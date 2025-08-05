@@ -18,8 +18,11 @@ export const useGameState = () => {
   });
 
   const updateGameState = useCallback((updates: Partial<GameState>) => {
+    console.log('useGameState: updateGameState called with:', updates);
     setGameState(prev => {
       const newState = { ...prev, ...updates };
+      console.log('useGameState: Previous state:', prev);
+      console.log('useGameState: New state:', newState);
       // Save to localStorage
       localStorage.setItem('bc-ai-quest-state', JSON.stringify(newState));
       return newState;

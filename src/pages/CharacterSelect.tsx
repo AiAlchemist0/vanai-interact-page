@@ -59,14 +59,21 @@ const CharacterSelect = () => {
   };
 
   const handleStartGame = () => {
+    console.log('handleStartGame called with character:', selectedCharacter);
+    
     if (selectedCharacter) {
+      console.log('Updating game state...');
       updateGameState({
         selectedCharacter,
         gameStarted: true,
         unlockedDistricts: ['tech-hub'], // Start with Tech Hub unlocked
         playerPosition: { x: 400, y: 300 }
       });
+      
+      console.log('Navigating to /game...');
       navigate('/game');
+    } else {
+      console.log('No character selected!');
     }
   };
 
@@ -124,7 +131,11 @@ const CharacterSelect = () => {
             <Button
               size="lg"
               className="gradient-primary hover:opacity-90 transition-smooth text-lg px-8 py-4"
-              onClick={handleStartGame}
+              onClick={() => {
+                console.log('Start Your Journey button clicked!');
+                console.log('Current selectedCharacter:', selectedCharacter);
+                handleStartGame();
+              }}
             >
               <Play className="w-5 h-5 mr-2" />
               Start Your Journey

@@ -24,8 +24,14 @@ const GamePage = () => {
   }, []);
 
   useEffect(() => {
+    console.log('GamePage: useEffect triggered, gameState:', gameState);
+    console.log('GamePage: selectedCharacter:', gameState.selectedCharacter);
+    
     if (!gameState.selectedCharacter) {
+      console.log('GamePage: No character selected, redirecting to character-select');
       navigate('/character-select');
+    } else {
+      console.log('GamePage: Character found, loading game...');
     }
   }, [gameState.selectedCharacter, navigate]);
 
