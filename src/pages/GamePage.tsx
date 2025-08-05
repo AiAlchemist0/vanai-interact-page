@@ -5,13 +5,23 @@ import { ArrowLeft } from 'lucide-react';
 import GameCanvas from '@/components/game/GameCanvas';
 import GameHUD from '@/components/game/GameHUD';
 import InsightModal from '@/components/game/InsightModal';
+import MiniGame from '@/components/game/MiniGame';
+import AchievementSystem from '@/components/game/AchievementSystem';
 import { useGameState } from '@/hooks/useGameState';
+import { gameAudio } from '@/utils/gameAudio';
 import type { InsightData } from '@/types/game';
 
 const GamePage = () => {
   const navigate = useNavigate();
   const { gameState, updateGameState } = useGameState();
   const [selectedInsight, setSelectedInsight] = useState<InsightData | null>(null);
+  const [miniGameType, setMiniGameType] = useState<'ai-training' | 'policy-puzzle' | 'creativity-challenge' | null>(null);
+  const [showAchievements, setShowAchievements] = useState(false);
+
+  useEffect(() => {
+    // Initialize audio system
+    gameAudio.preloadSounds();
+  }, []);
 
   useEffect(() => {
     if (!gameState.selectedCharacter) {
@@ -19,12 +29,36 @@ const GamePage = () => {
     }
   }, [gameState.selectedCharacter, navigate]);
 
-  const handleInsightClick = (insight: InsightData) => {
-    setSelectedInsight(insight);
+  const handleInsightClick = (insight: InsightData, buildingType?: string) => {
+    // Play discovery sound
+    gameAudio.playDiscoverySound();
+    
+    // Check if this should trigger a mini-game
+    if (buildingType === 'mini-game') {
+      const gameTypes: ('ai-training' | 'policy-puzzle' | 'creativity-challenge')[] = ['ai-training', 'policy-puzzle', 'creativity-challenge'];
+      const randomType = gameTypes[Math.floor(Math.random() * gameTypes.length)];
+      setMiniGameType(randomType);
+    } else {
+      setSelectedInsight(insight);
+    }
+  };
+
+  const handleMiniGameComplete = (score: number) => {
+    gameAudio.playSuccessSound();
+    setMiniGameType(null);
+    
+    // Show achievement if high score
+    if (score >= 80) {
+      setShowAchievements(true);
+    }
   };
 
   const handleCloseInsight = () => {
     setSelectedInsight(null);
+  };
+
+  const handleCloseAchievements = () => {
+    setShowAchievements(false);
   };
 
   if (!gameState.selectedCharacter) {
@@ -68,6 +102,23 @@ const GamePage = () => {
           insight={selectedInsight}
           character={gameState.selectedCharacter}
           onClose={handleCloseInsight}
+        />
+      )}
+
+      {/* Mini Game */}
+      {miniGameType && (
+        <MiniGame
+          gameType={miniGameType}
+          onComplete={handleMiniGameComplete}
+          onClose={() => setMiniGameType(null)}
+        />
+      )}
+
+      {/* Achievement System */}
+      {showAchievements && (
+        <AchievementSystem
+          gameState={gameState}
+          onClose={handleCloseAchievements}
         />
       )}
     </div>
