@@ -1,6 +1,7 @@
 import { useRef, useEffect, useCallback } from 'react';
 import { useKeyboard } from '@/hooks/useKeyboard';
-import type { GameState, InsightData, PlayerSprite } from '@/types/game';
+import { gameDistricts } from '@/utils/gameData';
+import type { GameState, InsightData, PlayerSprite, District, Building } from '@/types/game';
 
 interface GameCanvasProps {
   gameState: GameState;
@@ -12,6 +13,7 @@ const GameCanvas = ({ gameState, onInsightClick, onStateUpdate }: GameCanvasProp
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const animationRef = useRef<number>();
   const keys = useKeyboard();
+  const lastInteractionRef = useRef<number>(0);
   
   const playerRef = useRef<PlayerSprite>({
     x: gameState.playerPosition.x,
@@ -22,123 +24,207 @@ const GameCanvas = ({ gameState, onInsightClick, onStateUpdate }: GameCanvasProp
     direction: 'down'
   });
 
-  // Game districts data
-  const districts = [
-    {
-      id: 'tech-hub',
-      name: 'Tech Hub',
-      color: 'hsl(var(--ai-cyan))',
-      position: { x: 150, y: 150 },
-      buildings: [
-        { id: 'ai-center', name: 'AI Research Center', position: { x: 180, y: 120 } },
-        { id: 'startup-office', name: 'Startup Offices', position: { x: 120, y: 180 } }
-      ]
-    },
-    {
-      id: 'business-quarter',
-      name: 'Business Quarter',
-      color: 'hsl(var(--ai-orange))',
-      position: { x: 450, y: 150 },
-      buildings: [
-        { id: 'corporate-tower', name: 'Corporate Tower', position: { x: 480, y: 120 } },
-        { id: 'job-center', name: 'Employment Center', position: { x: 420, y: 180 } }
-      ]
-    },
-    {
-      id: 'creative-district',
-      name: 'Creative Arts District',
-      color: 'hsl(var(--ai-purple))',
-      position: { x: 150, y: 350 },
-      buildings: [
-        { id: 'art-studio', name: 'Digital Art Studio', position: { x: 180, y: 320 } },
-        { id: 'media-lab', name: 'Media Lab', position: { x: 120, y: 380 } }
-      ]
-    },
-    {
-      id: 'government-center',
-      name: 'Government Center',
-      color: 'hsl(var(--ai-green))',
-      position: { x: 450, y: 350 },
-      buildings: [
-        { id: 'policy-building', name: 'Policy Building', position: { x: 480, y: 320 } },
-        { id: 'regulation-office', name: 'Regulation Office', position: { x: 420, y: 380 } }
-      ]
-    },
-    {
-      id: 'medical-campus',
-      name: 'Medical Campus',
-      color: 'hsl(var(--ai-blue))',
-      position: { x: 300, y: 100 },
-      buildings: [
-        { id: 'hospital', name: 'AI Hospital', position: { x: 330, y: 70 } },
-        { id: 'research-lab', name: 'Medical AI Lab', position: { x: 270, y: 130 } }
-      ]
-    },
-    {
-      id: 'education-zone',
-      name: 'Education Zone',
-      color: 'hsl(var(--accent))',
-      position: { x: 300, y: 400 },
-      buildings: [
-        { id: 'university', name: 'AI University', position: { x: 330, y: 370 } },
-        { id: 'training-center', name: 'Training Center', position: { x: 270, y: 430 } }
-      ]
+  const drawBackground = useCallback((ctx: CanvasRenderingContext2D) => {
+    // Draw grid pattern
+    ctx.strokeStyle = '#1a1a1a';
+    ctx.lineWidth = 1;
+    
+    for (let x = 0; x <= 800; x += 40) {
+      ctx.beginPath();
+      ctx.moveTo(x, 0);
+      ctx.lineTo(x, 600);
+      ctx.stroke();
     }
-  ];
+    
+    for (let y = 0; y <= 600; y += 40) {
+      ctx.beginPath();
+      ctx.moveTo(0, y);
+      ctx.lineTo(800, y);
+      ctx.stroke();
+    }
+  }, []);
+
+  const drawDistrict = useCallback((ctx: CanvasRenderingContext2D, district: District) => {
+    const isUnlocked = gameState.unlockedDistricts.includes(district.id);
+    const playerDistance = Math.sqrt(
+      Math.pow(playerRef.current.x - district.position.x, 2) + 
+      Math.pow(playerRef.current.y - district.position.y, 2)
+    );
+    const isNearby = playerDistance < 100;
+    
+    // District area with glow effect
+    if (isUnlocked) {
+      ctx.shadowColor = district.color;
+      ctx.shadowBlur = isNearby ? 20 : 10;
+    } else {
+      ctx.shadowColor = 'transparent';
+      ctx.shadowBlur = 0;
+    }
+    
+    ctx.fillStyle = isUnlocked ? district.color + '30' : '#333333';
+    ctx.fillRect(district.position.x - 80, district.position.y - 80, 160, 160);
+    
+    // District border
+    ctx.shadowBlur = 0;
+    ctx.strokeStyle = isUnlocked ? district.color : '#666666';
+    ctx.lineWidth = isNearby ? 3 : 2;
+    ctx.strokeRect(district.position.x - 80, district.position.y - 80, 160, 160);
+    
+    // District name
+    ctx.fillStyle = isUnlocked ? '#ffffff' : '#999999';
+    ctx.font = 'bold 14px Arial';
+    ctx.textAlign = 'center';
+    ctx.fillText(district.name, district.position.x, district.position.y - 90);
+    
+    // District description (when nearby)
+    if (isNearby && isUnlocked) {
+      ctx.fillStyle = '#cccccc';
+      ctx.font = '10px Arial';
+      ctx.fillText(district.description, district.position.x, district.position.y - 75);
+    }
+    
+    // Buildings
+    if (isUnlocked) {
+      district.buildings.forEach((building) => {
+        drawBuilding(ctx, building, district);
+      });
+    } else {
+      // Lock icon for locked districts
+      ctx.fillStyle = '#666666';
+      ctx.font = '32px Arial';
+      ctx.textAlign = 'center';
+      ctx.fillText('🔒', district.position.x, district.position.y + 10);
+    }
+  }, [gameState.unlockedDistricts, gameState.visitedBuildings]);
+
+  const drawBuilding = useCallback((ctx: CanvasRenderingContext2D, building: Building, district: District) => {
+    const isVisited = gameState.visitedBuildings.includes(building.id);
+    const playerDistance = Math.sqrt(
+      Math.pow(playerRef.current.x - building.position.x, 2) + 
+      Math.pow(playerRef.current.y - building.position.y, 2)
+    );
+    const isInteractable = playerDistance < 25;
+    
+    // Building glow when interactable
+    if (isInteractable) {
+      ctx.shadowColor = '#ffff00';
+      ctx.shadowBlur = 15;
+    } else {
+      ctx.shadowBlur = 0;
+    }
+    
+    // Building base
+    ctx.fillStyle = isVisited ? '#00ff00' : (isInteractable ? '#ffff00' : '#888888');
+    ctx.fillRect(building.position.x - 12, building.position.y - 12, 24, 24);
+    
+    ctx.shadowBlur = 0;
+    ctx.strokeStyle = district.color;
+    ctx.lineWidth = isInteractable ? 2 : 1;
+    ctx.strokeRect(building.position.x - 12, building.position.y - 12, 24, 24);
+    
+    // Building type icon
+    const icons = {
+      'npc': '👥',
+      'data-center': '💾',
+      'mini-game': '🎮',
+      'insight': '💡'
+    };
+    
+    ctx.fillStyle = '#000000';
+    ctx.font = '16px Arial';
+    ctx.textAlign = 'center';
+    ctx.fillText(icons[building.type], building.position.x, building.position.y + 5);
+    
+    // Building name (when nearby)
+    if (isInteractable) {
+      ctx.fillStyle = '#ffffff';
+      ctx.font = '10px Arial';
+      ctx.fillText(building.name, building.position.x, building.position.y - 20);
+      
+      // Interaction hint
+      ctx.fillStyle = '#ffff00';
+      ctx.font = '8px Arial';
+      ctx.fillText('Press SPACE', building.position.x, building.position.y + 30);
+    }
+    
+    // Checkmark for visited buildings
+    if (isVisited) {
+      ctx.fillStyle = '#00ff00';
+      ctx.font = '12px Arial';
+      ctx.fillText('✓', building.position.x + 15, building.position.y - 10);
+    }
+  }, [gameState.visitedBuildings]);
 
   const drawPlayer = useCallback((ctx: CanvasRenderingContext2D, player: PlayerSprite) => {
-    // Draw player character
-    ctx.fillStyle = gameState.selectedCharacter?.color || 'hsl(var(--primary))';
+    // Player shadow
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.3)';
+    ctx.ellipse(player.x, player.y + 20, 12, 6, 0, 0, 2 * Math.PI);
+    ctx.fill();
+    
+    // Player character with glow
+    ctx.shadowColor = gameState.selectedCharacter?.color || '#3B82F6';
+    ctx.shadowBlur = 10;
+    
+    ctx.fillStyle = gameState.selectedCharacter?.color || '#3B82F6';
     ctx.fillRect(player.x - player.width/2, player.y - player.height/2, player.width, player.height);
     
-    // Draw character emoji
-    ctx.font = '24px Arial';
+    ctx.shadowBlur = 0;
+    
+    // Character emoji
+    ctx.font = '28px Arial';
     ctx.textAlign = 'center';
     ctx.fillText(
       gameState.selectedCharacter?.avatar || '🤖',
       player.x,
       player.y + 8
     );
+    
+    // Movement indicator
+    if (player.moving) {
+      ctx.strokeStyle = gameState.selectedCharacter?.color || '#3B82F6';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.arc(player.x, player.y, player.width/2 + 5, 0, 2 * Math.PI);
+      ctx.stroke();
+    }
   }, [gameState.selectedCharacter]);
 
-  const drawDistrict = useCallback((ctx: CanvasRenderingContext2D, district: any) => {
-    const isUnlocked = gameState.unlockedDistricts.includes(district.id);
+  const drawUI = useCallback((ctx: CanvasRenderingContext2D) => {
+    // Mini-map in top-right corner
+    const mapSize = 120;
+    const mapX = 800 - mapSize - 10;
+    const mapY = 10;
     
-    // District background
-    ctx.fillStyle = isUnlocked ? district.color + '40' : '#333333';
-    ctx.fillRect(district.position.x - 60, district.position.y - 60, 120, 120);
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.8)';
+    ctx.fillRect(mapX, mapY, mapSize, mapSize);
     
-    // District border
-    ctx.strokeStyle = isUnlocked ? district.color : '#666666';
-    ctx.lineWidth = 2;
-    ctx.strokeRect(district.position.x - 60, district.position.y - 60, 120, 120);
+    ctx.strokeStyle = '#ffffff';
+    ctx.lineWidth = 1;
+    ctx.strokeRect(mapX, mapY, mapSize, mapSize);
     
-    // District name
-    ctx.fillStyle = isUnlocked ? '#ffffff' : '#999999';
-    ctx.font = '12px Arial';
-    ctx.textAlign = 'center';
-    ctx.fillText(district.name, district.position.x, district.position.y - 70);
+    // Districts on mini-map
+    gameDistricts.forEach(district => {
+      const miniX = mapX + (district.position.x / 800) * mapSize;
+      const miniY = mapY + (district.position.y / 600) * mapSize;
+      
+      ctx.fillStyle = gameState.unlockedDistricts.includes(district.id) ? 
+        district.color : '#666666';
+      ctx.fillRect(miniX - 8, miniY - 6, 16, 12);
+    });
     
-    // Buildings
-    if (isUnlocked) {
-      district.buildings.forEach((building: any) => {
-        const isVisited = gameState.visitedBuildings.includes(building.id);
-        
-        ctx.fillStyle = isVisited ? '#00ff00' : '#ffff00';
-        ctx.fillRect(building.position.x - 8, building.position.y - 8, 16, 16);
-        
-        // Building icon
-        ctx.fillStyle = '#000000';
-        ctx.font = '12px Arial';
-        ctx.textAlign = 'center';
-        ctx.fillText('🏢', building.position.x, building.position.y + 4);
-      });
-    }
-  }, [gameState.unlockedDistricts, gameState.visitedBuildings]);
+    // Player on mini-map
+    const playerMiniX = mapX + (playerRef.current.x / 800) * mapSize;
+    const playerMiniY = mapY + (playerRef.current.y / 600) * mapSize;
+    
+    ctx.fillStyle = '#ffffff';
+    ctx.beginPath();
+    ctx.arc(playerMiniX, playerMiniY, 3, 0, 2 * Math.PI);
+    ctx.fill();
+  }, [gameState.unlockedDistricts]);
 
   const updatePlayer = useCallback(() => {
     const player = playerRef.current;
-    const speed = 3;
+    const speed = 4;
     let moved = false;
 
     if (keys.up) {
@@ -172,9 +258,12 @@ const GameCanvas = ({ gameState, onInsightClick, onStateUpdate }: GameCanvasProp
   }, [keys, onStateUpdate]);
 
   const checkInteractions = useCallback(() => {
+    const now = Date.now();
+    if (now - lastInteractionRef.current < 500) return; // Debounce interactions
+    
     const player = playerRef.current;
     
-    districts.forEach(district => {
+    gameDistricts.forEach(district => {
       const isUnlocked = gameState.unlockedDistricts.includes(district.id);
       if (!isUnlocked) return;
       
@@ -184,24 +273,42 @@ const GameCanvas = ({ gameState, onInsightClick, onStateUpdate }: GameCanvasProp
           Math.pow(player.y - building.position.y, 2)
         );
         
-        if (distance < 30 && keys.space && !gameState.visitedBuildings.includes(building.id)) {
-          // Create sample insight data
-          const insight: InsightData = {
-            title: `${building.name} Data`,
-            description: `Insights from ${building.name} in ${district.name}`,
-            data: { value: Math.random() * 100 },
-            quote: "AI is transforming how we work and live in BC."
-          };
+        if (distance < 25 && keys.space) {
+          lastInteractionRef.current = now;
           
-          onInsightClick(insight);
-          onStateUpdate({
-            visitedBuildings: [...gameState.visitedBuildings, building.id],
-            discoveredInsights: [...gameState.discoveredInsights, building.id]
-          });
+          if (building.insight && !gameState.visitedBuildings.includes(building.id)) {
+            onInsightClick(building.insight);
+            onStateUpdate({
+              visitedBuildings: [...gameState.visitedBuildings, building.id],
+              discoveredInsights: [...gameState.discoveredInsights, building.id]
+            });
+            
+            // Unlock adjacent districts based on progress
+            checkDistrictUnlocks();
+          }
         }
       });
     });
   }, [gameState, keys.space, onInsightClick, onStateUpdate]);
+
+  const checkDistrictUnlocks = useCallback(() => {
+    const discoveredCount = gameState.discoveredInsights.length;
+    const unlockThresholds = {
+      'business-quarter': 1,
+      'creative-district': 2,
+      'government-center': 3,
+      'medical-campus': 4,
+      'education-zone': 5
+    };
+    
+    Object.entries(unlockThresholds).forEach(([districtId, threshold]) => {
+      if (discoveredCount >= threshold && !gameState.unlockedDistricts.includes(districtId)) {
+        onStateUpdate({
+          unlockedDistricts: [...gameState.unlockedDistricts, districtId]
+        });
+      }
+    });
+  }, [gameState.discoveredInsights.length, gameState.unlockedDistricts, onStateUpdate]);
 
   const gameLoop = useCallback(() => {
     const canvas = canvasRef.current;
@@ -210,22 +317,24 @@ const GameCanvas = ({ gameState, onInsightClick, onStateUpdate }: GameCanvasProp
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    // Clear canvas
+    // Clear canvas with dark background
     ctx.fillStyle = '#0a0a0a';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    // Draw background grid
+    drawBackground(ctx);
 
     // Update game state
     updatePlayer();
     checkInteractions();
 
-    // Draw districts
-    districts.forEach(district => drawDistrict(ctx, district));
-
-    // Draw player
+    // Draw game elements
+    gameDistricts.forEach(district => drawDistrict(ctx, district));
     drawPlayer(ctx, playerRef.current);
+    drawUI(ctx);
 
     animationRef.current = requestAnimationFrame(gameLoop);
-  }, [updatePlayer, checkInteractions, drawDistrict, drawPlayer]);
+  }, [drawBackground, drawDistrict, drawPlayer, drawUI, updatePlayer, checkInteractions]);
 
   useEffect(() => {
     playerRef.current.x = gameState.playerPosition.x;
@@ -248,7 +357,7 @@ const GameCanvas = ({ gameState, onInsightClick, onStateUpdate }: GameCanvasProp
         ref={canvasRef}
         width={800}
         height={600}
-        className="border border-gradient rounded-lg shadow-elegant bg-black"
+        className="border border-gradient rounded-lg shadow-elegant bg-black cursor-crosshair"
         style={{ imageRendering: 'pixelated' }}
       />
     </div>
