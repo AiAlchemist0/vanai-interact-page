@@ -2,8 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft } from 'lucide-react';
-import GameCanvas from '@/components/game/GameCanvas';
-import GameHUD from '@/components/game/GameHUD';
+import GameCanvas3D from '@/components/game/GameCanvas3D';
 import InsightModal from '@/components/game/InsightModal';
 import MiniGame from '@/components/game/MiniGame';
 import AchievementSystem from '@/components/game/AchievementSystem';
@@ -84,19 +83,9 @@ const GamePage = () => {
         Exit Game
       </Button>
 
-      {/* Game HUD */}
-      <GameHUD 
-        character={gameState.selectedCharacter}
-        progress={{
-          totalDistricts: 6,
-          unlockedDistricts: gameState.unlockedDistricts.length,
-          totalInsights: 24,
-          discoveredInsights: gameState.discoveredInsights.length
-        }}
-      />
 
-      {/* Game Canvas */}
-      <GameCanvas
+      {/* Game Canvas 3D */}
+      <GameCanvas3D
         gameState={gameState}
         onInsightClick={handleInsightClick}
         onStateUpdate={updateGameState}
