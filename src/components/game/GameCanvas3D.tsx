@@ -4,8 +4,8 @@ import { OrbitControls, Sky, Environment, Text } from '@react-three/drei';
 import { useKeyboard } from '@/hooks/useKeyboard';
 import { gameDistricts } from '@/utils/gameData';
 import type { GameState, InsightData } from '@/types/game';
-import Player3D from './Player3D';
-import District3D from './District3D';
+import EnhancedPlayer3D from './EnhancedPlayer3D';
+import EnhancedDistrict3D from './EnhancedDistrict3D';
 import GameUI3D from './GameUI3D';
 
 interface GameCanvas3DProps {
@@ -15,7 +15,6 @@ interface GameCanvas3DProps {
 }
 
 const GameCanvas3D = ({ gameState, onInsightClick, onStateUpdate }: GameCanvas3DProps) => {
-  const [cameraTarget, setCameraTarget] = useState([0, 0, 0]);
   
   return (
     <div className="flex-1 relative">
@@ -68,9 +67,9 @@ const GameCanvas3D = ({ gameState, onInsightClick, onStateUpdate }: GameCanvas3D
           {/* Grid Pattern */}
           <gridHelper args={[100, 50, '#333333', '#333333']} position={[0, 0, 0]} />
           
-          {/* Districts */}
+          {/* Enhanced Districts */}
           {gameDistricts.map((district) => (
-            <District3D
+            <EnhancedDistrict3D
               key={district.id}
               district={district}
               gameState={gameState}
@@ -79,8 +78,8 @@ const GameCanvas3D = ({ gameState, onInsightClick, onStateUpdate }: GameCanvas3D
             />
           ))}
           
-          {/* Player */}
-          <Player3D
+          {/* Enhanced Player */}
+          <EnhancedPlayer3D
             gameState={gameState}
             onStateUpdate={onStateUpdate}
           />
@@ -97,16 +96,8 @@ const GameCanvas3D = ({ gameState, onInsightClick, onStateUpdate }: GameCanvas3D
             BC AI Quest - 3D World
           </Text>
           
-          {/* Camera Controls */}
-          <OrbitControls
-            enablePan={true}
-            enableZoom={true}
-            enableRotate={true}
-            minDistance={10}
-            maxDistance={50}
-            minPolarAngle={Math.PI / 6}
-            maxPolarAngle={Math.PI / 2.2}
-          />
+          {/* Enhanced Camera Controls - Now camera is controlled by player */}
+          {/* OrbitControls disabled when player is active */}
         </Suspense>
       </Canvas>
       

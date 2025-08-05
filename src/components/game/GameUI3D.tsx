@@ -45,26 +45,29 @@ const GameUI3D = ({ gameState }: GameUI3DProps) => {
         </div>
       </Card>
 
-      {/* Controls Info */}
+      {/* Enhanced Controls Info */}
       <Card className="p-4 bg-background/90 backdrop-blur-sm border-gradient">
-        <h4 className="font-semibold text-sm mb-2">3D Controls</h4>
+        <h4 className="font-semibold text-sm mb-2">Enhanced 3D Controls</h4>
         <div className="space-y-1 text-xs">
           <div className="flex justify-between">
             <span>Move:</span>
             <Badge variant="secondary" className="text-xs px-2 py-0">WASD</Badge>
           </div>
           <div className="flex justify-between">
-            <span>Interact:</span>
+            <span>Jump:</span>
             <Badge variant="secondary" className="text-xs px-2 py-0">SPACE</Badge>
           </div>
           <div className="flex justify-between">
-            <span>Camera:</span>
-            <Badge variant="secondary" className="text-xs px-2 py-0">Mouse</Badge>
+            <span>Interact:</span>
+            <Badge variant="secondary" className="text-xs px-2 py-0">SPACE (near building)</Badge>
           </div>
           <div className="flex justify-between">
-            <span>Zoom:</span>
-            <Badge variant="secondary" className="text-xs px-2 py-0">Scroll</Badge>
+            <span>Camera:</span>
+            <Badge variant="secondary" className="text-xs px-2 py-0">Auto-Follow</Badge>
           </div>
+        </div>
+        <div className="mt-2 pt-2 border-t border-border text-xs text-muted-foreground">
+          Enhanced physics with momentum, jumping, and smooth camera following
         </div>
       </Card>
 
