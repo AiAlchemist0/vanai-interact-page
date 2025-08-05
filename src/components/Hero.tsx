@@ -3,19 +3,12 @@ import { Badge } from "@/components/ui/badge";
 import { ArrowRight, Users, BarChart3, MapPin, Play } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import heroImage from "@/assets/hero-ai-survey.jpg";
-
 const Hero = () => {
   const navigate = useNavigate();
-  
-  return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+  return <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
       {/* Background Image with Overlay */}
       <div className="absolute inset-0 z-0">
-        <img 
-          src={heroImage} 
-          alt="AI Survey Dashboard" 
-          className="w-full h-full object-cover"
-        />
+        <img src={heroImage} alt="AI Survey Dashboard" className="w-full h-full object-cover" />
         <div className="absolute inset-0 bg-background/90 backdrop-blur-sm" />
       </div>
 
@@ -72,43 +65,30 @@ const Hero = () => {
 
         {/* CTA Buttons */}
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <Button 
-            size="lg" 
-            className="gradient-warm hover:glow-accent transition-smooth group text-lg px-8 py-6 animate-pulse"
-            onClick={() => navigate('/character-select')}
-          >
+          <Button size="lg" className="gradient-warm hover:glow-accent transition-smooth group text-lg px-8 py-6 animate-pulse" onClick={() => navigate('/character-select')}>
             <Play className="mr-2 w-5 h-5" />
             Play BC AI Quest
           </Button>
           
-          <Button 
-            size="lg" 
-            className="gradient-primary hover:glow-primary transition-smooth group text-lg px-8 py-6"
-            onClick={() => document.getElementById('insights')?.scrollIntoView({ behavior: 'smooth' })}
-          >
+          <Button size="lg" className="gradient-primary hover:glow-primary transition-smooth group text-lg px-8 py-6" onClick={() => document.getElementById('insights')?.scrollIntoView({
+          behavior: 'smooth'
+        })}>
             Explore Survey Data
             <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
           </Button>
           
-          <Button 
-            variant="outline" 
-            size="lg"
-            className="border-gradient text-lg px-8 py-6 hover:bg-primary/10 transition-smooth"
-            onClick={() => document.getElementById('methodology')?.scrollIntoView({ behavior: 'smooth' })}
-          >
+          <Button variant="outline" size="lg" className="border-gradient text-lg px-8 py-6 hover:bg-primary/10 transition-smooth" onClick={() => document.getElementById('methodology')?.scrollIntoView({
+          behavior: 'smooth'
+        })}>
             View Methodology
           </Button>
         </div>
 
         {/* Scroll Indicator */}
         <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
-          <div className="w-6 h-10 border-2 border-primary rounded-full flex justify-center">
-            <div className="w-1 h-3 bg-primary rounded-full mt-2 animate-pulse" />
-          </div>
+          
         </div>
       </div>
-    </section>
-  );
+    </section>;
 };
-
 export default Hero;
