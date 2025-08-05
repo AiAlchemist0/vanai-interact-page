@@ -51,27 +51,35 @@ const characters: Character[] = [
 
 const CharacterSelect = () => {
   const navigate = useNavigate();
-  const { updateGameState } = useGameState();
+  const { gameState, updateGameState } = useGameState();
   const [selectedCharacter, setSelectedCharacter] = useState<Character | null>(null);
 
   const handleCharacterSelect = (character: Character) => {
     setSelectedCharacter(character);
   };
 
-  const handleStartGame = () => {
+  const handleStartGame = async () => {
     console.log('handleStartGame called with character:', selectedCharacter);
     
     if (selectedCharacter) {
       console.log('Updating game state...');
-      updateGameState({
+      const newState = {
         selectedCharacter,
         gameStarted: true,
         unlockedDistricts: ['tech-hub'], // Start with Tech Hub unlocked
         playerPosition: { x: 400, y: 300 }
-      });
+      };
+      
+      // Update state and save directly to localStorage to ensure it's persisted before navigation
+      updateGameState(newState);
+      localStorage.setItem('bc-ai-quest-state', JSON.stringify({
+        ...gameState,
+        ...newState
+      }));
       
       console.log('Navigating to /game...');
-      navigate('/game');
+      // Small delay to ensure state is saved
+      setTimeout(() => navigate('/game'), 10);
     } else {
       console.log('No character selected!');
     }
