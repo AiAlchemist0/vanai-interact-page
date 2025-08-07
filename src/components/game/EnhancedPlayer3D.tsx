@@ -64,9 +64,8 @@ const EnhancedPlayer3D = ({ gameState, onStateUpdate, obstacles = [], paused = f
   const playerRadius = 0.45;
   
   // Animated character properties for smooth animations
-  const [{ scale, rotationY }, springApi] = useSpring(() => ({
+  const [{ scale }, springApi] = useSpring(() => ({
     scale: 1,
-    rotationY: 0,
     config: { tension: 300, friction: 30 }
   }));
 
@@ -137,7 +136,12 @@ const EnhancedPlayer3D = ({ gameState, onStateUpdate, obstacles = [], paused = f
       // Character rotation to face movement direction
       if (inputX !== 0 || inputZ !== 0) {
         const targetRotation = Math.atan2(inputX, inputZ);
-        springApi.start({ rotationY: targetRotation });
+        // Smoothly rotate player model toward movement direction
+        playerRef.current.rotation.y = THREE.MathUtils.lerp(
+          playerRef.current.rotation.y,
+          targetRotation,
+          0.2
+        );
       }
     } else {
       setIsMoving(false);
@@ -264,7 +268,6 @@ const EnhancedPlayer3D = ({ gameState, onStateUpdate, obstacles = [], paused = f
     <animated.group 
       ref={playerRef}
       scale={scale}
-      rotation-y={rotationY}
     >
       {/* Enhanced Player Body with Animation States */}
       <animated.mesh castShadow>

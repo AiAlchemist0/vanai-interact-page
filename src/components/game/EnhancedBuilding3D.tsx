@@ -72,11 +72,10 @@ const EnhancedBuilding3D = ({
   const config = buildingConfigs[building.type];
   
   // Animated properties with enhanced effects
-  const [{ scale, elevationY, glowIntensity, rotationY }, springApi] = useSpring(() => ({
+  const [{ scale, elevationY, glowIntensity }, springApi] = useSpring(() => ({
     scale: 1,
     elevationY: 0,
     glowIntensity: 0.1,
-    rotationY: 0,
     config: { tension: 300, friction: 20 }
   }));
 
@@ -129,14 +128,12 @@ const EnhancedBuilding3D = ({
         
         // Interaction animation
         springApi.start({ 
-          scale: 1.3,
-          rotationY: Math.PI * 2
+          scale: 1.3
         });
         
         setTimeout(() => {
           springApi.start({ 
-            scale: 1.1,
-            rotationY: 0
+            scale: 1.1
           });
           setInteractionCooldown(false);
         }, 300);
@@ -176,7 +173,6 @@ const EnhancedBuilding3D = ({
       ref={buildingRef}
       position={position}
       scale={scale}
-      rotation-y={rotationY}
       onPointerOver={() => setHovered(true)}
       onPointerOut={() => setHovered(false)}
     >
