@@ -11,6 +11,8 @@ interface SettingsPanel3DProps {
   onChangeCycleSpeed: (v: number) => void;
   showGrid: boolean;
   onToggleGrid: () => void;
+  fov: number;
+  onChangeFov: (v: number) => void;
   className?: string;
 }
 
@@ -21,6 +23,8 @@ const SettingsPanel3D = ({
   onChangeCycleSpeed,
   showGrid,
   onToggleGrid,
+  fov,
+  onChangeFov,
   className
 }: SettingsPanel3DProps) => {
   return (
@@ -48,6 +52,20 @@ const SettingsPanel3D = ({
           max={2}
           step={0.01}
           onValueChange={(v) => onChangeCycleSpeed(v[0] ?? 1)}
+        />
+      </div>
+
+      <div className="py-2">
+        <div className="flex items-center justify-between mb-2">
+          <Label className="text-sm">Field of View</Label>
+          <span className="text-xs opacity-70">{Math.round(fov)}°</span>
+        </div>
+        <Slider
+          value={[fov]}
+          min={40}
+          max={90}
+          step={1}
+          onValueChange={(v) => onChangeFov(v[0] ?? 60)}
         />
       </div>
     </Card>

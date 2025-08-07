@@ -1,5 +1,5 @@
 import { useRef, useEffect, Suspense, useState } from 'react';
-import { Canvas } from '@react-three/fiber';
+import { Canvas, useThree } from '@react-three/fiber';
 import { OrbitControls, Sky, Environment, Text } from '@react-three/drei';
 import { useKeyboard } from '@/hooks/useKeyboard';
 import { gameDistricts } from '@/utils/gameData';
@@ -12,6 +12,19 @@ import SettingsPanel3D from './SettingsPanel3D';
 import PauseMenu3D from './PauseMenu3D';
 import { Button } from '@/components/ui/button';
 
+// Expose a capture function from inside the Canvas
+const CaptureController = ({ onReady }: { onReady: (fn: () => string) => void }) => {
+  const { gl, scene, camera } = useThree();
+  useEffect(() => {
+    const fn = () => {
+      gl.render(scene, camera);
+      return gl.domElement.toDataURL('image/png');
+    };
+    onReady(fn);
+  }, [gl, scene, camera, onReady]);
+  return null;
+};
+
 interface GameCanvas3DProps {
   gameState: GameState;
   onInsightClick: (insight: InsightData, buildingType?: string) => void;
@@ -23,16 +36,38 @@ const GameCanvas3D = ({ gameState, onInsightClick, onStateUpdate }: GameCanvas3D
   const [isRaining, setIsRaining] = useState(true);
   const [cycleSpeed, setCycleSpeed] = useState(1);
   const [showGrid, setShowGrid] = useState(true);
+  const [fov, setFov] = useState(60);
   const [paused, setPaused] = useState(false);
+  const [photoMode, setPhotoMode] = useState(false);
+  const [doCapture, setDoCapture] = useState<(() => string) | null>(null);
 
-  // Toggle pause with Escape key
+  // Toggle pause with Escape key and photo mode with H
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') setPaused(p => !p);
+      if (e.key.toLowerCase() === 'h') setPhotoMode(m => !m);
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
   }, []);
+
+  // Persist settings
+  useEffect(() => {
+    const saved = localStorage.getItem('bc-ai-quest-settings');
+    if (saved) {
+      try {
+        const s = JSON.parse(saved);
+        setIsRaining(s.isRaining ?? true);
+        setCycleSpeed(s.cycleSpeed ?? 1);
+        setShowGrid(s.showGrid ?? true);
+        setFov(s.fov ?? 60);
+      } catch {}
+    }
+  }, []);
+  useEffect(() => {
+    const s = { isRaining, cycleSpeed, showGrid, fov };
+    localStorage.setItem('bc-ai-quest-settings', JSON.stringify(s));
+  }, [isRaining, cycleSpeed, showGrid, fov]);
 
   // Precompute simple collision obstacles for buildings
   const obstacles = gameDistricts.flatMap(d => d.buildings.map(b => {
@@ -55,6 +90,8 @@ const GameCanvas3D = ({ gameState, onInsightClick, onStateUpdate }: GameCanvas3D
       >
         <Suspense fallback={null}>
           <EnvironmentController3D isRaining={isRaining} cycleSpeed={cycleSpeed} />
+          <CaptureController onReady={setDoCapture} />
+          {photoMode && <OrbitControls makeDefault enableDamping dampingFactor={0.1} />}
 
           {/* Ground Plane */}
           <mesh
@@ -90,6 +127,7 @@ const GameCanvas3D = ({ gameState, onInsightClick, onStateUpdate }: GameCanvas3D
             onStateUpdate={onStateUpdate}
             obstacles={obstacles}
             paused={paused}
+            fov={fov}
           />
           
           {/* Title */}
@@ -110,22 +148,36 @@ const GameCanvas3D = ({ gameState, onInsightClick, onStateUpdate }: GameCanvas3D
       </Canvas>
       
       {/* 3D UI Overlay */}
-      <GameUI3D gameState={gameState} />
+      {!photoMode && <GameUI3D gameState={gameState} />}
 
       {/* Floating Controls */}
-      <div className="absolute top-4 left-4 z-20">
-        <Button size="sm" variant="secondary" onClick={() => setPaused(true)}>Pause</Button>
+      <div className="absolute top-4 left-4 z-20 flex gap-2">
+        {!photoMode ? (
+          <>
+            <Button size="sm" variant="secondary" onClick={() => setPaused(true)}>Pause</Button>
+            <Button size="sm" onClick={() => { setPhotoMode(true); setPaused(true); }}>Photo Mode</Button>
+          </>
+        ) : (
+          <>
+            <Button size="sm" variant="secondary" onClick={() => { setPhotoMode(false); setPaused(false); }}>Exit Photo</Button>
+            <Button size="sm" onClick={() => { const url = doCapture?.(); if (url) { const a = document.createElement('a'); a.href = url; a.download = 'bc-ai-quest.png'; a.click(); } }}>Capture</Button>
+          </>
+        )}
       </div>
-      <div className="absolute top-4 right-4 z-20">
-        <SettingsPanel3D
-          isRaining={isRaining}
-          onToggleRaining={() => setIsRaining(v => !v)}
-          cycleSpeed={cycleSpeed}
-          onChangeCycleSpeed={setCycleSpeed}
-          showGrid={showGrid}
-          onToggleGrid={() => setShowGrid(v => !v)}
-        />
-      </div>
+      {!photoMode && (
+        <div className="absolute top-4 right-4 z-20">
+          <SettingsPanel3D
+            isRaining={isRaining}
+            onToggleRaining={() => setIsRaining(v => !v)}
+            cycleSpeed={cycleSpeed}
+            onChangeCycleSpeed={setCycleSpeed}
+            showGrid={showGrid}
+            onToggleGrid={() => setShowGrid(v => !v)}
+            fov={fov}
+            onChangeFov={setFov}
+          />
+        </div>
+      )}
 
       {/* Pause Overlay */}
       {paused && (

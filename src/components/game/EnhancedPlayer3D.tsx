@@ -11,9 +11,10 @@ interface EnhancedPlayer3DProps {
   onStateUpdate: (updates: Partial<GameState>) => void;
   obstacles?: { x: number; z: number; radius: number }[];
   paused?: boolean;
+  fov?: number;
 }
 
-const EnhancedPlayer3D = ({ gameState, onStateUpdate, obstacles = [], paused = false }: EnhancedPlayer3DProps) => {
+const EnhancedPlayer3D = ({ gameState, onStateUpdate, obstacles = [], paused = false, fov = 60 }: EnhancedPlayer3DProps) => {
   const playerRef = useRef<any>(null);
   const cameraTargetRef = useRef<THREE.Vector3>(new THREE.Vector3());
   const cameraPositionRef = useRef<THREE.Vector3>(new THREE.Vector3());
@@ -65,6 +66,15 @@ const EnhancedPlayer3D = ({ gameState, onStateUpdate, obstacles = [], paused = f
       return;
     }
     
+    // Ensure camera FOV matches settings (Perspective camera only)
+    if (typeof fov === 'number' && 'fov' in camera) {
+      const persp = camera as THREE.PerspectiveCamera;
+      if (persp.fov !== fov) {
+        persp.fov = fov;
+        persp.updateProjectionMatrix();
+      }
+    }
+
     const velocity = velocityRef.current;
     const position = positionRef.current;
     
