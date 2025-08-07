@@ -1,4 +1,4 @@
-import { useMemo, useRef } from 'react';
+import { useMemo, useRef, useEffect } from 'react';
 import { useFrame, useThree } from '@react-three/fiber';
 import { Sky } from '@react-three/drei';
 import * as THREE from 'three';
@@ -94,10 +94,23 @@ const EnvironmentController3D = ({ isRaining = true, cycleSpeed = 1 }: { isRaini
     fog.color.copy(fogColor);
   });
 
-  
+  // Configure directional light shadow properties once
+  useEffect(() => {
+    const light = dirLightRef.current;
+    if (!light) return;
+    light.castShadow = true;
+    // Shadow map size
+    light.shadow.mapSize.set(1024, 1024);
+    // Orthographic shadow camera bounds
+    const cam = light.shadow.camera as THREE.OrthographicCamera;
+    cam.left = -50;
+    cam.right = 50;
+    cam.top = 50;
+    cam.bottom = -50;
+    cam.updateProjectionMatrix();
+  }, []);
 
   // Attach fog to scene
-  // eslint-disable-next-line react/jsx-no-constructed-context-values
   scene.fog = fog;
 
   return (
@@ -113,11 +126,6 @@ const EnvironmentController3D = ({ isRaining = true, cycleSpeed = 1 }: { isRaini
         position={[50, 50, 25]}
         intensity={1}
         castShadow
-        shadow-mapSize={[1024, 1024]}
-        shadow-camera-left={-50}
-        shadow-camera-right={50}
-        shadow-camera-top={50}
-        shadow-camera-bottom={-50}
       />
 
       {/* Weather */}
