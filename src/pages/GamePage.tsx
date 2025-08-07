@@ -12,7 +12,7 @@ import type { InsightData } from '@/types/game';
 
 const GamePage = () => {
   const navigate = useNavigate();
-  const { gameState, updateGameState } = useGameState();
+  const { gameState, updateGameState, resetGameState } = useGameState();
   const [selectedInsight, setSelectedInsight] = useState<InsightData | null>(null);
   const [miniGameType, setMiniGameType] = useState<'ai-training' | 'policy-puzzle' | 'creativity-challenge' | null>(null);
   const [showAchievements, setShowAchievements] = useState(false);
@@ -89,6 +89,8 @@ const GamePage = () => {
         gameState={gameState}
         onInsightClick={handleInsightClick}
         onStateUpdate={updateGameState}
+        onExit={() => navigate('/character-select')}
+        onReset={() => { resetGameState(); navigate('/character-select'); }}
       />
 
       {/* Insight Modal */}

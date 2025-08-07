@@ -29,9 +29,11 @@ interface GameCanvas3DProps {
   gameState: GameState;
   onInsightClick: (insight: InsightData, buildingType?: string) => void;
   onStateUpdate: (updates: Partial<GameState>) => void;
+  onExit?: () => void;
+  onReset?: () => void;
 }
 
-const GameCanvas3D = ({ gameState, onInsightClick, onStateUpdate }: GameCanvas3DProps) => {
+const GameCanvas3D = ({ gameState, onInsightClick, onStateUpdate, onExit, onReset }: GameCanvas3DProps) => {
   // Environment & view settings
   const [isRaining, setIsRaining] = useState(true);
   const [cycleSpeed, setCycleSpeed] = useState(1);
@@ -184,6 +186,8 @@ const GameCanvas3D = ({ gameState, onInsightClick, onStateUpdate }: GameCanvas3D
         <PauseMenu3D
           paused={paused}
           onResume={() => setPaused(false)}
+          onExit={onExit}
+          onReset={onReset}
         />
       )}
     </div>

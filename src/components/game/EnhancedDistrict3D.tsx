@@ -214,7 +214,6 @@ const EnhancedDistrict3D = ({ district, gameState, onInsightClick, onStateUpdate
           {/* Ambient district lighting */}
           <spotLight
             position={[0, 8, 0]}
-            target-position={[0, 0, 0]}
             color={district.color}
             intensity={0.3}
             distance={15}
