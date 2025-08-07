@@ -39,6 +39,7 @@ const EnhancedPlayer3D = ({ gameState, onStateUpdate, obstacles = [], paused = f
   const [isJumping, setIsJumping] = useState(false);
   const [direction, setDirection] = useState<'idle' | 'forward' | 'backward' | 'left' | 'right'>('idle');
   const charColor = useMemo(() => resolveCssColor(gameState.selectedCharacter?.color, '#3B82F6'), [gameState.selectedCharacter?.color]);
+  const charThree = useMemo(() => new THREE.Color(charColor), [charColor]);
   
   // Movement physics state
   const velocityRef = useRef<THREE.Vector3>(new THREE.Vector3());

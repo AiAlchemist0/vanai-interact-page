@@ -185,7 +185,6 @@ const EnhancedBuilding3D = ({
         <animated.mesh 
           key={level}
           position={[0, level * (config.height / config.levels) + (config.height / config.levels) / 2, 0]}
-          position-y={level * (config.height / config.levels) + (config.height / config.levels) / 2}
           castShadow 
           receiveShadow
         >
@@ -207,7 +206,7 @@ const EnhancedBuilding3D = ({
       ))}
       
       {/* Building Top Features */}
-      <animated.mesh position={[0, config.height + 0.2, 0]} position-y={elevationY}>
+      <animated.mesh position={[0, config.height + 0.2, 0]}>
         <cylinderGeometry args={[0.2, 0.2, 0.2, 8]} />
         <meshStandardMaterial 
           color={district.color}
