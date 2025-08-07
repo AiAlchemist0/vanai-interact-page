@@ -1,10 +1,24 @@
-import { useRef, useState } from 'react';
+import { useRef, useState, useMemo } from 'react';
 import { useFrame, useThree } from '@react-three/fiber';
 import { useKeyboard } from '@/hooks/useKeyboard';
 import { Text } from '@react-three/drei';
 import { useSpring, animated } from '@react-spring/three';
 import type { GameState } from '@/types/game';
 import * as THREE from 'three';
+
+const resolveCssColor = (input?: string, fallback = '#3B82F6') => {
+  try {
+    if (!input) return fallback;
+    const el = document.createElement('div');
+    el.style.color = input;
+    document.body.appendChild(el);
+    const computed = getComputedStyle(el).color;
+    el.remove();
+    return computed || fallback;
+  } catch {
+    return fallback;
+  }
+};
 
 interface EnhancedPlayer3DProps {
   gameState: GameState;
@@ -24,6 +38,7 @@ const EnhancedPlayer3D = ({ gameState, onStateUpdate, obstacles = [], paused = f
   const [isMoving, setIsMoving] = useState(false);
   const [isJumping, setIsJumping] = useState(false);
   const [direction, setDirection] = useState<'idle' | 'forward' | 'backward' | 'left' | 'right'>('idle');
+  const charColor = useMemo(() => resolveCssColor(gameState.selectedCharacter?.color, '#3B82F6'), [gameState.selectedCharacter?.color]);
   
   // Movement physics state
   const velocityRef = useRef<THREE.Vector3>(new THREE.Vector3());
@@ -222,8 +237,8 @@ const EnhancedPlayer3D = ({ gameState, onStateUpdate, obstacles = [], paused = f
       <animated.mesh castShadow>
         <cylinderGeometry args={[0.4, 0.4, 1.8, 12]} />
         <meshStandardMaterial 
-          color={gameState.selectedCharacter?.color || '#3B82F6'}
-          emissive={gameState.selectedCharacter?.color || '#3B82F6'}
+          color={charColor}
+          emissive={charColor}
           emissiveIntensity={isMoving ? 0.4 : 0.2}
           roughness={0.2}
           metalness={0.8}
@@ -234,8 +249,8 @@ const EnhancedPlayer3D = ({ gameState, onStateUpdate, obstacles = [], paused = f
       <animated.mesh position={[0, 1.2, 0]} castShadow>
         <sphereGeometry args={[0.5, 16, 16]} />
         <meshStandardMaterial 
-          color={gameState.selectedCharacter?.color || '#3B82F6'}
-          emissive={gameState.selectedCharacter?.color || '#3B82F6'}
+          color={charColor}
+          emissive={charColor}
           emissiveIntensity={isJumping ? 0.6 : 0.3}
           roughness={0.1}
           metalness={0.9}
@@ -261,10 +276,10 @@ const EnhancedPlayer3D = ({ gameState, onStateUpdate, obstacles = [], paused = f
       >
         <ringGeometry args={[0.6, 0.9, 16]} />
         <meshStandardMaterial 
-          color={gameState.selectedCharacter?.color || '#3B82F6'}
+          color={charColor}
           transparent
           opacity={isMoving ? 0.8 : 0.4}
-          emissive={gameState.selectedCharacter?.color || '#3B82F6'}
+          emissive={charColor}
           emissiveIntensity={isMoving ? 0.4 : 0.1}
         />
       </animated.mesh>
@@ -273,7 +288,7 @@ const EnhancedPlayer3D = ({ gameState, onStateUpdate, obstacles = [], paused = f
       {isJumping && (
         <pointLight
           position={[0, 0, 0]}
-          color={gameState.selectedCharacter?.color || '#3B82F6'}
+          color={charColor}
           intensity={2}
           distance={5}
           decay={2}
@@ -307,7 +322,7 @@ const EnhancedPlayer3D = ({ gameState, onStateUpdate, obstacles = [], paused = f
         <>
           <pointLight
             position={[0, 0.5, 0]}
-            color={gameState.selectedCharacter?.color || '#3B82F6'}
+            color={charColor}
             intensity={1}
             distance={3}
             decay={2}
