@@ -7,6 +7,10 @@ interface KeyboardState {
   right: boolean;
   space: boolean;
   enter: boolean;
+  shift: boolean;
+  ctrl: boolean;
+  q: boolean;
+  e: boolean;
 }
 
 export const useKeyboard = () => {
@@ -16,7 +20,11 @@ export const useKeyboard = () => {
     left: false,
     right: false,
     space: false,
-    enter: false
+    enter: false,
+    shift: false,
+    ctrl: false,
+    q: false,
+    e: false
   });
 
   const handleKeyDown = useCallback((event: KeyboardEvent) => {
@@ -49,6 +57,22 @@ export const useKeyboard = () => {
         setKeys(prev => ({ ...prev, enter: true }));
         event.preventDefault();
         break;
+      case 'ShiftLeft':
+      case 'ShiftRight':
+        setKeys(prev => ({ ...prev, shift: true }));
+        break;
+      case 'ControlLeft':
+      case 'ControlRight':
+        setKeys(prev => ({ ...prev, ctrl: true }));
+        break;
+      case 'KeyQ':
+        setKeys(prev => ({ ...prev, q: true }));
+        break;
+      case 'KeyE':
+        setKeys(prev => ({ ...prev, e: true }));
+        break;
+      default:
+        break;
     }
   }, []);
 
@@ -75,6 +99,22 @@ export const useKeyboard = () => {
         break;
       case 'Enter':
         setKeys(prev => ({ ...prev, enter: false }));
+        break;
+      case 'ShiftLeft':
+      case 'ShiftRight':
+        setKeys(prev => ({ ...prev, shift: false }));
+        break;
+      case 'ControlLeft':
+      case 'ControlRight':
+        setKeys(prev => ({ ...prev, ctrl: false }));
+        break;
+      case 'KeyQ':
+        setKeys(prev => ({ ...prev, q: false }));
+        break;
+      case 'KeyE':
+        setKeys(prev => ({ ...prev, e: false }));
+        break;
+      default:
         break;
     }
   }, []);

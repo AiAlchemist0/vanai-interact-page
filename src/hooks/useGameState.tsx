@@ -8,7 +8,9 @@ const initialGameState: GameState = {
   visitedBuildings: [],
   discoveredInsights: [],
   playerPosition: { x: 400, y: 300 },
-  gameStarted: false
+  gameStarted: false,
+  health: 100,
+  stamina: 100
 };
 
 export const useGameState = () => {

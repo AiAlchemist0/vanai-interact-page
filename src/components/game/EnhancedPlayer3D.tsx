@@ -37,9 +37,15 @@ const EnhancedPlayer3D = ({ gameState, onStateUpdate, obstacles = [], paused = f
   
   const [isMoving, setIsMoving] = useState(false);
   const [isJumping, setIsJumping] = useState(false);
+  const [isAttacking, setIsAttacking] = useState(false);
   const [direction, setDirection] = useState<'idle' | 'forward' | 'backward' | 'left' | 'right'>('idle');
   const charColor = useMemo(() => resolveCssColor(gameState.selectedCharacter?.color, '#3B82F6'), [gameState.selectedCharacter?.color]);
   const charThree = useMemo(() => new THREE.Color(charColor), [charColor]);
+
+  // Stamina and cooldowns
+  const staminaRef = useRef<number>(gameState.stamina ?? 100);
+  const dodgeCooldownRef = useRef<number>(0);
+  const attackCooldownRef = useRef<number>(0);
   
   // Movement physics state
   const velocityRef = useRef<THREE.Vector3>(new THREE.Vector3());
@@ -50,7 +56,8 @@ const EnhancedPlayer3D = ({ gameState, onStateUpdate, obstacles = [], paused = f
   });
   
 // Enhanced movement parameters
-  const moveSpeed = 8;
+  const baseSpeed = 6;
+  const sprintMultiplier = 1.6;
   const acceleration = 0.8;
   const friction = 0.85;
   const jumpForce = 12;
@@ -144,13 +151,19 @@ const EnhancedPlayer3D = ({ gameState, onStateUpdate, obstacles = [], paused = f
     velocity.z *= friction;
     
     // Limit max speed
-    const maxSpeed = moveSpeed;
+    const maxSpeed = baseSpeed * (keys.shift && staminaRef.current > 0 ? sprintMultiplier : 1);
     const currentSpeed = Math.sqrt(velocity.x * velocity.x + velocity.z * velocity.z);
     if (currentSpeed > maxSpeed) {
       velocity.x = (velocity.x / currentSpeed) * maxSpeed;
       velocity.z = (velocity.z / currentSpeed) * maxSpeed;
     }
-    
+    // Sprint stamina drain/regeneration
+    if ((inputX !== 0 || inputZ !== 0) && keys.shift && staminaRef.current > 0) {
+      staminaRef.current = Math.max(0, staminaRef.current - 25 * delta);
+    } else {
+      staminaRef.current = Math.min(100, staminaRef.current + 15 * delta);
+    }
+
     // Jump mechanics
     if (keys.space && !isJumping && position.y <= 0.1) {
       velocity.y = jumpForce;
@@ -158,7 +171,24 @@ const EnhancedPlayer3D = ({ gameState, onStateUpdate, obstacles = [], paused = f
       springApi.start({ scale: 1.2 });
       setTimeout(() => springApi.start({ scale: 1 }), 200);
     }
-    
+    // Dodge on CTRL (quick dash forward)
+    dodgeCooldownRef.current = Math.max(0, dodgeCooldownRef.current - delta);
+    if (keys.ctrl && dodgeCooldownRef.current <= 0 && staminaRef.current >= 20) {
+      const dashDir = new THREE.Vector3(Math.sin(rotationY.get()), 0, Math.cos(rotationY.get()));
+      position.x += dashDir.x * 2.0;
+      position.z += dashDir.z * 2.0;
+      staminaRef.current -= 20;
+      dodgeCooldownRef.current = 0.6;
+    }
+
+    // Attack on Q (short visual effect)
+    attackCooldownRef.current = Math.max(0, attackCooldownRef.current - delta);
+    if (keys.q && attackCooldownRef.current <= 0) {
+      setIsAttacking(true);
+      attackCooldownRef.current = 0.5;
+      setTimeout(() => setIsAttacking(false), 250);
+    }
+
     // Apply gravity
     velocity.y += gravity * delta;
     
@@ -223,7 +253,8 @@ const EnhancedPlayer3D = ({ gameState, onStateUpdate, obstacles = [], paused = f
         playerPosition: { 
           x: position.x * 50, 
           y: position.z * 50 
-        }
+        },
+        stamina: Math.round(staminaRef.current)
       });
     }
   });
@@ -304,7 +335,7 @@ const EnhancedPlayer3D = ({ gameState, onStateUpdate, obstacles = [], paused = f
         anchorX="center"
         anchorY="middle"
       >
-        {isJumping ? '🚀 Jumping' : isMoving ? '🏃 Moving' : '🧍 Idle'}
+        {isJumping ? '🚀 Jumping' : isAttacking ? '🗡️ Attacking' : isMoving ? '🏃 Moving' : '🧍 Idle'}
       </Text>
       
       {/* Character Name */}
@@ -315,7 +346,7 @@ const EnhancedPlayer3D = ({ gameState, onStateUpdate, obstacles = [], paused = f
         anchorX="center"
         anchorY="middle"
       >
-        {gameState.selectedCharacter?.name || 'Player'}
+        {gameState.selectedCharacter?.name || 'Player'} • {Math.round(staminaRef.current)} STA
       </Text>
       
       {/* Enhanced Particle Effects for Movement */}
@@ -349,6 +380,14 @@ const EnhancedPlayer3D = ({ gameState, onStateUpdate, obstacles = [], paused = f
             />
           </mesh>
         </>
+      )}
+
+      {/* Simple Attack Arc */}
+      {isAttacking && (
+        <mesh position={[0, 1, 0]} rotation={[0, rotationY.get(), 0]}>
+          <torusGeometry args={[1.1, 0.04, 8, 24, Math.PI / 1.2]} />
+          <meshStandardMaterial color="#ff6666" emissive="#ff3333" emissiveIntensity={0.8} transparent opacity={0.9} />
+        </mesh>
       )}
     </animated.group>
   );

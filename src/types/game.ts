@@ -16,6 +16,8 @@ export interface GameState {
   discoveredInsights: string[];
   playerPosition: { x: number; y: number };
   gameStarted: boolean;
+  health: number;
+  stamina: number;
 }
 
 export interface District {

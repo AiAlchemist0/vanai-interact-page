@@ -27,6 +27,23 @@ const GameUI3D = ({ gameState }: GameUI3DProps) => {
       {/* Progress Info */}
       <Card className="p-4 bg-background/90 backdrop-blur-sm border-gradient">
         <div className="space-y-3">
+          {/* Health / Stamina */}
+          <div>
+            <div className="flex justify-between text-xs mb-1">
+              <span>Health</span>
+              <span>{Math.round((gameState.health ?? 100))}/100</span>
+            </div>
+            <Progress value={Math.max(0, Math.min(100, gameState.health ?? 100))} className="h-2" />
+          </div>
+          <div>
+            <div className="flex justify-between text-xs mb-1">
+              <span>Stamina</span>
+              <span>{Math.round((gameState.stamina ?? 100))}/100</span>
+            </div>
+            <Progress value={Math.max(0, Math.min(100, gameState.stamina ?? 100))} className="h-2" />
+          </div>
+
+          {/* Districts / Insights */}
           <div>
             <div className="flex justify-between text-xs mb-1">
               <span>Districts Unlocked</span>
@@ -47,7 +64,7 @@ const GameUI3D = ({ gameState }: GameUI3DProps) => {
 
       {/* Enhanced Controls Info */}
       <Card className="p-4 bg-background/90 backdrop-blur-sm border-gradient">
-        <h4 className="font-semibold text-sm mb-2">Enhanced 3D Controls</h4>
+        <h4 className="font-semibold text-sm mb-2">Action Controls</h4>
         <div className="space-y-1 text-xs">
           <div className="flex justify-between">
             <span>Move:</span>
@@ -58,8 +75,20 @@ const GameUI3D = ({ gameState }: GameUI3DProps) => {
             <Badge variant="secondary" className="text-xs px-2 py-0">SPACE</Badge>
           </div>
           <div className="flex justify-between">
+            <span>Sprint:</span>
+            <Badge variant="secondary" className="text-xs px-2 py-0">SHIFT</Badge>
+          </div>
+          <div className="flex justify-between">
+            <span>Dodge:</span>
+            <Badge variant="secondary" className="text-xs px-2 py-0">CTRL</Badge>
+          </div>
+          <div className="flex justify-between">
+            <span>Attack:</span>
+            <Badge variant="secondary" className="text-xs px-2 py-0">Q</Badge>
+          </div>
+          <div className="flex justify-between">
             <span>Interact:</span>
-            <Badge variant="secondary" className="text-xs px-2 py-0">SPACE (near building)</Badge>
+            <Badge variant="secondary" className="text-xs px-2 py-0">E / SPACE (near)</Badge>
           </div>
           <div className="flex justify-between">
             <span>Camera:</span>
@@ -67,7 +96,7 @@ const GameUI3D = ({ gameState }: GameUI3DProps) => {
           </div>
         </div>
         <div className="mt-2 pt-2 border-t border-border text-xs text-muted-foreground">
-          Enhanced physics with momentum, jumping, and smooth camera following
+          Sprint drains stamina; dodge costs stamina; attacks have short cooldown.
         </div>
       </Card>
 
