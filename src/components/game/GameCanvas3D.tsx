@@ -11,6 +11,7 @@ import EnvironmentController3D from './EnvironmentController3D';
 import SettingsPanel3D from './SettingsPanel3D';
 import PauseMenu3D from './PauseMenu3D';
 import { Button } from '@/components/ui/button';
+import PostProcessingEffects3D from './PostProcessingEffects3D';
 
 // Expose a capture function from inside the Canvas
 const CaptureController = ({ onReady }: { onReady: (fn: () => string) => void }) => {
@@ -92,6 +93,8 @@ const GameCanvas3D = ({ gameState, onInsightClick, onStateUpdate, onExit, onRese
       >
         <Suspense fallback={null}>
           <EnvironmentController3D isRaining={isRaining} cycleSpeed={cycleSpeed} />
+          {/* High quality HDRI reflections */}
+          <Environment preset="city" background={false} />
           <CaptureController onReady={setDoCapture} />
           {photoMode && <OrbitControls makeDefault enableDamping dampingFactor={0.1} />}
 
@@ -143,6 +146,9 @@ const GameCanvas3D = ({ gameState, onInsightClick, onStateUpdate, onExit, onRese
           >
             BC AI Quest - 3D World
           </Text>
+          
+          {/* Post Processing Effects */}
+          <PostProcessingEffects3D enabled={!photoMode} />
           
           {/* Enhanced Camera Controls - Now camera is controlled by player */}
           {/* OrbitControls disabled when player is active */}
