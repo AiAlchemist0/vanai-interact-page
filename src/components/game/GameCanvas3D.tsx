@@ -9,6 +9,8 @@ import EnhancedDistrict3D from './EnhancedDistrict3D';
 import GameUI3D from './GameUI3D';
 import EnvironmentController3D from './EnvironmentController3D';
 import SettingsPanel3D from './SettingsPanel3D';
+import PauseMenu3D from './PauseMenu3D';
+import { Button } from '@/components/ui/button';
 
 interface GameCanvas3DProps {
   gameState: GameState;
@@ -21,6 +23,16 @@ const GameCanvas3D = ({ gameState, onInsightClick, onStateUpdate }: GameCanvas3D
   const [isRaining, setIsRaining] = useState(true);
   const [cycleSpeed, setCycleSpeed] = useState(1);
   const [showGrid, setShowGrid] = useState(true);
+  const [paused, setPaused] = useState(false);
+
+  // Toggle pause with Escape key
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setPaused(p => !p);
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, []);
 
   // Precompute simple collision obstacles for buildings
   const obstacles = gameDistricts.flatMap(d => d.buildings.map(b => {
@@ -77,6 +89,7 @@ const GameCanvas3D = ({ gameState, onInsightClick, onStateUpdate }: GameCanvas3D
             gameState={gameState}
             onStateUpdate={onStateUpdate}
             obstacles={obstacles}
+            paused={paused}
           />
           
           {/* Title */}
@@ -98,6 +111,11 @@ const GameCanvas3D = ({ gameState, onInsightClick, onStateUpdate }: GameCanvas3D
       
       {/* 3D UI Overlay */}
       <GameUI3D gameState={gameState} />
+
+      {/* Floating Controls */}
+      <div className="absolute top-4 left-4 z-20">
+        <Button size="sm" variant="secondary" onClick={() => setPaused(true)}>Pause</Button>
+      </div>
       <div className="absolute top-4 right-4 z-20">
         <SettingsPanel3D
           isRaining={isRaining}
@@ -108,6 +126,14 @@ const GameCanvas3D = ({ gameState, onInsightClick, onStateUpdate }: GameCanvas3D
           onToggleGrid={() => setShowGrid(v => !v)}
         />
       </div>
+
+      {/* Pause Overlay */}
+      {paused && (
+        <PauseMenu3D
+          paused={paused}
+          onResume={() => setPaused(false)}
+        />
+      )}
     </div>
   );
 };

@@ -10,9 +10,10 @@ interface EnhancedPlayer3DProps {
   gameState: GameState;
   onStateUpdate: (updates: Partial<GameState>) => void;
   obstacles?: { x: number; z: number; radius: number }[];
+  paused?: boolean;
 }
 
-const EnhancedPlayer3D = ({ gameState, onStateUpdate, obstacles = [] }: EnhancedPlayer3DProps) => {
+const EnhancedPlayer3D = ({ gameState, onStateUpdate, obstacles = [], paused = false }: EnhancedPlayer3DProps) => {
   const playerRef = useRef<any>(null);
   const cameraTargetRef = useRef<THREE.Vector3>(new THREE.Vector3());
   const cameraPositionRef = useRef<THREE.Vector3>(new THREE.Vector3());
@@ -48,6 +49,21 @@ const EnhancedPlayer3D = ({ gameState, onStateUpdate, obstacles = [] }: Enhanced
 
   useFrame((state, delta) => {
     if (!playerRef.current) return;
+
+    // If paused, keep camera steady on current position and skip movement
+    if (paused) {
+      const pos = positionRef.current;
+      playerRef.current.position.set(pos.x, pos.y, pos.z);
+
+      const idealCameraPosition = new THREE.Vector3(pos.x + 8, pos.y + 6, pos.z + 8);
+      const idealCameraTarget = new THREE.Vector3(pos.x, pos.y + 1, pos.z);
+      cameraPositionRef.current.lerp(idealCameraPosition, 2 * delta);
+      cameraTargetRef.current.lerp(idealCameraTarget, 3 * delta);
+      camera.position.copy(cameraPositionRef.current);
+      camera.lookAt(cameraTargetRef.current);
+      setIsMoving(false);
+      return;
+    }
     
     const velocity = velocityRef.current;
     const position = positionRef.current;
