@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { Text, Box } from '@react-three/drei';
 import { useSpring, animated } from '@react-spring/three';
 import type { District, GameState, InsightData } from '@/types/game';
@@ -30,6 +30,8 @@ const EnhancedDistrict3D = ({ district, gameState, onInsightClick, onStateUpdate
     config: { tension: 200, friction: 25 }
   }));
 
+  const platformPos = useMemo(() => platformY.to((y) => [0, y, 0] as [number, number, number]), [platformY]);
+
   // Update animations when hovered
   const handlePointerOver = () => {
     setHovered(true);
@@ -53,7 +55,7 @@ const EnhancedDistrict3D = ({ district, gameState, onInsightClick, onStateUpdate
     <group position={position3D}>
       {/* Enhanced District Base Platform with Animation */}
       <animated.mesh 
-        position-y={platformY}
+        position={platformPos}
         receiveShadow
         onPointerOver={handlePointerOver}
         onPointerOut={handlePointerOut}
@@ -129,7 +131,7 @@ const EnhancedDistrict3D = ({ district, gameState, onInsightClick, onStateUpdate
         color={isUnlocked ? '#ffffff' : '#999999'}
         anchorX="center"
         anchorY="middle"
-        font="/fonts/Inter-Bold.woff"
+        
         outlineWidth={0.02}
         outlineColor="#000000"
       >

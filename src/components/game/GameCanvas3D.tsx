@@ -142,7 +142,7 @@ const GameCanvas3D = ({ gameState, onInsightClick, onStateUpdate, onExit, onRese
             color="#ffffff"
             anchorX="center"
             anchorY="middle"
-            font="/fonts/Inter-Bold.woff"
+            
           >
             BC AI Quest - 3D World
           </Text>
