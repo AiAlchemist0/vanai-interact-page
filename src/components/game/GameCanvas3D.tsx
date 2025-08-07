@@ -8,6 +8,7 @@ import EnhancedPlayer3D from './EnhancedPlayer3D';
 import EnhancedDistrict3D from './EnhancedDistrict3D';
 import GameUI3D from './GameUI3D';
 import EnvironmentController3D from './EnvironmentController3D';
+import SettingsPanel3D from './SettingsPanel3D';
 
 interface GameCanvas3DProps {
   gameState: GameState;
@@ -16,6 +17,11 @@ interface GameCanvas3DProps {
 }
 
 const GameCanvas3D = ({ gameState, onInsightClick, onStateUpdate }: GameCanvas3DProps) => {
+  // Environment & view settings
+  const [isRaining, setIsRaining] = useState(true);
+  const [cycleSpeed, setCycleSpeed] = useState(1);
+  const [showGrid, setShowGrid] = useState(true);
+
   // Precompute simple collision obstacles for buildings
   const obstacles = gameDistricts.flatMap(d => d.buildings.map(b => {
     const districtPos = { x: d.position.x / 50 - 8, z: d.position.y / 50 - 6 };
@@ -36,7 +42,7 @@ const GameCanvas3D = ({ gameState, onInsightClick, onStateUpdate }: GameCanvas3D
         className="bg-gradient-to-b from-slate-900 to-slate-800"
       >
         <Suspense fallback={null}>
-          <EnvironmentController3D />
+          <EnvironmentController3D isRaining={isRaining} cycleSpeed={cycleSpeed} />
 
           {/* Ground Plane */}
           <mesh
@@ -53,7 +59,7 @@ const GameCanvas3D = ({ gameState, onInsightClick, onStateUpdate }: GameCanvas3D
           </mesh>
           
           {/* Grid Pattern */}
-          <gridHelper args={[100, 50, '#333333', '#333333']} position={[0, 0, 0]} />
+          {showGrid && (<gridHelper args={[100, 50, '#333333', '#333333']} position={[0, 0, 0]} />)}
           
           {/* Enhanced Districts */}
           {gameDistricts.map((district) => (
@@ -92,6 +98,16 @@ const GameCanvas3D = ({ gameState, onInsightClick, onStateUpdate }: GameCanvas3D
       
       {/* 3D UI Overlay */}
       <GameUI3D gameState={gameState} />
+      <div className="absolute top-4 right-4 z-20">
+        <SettingsPanel3D
+          isRaining={isRaining}
+          onToggleRaining={() => setIsRaining(v => !v)}
+          cycleSpeed={cycleSpeed}
+          onChangeCycleSpeed={setCycleSpeed}
+          showGrid={showGrid}
+          onToggleGrid={() => setShowGrid(v => !v)}
+        />
+      </div>
     </div>
   );
 };

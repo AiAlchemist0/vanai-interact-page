@@ -50,7 +50,7 @@ const RainParticles = () => {
   );
 };
 
-const EnvironmentController3D = () => {
+const EnvironmentController3D = ({ isRaining = true, cycleSpeed = 1 }: { isRaining?: boolean; cycleSpeed?: number; }) => {
   const dirLightRef = useRef<THREE.DirectionalLight>(null);
   const ambLightRef = useRef<THREE.AmbientLight>(null);
   const hemiLightRef = useRef<THREE.HemisphereLight>(null);
@@ -63,7 +63,7 @@ const EnvironmentController3D = () => {
   const timeRef = useRef(0);
 
   useFrame((_, delta) => {
-    timeRef.current = (timeRef.current + delta * 0.02) % 1; // slow cycle
+    timeRef.current = (timeRef.current + delta * 0.02 * cycleSpeed) % 1; // adjustable cycle speed
     const t = timeRef.current;
 
     // compute lighting values
@@ -94,7 +94,7 @@ const EnvironmentController3D = () => {
     fog.color.copy(fogColor);
   });
 
-  const isRaining = true; // can be made dynamic later
+  
 
   // Attach fog to scene
   // eslint-disable-next-line react/jsx-no-constructed-context-values
