@@ -9,9 +9,10 @@ import * as THREE from 'three';
 interface EnhancedPlayer3DProps {
   gameState: GameState;
   onStateUpdate: (updates: Partial<GameState>) => void;
+  obstacles?: { x: number; z: number; radius: number }[];
 }
 
-const EnhancedPlayer3D = ({ gameState, onStateUpdate }: EnhancedPlayer3DProps) => {
+const EnhancedPlayer3D = ({ gameState, onStateUpdate, obstacles = [] }: EnhancedPlayer3DProps) => {
   const playerRef = useRef<any>(null);
   const cameraTargetRef = useRef<THREE.Vector3>(new THREE.Vector3());
   const cameraPositionRef = useRef<THREE.Vector3>(new THREE.Vector3());
@@ -30,12 +31,13 @@ const EnhancedPlayer3D = ({ gameState, onStateUpdate }: EnhancedPlayer3DProps) =
     z: gameState.playerPosition.y / 50
   });
   
-  // Enhanced movement parameters
+// Enhanced movement parameters
   const moveSpeed = 8;
   const acceleration = 0.8;
   const friction = 0.85;
   const jumpForce = 12;
   const gravity = -25;
+  const playerRadius = 0.45;
   
   // Animated character properties for smooth animations
   const [{ scale, rotationY }, springApi] = useSpring(() => ({
@@ -128,6 +130,26 @@ const EnhancedPlayer3D = ({ gameState, onStateUpdate }: EnhancedPlayer3DProps) =
       position.y = 0;
       velocity.y = 0;
       setIsJumping(false);
+    }
+
+    // Simple circular collision against building obstacles
+    if (obstacles.length) {
+      for (const ob of obstacles) {
+        const dx = position.x - ob.x;
+        const dz = position.z - ob.z;
+        const dist = Math.sqrt(dx * dx + dz * dz);
+        const minDist = (playerRadius) + ob.radius;
+        if (dist > 0 && dist < minDist) {
+          const overlap = minDist - dist;
+          const nx = dx / dist;
+          const nz = dz / dist;
+          position.x += nx * overlap;
+          position.z += nz * overlap;
+          // Reduce velocity when colliding
+          velocity.x *= 0.2;
+          velocity.z *= 0.2;
+        }
+      }
     }
     
     // Boundary constraints

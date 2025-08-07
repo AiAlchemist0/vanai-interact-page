@@ -4,6 +4,8 @@ import { Text } from '@react-three/drei';
 import { useSpring, animated } from '@react-spring/three';
 import { useKeyboard } from '@/hooks/useKeyboard';
 import type { Building, District, GameState, InsightData } from '@/types/game';
+import { gameDistricts } from '@/utils/gameData';
+import Chart3D from './Chart3D';
 
 interface EnhancedBuilding3DProps {
   building: Building;
@@ -145,6 +147,20 @@ const EnhancedBuilding3D = ({
             visitedBuildings: [...gameState.visitedBuildings, building.id],
             discoveredInsights: [...gameState.discoveredInsights, building.id]
           });
+
+          // District progression: unlock next district when all buildings in current are visited
+          const currentVisited = [...gameState.visitedBuildings, building.id];
+          const allVisited = district.buildings.every(b => currentVisited.includes(b.id));
+          if (allVisited) {
+            const order = gameDistricts.map(d => d.id);
+            const currentIndex = order.indexOf(district.id);
+            const nextId = order[currentIndex + 1];
+            if (nextId && !gameState.unlockedDistricts.includes(nextId)) {
+              onStateUpdate({
+                unlockedDistricts: [...gameState.unlockedDistricts, nextId]
+              });
+            }
+          }
         }
       }
     }
@@ -290,6 +306,12 @@ const EnhancedBuilding3D = ({
       {/* Enhanced Interactive Effects */}
       {isNearby && (
         <>
+          {/* Ground entrance hotspot */}
+          <mesh position={[0, 0.05, 0]} rotation={[-Math.PI / 2, 0, 0]}>
+            <ringGeometry args={[0.6, 0.8, 24]} />
+            <meshStandardMaterial color="#ffff00" transparent opacity={0.4} emissive="#ffff00" emissiveIntensity={0.5} />
+          </mesh>
+
           <pointLight
             position={[0, config.height / 2, 0]}
             color="#ffff00"
@@ -308,6 +330,13 @@ const EnhancedBuilding3D = ({
               emissiveIntensity={0.2}
             />
           </mesh>
+
+          {/* In-world 3D chart preview */}
+          {building.insight && (
+            <group position={[0, config.height + 1.8, 0]}>
+              <Chart3D insight={building.insight} />
+            </group>
+          )}
         </>
       )}
       

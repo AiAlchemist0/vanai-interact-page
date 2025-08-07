@@ -1,5 +1,6 @@
 import { useState, useCallback } from 'react';
 import type { GameState } from '@/types/game';
+import { gameDistricts } from '@/utils/gameData';
 
 const initialGameState: GameState = {
   selectedCharacter: null,
@@ -12,9 +13,10 @@ const initialGameState: GameState = {
 
 export const useGameState = () => {
   const [gameState, setGameState] = useState<GameState>(() => {
-    // Load from localStorage if available
     const saved = localStorage.getItem('bc-ai-quest-state');
-    return saved ? { ...initialGameState, ...JSON.parse(saved) } : initialGameState;
+    if (saved) return { ...initialGameState, ...JSON.parse(saved) };
+    const defaultUnlocked = gameDistricts.filter(d => d.unlocked).map(d => d.id);
+    return { ...initialGameState, unlockedDistricts: defaultUnlocked };
   });
 
   const updateGameState = useCallback((updates: Partial<GameState>) => {

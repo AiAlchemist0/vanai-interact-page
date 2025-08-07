@@ -15,9 +15,15 @@ interface GameCanvas3DProps {
 }
 
 const GameCanvas3D = ({ gameState, onInsightClick, onStateUpdate }: GameCanvas3DProps) => {
+  // Precompute simple collision obstacles for buildings
+  const obstacles = gameDistricts.flatMap(d => d.buildings.map(b => {
+    const districtPos = { x: d.position.x / 50 - 8, z: d.position.y / 50 - 6 };
+    const localPos = { x: (b.position.x - d.position.x) / 50, z: (b.position.y - d.position.y) / 50 };
+    return { x: districtPos.x + localPos.x, z: districtPos.z + localPos.z, radius: 0.6 };
+  }));
   
   return (
-    <div className="flex-1 relative">
+  <div className="flex-1 relative">
       <Canvas
         camera={{ 
           position: [20, 15, 20], 
@@ -82,6 +88,7 @@ const GameCanvas3D = ({ gameState, onInsightClick, onStateUpdate }: GameCanvas3D
           <EnhancedPlayer3D
             gameState={gameState}
             onStateUpdate={onStateUpdate}
+            obstacles={obstacles}
           />
           
           {/* Title */}
