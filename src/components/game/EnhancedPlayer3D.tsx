@@ -40,7 +40,6 @@ const EnhancedPlayer3D = ({ gameState, onStateUpdate, obstacles = [], paused = f
   const [isAttacking, setIsAttacking] = useState(false);
   const [direction, setDirection] = useState<'idle' | 'forward' | 'backward' | 'left' | 'right'>('idle');
   const charColor = useMemo(() => resolveCssColor(gameState.selectedCharacter?.color, '#3B82F6'), [gameState.selectedCharacter?.color]);
-  const charThree = useMemo(() => new THREE.Color(charColor), [charColor]);
 
   // Stamina and cooldowns
   const staminaRef = useRef<number>(gameState.stamina ?? 100);
@@ -174,9 +173,11 @@ const EnhancedPlayer3D = ({ gameState, onStateUpdate, obstacles = [], paused = f
     // Dodge on CTRL (quick dash forward)
     dodgeCooldownRef.current = Math.max(0, dodgeCooldownRef.current - delta);
     if (keys.ctrl && dodgeCooldownRef.current <= 0 && staminaRef.current >= 20) {
-      const dashDir = new THREE.Vector3(Math.sin(rotationY.get()), 0, Math.cos(rotationY.get()));
-      position.x += dashDir.x * 2.0;
-      position.z += dashDir.z * 2.0;
+      const dash = new THREE.Vector3(inputX, 0, inputZ);
+      if (dash.lengthSq() === 0) dash.set(0, 0, -1); // default forward
+      dash.normalize();
+      position.x += dash.x * 2.0;
+      position.z += dash.z * 2.0;
       staminaRef.current -= 20;
       dodgeCooldownRef.current = 0.6;
     }
@@ -384,7 +385,7 @@ const EnhancedPlayer3D = ({ gameState, onStateUpdate, obstacles = [], paused = f
 
       {/* Simple Attack Arc */}
       {isAttacking && (
-        <mesh position={[0, 1, 0]} rotation={[0, rotationY.get(), 0]}>
+        <mesh position={[0, 1, 0]} rotation={[0, 0, 0]}>
           <torusGeometry args={[1.1, 0.04, 8, 24, Math.PI / 1.2]} />
           <meshStandardMaterial color="#ff6666" emissive="#ff3333" emissiveIntensity={0.8} transparent opacity={0.9} />
         </mesh>
