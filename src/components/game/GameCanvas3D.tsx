@@ -7,6 +7,7 @@ import type { GameState, InsightData } from '@/types/game';
 import EnhancedPlayer3D from './EnhancedPlayer3D';
 import EnhancedDistrict3D from './EnhancedDistrict3D';
 import GameUI3D from './GameUI3D';
+import EnvironmentController3D from './EnvironmentController3D';
 
 interface GameCanvas3DProps {
   gameState: GameState;
@@ -23,7 +24,7 @@ const GameCanvas3D = ({ gameState, onInsightClick, onStateUpdate }: GameCanvas3D
   }));
   
   return (
-  <div className="flex-1 relative">
+    <div className="flex-1 relative">
       <Canvas
         camera={{ 
           position: [20, 15, 20], 
@@ -35,27 +36,8 @@ const GameCanvas3D = ({ gameState, onInsightClick, onStateUpdate }: GameCanvas3D
         className="bg-gradient-to-b from-slate-900 to-slate-800"
       >
         <Suspense fallback={null}>
-          {/* Lighting Setup */}
-          <ambientLight intensity={0.3} />
-          <directionalLight
-            position={[50, 50, 25]}
-            intensity={1}
-            castShadow
-            shadow-mapSize={[2048, 2048]}
-            shadow-camera-left={-50}
-            shadow-camera-right={50}
-            shadow-camera-top={50}
-            shadow-camera-bottom={-50}
-          />
-          
-          {/* Environment */}
-          <Sky
-            distance={450000}
-            sunPosition={[0, 1, 0]}
-            inclination={0}
-            azimuth={0.25}
-          />
-          
+          <EnvironmentController3D />
+
           {/* Ground Plane */}
           <mesh
             rotation={[-Math.PI / 2, 0, 0]}
