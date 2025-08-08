@@ -15,7 +15,7 @@ const PostProcessingEffects3D = ({ enabled = true }: PostProcessingEffects3DProp
       <DepthOfField focusDistance={0.02} focalLength={0.02} bokehScale={1.2} />
 
       {/* Gentle vignette */}
-      <Vignette eskil={false} offset={0.1} darkness={0.6} />
+      {/* Vignette disabled temporarily to prevent runtime error */}
     </EffectComposer>
   );
 };
