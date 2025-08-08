@@ -7,6 +7,7 @@ import Index from "./pages/Index";
 import GamePage from "./pages/GamePage";
 import CharacterSelect from "./pages/CharacterSelect";
 import NotFound from "./pages/NotFound";
+import VoxelGame from "./pages/VoxelGame";
 
 const queryClient = new QueryClient();
 
@@ -20,6 +21,7 @@ const App = () => (
           <Route path="/" element={<Index />} />
           <Route path="/character-select" element={<CharacterSelect />} />
           <Route path="/game" element={<GamePage />} />
+          <Route path="/game-mc" element={<VoxelGame />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
