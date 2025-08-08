@@ -9,6 +9,17 @@ import React from 'react';
 // A minimal whitelist of R3F intrinsic element names used in this project.
 // We only filter for these so DOM elements keep their data-* attributes
 // (Radix UI relies on data-state, etc.).
+
+// Common HTML tag names we should NEVER sanitize (preserve data-*/aria-* for UI libs like Radix)
+const HTML_TAGS = new Set<string>([
+  'div','span','p','a','button','input','textarea','select','option','label',
+  'ul','ol','li','nav','header','footer','main','section','article','aside',
+  'h1','h2','h3','h4','h5','h6','img','picture','source','svg','path','g',
+  'circle','rect','line','polyline','polygon','defs','use','symbol','canvas',
+  'video','audio','track','table','thead','tbody','tfoot','tr','td','th','col','colgroup',
+  'form','fieldset','legend','datalist','progress','meter','details','summary','dialog',
+  'iframe','small','strong','em','code','pre','blockquote','hr','br']
+);
 const R3F_INTRINSICS = new Set<string>([
   'group',
   'mesh',
@@ -59,7 +70,7 @@ if (typeof window !== 'undefined' && !(window as any).__r3fSanitized) {
   (window as any).__r3fSanitized = true;
   const origCreateElement = React.createElement as any;
   (React as any).createElement = (type: any, props?: any, ...children: any[]) => {
-    if (props && typeof type === 'string' && R3F_INTRINSICS.has(type)) {
+    if (props && typeof type === 'string' && !HTML_TAGS.has(type)) {
       const sanitized: any = {};
       for (const key in props) {
         // Drop attributes that are meaningless or harmful on Three objects
