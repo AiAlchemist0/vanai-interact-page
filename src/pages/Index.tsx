@@ -4,6 +4,7 @@ import QuestionCategories from "@/components/QuestionCategories";
 import DataVisualization from "@/components/DataVisualization";
 import Methodology from "@/components/Methodology";
 import Footer from "@/components/Footer";
+import AudioPlayer from "@/components/AudioPlayer";
 
 const Index = () => {
   return (
@@ -14,6 +15,7 @@ const Index = () => {
       <DataVisualization />
       <Methodology />
       <Footer />
+      <AudioPlayer />
     </div>
   );
 };
