@@ -43,6 +43,7 @@ const R3F_INTRINSICS = new Set<string>([
   'instancedMesh',
   'line',
   'points',
+  'primitive',
   'meshStandardMaterial',
   'meshBasicMaterial',
   'meshPhongMaterial',
@@ -62,7 +63,8 @@ if (typeof window !== 'undefined' && !(window as any).__r3fSanitized) {
       const sanitized: any = {};
       for (const key in props) {
         // Drop attributes that are meaningless or harmful on Three objects
-        if (key.startsWith('data-') || key.startsWith('aria-')) continue;
+        // - Any dashed props (e.g., lov-id, data-*, aria-*) can crash applyProps
+        if (key.includes('-') || key.startsWith('data-') || key.startsWith('aria-')) continue;
         sanitized[key] = props[key];
       }
       return origCreateElement(type, sanitized, ...children);
