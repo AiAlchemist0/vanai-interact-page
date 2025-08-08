@@ -1,4 +1,4 @@
-import { EffectComposer, Bloom, Vignette, DepthOfField } from '@react-three/postprocessing';
+import { EffectComposer, Bloom, DepthOfField } from '@react-three/postprocessing';
 
 interface PostProcessingEffects3DProps {
   enabled?: boolean;
