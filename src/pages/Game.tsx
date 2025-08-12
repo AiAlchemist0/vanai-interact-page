@@ -5,6 +5,11 @@ import GameBoard from "@/components/game/GameBoard";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
 
+// Helper function to get audio URL from Supabase Storage
+const getAudioUrl = (filename: string) => {
+  return `https://oojckbecymzrrdtvcmqi.supabase.co/storage/v1/object/public/audio-files/${filename}`;
+};
+
 export type GameState = "menu" | "playing" | "paused" | "gameOver";
 export type Difficulty = "easy" | "medium" | "hard" | "expert";
 
@@ -29,7 +34,7 @@ const SONGS: Song[] = [
     id: "bc-ai-hackathon",
     title: "BC AI Hackathon by Rival Tech",
     artist: "Digital BC AI Girl",
-    audioFile: "/BC AI Hackathon by Rival Tech.mp3",
+    audioFile: getAudioUrl("BC AI Hackathon by Rival Tech.mp3"),
     coverArt: "/src/assets/bc-ai-hackathon-cover.jpg",
     bpm: 128,
     duration: 210000,
@@ -38,7 +43,7 @@ const SONGS: Song[] = [
     id: "mac",
     title: "Mind, AI, & Consciousness (MAC)",
     artist: "Loki Jörgenson",
-    audioFile: "/Mind, AI, & Consciousness (MAC).mp3",
+    audioFile: getAudioUrl("Mind, AI, & Consciousness (MAC).mp3"),
     coverArt: "/lovable-uploads/1c4667b0-798c-4df2-872f-a4638d2a2755.png",
     bpm: 95,
     duration: 180000,
@@ -47,7 +52,7 @@ const SONGS: Song[] = [
     id: "deepfakes",
     title: "Deepfakes in the Rain",
     artist: "KK / BCAI",
-    audioFile: "/Deepfakes in the Rain_KK_BCAI.mp3",
+    audioFile: getAudioUrl("Deepfakes in the Rain_KK_BCAI.mp3"),
     coverArt: "/lovable-uploads/d9e36528-0e0f-46c3-abe0-5508d700b908.png",
     bpm: 120,
     duration: 180000,
@@ -56,7 +61,7 @@ const SONGS: Song[] = [
     id: "hr-macmillan",
     title: "H.R MacMillan Space Centre - Alien Abduction",
     artist: "That Sole Survivor BC AI Gurl",
-    audioFile: "/H.R MacMillan Space Centre _ Alian Abduction.mp3",
+    audioFile: getAudioUrl("H.R MacMillan Space Centre _ Alian Abduction.mp3"),
     coverArt: "/src/assets/hr-macmillan-alien-cover.jpg",
     bpm: 95,
     duration: 220000,
@@ -65,7 +70,7 @@ const SONGS: Song[] = [
     id: "pixel-wizard",
     title: "Mr. Pixel Wizard BC AI",
     artist: "Kevin Friel",
-    audioFile: "/Mr_Pixel_Wizard BC AI.mp3",
+    audioFile: getAudioUrl("Mr_Pixel_Wizard BC AI.mp3"),
     coverArt: "/src/assets/pixel-wizard-bc-ai-cover.jpg",
     bpm: 140,
     duration: 200000,
@@ -74,7 +79,7 @@ const SONGS: Song[] = [
     id: "dr-patrick",
     title: "Dr. Patrick Parra Pennefather",
     artist: "Academic Orchestra",
-    audioFile: "/Dr. Patrick Parra Pennefather.mp3",
+    audioFile: getAudioUrl("Dr. Patrick Parra Pennefather.mp3"),
     coverArt: "/lovable-uploads/fc226621-2faf-4a33-8885-28d7dc934861.png",
     bpm: 110,
     duration: 190000,
