@@ -22,7 +22,7 @@ const SONGS = [
     id: "hr-macmillan",
     title: "H.R MacMillan Space Centre - Alien Abduction",
     artist: "That Sole Survivor BC AI Gurl",
-    src: getAudioUrl("hr-macmillan-alien-abduction.mp3"),
+    src: getAudioUrl("H.R MacMillan Space Centre _ Alian Abduction.mp3"),
     coverArt: getCoverUrl("hr-macmillan-alien-cover.jpg"),
     lyrics: [
       { time: 0, text: "Under the dome of starlit night" },
@@ -45,7 +45,7 @@ const SONGS = [
     id: "bc-ai-hackathon",
     title: "BC AI Hackathon by Rival Tech",
     artist: "Digital BC AI Girl",
-    src: getAudioUrl("bc-ai-hackathon.mp3"),
+    src: getAudioUrl("BC AI Hackathon by Rival Tech.mp3"),
     coverArt: getCoverUrl("bc-ai-hackathon-cover.jpg"),
     lyrics: [
       { time: 0, text: "Code flows through the digital night" },
@@ -68,7 +68,7 @@ const SONGS = [
     id: "mac",
     title: "Mind, AI, & Consciousness (MAC)",
     artist: "Loki Jörgenson",
-    src: getAudioUrl("mind-ai-consciousness.mp3"),
+    src: getAudioUrl("Mind, AI, & Consciousness (MAC).mp3"),
     coverArt: getCoverUrl("mac-cover.jpg"),
     lyrics: [
       { time: 0, text: "What is consciousness in the age of AI?" },
@@ -91,7 +91,7 @@ const SONGS = [
     id: "deepfakes",
     title: "Deepfakes in the Rain",
     artist: "KK / BCAI",
-    src: getAudioUrl("deepfakes-in-the-rain.mp3"),
+    src: getAudioUrl("Deepfakes in the Rain_KK_BCAI.mp3"),
     coverArt: getCoverUrl("deepfakes-cover.jpg"),
     lyrics: [
       { time: 0, text: "In the digital rain we fall" },
@@ -119,7 +119,7 @@ const SONGS = [
     id: "pixel-wizard",
     title: "Mr. Pixel Wizard BC AI",
     artist: "Kevin Friel",
-    src: getAudioUrl("pixel-wizard-bc-ai.mp3"),
+    src: getAudioUrl("Mr_Pixel_Wizard BC AI.mp3"),
     coverArt: getCoverUrl("pixel-wizard-cover.jpg"),
     lyrics: [
       { time: 0, text: "In the realm of digital art" },
@@ -142,7 +142,7 @@ const SONGS = [
     id: "dr-patrick",
     title: "Dr. Patrick Parra Pennefather",
     artist: "Academic Orchestra",
-    src: getAudioUrl("dr-patrick-parra-pennefather.mp3"),
+    src: getAudioUrl("Dr. Patrick Parra Pennefather.mp3"),
     coverArt: getCoverUrl("dr-patrick-cover.jpg"),
     lyrics: [
       { time: 0, text: "In the halls of learning high" },
