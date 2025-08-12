@@ -73,14 +73,65 @@ const Hero = () => {
             <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
           </Button>
 
-          <Button 
-            size="lg" 
-            className="gradient-accent hover:glow-accent transition-smooth group text-lg px-8 py-6" 
-            onClick={() => navigate('/game')}
-          >
-            <Gamepad2 className="mr-2 w-5 h-5 group-hover:scale-110 transition-transform" />
-            PLAY BC AI GAME
-          </Button>
+            {/* Interactive Song Banner */}
+            <div className="relative group cursor-pointer" onClick={() => navigate("/game")}>
+              <div className="relative overflow-hidden rounded-2xl border-2 border-primary/30 bg-gradient-to-r from-primary/10 via-accent/10 to-primary/10 p-6 backdrop-blur-sm transition-all duration-300 hover:border-primary/60 hover:shadow-glow animate-pulse">
+                {/* Animated background glow */}
+                <div className="absolute inset-0 bg-gradient-to-r from-primary/20 via-accent/20 to-primary/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 animate-pulse"></div>
+                
+                {/* Content */}
+                <div className="relative z-10 flex items-center gap-6">
+                  {/* Featured Song Cover */}
+                  <div className="relative">
+                    <img 
+                      src="/lovable-uploads/d9e36528-0e0f-46c3-abe0-5508d700b908.png" 
+                      alt="Deepfakes in the Rain cover"
+                      className="w-20 h-20 rounded-lg object-cover border-2 border-primary/40 group-hover:border-primary/80 transition-all duration-300 group-hover:scale-110 shadow-lg"
+                    />
+                    <div className="absolute -top-1 -right-1 w-6 h-6 bg-accent rounded-full animate-ping"></div>
+                    <div className="absolute -top-1 -right-1 w-6 h-6 bg-accent rounded-full flex items-center justify-center">
+                      <span className="text-xs font-bold text-accent-foreground">♪</span>
+                    </div>
+                  </div>
+                  
+                  {/* Song Info */}
+                  <div className="flex-1">
+                    <div className="flex items-center gap-2 mb-2">
+                      <span className="px-3 py-1 bg-accent/20 text-accent font-bold text-sm rounded-full animate-pulse">
+                        NOW FEATURED
+                      </span>
+                      <span className="text-primary font-semibold">🎸</span>
+                    </div>
+                    <h3 className="text-xl font-bold text-foreground mb-1 group-hover:text-primary transition-colors">
+                      Deepfakes in the Rain
+                    </h3>
+                    <p className="text-muted-foreground text-sm mb-2">by KK / BCAI</p>
+                    <p className="text-xs text-muted-foreground">Experience AI music in our Guitar Hero game!</p>
+                  </div>
+                  
+                  {/* Play Button */}
+                  <div className="flex flex-col items-center">
+                    <div className="w-16 h-16 bg-gradient-to-r from-primary to-accent rounded-full flex items-center justify-center group-hover:scale-110 transition-transform duration-300 shadow-lg">
+                      <svg className="w-8 h-8 text-primary-foreground ml-1" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M8 5v14l11-7z"/>
+                      </svg>
+                    </div>
+                    <span className="text-sm font-semibold mt-2 text-primary group-hover:text-accent transition-colors">
+                      PLAY NOW
+                    </span>
+                  </div>
+                </div>
+                
+                {/* Animated border effect */}
+                <div className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                  <div className="absolute inset-0 rounded-2xl border-2 border-accent animate-pulse"></div>
+                </div>
+              </div>
+              
+              {/* Floating musical notes */}
+              <div className="absolute -top-2 -right-2 text-accent animate-bounce">♪</div>
+              <div className="absolute -bottom-2 -left-2 text-primary animate-bounce" style={{animationDelay: '0.5s'}}>♫</div>
+            </div>
           
           <Button variant="outline" size="lg" className="border-gradient text-lg px-8 py-6 hover:bg-primary/10 transition-smooth" onClick={() => document.getElementById('methodology')?.scrollIntoView({
           behavior: 'smooth'
