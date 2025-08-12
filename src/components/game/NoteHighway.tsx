@@ -19,92 +19,87 @@ const NoteHighway = ({ activeNotes, currentTime, pressedFrets }: NoteHighwayProp
     }
   });
 
-  // Fret positions (X coordinates) - spread them out more
-  const fretPositions = [-3, -1.5, 0, 1.5, 3];
+  // Fret positions (X coordinates) - Guitar Hero standard spacing
+  const fretPositions = [-2.4, -1.2, 0, 1.2, 2.4];
   
-  // Fret colors matching the game
-  const fretColors = ['#00ff00', '#ff0000', '#ffff00', '#0000ff', '#ff8800'];
+  // Guitar Hero accurate fret colors
+  const fretColors = ['#22c55e', '#ef4444', '#eab308', '#3b82f6', '#f97316']; // Green, Red, Yellow, Blue, Orange
 
   return (
     <group ref={highwayRef}>
-      {/* Highway Rails */}
+      {/* Lane Dividers - Subtle guidelines */}
       {fretPositions.map((x, index) => (
-        <group key={index}>
-          {/* Fret Rail - Extended and brighter */}
-          <mesh position={[x, -1, -25]}>
-            <boxGeometry args={[0.15, 3, 50]} />
+        <group key={`lane-${index}`}>
+          {/* Subtle lane divider */}
+          <mesh position={[x + 0.6, -2, -10]}>
+            <boxGeometry args={[0.02, 0.1, 40]} />
             <meshBasicMaterial 
-              color={fretColors[index]}
+              color="#333366"
               transparent
-              opacity={pressedFrets.has(index) ? 1.0 : 0.6}
+              opacity={0.3}
             />
           </mesh>
 
-          {/* Fret Base (where notes hit) - Larger and more visible */}
-          <mesh position={[x, -2.5, 5]}>
-            <cylinderGeometry args={[0.4, 0.4, 0.3]} />
+          {/* Hit zone platform - rectangular to match notes */}
+          <mesh position={[x, -2.8, 5]} rotation={[0, 0, Math.PI / 4]}>
+            <boxGeometry args={[0.8, 0.8, 0.1]} />
             <meshBasicMaterial 
               color={fretColors[index]}
               transparent
-              opacity={pressedFrets.has(index) ? 1.0 : 0.8}
+              opacity={pressedFrets.has(index) ? 0.9 : 0.4}
             />
           </mesh>
 
           {/* Hit zone glow when pressed */}
           {pressedFrets.has(index) && (
-            <mesh position={[x, -2.5, 5]}>
-              <cylinderGeometry args={[1, 1, 0.1]} />
+            <mesh position={[x, -2.8, 5]} rotation={[0, 0, Math.PI / 4]}>
+              <boxGeometry args={[1.2, 1.2, 0.05]} />
               <meshBasicMaterial 
                 color={fretColors[index]}
                 transparent
-                opacity={0.9}
+                opacity={0.8}
+              />
+            </mesh>
+          )}
+
+          {/* Lane highlight when pressed */}
+          {pressedFrets.has(index) && (
+            <mesh position={[x, -2, -10]}>
+              <boxGeometry args={[1.0, 0.05, 40]} />
+              <meshBasicMaterial 
+                color={fretColors[index]}
+                transparent
+                opacity={0.3}
               />
             </mesh>
           )}
         </group>
       ))}
 
-      {/* Highway Floor - More visible */}
-      <mesh position={[0, -4, -10]} rotation={[-Math.PI / 2, 0, 0]}>
-        <planeGeometry args={[12, 60]} />
+      {/* Hit line - clear visual indicator where to strum */}
+      <mesh position={[0, -2.7, 5]}>
+        <boxGeometry args={[7, 0.05, 0.1]} />
         <meshBasicMaterial 
-          color="#000033"
+          color="#ffffff"
           transparent
-          opacity={0.7}
+          opacity={0.6}
         />
       </mesh>
-
-      {/* Highway Grid Lines */}
-      {Array.from({ length: 10 }, (_, i) => (
-        <mesh key={i} position={[0, -3.9, -20 + i * 4]} rotation={[-Math.PI / 2, 0, 0]}>
-          <planeGeometry args={[12, 0.1]} />
-          <meshBasicMaterial 
-            color="#0066ff"
-            transparent
-            opacity={0.5}
-          />
-        </mesh>
-      ))}
 
       {/* Notes */}
       {activeNotes.map((note, noteIndex) => 
         note.frets.map((fret, fretIndex) => {
-          // Calculate note position: notes start far away (negative Z) and move toward camera (positive Z)
+          // Calculate note position: notes start far away and move toward hit zone
           const timeToHit = (note.time - currentTime) / 1000; // Time in seconds until hit
-          const noteZ = -30 + (5 - timeToHit) * 10; // Notes start at Z=-30, hit zone at Z=5
-          
-          // Debug logging for first few notes
-          if (noteIndex < 2 && fretIndex === 0) {
-            console.log(`Note ${noteIndex}: time=${note.time}, currentTime=${currentTime}, timeToHit=${timeToHit.toFixed(2)}s, noteZ=${noteZ.toFixed(2)}`);
-          }
+          const noteZ = -25 + (5 - timeToHit) * 8; // Notes start at Z=-25, hit zone at Z=5
           
           // Only render notes that are in visible range
-          if (noteZ < -35 || noteZ > 15) return null;
+          if (noteZ < -30 || noteZ > 10) return null;
           
           return (
             <Note3D
               key={`${note.time}-${fret}-${noteIndex}-${fretIndex}`}
-              position={[fretPositions[fret], 0, noteZ]}
+              position={[fretPositions[fret], -1, noteZ]}
               fret={fret}
               isChord={note.type === 'chord'}
               noteTime={note.time}
@@ -113,12 +108,6 @@ const NoteHighway = ({ activeNotes, currentTime, pressedFrets }: NoteHighwayProp
           );
         })
       )}
-
-      {/* Test note to verify visibility */}
-      <mesh position={[0, 0, 0]}>
-        <sphereGeometry args={[0.5]} />
-        <meshBasicMaterial color="#ffffff" />
-      </mesh>
     </group>
   );
 };

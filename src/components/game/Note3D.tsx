@@ -13,75 +13,77 @@ interface Note3DProps {
 const Note3D = ({ position, fret, isChord, noteTime, currentTime }: Note3DProps) => {
   const noteRef = useRef<Mesh>(null);
   
-  // Fret colors matching the game
-  const fretColors = ['#00ff00', '#ff0000', '#ffff00', '#0000ff', '#ff8800'];
+  // Guitar Hero accurate fret colors
+  const fretColors = ['#22c55e', '#ef4444', '#eab308', '#3b82f6', '#f97316']; // Green, Red, Yellow, Blue, Orange
   const color = fretColors[fret];
+
+  // Calculate if note is in hit zone
+  const timeDiff = Math.abs(noteTime - currentTime);
+  const isInHitZone = timeDiff < 200;
+  const hitIntensity = isInHitZone ? 1 - (timeDiff / 200) : 0;
 
   useFrame(() => {
     if (noteRef.current) {
-      // Rotation animation
-      noteRef.current.rotation.y += 0.02;
-      noteRef.current.rotation.x += 0.01;
+      // Subtle rotation for visual interest
+      noteRef.current.rotation.y += 0.005;
       
-      // Pulsing effect for chords
-      if (isChord) {
-        const scale = 1 + Math.sin(Date.now() * 0.005) * 0.2;
-        noteRef.current.scale.setScalar(scale);
-      }
-
-      // Glow effect when close to hit zone
-      const timeDiff = Math.abs(noteTime - currentTime);
-      if (timeDiff < 200) {
-        const intensity = 1 - (timeDiff / 200);
-        noteRef.current.scale.setScalar(1 + intensity * 0.5);
+      // Scale effect when approaching hit zone
+      if (isInHitZone) {
+        const baseScale = isChord ? 1.2 : 1.0;
+        noteRef.current.scale.setScalar(baseScale + hitIntensity * 0.3);
+      } else {
+        const baseScale = isChord ? 1.2 : 1.0;
+        noteRef.current.scale.setScalar(baseScale);
       }
     }
   });
 
   return (
     <group position={position}>
-      <mesh ref={noteRef}>
-        {isChord ? (
-          // Chord notes are star-shaped (using octahedron)
-          <octahedronGeometry args={[0.3]} />
-        ) : (
-          // Single notes are spherical
-          <sphereGeometry args={[0.25, 16, 16]} />
-        )}
+      {/* Main note gem - rectangular like Guitar Hero */}
+      <mesh ref={noteRef} rotation={[0, 0, Math.PI / 4]}>
+        <boxGeometry args={isChord ? [0.8, 0.8, 0.3] : [0.6, 0.6, 0.25]} />
         <meshStandardMaterial 
           color={color}
           emissive={color}
-          emissiveIntensity={isChord ? 0.4 : 0.2}
+          emissiveIntensity={isInHitZone ? 0.6 : 0.2}
+          metalness={0.3}
+          roughness={0.1}
           transparent
-          opacity={0.9}
+          opacity={0.95}
         />
       </mesh>
 
-      {/* Glow ring for chords */}
+      {/* Chord indicator - additional visual elements */}
       {isChord && (
-        <mesh rotation={[Math.PI / 2, 0, 0]}>
-          <ringGeometry args={[0.4, 0.6, 16]} />
-          <meshStandardMaterial 
+        <>
+          {/* Star points for chord notes */}
+          {[-0.3, 0.3].map((offset, i) => (
+            <mesh key={i} position={[offset, offset, 0]} rotation={[0, 0, Math.PI / 4]}>
+              <boxGeometry args={[0.3, 0.3, 0.15]} />
+              <meshStandardMaterial 
+                color={color}
+                emissive={color}
+                emissiveIntensity={0.4}
+                transparent
+                opacity={0.8}
+              />
+            </mesh>
+          ))}
+        </>
+      )}
+
+      {/* Hit zone glow effect */}
+      {isInHitZone && (
+        <mesh rotation={[0, 0, Math.PI / 4]}>
+          <boxGeometry args={[1.2, 1.2, 0.1]} />
+          <meshBasicMaterial 
             color={color}
-            emissive={color}
-            emissiveIntensity={0.6}
             transparent
-            opacity={0.7}
+            opacity={hitIntensity * 0.5}
           />
         </mesh>
       )}
-
-      {/* Trail effect */}
-      <mesh position={[0, 0, 1]}>
-        <sphereGeometry args={[0.1, 8, 8]} />
-        <meshStandardMaterial 
-          color={color}
-          emissive={color}
-          emissiveIntensity={0.3}
-          transparent
-          opacity={0.5}
-        />
-      </mesh>
     </group>
   );
 };
