@@ -6,6 +6,9 @@ import FretBoard from "./FretBoard";
 import ScoreDisplay from "./ScoreDisplay";
 import GameOverModal from "./GameOverModal";
 import GameBoard3D from "./GameBoard3D";
+import { HitEffect } from "./HitEffects";
+import { FloatingTextItem } from "./FloatingText";
+import { useHitDetection } from "@/hooks/useHitDetection";
 import { Pause, Play, Square, Home } from "lucide-react";
 
 interface GameBoardProps {
@@ -84,6 +87,11 @@ const GameBoard = ({
   const [accuracy, setAccuracy] = useState(100);
   const [notesHit, setNotesHit] = useState(0);
   const [totalNotes, setTotalNotes] = useState(0);
+  const [hitEffects, setHitEffects] = useState<HitEffect[]>([]);
+  const [floatingTexts, setFloatingTexts] = useState<FloatingTextItem[]>([]);
+
+  // Hit detection system
+  const { processHit, processMiss, resetStats, getStats } = useHitDetection();
 
   // Initialize game
   useEffect(() => {
@@ -142,12 +150,22 @@ const GameBoard = ({
       
       setActiveNotes(upcoming);
 
-      // Check for missed notes
+      // Check for missed notes (increased window to 150ms)
       const missedNotes = notes.filter(note => 
-        note.time < time - 200 && note.time > time - 250
+        note.time < time - 150 && note.time > time - 200
       );
       
       if (missedNotes.length > 0) {
+        missedNotes.forEach(note => {
+          // Add miss effect
+          const fretPositions = [-1.5, -0.75, 0, 0.75, 1.5];
+          note.frets.forEach(fret => {
+            addHitEffect('miss', [fretPositions[fret], 0, 0]);
+            addFloatingText('MISS', 'miss', [fretPositions[fret], 1, 0], 0);
+          });
+          processMiss();
+        });
+        
         onComboChange(0);
         setNotes(prev => prev.filter(note => !missedNotes.includes(note)));
       }
@@ -207,13 +225,36 @@ const GameBoard = ({
     };
   }, [gameState]);
 
+  // Helper functions for effects
+  const addHitEffect = (grade: 'perfect' | 'good' | 'okay' | 'miss', position: [number, number, number]) => {
+    const effect: HitEffect = {
+      id: Math.random().toString(36),
+      position: { x: position[0], y: position[1], z: position[2] },
+      grade,
+      age: 0,
+      maxAge: grade === 'miss' ? 800 : 600
+    };
+    setHitEffects(prev => [...prev, effect]);
+  };
+
+  const addFloatingText = (text: string, grade: 'perfect' | 'good' | 'okay' | 'miss', position: [number, number, number], points: number) => {
+    const floatingText: FloatingTextItem = {
+      id: Math.random().toString(36),
+      text: points > 0 ? `+${points} ${text.toUpperCase()}` : text,
+      grade,
+      position,
+      age: 0,
+      maxAge: 1500
+    };
+    setFloatingTexts(prev => [...prev, floatingText]);
+  };
+
   const handleStrum = () => {
-    const hitWindow = 150; // ms window for hitting notes
     const currentTimeMs = currentTime;
 
-    // Find notes within hit window
+    // Find notes within extended hit window for detection
     const hittableNotes = notes.filter(note => 
-      Math.abs(note.time - currentTimeMs) <= hitWindow
+      Math.abs(note.time - currentTimeMs) <= 100 // 100ms max window
     );
 
     if (hittableNotes.length === 0) return;
@@ -230,27 +271,59 @@ const GameBoard = ({
     const isCorrect = requiredFrets.size === pressedFrets.size && 
                      pressedFretsArray.every(fret => requiredFrets.has(fret));
 
+    const fretPositions = [-1.5, -0.75, 0, 0.75, 1.5];
+
     if (isCorrect) {
-      // Hit!
-      const newCombo = combo + 1;
-      onComboChange(newCombo);
-      
-      const basePoints = closestNote.type === "chord" ? 100 : 50;
-      const comboMultiplier = Math.min(Math.floor(newCombo / 10) + 1, 4);
-      const points = basePoints * comboMultiplier;
-      
-      onScoreChange(score + points);
-      setNotesHit(prev => prev + 1);
-      
-      // Remove hit note
-      setNotes(prev => prev.filter(n => n !== closestNote));
+      // Calculate timing and hit grade
+      const timingDiff = closestNote.time - currentTimeMs;
+      const isChord = closestNote.type === "chord";
+      const hitResult = processHit(timingDiff, isChord, combo);
+
+      if (hitResult.grade !== 'miss') {
+        // Successful hit
+        const newCombo = combo + 1;
+        onComboChange(newCombo);
+        onScoreChange(score + hitResult.points);
+        setNotesHit(prev => prev + 1);
+
+        // Add visual effects for each fret
+        closestNote.frets.forEach(fret => {
+          addHitEffect(hitResult.grade, [fretPositions[fret], 0, 0]);
+          addFloatingText(hitResult.grade, hitResult.grade, [fretPositions[fret], 1, 0], hitResult.points);
+        });
+
+        // Remove hit note
+        setNotes(prev => prev.filter(n => n !== closestNote));
+      } else {
+        // Miss due to bad timing
+        onComboChange(0);
+        closestNote.frets.forEach(fret => {
+          addHitEffect('miss', [fretPositions[fret], 0, 0]);
+          addFloatingText('MISS', 'miss', [fretPositions[fret], 1, 0], 0);
+        });
+      }
     } else {
-      // Miss
+      // Wrong frets pressed
       onComboChange(0);
+      // Show miss effect on the note's frets
+      closestNote.frets.forEach(fret => {
+        addHitEffect('miss', [fretPositions[fret], 0, 0]);
+        addFloatingText('MISS', 'miss', [fretPositions[fret], 1, 0], 0);
+      });
     }
 
-    // Update accuracy
-    setAccuracy(Math.round((notesHit / Math.max(1, totalNotes - notes.length)) * 100));
+    // Update accuracy using hit detection stats
+    const stats = getStats();
+    setAccuracy(stats.accuracy);
+  };
+
+  // Effect cleanup handlers
+  const handleEffectComplete = (id: string) => {
+    setHitEffects(prev => prev.filter(effect => effect.id !== id));
+  };
+
+  const handleTextComplete = (id: string) => {
+    setFloatingTexts(prev => prev.filter(text => text.id !== id));
   };
 
   const handlePauseToggle = () => {
@@ -321,6 +394,10 @@ const GameBoard = ({
             activeNotes={activeNotes}
             currentTime={currentTime}
             pressedFrets={pressedFrets}
+            hitEffects={hitEffects}
+            floatingTexts={floatingTexts}
+            onEffectComplete={handleEffectComplete}
+            onTextComplete={handleTextComplete}
           />
         </div>
         
@@ -368,6 +445,9 @@ const GameBoard = ({
             setCurrentTime(0);
             setNotesHit(0);
             setAccuracy(100);
+            setHitEffects([]);
+            setFloatingTexts([]);
+            resetStats();
             if (audioRef.current) {
               audioRef.current.currentTime = 0;
             }

@@ -1,15 +1,29 @@
 import { Canvas } from '@react-three/fiber';
 import { PerspectiveCamera } from '@react-three/drei';
 import NoteHighway from './NoteHighway';
+import HitEffects, { HitEffect } from './HitEffects';
+import FloatingText, { FloatingTextItem } from './FloatingText';
 import { NotePattern } from '@/pages/Game';
 
 interface GameBoard3DProps {
   activeNotes: NotePattern[];
   currentTime: number;
   pressedFrets: Set<number>;
+  hitEffects: HitEffect[];
+  floatingTexts: FloatingTextItem[];
+  onEffectComplete: (id: string) => void;
+  onTextComplete: (id: string) => void;
 }
 
-const GameBoard3D = ({ activeNotes, currentTime, pressedFrets }: GameBoard3DProps) => {
+const GameBoard3D = ({ 
+  activeNotes, 
+  currentTime, 
+  pressedFrets, 
+  hitEffects, 
+  floatingTexts,
+  onEffectComplete,
+  onTextComplete 
+}: GameBoard3DProps) => {
   return (
     <div className="w-full h-full">
       <Canvas
@@ -42,6 +56,18 @@ const GameBoard3D = ({ activeNotes, currentTime, pressedFrets }: GameBoard3DProp
           activeNotes={activeNotes}
           currentTime={currentTime}
           pressedFrets={pressedFrets}
+        />
+
+        {/* Hit Effects */}
+        <HitEffects 
+          effects={hitEffects}
+          onEffectComplete={onEffectComplete}
+        />
+
+        {/* Floating Score Text */}
+        <FloatingText 
+          texts={floatingTexts}
+          onTextComplete={onTextComplete}
         />
       </Canvas>
       
