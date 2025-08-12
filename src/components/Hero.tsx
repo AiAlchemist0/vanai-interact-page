@@ -1,10 +1,8 @@
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { ArrowRight, Users, BarChart3, MapPin, Play } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { ArrowRight, Users, BarChart3, MapPin } from "lucide-react";
 import heroImage from "@/assets/hero-ai-survey.jpg";
 const Hero = () => {
-  const navigate = useNavigate();
   return <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
       {/* Background Image with Overlay */}
       <div className="absolute inset-0 z-0">
@@ -65,11 +63,6 @@ const Hero = () => {
 
         {/* CTA Buttons */}
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <Button size="lg" className="gradient-warm hover:glow-accent transition-smooth group text-lg px-8 py-6 animate-pulse" onClick={() => navigate('/character-select')}>
-            <Play className="mr-2 w-5 h-5" />
-            Play BC AI Quest
-          </Button>
-          
           <Button size="lg" className="gradient-primary hover:glow-primary transition-smooth group text-lg px-8 py-6" onClick={() => document.getElementById('insights')?.scrollIntoView({
           behavior: 'smooth'
         })}>

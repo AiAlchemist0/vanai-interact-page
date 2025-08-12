@@ -4,11 +4,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
-import GamePage from "./pages/GamePage";
-import CharacterSelect from "./pages/CharacterSelect";
 import NotFound from "./pages/NotFound";
-import VoxelGame from "./pages/VoxelGame";
-import McPortPage from "./pages/McPort";
 
 const queryClient = new QueryClient();
 
@@ -20,10 +16,6 @@ const App = () => (
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Index />} />
-          <Route path="/character-select" element={<CharacterSelect />} />
-          <Route path="/game" element={<GamePage />} />
-          <Route path="/game-mc" element={<VoxelGame />} />
-          <Route path="/mc" element={<McPortPage />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
