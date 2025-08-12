@@ -10,8 +10,10 @@ import { HitEffect } from "./HitEffects";
 import { FloatingTextItem } from "./FloatingText";
 import { useHitDetection, HitWindowSettings } from "@/hooks/useHitDetection";
 import { useGameCalibration } from "@/hooks/useGameCalibration";
+import { useSoundEffects } from "@/hooks/useSoundEffects";
+import { useStarPower } from "@/components/game/StarPowerEffects";
 import CalibrationModal from "./CalibrationModal";
-import { Pause, Play, Square, Home, Settings } from "lucide-react";
+import { Pause, Play, Square, Home, Settings, Zap } from "lucide-react";
 
 interface GameBoardProps {
   song: Song;
@@ -93,9 +95,11 @@ const GameBoard = ({
   const [floatingTexts, setFloatingTexts] = useState<FloatingTextItem[]>([]);
   const [showCalibration, setShowCalibration] = useState(false);
 
-  // Calibration and hit detection systems
+  // Calibration, hit detection, and effects systems
   const calibration = useGameCalibration();
   const { processHit, processMiss, resetStats, getStats } = useHitDetection(calibration.settings.hitWindow);
+  const soundEffects = useSoundEffects();
+  const starPowerSystem = useStarPower();
 
   // Initialize game
   useEffect(() => {
@@ -142,6 +146,9 @@ const GameBoard = ({
       const calibratedTime = rawTime + calibration.settings.audioOffset;
       setCurrentTime(calibratedTime);
 
+      // Update star power system
+      starPowerSystem.updateStarPower(16); // ~60fps
+
       // Check if song ended
       if (audio.ended) {
         onGameOver(score);
@@ -168,13 +175,14 @@ const GameBoard = ({
       
       if (missedNotes.length > 0) {
         missedNotes.forEach(note => {
-          // Add miss effect
+          // Add miss effect and sound
           const fretPositions = [-1.5, -0.75, 0, 0.75, 1.5];
           note.frets.forEach(fret => {
             addHitEffect('miss', [fretPositions[fret], 0, 0]);
             addFloatingText('MISS', 'miss', [fretPositions[fret], 1, 0], 0);
           });
           processMiss();
+          soundEffects.playSound('miss');
         });
         
         onComboChange(0);
@@ -206,6 +214,15 @@ const GameBoard = ({
       if (e.code === 'Space') {
         e.preventDefault();
         handleStrum();
+      }
+
+      // Shift key to activate star power
+      if (e.code === 'ShiftLeft' || e.code === 'ShiftRight') {
+        e.preventDefault();
+        if (starPowerSystem.starPower.energy >= 50) {
+          starPowerSystem.activateStarPower();
+          soundEffects.playSound('star_power');
+        }
       }
     };
 
@@ -294,13 +311,32 @@ const GameBoard = ({
         // Successful hit
         const newCombo = combo + 1;
         onComboChange(newCombo);
-        onScoreChange(score + hitResult.points);
+        
+        // Apply star power multiplier
+        const finalPoints = hitResult.points * starPowerSystem.starPower.multiplier;
+        onScoreChange(score + finalPoints);
         setNotesHit(prev => prev + 1);
+
+        // Play hit sound
+        soundEffects.playSound(`hit_${hitResult.grade}` as any);
+
+        // Add star power energy for perfect hits
+        if (hitResult.grade === 'perfect') {
+          starPowerSystem.addStarPowerEnergy(5);
+        } else if (hitResult.grade === 'good') {
+          starPowerSystem.addStarPowerEnergy(2);
+        }
+
+        // Combo milestone sound
+        if (newCombo > 0 && newCombo % 10 === 0) {
+          soundEffects.playSound('combo_milestone');
+        }
 
         // Add visual effects for each fret
         closestNote.frets.forEach(fret => {
           addHitEffect(hitResult.grade, [fretPositions[fret], 0, 0]);
-          addFloatingText(hitResult.grade, hitResult.grade, [fretPositions[fret], 1, 0], hitResult.points);
+          const displayPoints = finalPoints / closestNote.frets.length; // Split points for chords
+          addFloatingText(hitResult.grade, hitResult.grade, [fretPositions[fret], 1, 0], Math.round(displayPoints));
         });
 
         // Remove hit note
@@ -308,6 +344,7 @@ const GameBoard = ({
       } else {
         // Miss due to bad timing
         onComboChange(0);
+        soundEffects.playSound('miss');
         closestNote.frets.forEach(fret => {
           addHitEffect('miss', [fretPositions[fret], 0, 0]);
           addFloatingText('MISS', 'miss', [fretPositions[fret], 1, 0], 0);
@@ -316,6 +353,7 @@ const GameBoard = ({
     } else {
       // Wrong frets pressed
       onComboChange(0);
+      soundEffects.playSound('miss');
       // Show miss effect on the note's frets
       closestNote.frets.forEach(fret => {
         addHitEffect('miss', [fretPositions[fret], 0, 0]);
@@ -391,9 +429,25 @@ const GameBoard = ({
             <Settings className="w-4 h-4" />
             Calibrate
           </Button>
+
+          {/* Star Power indicator */}
+          <div className="flex items-center gap-2 bg-card/30 px-3 py-1 rounded">
+            <Zap className="w-4 h-4 text-yellow-400" />
+            <div className="w-16 h-2 bg-muted rounded-full overflow-hidden">
+              <div 
+                className="h-full bg-gradient-to-r from-blue-400 to-yellow-400 transition-all duration-300"
+                style={{ width: `${starPowerSystem.starPower.energy}%` }}
+              />
+            </div>
+            {starPowerSystem.starPower.isActive && (
+              <span className="text-xs text-yellow-400 font-bold animate-pulse">
+                ACTIVE!
+              </span>
+            )}
+          </div>
         </div>
 
-        <ScoreDisplay 
+        <ScoreDisplay
           score={score}
           combo={combo}
           accuracy={accuracy}
@@ -422,6 +476,7 @@ const GameBoard = ({
             onTextComplete={handleTextComplete}
             noteSpeed={calibration.settings.noteSpeed}
             hitWindow={calibration.settings.hitWindow}
+            starPower={starPowerSystem.starPower}
           />
         </div>
         
@@ -472,6 +527,7 @@ const GameBoard = ({
             setHitEffects([]);
             setFloatingTexts([]);
             resetStats();
+            starPowerSystem.resetStarPower();
             if (audioRef.current) {
               audioRef.current.currentTime = 0;
             }

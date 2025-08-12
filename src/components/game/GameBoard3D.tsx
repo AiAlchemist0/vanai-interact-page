@@ -3,6 +3,8 @@ import { PerspectiveCamera } from '@react-three/drei';
 import NoteHighway from './NoteHighway';
 import HitEffects, { HitEffect } from './HitEffects';
 import FloatingText, { FloatingTextItem } from './FloatingText';
+import StarPowerEffects from './StarPowerEffects';
+import Atmosphere from './Atmosphere';
 import { NotePattern } from '@/pages/Game';
 
 interface GameBoard3DProps {
@@ -20,6 +22,12 @@ interface GameBoard3DProps {
     good: number;
     okay: number;
   };
+  starPower: {
+    isActive: boolean;
+    energy: number;
+    duration: number;
+    maxDuration: number;
+  };
 }
 
 const GameBoard3D = ({ 
@@ -32,7 +40,8 @@ const GameBoard3D = ({
   onEffectComplete,
   onTextComplete,
   noteSpeed,
-  hitWindow
+  hitWindow,
+  starPower
 }: GameBoard3DProps) => {
   return (
     <div className="w-full h-full">
@@ -42,24 +51,32 @@ const GameBoard3D = ({
         style={{ 
           width: '100%', 
           height: '100%',
-          background: 'linear-gradient(180deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%)'
+          background: starPower.isActive 
+            ? 'linear-gradient(180deg, #2a1810 0%, #4a3820 50%, #6a5030 100%)'
+            : 'linear-gradient(180deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%)'
         }}
       >
         <PerspectiveCamera makeDefault position={[0, 4, 10]} fov={75} />
         
-        {/* Lighting Setup */}
-        <ambientLight intensity={0.4} />
+        {/* Enhanced Lighting Setup */}
+        <ambientLight intensity={starPower.isActive ? 0.6 : 0.4} />
         <directionalLight 
           position={[10, 10, 5]} 
-          intensity={1.2}
-          color="#ffffff"
+          intensity={starPower.isActive ? 1.8 : 1.2}
+          color={starPower.isActive ? "#fff8dc" : "#ffffff"}
           castShadow
           shadow-mapSize-width={2048}
           shadow-mapSize-height={2048}
         />
-        <pointLight position={[0, 2, 0]} intensity={0.8} color="#00ffff" />
-        <pointLight position={[-3, 3, -3]} intensity={0.4} color="#ff00ff" />
-        <pointLight position={[3, 3, -3]} intensity={0.4} color="#ffff00" />
+        <pointLight position={[0, 2, 0]} intensity={starPower.isActive ? 1.2 : 0.8} color={starPower.isActive ? "#ffd700" : "#00ffff"} />
+        <pointLight position={[-3, 3, -3]} intensity={0.4} color={starPower.isActive ? "#ffaa00" : "#ff00ff"} />
+        <pointLight position={[3, 3, -3]} intensity={0.4} color={starPower.isActive ? "#ffaa00" : "#ffff00"} />
+
+        {/* Atmosphere and Background */}
+        <Atmosphere 
+          intensity={Math.min(combo / 50, 1)}
+          isStarPowerActive={starPower.isActive}
+        />
 
         {/* Note Highway */}
         <NoteHighway 
@@ -81,6 +98,14 @@ const GameBoard3D = ({
         <FloatingText 
           texts={floatingTexts}
           onTextComplete={onTextComplete}
+        />
+
+        {/* Star Power Effects */}
+        <StarPowerEffects 
+          isActive={starPower.isActive}
+          energy={starPower.energy}
+          duration={starPower.duration}
+          maxDuration={starPower.maxDuration}
         />
       </Canvas>
       
