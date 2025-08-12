@@ -21,14 +21,14 @@ const NoteHighway = ({ activeNotes, currentTime, pressedFrets, combo = 0, noteSp
   const highwayRef = useRef<any>();
 
   useFrame(() => {
-    // Add subtle highway animation
+    // Disable wobble for clarity
     if (highwayRef.current) {
-      highwayRef.current.rotation.z = Math.sin(Date.now() * 0.001) * 0.01;
+      highwayRef.current.rotation.z = 0;
     }
   });
 
   // Fret positions (X coordinates) - Guitar Hero standard spacing
-  const fretPositions = [-2.4, -1.2, 0, 1.2, 2.4];
+  const fretPositions = [-3.6, -1.8, 0, 1.8, 3.6];
   
   // Guitar Hero accurate fret colors
   const fretColors = ['#22c55e', '#ef4444', '#eab308', '#3b82f6', '#f97316']; // Green, Red, Yellow, Blue, Orange
@@ -43,8 +43,8 @@ const NoteHighway = ({ activeNotes, currentTime, pressedFrets, combo = 0, noteSp
         return (
           <group key={`lane-${index}`}>
             {/* Clearer lane divider with depth */}
-            <mesh position={[x + 0.6, -2, -10]}>
-              <boxGeometry args={[0.04, 0.1, 40]} />
+            <mesh position={[x + 0.9, -2, -10]}>
+              <boxGeometry args={[0.05, 0.1, 40]} />
               <meshBasicMaterial 
                 color="#4a5568"
                 transparent
@@ -54,7 +54,7 @@ const NoteHighway = ({ activeNotes, currentTime, pressedFrets, combo = 0, noteSp
             
             {/* Lane depth markers for better perception */}
             {[-15, -10, -5, 0].map((z, idx) => (
-              <mesh key={idx} position={[x + 0.6, -2.1, z]}>
+              <mesh key={idx} position={[x + 0.9, -2.1, z]}>
                 <boxGeometry args={[0.1, 0.05, 0.2]} />
                 <meshBasicMaterial 
                   color="#6b7280"
@@ -65,50 +65,57 @@ const NoteHighway = ({ activeNotes, currentTime, pressedFrets, combo = 0, noteSp
             ))}
 
             {/* Enhanced hit zone cavity - much more visible */}
-            <mesh position={[x, -2.5, 5]}>
-              <cylinderGeometry args={[0.6, 0.4, 0.3, 16]} />
+            {/* Socket base */}
+            <mesh position={[x, -2.65, 5]} rotation={[Math.PI / 2, 0, 0]}>
+              <circleGeometry args={[1.25, 32]} />
+              <meshBasicMaterial color="#111111" transparent opacity={0.8} />
+            </mesh>
+
+            {/* Glowing cavity core */}
+            <mesh position={[x, -2.6, 5]}>
+              <cylinderGeometry args={[0.85, 0.7, 0.25, 24]} />
               <meshStandardMaterial 
                 color={fretColors[index]}
                 emissive={fretColors[index]}
-                emissiveIntensity={isPressed ? 1.2 : (comboGlow ? 0.5 : 0.3)}
+                emissiveIntensity={isPressed ? 1.6 : (comboGlow ? 0.8 : 0.5)}
                 metalness={0.4}
-                roughness={0.1}
+                roughness={0.15}
                 transparent
-                opacity={0.9}
+                opacity={0.95}
               />
             </mesh>
 
-            {/* Hit zone rim - makes the cavity more obvious */}
-            <mesh position={[x, -2.3, 5]} rotation={[Math.PI / 2, 0, 0]}>
-              <ringGeometry args={[0.6, 0.8, 16]} />
+            {/* Hit zone rim - thick and bright */}
+            <mesh position={[x, -2.4, 5]} rotation={[Math.PI / 2, 0, 0]}>
+              <ringGeometry args={[0.8, 1.1, 32]} />
               <meshBasicMaterial 
                 color={fretColors[index]}
                 transparent
-                opacity={isPressed ? 0.8 : 0.5}
+                opacity={isPressed ? 0.95 : 0.7}
                 side={2}
               />
             </mesh>
 
             {/* Hit zone glow when pressed */}
             {isPressed && (
-              <mesh position={[x, -2.8, 5]} rotation={[0, 0, Math.PI / 4]}>
-                <boxGeometry args={[1.2, 1.2, 0.05]} />
+              <mesh position={[x, -2.9, 5]} rotation={[0, 0, Math.PI / 4]}>
+                <boxGeometry args={[1.8, 1.8, 0.05]} />
                 <meshBasicMaterial 
                   color={fretColors[index]}
                   transparent
-                  opacity={0.8}
+                  opacity={0.85}
                 />
               </mesh>
             )}
 
             {/* Combo energy ring around fret */}
             {comboGlow && (
-              <mesh position={[x, -2.8, 5]} rotation={[Math.PI / 2, 0, 0]}>
-                <ringGeometry args={[0.6, 0.8, 16]} />
+              <mesh position={[x, -2.85, 5]} rotation={[Math.PI / 2, 0, 0]}>
+                <ringGeometry args={[0.95, 1.25, 32]} />
                 <meshBasicMaterial 
                   color={combo >= 30 ? "#ffff00" : "#ff8800"}
                   transparent
-                  opacity={0.4 + Math.sin(Date.now() * 0.005) * 0.2}
+                  opacity={0.5 + Math.sin(Date.now() * 0.005) * 0.25}
                   side={2}
                 />
               </mesh>
@@ -117,7 +124,7 @@ const NoteHighway = ({ activeNotes, currentTime, pressedFrets, combo = 0, noteSp
             {/* Lane highlight when pressed */}
             {isPressed && (
               <mesh position={[x, -2, -10]}>
-                <boxGeometry args={[1.0, 0.05, 40]} />
+                <boxGeometry args={[1.4, 0.05, 40]} />
                 <meshBasicMaterial 
                   color={fretColors[index]}
                   transparent
@@ -131,7 +138,7 @@ const NoteHighway = ({ activeNotes, currentTime, pressedFrets, combo = 0, noteSp
 
       {/* Hit line - much more prominent */}
       <mesh position={[0, -2.2, 5]}>
-        <boxGeometry args={[8, 0.1, 0.2]} />
+        <boxGeometry args={[12, 0.1, 0.2]} />
         <meshBasicMaterial 
           color="#ffffff"
           transparent
@@ -141,7 +148,7 @@ const NoteHighway = ({ activeNotes, currentTime, pressedFrets, combo = 0, noteSp
 
       {/* Hit line glow */}
       <mesh position={[0, -2.2, 5]}>
-        <boxGeometry args={[8.5, 0.2, 0.3]} />
+        <boxGeometry args={[12.5, 0.2, 0.3]} />
         <meshBasicMaterial 
           color="#ffffff"
           transparent

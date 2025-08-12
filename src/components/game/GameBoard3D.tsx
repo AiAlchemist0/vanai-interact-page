@@ -51,12 +51,10 @@ const GameBoard3D = ({
         style={{ 
           width: '100%', 
           height: '100%',
-          background: starPower.isActive 
-            ? 'linear-gradient(180deg, #2a1810 0%, #4a3820 50%, #6a5030 100%)'
-            : 'linear-gradient(180deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%)'
+          background: starPower.isActive ? 'var(--gradient-warm)' : 'var(--gradient-secondary)'
         }}
       >
-        <PerspectiveCamera makeDefault position={[0, 8, 6]} fov={80} />
+        <PerspectiveCamera makeDefault position={[0, 12, 10]} rotation={[-0.6, 0, 0]} fov={60} />
         
         {/* Optimized Lighting Setup - reduced for performance */}
         <ambientLight intensity={starPower.isActive ? 0.5 : 0.3} />
@@ -72,41 +70,44 @@ const GameBoard3D = ({
           color={starPower.isActive ? "#ffd700" : "#00ffff"} 
         />
 
-        {/* Atmosphere and Background */}
-        <Atmosphere 
-          intensity={Math.min(combo / 50, 1)}
-          isStarPowerActive={starPower.isActive}
-        />
+        {/* Scene content wrapper to raise and widen the board */}
+        <group position={[0, 1.5, 0]} scale={[1.25, 1, 1]}>
+          {/* Atmosphere and Background */}
+          <Atmosphere 
+            intensity={Math.min(combo / 50, 1)}
+            isStarPowerActive={starPower.isActive}
+          />
 
-        {/* Note Highway */}
-        <NoteHighway 
-          activeNotes={activeNotes}
-          currentTime={currentTime}
-          pressedFrets={pressedFrets}
-          combo={combo}
-          noteSpeed={noteSpeed}
-          hitWindow={hitWindow}
-        />
+          {/* Note Highway */}
+          <NoteHighway 
+            activeNotes={activeNotes}
+            currentTime={currentTime}
+            pressedFrets={pressedFrets}
+            combo={combo}
+            noteSpeed={noteSpeed}
+            hitWindow={hitWindow}
+          />
 
-        {/* Hit Effects */}
-        <HitEffects 
-          effects={hitEffects}
-          onEffectComplete={onEffectComplete}
-        />
+          {/* Hit Effects */}
+          <HitEffects 
+            effects={hitEffects}
+            onEffectComplete={onEffectComplete}
+          />
 
-        {/* Floating Score Text */}
-        <FloatingText 
-          texts={floatingTexts}
-          onTextComplete={onTextComplete}
-        />
+          {/* Floating Score Text */}
+          <FloatingText 
+            texts={floatingTexts}
+            onTextComplete={onTextComplete}
+          />
 
-        {/* Star Power Effects */}
-        <StarPowerEffects 
-          isActive={starPower.isActive}
-          energy={starPower.energy}
-          duration={starPower.duration}
-          maxDuration={starPower.maxDuration}
-        />
+          {/* Star Power Effects */}
+          <StarPowerEffects 
+            isActive={starPower.isActive}
+            energy={starPower.energy}
+            duration={starPower.duration}
+            maxDuration={starPower.maxDuration}
+          />
+        </group>
       </Canvas>
       
       {/* Canvas Status Indicator */}

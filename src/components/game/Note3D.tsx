@@ -43,8 +43,8 @@ const Note3D = ({ position, fret, isChord, noteTime, currentTime, noteSpeed = 1.
 
   useFrame(() => {
     if (noteRef.current) {
-      // Rotation speed adjusted for note speed
-      noteRef.current.rotation.y += 0.01 * noteSpeed;
+      // Rotation speed adjusted for note speed (slightly reduced for clarity)
+      noteRef.current.rotation.y += 0.006 * noteSpeed;
       
       // Enhanced scaling effects based on timing
       let baseScale = isChord ? 1.2 : 1.0;
@@ -74,11 +74,11 @@ const Note3D = ({ position, fret, isChord, noteTime, currentTime, noteSpeed = 1.
       {/* Outer glow effect for approaching notes */}
       {isApproaching && (
         <mesh rotation={[0, 0, Math.PI / 4]}>
-          <boxGeometry args={isChord ? [1.4, 1.4, 0.1] : [1.1, 1.1, 0.1]} />
+          <boxGeometry args={isChord ? [1.9, 1.9, 0.1] : [1.6, 1.6, 0.1]} />
           <meshBasicMaterial 
             color={color}
             transparent
-            opacity={approachProgress * 0.3}
+            opacity={approachProgress * 0.5}
           />
         </mesh>
       )}
@@ -86,7 +86,7 @@ const Note3D = ({ position, fret, isChord, noteTime, currentTime, noteSpeed = 1.
       {/* Perfect zone indicator */}
       {isInPerfectZone && (
         <mesh rotation={[0, 0, Math.PI / 4]}>
-          <boxGeometry args={isChord ? [1.6, 1.6, 0.1] : [1.3, 1.3, 0.1]} />
+          <boxGeometry args={isChord ? [2.2, 2.2, 0.1] : [2.0, 2.0, 0.1]} />
           <meshBasicMaterial 
             color="#ffd700"
             transparent
@@ -97,14 +97,14 @@ const Note3D = ({ position, fret, isChord, noteTime, currentTime, noteSpeed = 1.
 
       {/* Main note gem - rectangular like Guitar Hero */}
       <mesh ref={noteRef} rotation={[0, 0, Math.PI / 4]}>
-        <boxGeometry args={isChord ? [0.8, 0.8, 0.3] : [0.6, 0.6, 0.25]} />
+        <boxGeometry args={isChord ? [1.2, 1.2, 0.35] : [0.9, 0.9, 0.3]} />
         <meshStandardMaterial 
           color={color}
           emissive={color}
           emissiveIntensity={
             isInPerfectZone ? 0.8 + perfectIntensity * 0.4 :
             isInHitZone ? 0.6 + hitIntensity * 0.3 :
-            isApproaching ? 0.2 + approachProgress * 0.3 : 0.2
+            isApproaching ? 0.3 + approachProgress * 0.35 : 0.25
           }
           metalness={0.4}
           roughness={0.1}
@@ -135,7 +135,7 @@ const Note3D = ({ position, fret, isChord, noteTime, currentTime, noteSpeed = 1.
       {/* Hit zone glow effect */}
       {isInHitZone && (
         <mesh rotation={[0, 0, Math.PI / 4]}>
-          <boxGeometry args={[1.4, 1.4, 0.1]} />
+          <boxGeometry args={[2.2, 2.2, 0.1]} />
           <meshBasicMaterial 
             color={isInPerfectZone ? "#ffd700" : color}
             transparent
@@ -153,7 +153,7 @@ const Note3D = ({ position, fret, isChord, noteTime, currentTime, noteSpeed = 1.
               position={[0, 0, -0.3 * (i + 1)]} 
               rotation={[0, 0, Math.PI / 4]}
             >
-              <boxGeometry args={isChord ? [0.6, 0.6, 0.1] : [0.4, 0.4, 0.1]} />
+              <boxGeometry args={isChord ? [0.9, 0.9, 0.1] : [0.6, 0.6, 0.1]} />
               <meshBasicMaterial 
                 color={color}
                 transparent
