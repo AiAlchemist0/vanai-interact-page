@@ -176,7 +176,11 @@ All colors MUST be HSL.
                 var(--gradient-primary) border-box;
   }
 
-  /* Game-specific animations */
+  /* Game-specific animations and 3D perspective */
+  .perspective-1000 {
+    perspective: 1000px;
+  }
+
   .animate-fade-in {
     animation: fadeIn 0.5s ease-out;
   }

@@ -1,8 +1,11 @@
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { ArrowRight, Users, BarChart3, MapPin } from "lucide-react";
+import { ArrowRight, Users, BarChart3, MapPin, Gamepad2 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import heroImage from "@/assets/hero-ai-survey.jpg";
 const Hero = () => {
+  const navigate = useNavigate();
+  
   return <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
       {/* Background Image with Overlay */}
       <div className="absolute inset-0 z-0">
@@ -68,6 +71,15 @@ const Hero = () => {
         })}>
             Explore Survey Data
             <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+          </Button>
+
+          <Button 
+            size="lg" 
+            className="gradient-accent hover:glow-accent transition-smooth group text-lg px-8 py-6" 
+            onClick={() => navigate('/game')}
+          >
+            <Gamepad2 className="mr-2 w-5 h-5 group-hover:scale-110 transition-transform" />
+            PLAY BC AI GAME
           </Button>
           
           <Button variant="outline" size="lg" className="border-gradient text-lg px-8 py-6 hover:bg-primary/10 transition-smooth" onClick={() => document.getElementById('methodology')?.scrollIntoView({
