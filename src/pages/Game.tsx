@@ -44,7 +44,7 @@ const SONGS: Song[] = [
     title: "Mind, AI, & Consciousness (MAC)",
     artist: "Loki Jörgenson",
     audioFile: getAudioUrl("Mind, AI, & Consciousness (MAC).mp3"),
-    coverArt: "/lovable-uploads/1c4667b0-798c-4df2-872f-a4638d2a2755.png",
+    coverArt: "/lovable-uploads/48a61984-8baf-4ae2-b980-a963ccf3a731.png",
     bpm: 95,
     duration: 180000,
   },
