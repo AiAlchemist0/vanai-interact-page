@@ -9,7 +9,6 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/component
 import SynchronizedLyrics, { LyricLine } from "@/components/SynchronizedLyrics";
 import deepfakesCover from "@/assets/deepfakes-cover.jpg";
 import pixelWizardCover from "@/assets/pixel-wizard-cover.jpg";
-import drPatrickCover from "@/assets/dr-patrick-cover.jpg";
 
 const SONGS = [
   {
@@ -73,7 +72,7 @@ const SONGS = [
     title: "Dr. Patrick Parra Pennefather",
     artist: "Academic Orchestra",
     src: "/Dr. Patrick Parra Pennefather.mp3",
-    coverArt: drPatrickCover,
+    coverArt: "/lovable-uploads/fc226621-2faf-4a33-8885-28d7dc934861.png",
     lyrics: [
       { time: 0, text: "In the halls of learning high" },
       { time: 3.5, text: "Dr. Patrick leads the way" },
