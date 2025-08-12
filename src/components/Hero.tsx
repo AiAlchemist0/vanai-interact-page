@@ -98,12 +98,12 @@ const Hero = () => {
                 {/* Featured Song Cover */}
                 <div className="relative">
                   <img 
-                    src="/src/assets/hr-macmillan-alien-cover.jpg" 
-                    alt="H.R MacMillan Space Centre Alien Abduction cover"
+                    src="/src/assets/bc-ai-hackathon-cover.jpg" 
+                    alt="BC AI Hackathon by Rival Tech cover"
                     className="w-16 h-16 rounded-lg object-cover border border-primary/30 group-hover:border-primary/60 transition-all duration-300 group-hover:scale-105 shadow-md"
                   />
                   <div className="absolute -top-1 -right-1 w-4 h-4 bg-accent rounded-full flex items-center justify-center">
-                    <span className="text-xs">👽</span>
+                    <span className="text-xs">🤖</span>
                   </div>
                 </div>
                 
@@ -111,13 +111,13 @@ const Hero = () => {
                 <div className="flex-1">
                   <div className="flex items-center gap-2 mb-1">
                     <span className="px-2 py-1 bg-accent/15 text-accent font-medium text-xs rounded-full animate-pulse">
-                      🛸 ALIENS HAVE LANDED - OUR LATEST HIT! 🛸
+                      🤖 BC AI HACKATHON ANTHEM - NOW PLAYING! 🎵
                     </span>
                   </div>
                   <h3 className="text-lg font-bold text-foreground mb-1 group-hover:text-primary transition-colors">
-                    H.R MacMillan Space Centre - Alien Abduction
+                    BC AI Hackathon by Rival Tech
                   </h3>
-                  <p className="text-muted-foreground text-sm">by That Sole Survivor BC AI Gurl</p>
+                  <p className="text-muted-foreground text-sm">The Official Vancouver AI Hackathon Theme</p>
                 </div>
                 
                 {/* Play Button */}
@@ -131,9 +131,9 @@ const Hero = () => {
               </div>
             </div>
             
-            {/* Subtle floating aliens and UFOs */}
-            <div className="absolute -top-1 -right-1 text-accent/60 text-sm animate-bounce">🛸</div>
-            <div className="absolute -bottom-1 -left-1 text-primary/60 text-sm animate-bounce" style={{animationDelay: '1s'}}>👽</div>
+            {/* Subtle floating tech icons */}
+            <div className="absolute -top-1 -right-1 text-accent/60 text-sm animate-bounce">🚀</div>
+            <div className="absolute -bottom-1 -left-1 text-primary/60 text-sm animate-bounce" style={{animationDelay: '1s'}}>⚡</div>
           </div>
         </div>
 
