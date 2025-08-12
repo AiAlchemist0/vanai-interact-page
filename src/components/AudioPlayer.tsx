@@ -15,7 +15,7 @@ const SONGS = [
     title: "Deepfakes in the Rain",
     artist: "KK / BCAI",
     src: "/Deepfakes in the Rain_KK_BCAI.mp3",
-    coverArt: deepfakesCover,
+    coverArt: "/lovable-uploads/d9e36528-0e0f-46c3-abe0-5508d700b908.png",
     lyrics: [
       { time: 0, text: "In the digital rain we fall" },
       { time: 3.5, text: "Where reality bends and breaks" },
