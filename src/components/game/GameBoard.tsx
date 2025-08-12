@@ -60,6 +60,7 @@ const generateNotePattern = (song: Song, difficulty: Difficulty): NotePattern[] 
     }
   }
 
+  console.log(`Generated ${patterns.length} notes for ${song.title}:`, patterns.slice(0, 5));
   return patterns;
 };
 
@@ -90,7 +91,6 @@ const GameBoard = ({
     audioRef.current = audio;
     
     const generatedNotes = generateNotePattern(song, difficulty);
-    console.log(`Generated ${generatedNotes.length} notes for ${song.title} on ${difficulty} difficulty:`, generatedNotes.slice(0, 5));
     setNotes(generatedNotes);
     setTotalNotes(generatedNotes.length);
     
@@ -114,7 +114,7 @@ const GameBoard = ({
     }
   }, [gameState]);
 
-  // Game loop - update current time and check for notes
+  // Game loop
   useEffect(() => {
     if (gameState !== "playing") return;
 
@@ -133,30 +133,28 @@ const GameBoard = ({
 
       // Update active notes (notes that should be visible on screen)
       const upcoming = notes.filter(note => 
-        note.time > time - 1000 && note.time < time + 4000 // 5 second window (1s past, 4s future)
+        note.time > time - 1000 && note.time < time + 5000 // 6 second window
       );
       
-      // Debug: Log active notes and timing
       if (upcoming.length !== activeNotes.length) {
-        console.log(`Time: ${time}ms, Active notes: ${upcoming.length}`, upcoming.slice(0, 3));
+        console.log(`Time: ${time.toFixed(0)}ms, Active notes: ${upcoming.length}`);
       }
       
       setActiveNotes(upcoming);
 
       // Check for missed notes
       const missedNotes = notes.filter(note => 
-        note.time < time - 200 && note.time > time - 250 // 50ms window for missed detection
+        note.time < time - 200 && note.time > time - 250
       );
       
       if (missedNotes.length > 0) {
-        onComboChange(0); // Reset combo on miss
-        // Remove missed notes from the array to avoid re-processing
+        onComboChange(0);
         setNotes(prev => prev.filter(note => !missedNotes.includes(note)));
       }
     }, 16); // ~60fps
 
     return () => clearInterval(interval);
-  }, [gameState, notes, score, onGameOver, onComboChange]);
+  }, [gameState, notes, score, onGameOver, onComboChange, activeNotes.length]);
 
   // Keyboard controls
   useEffect(() => {
@@ -266,14 +264,10 @@ const GameBoard = ({
   const progress = (currentTime / song.duration) * 100;
 
   return (
-    <div className="relative h-screen bg-gradient-to-b from-background via-background/95 to-background overflow-hidden">
-      {/* Background Effects */}
-      <div className="absolute inset-0 bg-gradient-to-b from-ai-blue/5 via-transparent to-ai-purple/5" />
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_transparent_0%,_hsl(var(--background))_100%)]" />
-
-      {/* Top HUD */}
-      <div className="relative z-10 p-4 flex items-center justify-between bg-card/50 backdrop-blur-sm border-b border-border/20">
-        <div className="flex items-center gap-4">
+    <div className="h-full flex flex-col bg-gradient-to-b from-background via-background/95 to-background">
+      {/* Game Controls - Fixed Height */}
+      <div className="h-16 bg-card/30 backdrop-blur-sm border-b border-border/20 flex items-center justify-between px-4 shrink-0">
+        <div className="flex items-center gap-2">
           <Button
             variant="outline"
             size="sm"
@@ -305,11 +299,6 @@ const GameBoard = ({
           </Button>
         </div>
 
-        <div className="text-center">
-          <h2 className="font-bold">{song.title}</h2>
-          <p className="text-sm text-muted-foreground">{song.artist}</p>
-        </div>
-
         <ScoreDisplay 
           score={score}
           combo={combo}
@@ -318,25 +307,33 @@ const GameBoard = ({
       </div>
 
       {/* Progress Bar */}
-      <div className="relative z-10 px-4 py-2">
+      <div className="px-4 py-2 shrink-0">
         <Progress value={progress} className="h-2" />
+        <div className="text-xs text-muted-foreground mt-1 text-center">
+          {Math.floor(currentTime / 1000)}s / {Math.floor(song.duration / 1000)}s
+        </div>
       </div>
 
-      {/* Game Area */}
-      <div className="relative flex-1 flex flex-col">
-        {/* 3D Note Highway */}
-        <div className="flex-1 relative">
+      {/* 3D Game Area - Takes remaining space */}
+      <div className="flex-1 relative min-h-0">
+        <div className="absolute inset-0">
           <GameBoard3D 
             activeNotes={activeNotes}
             currentTime={currentTime}
             pressedFrets={pressedFrets}
           />
-          
-          {/* Gradient overlay for depth */}
-          <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-transparent to-transparent pointer-events-none" />
         </div>
+        
+        {/* Debug overlay */}
+        <div className="absolute top-4 left-4 bg-black/50 text-white p-2 rounded text-xs">
+          <div>Time: {currentTime.toFixed(0)}ms</div>
+          <div>Active Notes: {activeNotes.length}</div>
+          <div>Pressed: [{Array.from(pressedFrets).join(', ')}]</div>
+        </div>
+      </div>
 
-        {/* Fret Board */}
+      {/* Fret Board - Fixed Height */}
+      <div className="h-32 shrink-0">
         <FretBoard 
           pressedFrets={pressedFrets}
           onStrum={handleStrum}
@@ -347,8 +344,8 @@ const GameBoard = ({
       {gameState === "paused" && (
         <div className="absolute inset-0 bg-background/80 backdrop-blur-sm flex items-center justify-center z-50">
           <div className="text-center">
-            <h2 className="text-4xl font-bold mb-4 text-gradient">Game Paused</h2>
-            <Button onClick={handlePauseToggle} size="lg" className="gradient-primary">
+            <h2 className="text-4xl font-bold mb-4">Game Paused</h2>
+            <Button onClick={handlePauseToggle} size="lg">
               <Play className="mr-2 w-5 h-5" />
               Resume
             </Button>

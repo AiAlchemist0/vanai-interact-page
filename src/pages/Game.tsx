@@ -96,45 +96,62 @@ const Game = () => {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [gameState]);
 
+  if (gameState === "menu") {
+    return (
+      <div className="min-h-screen bg-background">
+        {/* Header */}
+        <header className="p-4 flex items-center justify-between border-b border-border/20">
+          <Button
+            variant="ghost"
+            onClick={() => navigate("/")}
+            className="flex items-center gap-2"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            Back to Survey
+          </Button>
+          <h1 className="text-2xl font-bold">BC AI Guitar Hero</h1>
+          <div />
+        </header>
+
+        <GameMenu
+          songs={SONGS}
+          selectedSong={selectedSong}
+          difficulty={difficulty}
+          onSongSelect={handleSongSelect}
+          onDifficultyChange={setDifficulty}
+          onStartGame={handleStartGame}
+        />
+      </div>
+    );
+  }
+
   return (
-    <div className="min-h-screen bg-background text-foreground overflow-hidden">
-      {/* Header */}
-      <header className="relative z-50 p-4 flex items-center justify-between border-b border-border/20">
+    <div className="fixed inset-0 bg-background overflow-hidden">
+      {/* Game Header - Fixed Height */}
+      <div className="h-16 bg-card/50 backdrop-blur-sm border-b border-border/20 flex items-center justify-between px-4 z-50 relative">
         <Button
           variant="ghost"
           onClick={() => navigate("/")}
-          className="flex items-center gap-2 hover:bg-primary/10"
+          className="flex items-center gap-2"
         >
           <ArrowLeft className="w-4 h-4" />
-          Back to Survey
+          Back
         </Button>
         
-        <h1 className="text-2xl font-bold text-gradient">BC AI Guitar Hero</h1>
+        <div className="text-center">
+          <h1 className="font-bold">{selectedSong?.title}</h1>
+          <p className="text-sm text-muted-foreground">{selectedSong?.artist}</p>
+        </div>
         
         <div className="flex items-center gap-4 text-sm">
-          {gameState === "playing" && (
-            <>
-              <span>Score: {score.toLocaleString()}</span>
-              <span>Combo: {combo}x</span>
-            </>
-          )}
+          <span>Score: {score.toLocaleString()}</span>
+          <span>Combo: {combo}x</span>
         </div>
-      </header>
+      </div>
 
-      {/* Game Content */}
-      <main className="relative">
-        {gameState === "menu" && (
-          <GameMenu
-            songs={SONGS}
-            selectedSong={selectedSong}
-            difficulty={difficulty}
-            onSongSelect={handleSongSelect}
-            onDifficultyChange={setDifficulty}
-            onStartGame={handleStartGame}
-          />
-        )}
-
-        {(gameState === "playing" || gameState === "paused" || gameState === "gameOver") && selectedSong && (
+      {/* Game Board - Takes remaining space */}
+      <div className="h-[calc(100vh-4rem)]">
+        {selectedSong && (
           <GameBoard
             song={selectedSong}
             difficulty={difficulty}
@@ -148,7 +165,7 @@ const Game = () => {
             onReturnToMenu={handleReturnToMenu}
           />
         )}
-      </main>
+      </div>
     </div>
   );
 };
