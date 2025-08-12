@@ -52,6 +52,15 @@ const SONGS: Song[] = [
     bpm: 110,
     duration: 190000,
   },
+  {
+    id: "hr-macmillan",
+    title: "H.R MacMillan Space Centre - Alien Abduction",
+    artist: "That BC AI Poetry Gurl",
+    audioFile: "/H.R MacMillan Space Centre _ Alian Abduction.mp3",
+    coverArt: "/src/assets/hr-macmillan-alien-cover.jpg",
+    bpm: 95,
+    duration: 220000,
+  },
 ];
 
 const Game = () => {
