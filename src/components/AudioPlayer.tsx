@@ -9,7 +9,7 @@ import deepfakesCover from "@/assets/deepfakes-cover.jpg";
 import pixelWizardCover from "@/assets/pixel-wizard-cover.jpg";
 import macCover from "@/assets/mac-cover.jpg";
 import bcAiHackathonCover from "@/assets/bc-ai-hackathon-cover.jpg";
-import drPatrickCover from "@/assets/dr-patrick-cover.jpg";
+import drPatrickCover from "/lovable-uploads/4d050983-b56d-4606-a958-1c7e2c7253e8.png";
 
 // Supabase Storage URLs for audio files
 const SUPABASE_URL = "https://oojckbecymzrrdtvcmqi.supabase.co";

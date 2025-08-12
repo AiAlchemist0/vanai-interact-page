@@ -80,7 +80,7 @@ const SONGS: Song[] = [
     title: "Dr. Patrick Parra Pennefather",
     artist: "Academic Orchestra",
     audioFile: getAudioUrl("Dr. Patrick Parra Pennefather.mp3"),
-    coverArt: "/lovable-uploads/fc226621-2faf-4a33-8885-28d7dc934861.png",
+    coverArt: "/lovable-uploads/4d050983-b56d-4606-a958-1c7e2c7253e8.png",
     bpm: 110,
     duration: 190000,
   },
