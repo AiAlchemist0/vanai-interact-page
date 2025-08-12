@@ -39,7 +39,7 @@ const SONGS: Song[] = [
     title: "Mr. Pixel Wizard BC AI",
     artist: "BC AI",
     audioFile: "/Mr_Pixel_Wizard BC AI.mp3",
-    coverArt: "/src/assets/pixel-wizard-cover.jpg",
+    coverArt: "/src/assets/pixel-wizard-bc-ai-cover.jpg",
     bpm: 140,
     duration: 200000,
   },

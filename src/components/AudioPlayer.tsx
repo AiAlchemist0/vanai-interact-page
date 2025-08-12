@@ -8,6 +8,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { LyricLine } from "@/components/SynchronizedLyrics";
 import deepfakesCover from "@/assets/deepfakes-cover.jpg";
 import pixelWizardCover from "@/assets/pixel-wizard-cover.jpg";
+import pixelWizardBcCover from "@/assets/pixel-wizard-bc-ai-cover.jpg";
 import macCover from "@/assets/mac-cover.jpg";
 
 const SONGS = [
@@ -72,7 +73,7 @@ const SONGS = [
     title: "Mr. Pixel Wizard BC AI",
     artist: "BC AI",
     src: "/Mr_Pixel_Wizard BC AI.mp3",
-    coverArt: "/lovable-uploads/b05a11cd-74b0-4eda-9093-a9a558c0a56e.png",
+    coverArt: pixelWizardBcCover,
     lyrics: [
       { time: 0, text: "In the realm of digital art" },
       { time: 3.5, text: "Mr. Pixel Wizard stands" },
