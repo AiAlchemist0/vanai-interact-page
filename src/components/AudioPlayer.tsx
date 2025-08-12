@@ -181,6 +181,8 @@ const AudioPlayer: React.FC = () => {
   const [duration, setDuration] = React.useState(0);
   const [currentTime, setCurrentTime] = React.useState(0);
   const [autoplayBlocked, setAutoplayBlocked] = React.useState(false);
+  const [hasUserInteracted, setHasUserInteracted] = React.useState(false);
+  const [audioError, setAudioError] = React.useState<string | null>(null);
   const [lyricsOpen, setLyricsOpen] = React.useState(false);
   const [playbackMode, setPlaybackMode] = React.useState<"off" | "next" | "repeat" | "repeat-all">("next");
   
@@ -192,14 +194,27 @@ const AudioPlayer: React.FC = () => {
     audio.preload = "auto";
     audio.crossOrigin = "anonymous";
 
-    const onLoaded = () => setDuration(audio.duration || 0);
+    const onLoaded = () => {
+      setDuration(audio.duration || 0);
+      setAudioError(null);
+    };
+    
     const onTime = () => {
       setCurrentTime(audio.currentTime);
       const pct = audio.duration ? (audio.currentTime / audio.duration) * 100 : 0;
       setProgress(pct);
     };
+    
+    const onError = () => {
+      setAudioError(`Failed to load "${currentSong.title}". The audio file may not be available.`);
+      setIsPlaying(false);
+    };
+    
     const onEnded = () => {
       setIsPlaying(false);
+      
+      // Only auto-advance if user has interacted with the player
+      if (!hasUserInteracted) return;
       
       // Handle different playback modes
       switch (playbackMode) {
@@ -248,32 +263,42 @@ const AudioPlayer: React.FC = () => {
     audio.addEventListener("loadedmetadata", onLoaded);
     audio.addEventListener("timeupdate", onTime);
     audio.addEventListener("ended", onEnded);
+    audio.addEventListener("error", onError);
 
     // Reset states when song changes
     setIsPlaying(false);
     setProgress(0);
     setCurrentTime(0);
     setAutoplayBlocked(false);
+    setAudioError(null);
 
     return () => {
       audio.pause();
       audio.removeEventListener("loadedmetadata", onLoaded);
       audio.removeEventListener("timeupdate", onTime);
       audio.removeEventListener("ended", onEnded);
+      audio.removeEventListener("error", onError);
       audioRef.current = null;
     };
-  }, [currentSong, currentSongIndex]);
+  }, [currentSong, currentSongIndex, hasUserInteracted, playbackMode]);
 
   const togglePlay = async () => {
     const audio = audioRef.current;
     if (!audio) return;
+    
+    // Mark that user has interacted with the player
+    setHasUserInteracted(true);
+    
     if (audio.paused) {
       try {
         await audio.play();
         setIsPlaying(true);
         setAutoplayBlocked(false);
+        setAudioError(null);
       } catch (e) {
+        console.error('Audio play failed:', e);
         setAutoplayBlocked(true);
+        setAudioError('Autoplay blocked by browser. Please click play to start.');
       }
     } else {
       audio.pause();
@@ -306,12 +331,13 @@ const AudioPlayer: React.FC = () => {
   };
 
   const goToPreviousSong = () => {
+    setHasUserInteracted(true);
     const wasPlaying = isPlaying;
     const newIndex = currentSongIndex > 0 ? currentSongIndex - 1 : SONGS.length - 1;
     setCurrentSongIndex(newIndex);
     
-    // Auto-play if currently playing
-    if (wasPlaying) {
+    // Auto-play if currently playing and user has interacted
+    if (wasPlaying && hasUserInteracted) {
       setTimeout(() => {
         const audio = audioRef.current;
         if (audio) {
@@ -324,12 +350,13 @@ const AudioPlayer: React.FC = () => {
   };
 
   const goToNextSong = () => {
+    setHasUserInteracted(true);
     const wasPlaying = isPlaying;
     const newIndex = currentSongIndex < SONGS.length - 1 ? currentSongIndex + 1 : 0;
     setCurrentSongIndex(newIndex);
     
-    // Auto-play if currently playing
-    if (wasPlaying) {
+    // Auto-play if currently playing and user has interacted
+    if (wasPlaying && hasUserInteracted) {
       setTimeout(() => {
         const audio = audioRef.current;
         if (audio) {
@@ -466,10 +493,26 @@ const AudioPlayer: React.FC = () => {
                   <span>{formatTime(duration)}</span>
                 </div>
                 <Slider value={[progress]} max={100} step={0.1} onValueChange={onSeek} aria-label="Seek" />
-                {autoplayBlocked && (
-                  <p className="text-xs text-muted-foreground text-center">Autoplay blocked. Press play to start.</p>
-                )}
               </div>
+              
+              {/* Status Messages */}
+              {audioError && (
+                <div className="text-xs text-destructive text-center bg-destructive/10 p-2 rounded">
+                  {audioError}
+                </div>
+              )}
+              
+              {autoplayBlocked && !audioError && (
+                <div className="text-xs text-amber-600 dark:text-amber-400 text-center bg-amber-500/10 p-2 rounded">
+                  🎵 Ready to play! Click the play button to start.
+                </div>
+              )}
+              
+              {!hasUserInteracted && !autoplayBlocked && !audioError && (
+                <div className="text-xs text-muted-foreground text-center">
+                  Click play to begin listening to the BC AI Hackathon podcast
+                </div>
+               )}
             </div>
 
             {/* Action Buttons */}
