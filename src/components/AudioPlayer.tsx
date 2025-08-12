@@ -71,7 +71,7 @@ const SONGS = [
   {
     id: "pixel-wizard",
     title: "Mr. Pixel Wizard BC AI",
-    artist: "BC AI",
+    artist: "Kevin Friel",
     src: "/Mr_Pixel_Wizard BC AI.mp3",
     coverArt: pixelWizardBcCover,
     lyrics: [

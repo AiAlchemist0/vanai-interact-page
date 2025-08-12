@@ -37,7 +37,7 @@ const SONGS: Song[] = [
   {
     id: "pixel-wizard-bc",
     title: "Mr. Pixel Wizard BC AI",
-    artist: "BC AI",
+    artist: "Kevin Friel",
     audioFile: "/Mr_Pixel_Wizard BC AI.mp3",
     coverArt: "/src/assets/pixel-wizard-bc-ai-cover.jpg",
     bpm: 140,
