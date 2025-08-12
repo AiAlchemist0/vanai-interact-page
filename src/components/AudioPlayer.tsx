@@ -138,18 +138,37 @@ const AudioPlayer: React.FC = () => {
         case "next":
           if (currentSongIndex < SONGS.length - 1) {
             setCurrentSongIndex(currentSongIndex + 1);
+            // Auto-play will be handled in useEffect
+            setTimeout(() => {
+              const newAudio = audioRef.current;
+              if (newAudio) {
+                newAudio.play().then(() => {
+                  setIsPlaying(true);
+                }).catch(() => setAutoplayBlocked(true));
+              }
+            }, 100);
           }
           break;
         case "repeat":
           // Repeat current song
           audio.currentTime = 0;
-          audio.play().catch(() => setAutoplayBlocked(true));
-          setIsPlaying(true);
+          audio.play().then(() => {
+            setIsPlaying(true);
+          }).catch(() => setAutoplayBlocked(true));
           break;
         case "repeat-all":
           // Go to next song, or loop back to first
           const nextIndex = currentSongIndex < SONGS.length - 1 ? currentSongIndex + 1 : 0;
           setCurrentSongIndex(nextIndex);
+          // Auto-play will be handled in useEffect
+          setTimeout(() => {
+            const newAudio = audioRef.current;
+            if (newAudio) {
+              newAudio.play().then(() => {
+                setIsPlaying(true);
+              }).catch(() => setAutoplayBlocked(true));
+            }
+          }, 100);
           break;
         case "off":
         default:
@@ -219,13 +238,39 @@ const AudioPlayer: React.FC = () => {
   };
 
   const goToPreviousSong = () => {
+    const wasPlaying = isPlaying;
     const newIndex = currentSongIndex > 0 ? currentSongIndex - 1 : SONGS.length - 1;
     setCurrentSongIndex(newIndex);
+    
+    // Auto-play if currently playing
+    if (wasPlaying) {
+      setTimeout(() => {
+        const audio = audioRef.current;
+        if (audio) {
+          audio.play().then(() => {
+            setIsPlaying(true);
+          }).catch(() => setAutoplayBlocked(true));
+        }
+      }, 100);
+    }
   };
 
   const goToNextSong = () => {
+    const wasPlaying = isPlaying;
     const newIndex = currentSongIndex < SONGS.length - 1 ? currentSongIndex + 1 : 0;
     setCurrentSongIndex(newIndex);
+    
+    // Auto-play if currently playing
+    if (wasPlaying) {
+      setTimeout(() => {
+        const audio = audioRef.current;
+        if (audio) {
+          audio.play().then(() => {
+            setIsPlaying(true);
+          }).catch(() => setAutoplayBlocked(true));
+        }
+      }, 100);
+    }
   };
 
   const togglePlaybackMode = () => {
