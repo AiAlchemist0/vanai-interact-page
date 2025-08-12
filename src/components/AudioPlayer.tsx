@@ -183,12 +183,45 @@ const AudioPlayer: React.FC = () => {
   const [autoplayBlocked, setAutoplayBlocked] = React.useState(false);
   const [hasUserInteracted, setHasUserInteracted] = React.useState(false);
   const [audioError, setAudioError] = React.useState<string | null>(null);
+  const [isLoading, setIsLoading] = React.useState(true);
+  const [fileAvailable, setFileAvailable] = React.useState<boolean | null>(null);
   const [lyricsOpen, setLyricsOpen] = React.useState(false);
   const [playbackMode, setPlaybackMode] = React.useState<"off" | "next" | "repeat" | "repeat-all">("next");
   
   const currentSong = SONGS[currentSongIndex];
+  
+  // Check file availability
+  React.useEffect(() => {
+    const checkFileAvailability = async () => {
+      setIsLoading(true);
+      setFileAvailable(null);
+      setAudioError(null);
+      
+      try {
+        const response = await fetch(currentSong.src, { method: 'HEAD' });
+        if (response.ok) {
+          setFileAvailable(true);
+        } else {
+          setFileAvailable(false);
+          setAudioError(`Audio file not found (${response.status}). This track may not be available in production.`);
+        }
+      } catch (error) {
+        setFileAvailable(false);
+        setAudioError(`Unable to load "${currentSong.title}". Network error or file not found.`);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    
+    checkFileAvailability();
+  }, [currentSong.src]);
 
   React.useEffect(() => {
+    // Don't create audio element if file is not available
+    if (fileAvailable === false) {
+      return;
+    }
+    
     const audio = new Audio(currentSong.src);
     audioRef.current = audio;
     audio.preload = "auto";
@@ -197,6 +230,7 @@ const AudioPlayer: React.FC = () => {
     const onLoaded = () => {
       setDuration(audio.duration || 0);
       setAudioError(null);
+      setIsLoading(false);
     };
     
     const onTime = () => {
@@ -280,11 +314,11 @@ const AudioPlayer: React.FC = () => {
       audio.removeEventListener("error", onError);
       audioRef.current = null;
     };
-  }, [currentSong, currentSongIndex, hasUserInteracted, playbackMode]);
+  }, [currentSong, currentSongIndex, hasUserInteracted, playbackMode, fileAvailable]);
 
   const togglePlay = async () => {
     const audio = audioRef.current;
-    if (!audio) return;
+    if (!audio || fileAvailable === false) return;
     
     // Mark that user has interacted with the player
     setHasUserInteracted(true);
@@ -462,11 +496,22 @@ const AudioPlayer: React.FC = () => {
                 </button>
 
                 <button
-                  className="inline-flex h-10 w-10 items-center justify-center rounded-md border bg-background hover:bg-accent hover:text-accent-foreground transition-colors"
+                  className={`inline-flex h-10 w-10 items-center justify-center rounded-md border transition-colors ${
+                    fileAvailable === false 
+                      ? 'bg-muted text-muted-foreground cursor-not-allowed opacity-50' 
+                      : 'bg-background hover:bg-accent hover:text-accent-foreground'
+                  }`}
                   aria-label={isPlaying ? "Pause" : "Play"}
                   onClick={togglePlay}
+                  disabled={fileAvailable === false || isLoading}
                 >
-                  {isPlaying ? <Pause size={18} /> : <Play size={18} />}
+                  {isLoading ? (
+                    <div className="animate-spin w-4 h-4 border-2 border-primary border-t-transparent rounded-full" />
+                  ) : isPlaying ? (
+                    <Pause size={18} />
+                  ) : (
+                    <Play size={18} />
+                  )}
                 </button>
 
                 <button
@@ -496,23 +541,35 @@ const AudioPlayer: React.FC = () => {
               </div>
               
               {/* Status Messages */}
+              {isLoading && !audioError && (
+                <div className="text-xs text-muted-foreground text-center">
+                  Checking audio availability...
+                </div>
+              )}
+              
               {audioError && (
                 <div className="text-xs text-destructive text-center bg-destructive/10 p-2 rounded">
                   {audioError}
                 </div>
               )}
               
-              {autoplayBlocked && !audioError && (
+              {fileAvailable === false && !audioError && (
+                <div className="text-xs text-amber-600 dark:text-amber-400 text-center bg-amber-500/10 p-2 rounded">
+                  📁 This audio file is not available in production. Please upload the MP3 files to the public directory.
+                </div>
+              )}
+              
+              {autoplayBlocked && !audioError && fileAvailable && (
                 <div className="text-xs text-amber-600 dark:text-amber-400 text-center bg-amber-500/10 p-2 rounded">
                   🎵 Ready to play! Click the play button to start.
                 </div>
               )}
               
-              {!hasUserInteracted && !autoplayBlocked && !audioError && (
+              {!hasUserInteracted && !autoplayBlocked && !audioError && fileAvailable && !isLoading && (
                 <div className="text-xs text-muted-foreground text-center">
                   Click play to begin listening to the BC AI Hackathon podcast
                 </div>
-               )}
+              )}
             </div>
 
             {/* Action Buttons */}
