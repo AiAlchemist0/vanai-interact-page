@@ -17,7 +17,7 @@ interface NoteHighwayProps {
   };
 }
 
-const NoteHighway = ({ activeNotes, currentTime, pressedFrets, combo = 0, noteSpeed = 1.0, hitWindow }: NoteHighwayProps) => {
+const NoteHighway = ({ activeNotes, currentTime, pressedFrets, combo = 0, noteSpeed = 1.0, hitWindow, hitFlashTimes }: NoteHighwayProps) => {
   const highwayRef = useRef<any>();
 
   useFrame(() => {
@@ -181,6 +181,7 @@ const NoteHighway = ({ activeNotes, currentTime, pressedFrets, combo = 0, noteSp
               noteSpeed={adjustedSpeed}
               hitWindow={hitWindow}
               scale={depthScale}
+              isHit={hitFlashTimes.has(note.time)}
             />
           );
         })

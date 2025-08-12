@@ -15,9 +15,10 @@ interface Note3DProps {
     good: number;
     okay: number;
   };
+  isHit?: boolean;
 }
 
-const Note3D = ({ position, fret, isChord, noteTime, currentTime, noteSpeed = 1.0, scale = 1.0, hitWindow }: Note3DProps) => {
+const Note3D = ({ position, fret, isChord, noteTime, currentTime, noteSpeed = 1.0, scale = 1.0, hitWindow, isHit = false }: Note3DProps) => {
   const noteRef = useRef<Mesh>(null);
   
   // Guitar Hero accurate fret colors
@@ -60,6 +61,10 @@ const Note3D = ({ position, fret, isChord, noteTime, currentTime, noteSpeed = 1.
         baseScale += approachProgress * 0.15;
       }
       
+      if (isHit) {
+        baseScale += 0.35;
+      }
+      
       noteRef.current.scale.setScalar(baseScale * scale);
       
       // Add subtle bounce effect for chords
@@ -99,12 +104,14 @@ const Note3D = ({ position, fret, isChord, noteTime, currentTime, noteSpeed = 1.
       <mesh ref={noteRef}>
         <sphereGeometry args={[isChord ? 0.7 : 0.55, 24, 24]} />
         <meshStandardMaterial 
-          color={color}
-          emissive={color}
+          color={isHit ? '#ffffff' : color}
+          emissive={isHit ? '#ffffff' : color}
           emissiveIntensity={
-            isInPerfectZone ? 0.8 + perfectIntensity * 0.4 :
-            isInHitZone ? 0.6 + hitIntensity * 0.3 :
-            isApproaching ? 0.3 + approachProgress * 0.35 : 0.25
+            isHit ? 1.4 : (
+              isInPerfectZone ? 0.8 + perfectIntensity * 0.4 :
+              isInHitZone ? 0.6 + hitIntensity * 0.3 :
+              isApproaching ? 0.3 + approachProgress * 0.35 : 0.25
+            )
           }
           metalness={0.4}
           roughness={0.1}

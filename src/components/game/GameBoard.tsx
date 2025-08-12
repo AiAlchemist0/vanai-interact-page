@@ -95,6 +95,7 @@ const GameBoard = ({
   const [floatingTexts, setFloatingTexts] = useState<FloatingTextItem[]>([]);
   const [showCalibration, setShowCalibration] = useState(false);
   const [touchPressedFrets, setTouchPressedFrets] = useState<Set<number>>(new Set());
+  const [hitFlashTimes, setHitFlashTimes] = useState<Set<number>>(new Set());
 
   // Calibration, hit detection, and effects systems
   const calibration = useGameCalibration();
@@ -188,6 +189,8 @@ const GameBoard = ({
         
         onComboChange(0);
         setNotes(prev => prev.filter(note => !missedNotes.includes(note)));
+        const stats = getStats();
+        setAccuracy(stats.accuracy);
       }
     }, 16); // ~60fps
 
@@ -343,8 +346,24 @@ const GameBoard = ({
           addFloatingText(hitResult.grade, hitResult.grade, [fretPositions[fret], 1, 0], Math.round(displayPoints));
         });
 
-        // Remove hit note
-        setNotes(prev => prev.filter(n => n !== closestNote));
+        // Flash the hit note briefly
+        setHitFlashTimes(prev => {
+          const s = new Set(prev);
+          s.add(closestNote.time);
+          return s;
+        });
+        setTimeout(() => {
+          setHitFlashTimes(prev => {
+            const s = new Set(prev);
+            s.delete(closestNote.time);
+            return s;
+          });
+        }, 150);
+
+        // Remove hit note after short delay to show flash
+        setTimeout(() => {
+          setNotes(prev => prev.filter(n => n !== closestNote));
+        }, 100);
       } else {
         // Miss due to bad timing
         onComboChange(0);
@@ -481,6 +500,7 @@ const GameBoard = ({
             noteSpeed={calibration.settings.noteSpeed}
             hitWindow={calibration.settings.hitWindow}
             starPower={starPowerSystem.starPower}
+            hitFlashTimes={hitFlashTimes}
           />
         </div>
         

@@ -28,6 +28,7 @@ interface GameBoard3DProps {
     duration: number;
     maxDuration: number;
   };
+  hitFlashTimes: Set<number>;
 }
 
 const GameBoard3D = ({ 
@@ -41,7 +42,8 @@ const GameBoard3D = ({
   onTextComplete,
   noteSpeed,
   hitWindow,
-  starPower
+  starPower,
+  hitFlashTimes
 }: GameBoard3DProps) => {
   return (
     <div className="w-full h-full">
@@ -86,6 +88,7 @@ const GameBoard3D = ({
             combo={combo}
             noteSpeed={noteSpeed}
             hitWindow={hitWindow}
+            hitFlashTimes={hitFlashTimes}
           />
 
           {/* Hit Effects */}
