@@ -106,7 +106,7 @@ const GameBoard = ({
   // Unified input system - forward declaration needed
   const handleStrum = () => {
     // Debug logging
-    console.log(`Strum at: ${currentTime.toFixed(0)}ms, Pressed frets: [${Array.from(pressedFrets).join(', ')}], Input: ${inputMethod}`);
+    console.log(`GameBoard Strum at: ${currentTime.toFixed(0)}ms, Pressed frets: [${Array.from(pressedFrets).join(', ')}], Input: ${inputMethod}`);
 
     // Find notes within hit window - simplified
     const hittableNotes = notes.filter(note => 
@@ -491,35 +491,11 @@ const GameBoard = ({
         )}
       </div>
 
-      {/* FretBoard - with data attributes for touch */}
-      <div className="grid grid-cols-5 gap-2 p-4 bg-card/30 backdrop-blur-sm border-t border-border/20">
-        {[0, 1, 2, 3, 4].map(fret => {
-          const colors = ['bg-green-500', 'bg-red-500', 'bg-yellow-500', 'bg-blue-500', 'bg-orange-500'];
-          const labels = ['A', 'S', 'D', 'F', 'G'];
-          const isPressed = pressedFrets.has(fret);
-          
-          return (
-            <Button
-              key={fret}
-              data-fret={fret}
-              className={`h-16 ${colors[fret]} ${isPressed ? 'ring-4 ring-white' : ''} transition-all`}
-              disabled
-            >
-              <span className="text-white font-bold text-lg">{labels[fret]}</span>
-            </Button>
-          );
-        })}
-      </div>
-      
-      {/* Strum Button */}
-      <div className="p-4 bg-card/30 backdrop-blur-sm">
-        <Button
-          className="w-full h-12 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600"
-          onClick={handleStrum}
-        >
-          {inputMethod === 'touch' ? 'TAP TO STRUM' : 'SPACE TO STRUM'}
-        </Button>
-      </div>
+      {/* FretBoard Component - Unified for all input methods */}
+      <FretBoard
+        pressedFrets={pressedFrets}
+        onStrum={handleStrum}
+      />
 
       {/* Pause Overlay */}
       {gameState === "paused" && (

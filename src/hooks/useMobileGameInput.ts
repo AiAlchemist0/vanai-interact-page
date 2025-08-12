@@ -1,16 +1,18 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
+import { useIsMobile } from './use-mobile';
 
-export interface UnifiedInputState {
+export interface MobileGameInputState {
   pressedFrets: Set<number>;
   lastStrum: number;
   inputMethod: 'keyboard' | 'touch' | 'none';
 }
 
-export const useUnifiedInput = (onStrum: () => void, gameState: string) => {
+export const useMobileGameInput = (onStrum: () => void, gameState: string) => {
   const [pressedFrets, setPressedFrets] = useState<Set<number>>(new Set());
   const [inputMethod, setInputMethod] = useState<'keyboard' | 'touch' | 'none'>('none');
   const [touchPoints, setTouchPoints] = useState<Map<number, number>>(new Map());
   const lastStrumRef = useRef<number>(0);
+  const isMobile = useIsMobile();
   const strumCooldown = 100; // ms between strums
 
   // Fret mapping for keyboard
@@ -27,25 +29,23 @@ export const useUnifiedInput = (onStrum: () => void, gameState: string) => {
     if (now - lastStrumRef.current < strumCooldown) return;
     
     lastStrumRef.current = now;
-    console.log(`Strum triggered: method=${inputMethod}, frets=[${Array.from(pressedFrets).join(', ')}]`);
+    console.log(`Mobile Strum triggered: method=${inputMethod}, frets=[${Array.from(pressedFrets).join(', ')}]`);
     onStrum();
     
-    // Enhanced haptic feedback for touch
-    if (inputMethod === 'touch') {
+    // Enhanced haptic feedback for mobile
+    if (inputMethod === 'touch' && isMobile) {
       if ('vibrate' in navigator) {
-        navigator.vibrate(30);
+        navigator.vibrate([30]);
       }
-      // Add visual feedback for mobile users
       console.log('Mobile strum with haptic feedback');
     }
-  }, [onStrum, inputMethod, pressedFrets]);
+  }, [onStrum, inputMethod, pressedFrets, isMobile]);
 
   // Keyboard input handling
   useEffect(() => {
-    if (gameState !== "playing") return;
+    if (gameState !== "playing" || isMobile) return;
 
     const handleKeyDown = (e: KeyboardEvent) => {
-      // Switch to keyboard mode
       if (inputMethod !== 'keyboard' && fretMap[e.key] !== undefined) {
         setInputMethod('keyboard');
       }
@@ -54,7 +54,6 @@ export const useUnifiedInput = (onStrum: () => void, gameState: string) => {
         setPressedFrets(prev => new Set([...prev, fretMap[e.key]]));
       }
 
-      // Spacebar to strum
       if (e.code === 'Space') {
         e.preventDefault();
         handleStrum();
@@ -78,30 +77,28 @@ export const useUnifiedInput = (onStrum: () => void, gameState: string) => {
       window.removeEventListener('keydown', handleKeyDown);
       window.removeEventListener('keyup', handleKeyUp);
     };
-  }, [gameState, inputMethod, handleStrum]);
+  }, [gameState, inputMethod, handleStrum, isMobile]);
 
-  // Touch input handling
+  // Mobile touch input handling
   useEffect(() => {
-    if (gameState !== "playing") return;
+    if (gameState !== "playing" || !isMobile) return;
 
     const handleTouchStart = (e: TouchEvent) => {
       e.preventDefault();
       
-      // Switch to touch mode
       if (inputMethod !== 'touch') {
         setInputMethod('touch');
-        setPressedFrets(new Set()); // Clear keyboard frets
+        setPressedFrets(new Set());
       }
 
       Array.from(e.changedTouches).forEach(touch => {
         const element = document.elementFromPoint(touch.clientX, touch.clientY);
         
-        // Look for fret buttons by checking multiple selectors
+        // Enhanced fret detection for mobile
         const fretElement = element?.closest('[data-fret]') || 
                            element?.closest('.fret-button') ||
                            element?.closest('[class*="fret-"]');
         
-        // Also check if the touched element itself has the data-fret attribute
         const directFretElement = element as HTMLElement;
         const hasFretAttribute = directFretElement?.hasAttribute?.('data-fret');
         
@@ -112,20 +109,22 @@ export const useUnifiedInput = (onStrum: () => void, gameState: string) => {
             '0'
           );
           
-          console.log(`Touch on fret ${fretId} detected`);
+          console.log(`Mobile touch on fret ${fretId} detected`);
           setTouchPoints(prev => new Map([...prev, [touch.identifier, fretId]]));
           setPressedFrets(prev => new Set([...prev, fretId]));
         } else {
-          // Check for strum area
+          // Enhanced strum detection for mobile
           const strumElement = element?.closest('[data-strum]') || 
                               element?.closest('.strum-button') ||
                               element?.closest('[class*="strum"]');
           
-          if (strumElement || element?.tagName === 'BUTTON') {
-            console.log('Strum touch detected');
+          if (strumElement) {
+            console.log('Mobile strum touch detected');
             handleStrum();
           } else {
-            console.log('Touch outside game area, ignoring');
+            console.log('Mobile touch outside game area, triggering strum as fallback');
+            // On mobile, any touch outside frets should trigger strum
+            handleStrum();
           }
         }
       });
@@ -154,9 +153,10 @@ export const useUnifiedInput = (onStrum: () => void, gameState: string) => {
 
     const handleTouchMove = (e: TouchEvent) => {
       e.preventDefault();
-      // Handle touch movement between frets if needed
+      // Handle touch movement for better mobile experience
     };
 
+    // Add mobile-specific event listeners
     document.addEventListener('touchstart', handleTouchStart, { passive: false });
     document.addEventListener('touchend', handleTouchEnd, { passive: false });
     document.addEventListener('touchmove', handleTouchMove, { passive: false });
@@ -166,7 +166,7 @@ export const useUnifiedInput = (onStrum: () => void, gameState: string) => {
       document.removeEventListener('touchend', handleTouchEnd);
       document.removeEventListener('touchmove', handleTouchMove);
     };
-  }, [gameState, inputMethod, touchPoints, handleStrum]);
+  }, [gameState, inputMethod, touchPoints, handleStrum, isMobile]);
 
   // Clear input when game stops
   useEffect(() => {
@@ -180,6 +180,7 @@ export const useUnifiedInput = (onStrum: () => void, gameState: string) => {
   return {
     pressedFrets,
     inputMethod,
-    lastStrum: lastStrumRef.current
+    lastStrum: lastStrumRef.current,
+    isMobile
   };
 };
