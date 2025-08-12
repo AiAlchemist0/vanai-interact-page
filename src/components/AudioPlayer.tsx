@@ -7,15 +7,13 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { LyricLine } from "@/components/SynchronizedLyrics";
 import deepfakesCover from "@/assets/deepfakes-cover.jpg";
 import pixelWizardCover from "@/assets/pixel-wizard-cover.jpg";
-import pixelWizardBcCover from "@/assets/pixel-wizard-bc-ai-cover.jpg";
 import macCover from "@/assets/mac-cover.jpg";
-import hrMacMillanCover from "@/assets/hr-macmillan-alien-cover.jpg";
 import bcAiHackathonCover from "@/assets/bc-ai-hackathon-cover.jpg";
+import drPatrickCover from "@/assets/dr-patrick-cover.jpg";
 
-// Supabase Storage URLs for audio files and cover images
+// Supabase Storage URLs for audio files
 const SUPABASE_URL = "https://oojckbecymzrrdtvcmqi.supabase.co";
 const getAudioUrl = (filename: string) => `${SUPABASE_URL}/storage/v1/object/public/audio-files/${filename}`;
-const getCoverUrl = (filename: string) => `${SUPABASE_URL}/storage/v1/object/public/cover-images/${filename}`;
 
 const SONGS = [
   {
@@ -23,7 +21,7 @@ const SONGS = [
     title: "BC AI Hackathon by Rival Tech",
     artist: "Digital BC AI Girl",
     src: getAudioUrl("BC AI Hackathon by Rival Tech.mp3"),
-    coverArt: getCoverUrl("bc-ai-hackathon-cover.jpg"),
+    coverArt: bcAiHackathonCover,
     lyrics: [
       { time: 0, text: "Code flows through the digital night" },
       { time: 4, text: "BC AI hackathon has begun" },
@@ -46,7 +44,7 @@ const SONGS = [
     title: "Mind, AI, & Consciousness (MAC)",
     artist: "Loki Jörgenson",
     src: getAudioUrl("Mind, AI, & Consciousness (MAC).mp3"),
-    coverArt: getCoverUrl("mac-cover.jpg"),
+    coverArt: macCover,
     lyrics: [
       { time: 0, text: "What is consciousness in the age of AI?" },
       { time: 4, text: "Questions that keep us awake at night" },
@@ -69,7 +67,7 @@ const SONGS = [
     title: "Deepfakes in the Rain",
     artist: "KK / BCAI",
     src: getAudioUrl("Deepfakes in the Rain_KK_BCAI.mp3"),
-    coverArt: getCoverUrl("deepfakes-cover.jpg"),
+    coverArt: deepfakesCover,
     lyrics: [
       { time: 0, text: "In the digital rain we fall" },
       { time: 3.5, text: "Where reality bends and breaks" },
@@ -97,7 +95,7 @@ const SONGS = [
     title: "Mr. Pixel Wizard BC AI",
     artist: "Kevin Friel",
     src: getAudioUrl("Mr_Pixel_Wizard BC AI.mp3"),
-    coverArt: getCoverUrl("pixel-wizard-cover.jpg"),
+    coverArt: pixelWizardCover,
     lyrics: [
       { time: 0, text: "In the realm of digital art" },
       { time: 3.5, text: "Mr. Pixel Wizard stands" },
@@ -120,7 +118,7 @@ const SONGS = [
     title: "Dr. Patrick Parra Pennefather",
     artist: "Academic Orchestra",
     src: getAudioUrl("Dr. Patrick Parra Pennefather.mp3"),
-    coverArt: getCoverUrl("dr-patrick-cover.jpg"),
+    coverArt: drPatrickCover,
     lyrics: [
       { time: 0, text: "In the halls of learning high" },
       { time: 3.5, text: "Dr. Patrick leads the way" },
