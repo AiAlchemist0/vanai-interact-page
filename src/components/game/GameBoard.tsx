@@ -8,10 +8,12 @@ import GameOverModal from "./GameOverModal";
 import GameBoard3D from "./GameBoard3D";
 import { HitEffect } from "./HitEffects";
 import { FloatingTextItem } from "./FloatingText";
-import { useHitDetection, HitWindowSettings } from "@/hooks/useHitDetection";
-import { useGameCalibration } from "@/hooks/useGameCalibration";
+import { useSimplifiedHitDetection } from "@/hooks/useSimplifiedHitDetection";
+import { useUnifiedInput } from "@/hooks/useUnifiedInput";
+import { useWebGLContextRecovery } from "@/hooks/useWebGLContextRecovery";
 import { useSoundEffects } from "@/hooks/useSoundEffects";
 import { useStarPower } from "@/components/game/StarPowerEffects";
+import { GameDebugPanel } from "./GameDebugPanel";
 import CalibrationModal from "./CalibrationModal";
 import { Pause, Play, Square, Home, Settings, Zap } from "lucide-react";
 
@@ -87,235 +89,56 @@ const GameBoard = ({
   const [currentTime, setCurrentTime] = useState(0);
   const [notes, setNotes] = useState<NotePattern[]>([]);
   const [activeNotes, setActiveNotes] = useState<NotePattern[]>([]);
-  const [pressedFrets, setPressedFrets] = useState<Set<number>>(new Set());
   const [accuracy, setAccuracy] = useState(100);
   const [notesHit, setNotesHit] = useState(0);
   const [totalNotes, setTotalNotes] = useState(0);
   const [hitEffects, setHitEffects] = useState<HitEffect[]>([]);
   const [floatingTexts, setFloatingTexts] = useState<FloatingTextItem[]>([]);
   const [showCalibration, setShowCalibration] = useState(false);
-  const [touchPressedFrets, setTouchPressedFrets] = useState<Set<number>>(new Set());
   const [hitFlashTimes, setHitFlashTimes] = useState<Set<number>>(new Set());
 
-  // Calibration, hit detection, and effects systems
-  const calibration = useGameCalibration();
-  const { processHit, processMiss, resetStats, getStats } = useHitDetection(calibration.settings.hitWindow);
+  // Simplified systems
+  const { processHit, processMiss, resetStats, getStats, isNoteHittable, hitWindow } = useSimplifiedHitDetection();
+  const webglRecovery = useWebGLContextRecovery();
   const soundEffects = useSoundEffects();
   const starPowerSystem = useStarPower();
 
-  // Initialize game
-  useEffect(() => {
-    const audio = new Audio(song.audioFile);
-    audioRef.current = audio;
-    
-    const generatedNotes = generateNotePattern(song, difficulty);
-    setNotes(generatedNotes);
-    setTotalNotes(generatedNotes.length);
-    
-    // Adjust calibration for difficulty
-    calibration.adjustForDifficulty(difficulty);
-    
-    return () => {
-      if (audio) {
-        audio.pause();
-        audio.currentTime = 0;
-      }
-    };
-  }, [song, difficulty]);
-
-  // Handle game state changes
-  useEffect(() => {
-    const audio = audioRef.current;
-    if (!audio) return;
-
-    if (gameState === "playing") {
-      audio.play().catch(console.error);
-    } else if (gameState === "paused") {
-      audio.pause();
-    }
-  }, [gameState]);
-
-  // Game loop
-  useEffect(() => {
-    if (gameState !== "playing") return;
-
-    const interval = setInterval(() => {
-      const audio = audioRef.current;
-      if (!audio) return;
-
-      // Use calibrated time
-      const rawTime = audio.currentTime * 1000;
-      const calibratedTime = rawTime + calibration.settings.audioOffset;
-      setCurrentTime(calibratedTime);
-
-      // Update star power system
-      starPowerSystem.updateStarPower(16); // ~60fps
-
-      // Check if song ended
-      if (audio.ended) {
-        onGameOver(score);
-        return;
-      }
-
-      // Update active notes using calibration
-      const noteWindow = 6000 / calibration.settings.noteSpeed; // Adjust window for note speed
-      const upcoming = notes.filter(note => 
-        note.time > calibratedTime - 1000 && note.time < calibratedTime + noteWindow
-      );
-      
-      if (upcoming.length !== activeNotes.length) {
-        console.log(`Time: ${calibratedTime.toFixed(0)}ms, Active notes: ${upcoming.length}`);
-      }
-      
-      setActiveNotes(upcoming);
-
-      // Check for missed notes with calibration
-      const missWindow = calibration.settings.hitWindow.okay + 50; // 50ms grace period
-      const missedNotes = notes.filter(note => 
-        note.time < calibratedTime - missWindow && note.time > calibratedTime - (missWindow + 50)
-      );
-      
-      if (missedNotes.length > 0) {
-        missedNotes.forEach(note => {
-          // Add miss effect and sound
-          const fretPositions = [-1.5, -0.75, 0, 0.75, 1.5];
-          note.frets.forEach(fret => {
-            addHitEffect('miss', [fretPositions[fret], 0, 0]);
-            addFloatingText('MISS', 'miss', [fretPositions[fret], 1, 0], 0);
-          });
-          processMiss();
-          soundEffects.playSound('miss');
-        });
-        
-        onComboChange(0);
-        setNotes(prev => prev.filter(note => !missedNotes.includes(note)));
-        const stats = getStats();
-        setAccuracy(stats.accuracy);
-      }
-    }, 16); // ~60fps
-
-    return () => clearInterval(interval);
-  }, [gameState, notes, score, onGameOver, onComboChange, activeNotes.length, calibration.settings]);
-
-  // Keyboard controls
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (gameState !== "playing") return;
-
-      const fretMap: { [key: string]: number } = {
-        'a': 0, 'A': 0,  // Green
-        's': 1, 'S': 1,  // Red
-        'd': 2, 'D': 2,  // Yellow
-        'f': 3, 'F': 3,  // Blue
-        'g': 4, 'G': 4   // Orange
-      };
-
-      if (fretMap[e.key] !== undefined) {
-        setPressedFrets(prev => new Set([...prev, fretMap[e.key]]));
-      }
-
-      // Spacebar to strum
-      if (e.code === 'Space') {
-        e.preventDefault();
-        handleStrum();
-      }
-
-      // Shift key to activate star power
-      if (e.code === 'ShiftLeft' || e.code === 'ShiftRight') {
-        e.preventDefault();
-        if (starPowerSystem.starPower.energy >= 50) {
-          starPowerSystem.activateStarPower();
-          soundEffects.playSound('star_power');
-        }
-      }
-    };
-
-    const handleKeyUp = (e: KeyboardEvent) => {
-      const fretMap: { [key: string]: number } = {
-        'a': 0, 'A': 0,
-        's': 1, 'S': 1,
-        'd': 2, 'D': 2,
-        'f': 3, 'F': 3,
-        'g': 4, 'G': 4
-      };
-
-      if (fretMap[e.key] !== undefined) {
-        setPressedFrets(prev => {
-          const newSet = new Set(prev);
-          newSet.delete(fretMap[e.key]);
-          return newSet;
-        });
-      }
-    };
-
-    window.addEventListener('keydown', handleKeyDown);
-    window.addEventListener('keyup', handleKeyUp);
-
-    return () => {
-      window.removeEventListener('keydown', handleKeyDown);
-      window.removeEventListener('keyup', handleKeyUp);
-    };
-  }, [gameState]);
-
-  // Helper functions for effects
-  const addHitEffect = (grade: 'perfect' | 'good' | 'okay' | 'miss', position: [number, number, number]) => {
-    const effect: HitEffect = {
-      id: Math.random().toString(36),
-      position: { x: position[0], y: position[1], z: position[2] },
-      grade,
-      age: 0,
-      maxAge: grade === 'miss' ? 800 : 600
-    };
-    setHitEffects(prev => [...prev, effect]);
-  };
-
-  const addFloatingText = (text: string, grade: 'perfect' | 'good' | 'okay' | 'miss', position: [number, number, number], points: number) => {
-    const floatingText: FloatingTextItem = {
-      id: Math.random().toString(36),
-      text: points > 0 ? `+${points} ${text.toUpperCase()}` : text,
-      grade,
-      position,
-      age: 0,
-      maxAge: 1500
-    };
-    setFloatingTexts(prev => [...prev, floatingText]);
-  };
-
+  // Unified input system - forward declaration needed
   const handleStrum = () => {
-    const calibratedTime = currentTime + calibration.settings.audioOffset;
-
-    // Use touch controls if available, otherwise use keyboard
-    const activePressedFrets = touchPressedFrets.size > 0 ? touchPressedFrets : pressedFrets;
-
     // Debug logging
-    console.log(`Strum at: ${currentTime.toFixed(0)}ms, Calibrated: ${calibratedTime.toFixed(0)}ms`);
+    console.log(`Strum at: ${currentTime.toFixed(0)}ms, Pressed frets: [${Array.from(pressedFrets).join(', ')}], Input: ${inputMethod}`);
 
-    // Find notes within calibrated hit window - use calibratedTime instead of currentTime
+    // Find notes within hit window - simplified
     const hittableNotes = notes.filter(note => 
-      calibration.isNoteHittable(note.time, calibratedTime)
+      isNoteHittable(note.time, currentTime)
     );
 
     console.log(`Hittable notes: ${hittableNotes.length}, Active notes: ${activeNotes.length}`);
 
-    if (hittableNotes.length === 0) return;
+    if (hittableNotes.length === 0) {
+      console.log('No hittable notes - ignoring strum');
+      return;
+    }
 
-    // Get the closest note with calibration
+    // Get the closest note
     const closestNote = hittableNotes.reduce((closest, note) => 
-      Math.abs(note.time - calibratedTime) < Math.abs(closest.time - calibratedTime) ? note : closest
+      Math.abs(note.time - currentTime) < Math.abs(closest.time - currentTime) ? note : closest
     );
 
     // Check if pressed frets match the note
     const requiredFrets = new Set(closestNote.frets);
-    const pressedFretsArray = Array.from(activePressedFrets);
+    const pressedFretsArray = Array.from(pressedFrets);
     
-    const isCorrect = requiredFrets.size === activePressedFrets.size && 
+    const isCorrect = requiredFrets.size === pressedFrets.size && 
                      pressedFretsArray.every(fret => requiredFrets.has(fret));
+    
+    console.log(`Required frets: [${closestNote.frets.join(', ')}], Pressed: [${pressedFretsArray.join(', ')}], Correct: ${isCorrect}`);
 
     const fretPositions = [-1.5, -0.75, 0, 0.75, 1.5];
 
     if (isCorrect) {
-      // Calculate timing with calibration
-      const timingDiff = closestNote.time - calibratedTime;
+      // Calculate timing difference
+      const timingDiff = closestNote.time - currentTime;
       const isChord = closestNote.type === "chord";
       const hitResult = processHit(timingDiff, isChord, combo);
 
@@ -392,6 +215,139 @@ const GameBoard = ({
     // Update accuracy using hit detection stats
     const stats = getStats();
     setAccuracy(stats.accuracy);
+  };
+
+  const { pressedFrets, inputMethod } = useUnifiedInput(handleStrum, gameState);
+
+  // Initialize game
+  useEffect(() => {
+    const audio = new Audio(song.audioFile);
+    audioRef.current = audio;
+    
+    const generatedNotes = generateNotePattern(song, difficulty);
+    setNotes(generatedNotes);
+    setTotalNotes(generatedNotes.length);
+    
+    console.log(`Game initialized: ${generatedNotes.length} notes generated for ${song.title}`);
+    
+    return () => {
+      if (audio) {
+        audio.pause();
+        audio.currentTime = 0;
+      }
+    };
+  }, [song, difficulty]);
+
+  // Handle game state changes
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    if (gameState === "playing") {
+      audio.play().catch(console.error);
+    } else if (gameState === "paused") {
+      audio.pause();
+    }
+  }, [gameState]);
+
+  // Game loop
+  useEffect(() => {
+    if (gameState !== "playing") return;
+
+    const interval = setInterval(() => {
+      const audio = audioRef.current;
+      if (!audio) return;
+
+      // Simple time tracking - no double calibration
+      const currentGameTime = audio.currentTime * 1000;
+      setCurrentTime(currentGameTime);
+
+      // Update star power system
+      starPowerSystem.updateStarPower(16); // ~60fps
+
+      // Check if song ended
+      if (audio.ended) {
+        onGameOver(score);
+        return;
+      }
+
+      // Simplified active notes - show notes 6 seconds ahead
+      const noteViewWindow = 6000;
+      const upcoming = notes.filter(note => 
+        note.time > currentGameTime - 500 && note.time < currentGameTime + noteViewWindow
+      );
+      
+      setActiveNotes(upcoming);
+
+      // Simplified miss detection - use hit window + grace period
+      const missWindow = hitWindow.okay + 100; // 100ms grace period
+      const missedNotes = notes.filter(note => 
+        note.time < currentGameTime - missWindow && note.time > currentGameTime - (missWindow + 50)
+      );
+      
+      if (missedNotes.length > 0) {
+        missedNotes.forEach(note => {
+          // Add miss effect and sound
+          const fretPositions = [-1.5, -0.75, 0, 0.75, 1.5];
+          note.frets.forEach(fret => {
+            addHitEffect('miss', [fretPositions[fret], 0, 0]);
+            addFloatingText('MISS', 'miss', [fretPositions[fret], 1, 0], 0);
+          });
+          processMiss();
+          soundEffects.playSound('miss');
+        });
+        
+        onComboChange(0);
+        setNotes(prev => prev.filter(note => !missedNotes.includes(note)));
+        const stats = getStats();
+        setAccuracy(stats.accuracy);
+      }
+    }, 16); // ~60fps
+
+    return () => clearInterval(interval);
+  }, [gameState, notes, score, onGameOver, onComboChange, activeNotes.length, hitWindow]);
+
+  // Shift key for star power (handled separately from unified input)
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (gameState !== "playing") return;
+
+      // Shift key to activate star power
+      if (e.code === 'ShiftLeft' || e.code === 'ShiftRight') {
+        e.preventDefault();
+        if (starPowerSystem.starPower.energy >= 50) {
+          starPowerSystem.activateStarPower();
+          soundEffects.playSound('star_power');
+        }
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [gameState, starPowerSystem, soundEffects]);
+
+  // Helper functions for effects
+  const addHitEffect = (grade: 'perfect' | 'good' | 'okay' | 'miss', position: [number, number, number]) => {
+    const effect: HitEffect = {
+      id: Math.random().toString(36),
+      position: { x: position[0], y: position[1], z: position[2] },
+      grade,
+      age: 0,
+      maxAge: grade === 'miss' ? 800 : 600
+    };
+    setHitEffects(prev => [...prev, effect]);
+  };
+
+  const addFloatingText = (text: string, grade: 'perfect' | 'good' | 'okay' | 'miss', position: [number, number, number], points: number) => {
+    const floatingText: FloatingTextItem = {
+      id: Math.random().toString(36),
+      text: points > 0 ? `+${points} ${text.toUpperCase()}` : text,
+      grade,
+      position,
+      age: 0,
+      maxAge: 1500
+    };
+    setFloatingTexts(prev => [...prev, floatingText]);
   };
 
   // Effect cleanup handlers
@@ -496,35 +452,73 @@ const GameBoard = ({
           <GameBoard3D 
             activeNotes={activeNotes}
             currentTime={currentTime}
-            pressedFrets={touchPressedFrets.size > 0 ? touchPressedFrets : pressedFrets}
+            pressedFrets={pressedFrets}
             combo={combo}
             hitEffects={hitEffects}
             floatingTexts={floatingTexts}
             onEffectComplete={handleEffectComplete}
             onTextComplete={handleTextComplete}
-            noteSpeed={calibration.settings.noteSpeed}
-            hitWindow={calibration.settings.hitWindow}
+            noteSpeed={1.0}
+            hitWindow={hitWindow}
             starPower={starPowerSystem.starPower}
             hitFlashTimes={hitFlashTimes}
           />
         </div>
         
-        {/* Debug overlay */}
-        <div className="absolute top-4 left-4 bg-black/50 text-white p-2 rounded text-xs">
-          <div>Time: {currentTime.toFixed(0)}ms</div>
-          <div>Active Notes: {activeNotes.length}</div>
-          <div>Keyboard: [{Array.from(pressedFrets).join(', ')}]</div>
-          <div>Touch: [{Array.from(touchPressedFrets).join(', ')}]</div>
-        </div>
+        {/* Debug Panel */}
+        <GameDebugPanel
+          currentTime={currentTime}
+          activeNotes={activeNotes}
+          pressedFrets={pressedFrets}
+          hitStats={getStats()}
+          inputMethod={inputMethod}
+          contextLost={webglRecovery.contextLost}
+          contextRecovered={webglRecovery.contextRecovered}
+          onForceRecovery={webglRecovery.forceContextRecovery}
+        />
+
+        {/* WebGL Context Loss Warning */}
+        {webglRecovery.contextLost && (
+          <div className="absolute inset-0 bg-red-900/80 flex items-center justify-center z-40">
+            <div className="text-center text-white">
+              <h2 className="text-2xl font-bold mb-4">Graphics Error</h2>
+              <p className="mb-4">WebGL context was lost. Game performance may be affected.</p>
+              <Button onClick={webglRecovery.forceContextRecovery} variant="destructive">
+                Try to Recover
+              </Button>
+            </div>
+          </div>
+        )}
       </div>
 
-      {/* Fret Board - Fixed Height */}
-      <div className="h-32 shrink-0">
-        <FretBoard 
-          pressedFrets={pressedFrets}
-          onStrum={handleStrum}
-          onFretChange={setTouchPressedFrets}
-        />
+      {/* FretBoard - with data attributes for touch */}
+      <div className="grid grid-cols-5 gap-2 p-4 bg-card/30 backdrop-blur-sm border-t border-border/20">
+        {[0, 1, 2, 3, 4].map(fret => {
+          const colors = ['bg-green-500', 'bg-red-500', 'bg-yellow-500', 'bg-blue-500', 'bg-orange-500'];
+          const labels = ['A', 'S', 'D', 'F', 'G'];
+          const isPressed = pressedFrets.has(fret);
+          
+          return (
+            <Button
+              key={fret}
+              data-fret={fret}
+              className={`h-16 ${colors[fret]} ${isPressed ? 'ring-4 ring-white' : ''} transition-all`}
+              disabled
+            >
+              <span className="text-white font-bold text-lg">{labels[fret]}</span>
+            </Button>
+          );
+        })}
+      </div>
+      
+      {/* Strum Button */}
+      <div className="p-4 bg-card/30 backdrop-blur-sm">
+        <Button
+          className="w-full h-12 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600"
+          onClick={handleStrum}
+        >
+          {inputMethod === 'touch' ? 'TAP TO STRUM' : 'SPACE TO STRUM'}
+        </Button>
       </div>
 
       {/* Pause Overlay */}
@@ -566,18 +560,17 @@ const GameBoard = ({
         />
       )}
 
-      {/* Calibration Modal */}
+      {/* Calibration Modal - Disabled for now */}
       {showCalibration && (
-        <CalibrationModal
-          isOpen={showCalibration}
-          onClose={() => setShowCalibration(false)}
-          onCalibrationChange={(settings) => {
-            calibration.updateAudioOffset(settings.audioOffset);
-            calibration.updateVisualOffset(settings.visualOffset);
-            calibration.updateNoteSpeed(settings.noteSpeed);
-          }}
-          currentSettings={calibration.settings}
-        />
+        <div className="absolute inset-0 bg-background/80 backdrop-blur-sm flex items-center justify-center z-50">
+          <div className="bg-card p-6 rounded-lg">
+            <h2 className="text-2xl font-bold mb-4">Calibration</h2>
+            <p className="mb-4">Calibration system is being simplified...</p>
+            <Button onClick={() => setShowCalibration(false)}>
+              Close
+            </Button>
+          </div>
+        </div>
       )}
     </div>
   );
