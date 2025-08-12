@@ -27,12 +27,12 @@ const NoteHighway = ({ activeNotes, currentTime, pressedFrets }: NoteHighwayProp
 
   return (
     <group ref={highwayRef}>
-      {/* Clean Hit Zones Only */}
+      {/* Highway Rails */}
       {fretPositions.map((x, index) => (
         <group key={index}>
-          {/* Fret Base (where notes hit) - Clean and minimal */}
-          <mesh position={[x, -2.5, 5]}>
-            <cylinderGeometry args={[0.3, 0.3, 0.2]} />
+          {/* Fret Rail - Extended and brighter */}
+          <mesh position={[x, -1, -25]}>
+            <boxGeometry args={[0.15, 3, 50]} />
             <meshBasicMaterial 
               color={fretColors[index]}
               transparent
@@ -40,18 +40,50 @@ const NoteHighway = ({ activeNotes, currentTime, pressedFrets }: NoteHighwayProp
             />
           </mesh>
 
+          {/* Fret Base (where notes hit) - Larger and more visible */}
+          <mesh position={[x, -2.5, 5]}>
+            <cylinderGeometry args={[0.4, 0.4, 0.3]} />
+            <meshBasicMaterial 
+              color={fretColors[index]}
+              transparent
+              opacity={pressedFrets.has(index) ? 1.0 : 0.8}
+            />
+          </mesh>
+
           {/* Hit zone glow when pressed */}
           {pressedFrets.has(index) && (
             <mesh position={[x, -2.5, 5]}>
-              <cylinderGeometry args={[0.8, 0.8, 0.05]} />
+              <cylinderGeometry args={[1, 1, 0.1]} />
               <meshBasicMaterial 
                 color={fretColors[index]}
                 transparent
-                opacity={0.8}
+                opacity={0.9}
               />
             </mesh>
           )}
         </group>
+      ))}
+
+      {/* Highway Floor - More visible */}
+      <mesh position={[0, -4, -10]} rotation={[-Math.PI / 2, 0, 0]}>
+        <planeGeometry args={[12, 60]} />
+        <meshBasicMaterial 
+          color="#000033"
+          transparent
+          opacity={0.7}
+        />
+      </mesh>
+
+      {/* Highway Grid Lines */}
+      {Array.from({ length: 10 }, (_, i) => (
+        <mesh key={i} position={[0, -3.9, -20 + i * 4]} rotation={[-Math.PI / 2, 0, 0]}>
+          <planeGeometry args={[12, 0.1]} />
+          <meshBasicMaterial 
+            color="#0066ff"
+            transparent
+            opacity={0.5}
+          />
+        </mesh>
       ))}
 
       {/* Notes */}
