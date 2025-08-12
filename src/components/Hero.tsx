@@ -109,7 +109,7 @@ const Hero = () => {
                 
                 {/* Song Info */}
                 <div className="flex-1">
-                  <div className="flex items-center gap-2 mb-1">
+                  <div className="flex items-center justify-center gap-2 mb-1">
                     <span className="px-2 py-1 bg-accent/15 text-accent font-medium text-xs rounded-full animate-pulse">
                       🤖 BC AI HACKATHON ANTHEM - NOW PLAYING! 🎵
                     </span>
