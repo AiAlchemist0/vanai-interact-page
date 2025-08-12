@@ -9,6 +9,7 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/component
 import SynchronizedLyrics, { LyricLine } from "@/components/SynchronizedLyrics";
 import deepfakesCover from "@/assets/deepfakes-cover.jpg";
 import pixelWizardCover from "@/assets/pixel-wizard-cover.jpg";
+import drPatrickCover from "@/assets/dr-patrick-cover.jpg";
 
 const SONGS = [
   {
@@ -65,6 +66,34 @@ const SONGS = [
       { time: 51.5, text: "Pixelated dreams come true" },
       { time: 55, text: "In this world of retro hue" },
       { time: 58.5, text: "Magic waits for me and you" }
+    ] as LyricLine[]
+  },
+  {
+    id: "dr-patrick",
+    title: "Dr. Patrick Parra Pennefather",
+    artist: "Academic Orchestra",
+    src: "/Dr. Patrick Parra Pennefather.mp3",
+    coverArt: drPatrickCover,
+    lyrics: [
+      { time: 0, text: "In the halls of learning high" },
+      { time: 3.5, text: "Dr. Patrick leads the way" },
+      { time: 7, text: "With his wisdom reaching sky" },
+      { time: 10.5, text: "Teaching truth both night and day" },
+      { time: 14, text: "" },
+      { time: 16, text: "Parra Pennefather stands tall" },
+      { time: 19.5, text: "In his office lined with books" },
+      { time: 23, text: "Knowledge flowing to us all" },
+      { time: 26.5, text: "From his scholarly looks" },
+      { time: 30, text: "" },
+      { time: 32, text: "Doctor Patrick, wise and true" },
+      { time: 35.5, text: "Sharing all that he has learned" },
+      { time: 39, text: "Every lesson something new" },
+      { time: 42.5, text: "Every page that has been turned" },
+      { time: 46, text: "" },
+      { time: 48, text: "In the classroom, by the fire" },
+      { time: 51.5, text: "Students gather round to hear" },
+      { time: 55, text: "Words that lift our spirits higher" },
+      { time: 58.5, text: "Making complex concepts clear" }
     ] as LyricLine[]
   }
 ];
