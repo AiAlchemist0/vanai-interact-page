@@ -54,7 +54,7 @@ const GameBoard3D = ({
           background: starPower.isActive ? 'var(--gradient-warm)' : 'var(--gradient-secondary)'
         }}
       >
-        <PerspectiveCamera makeDefault position={[0, 12, 10]} rotation={[-0.6, 0, 0]} fov={60} />
+        <PerspectiveCamera makeDefault position={[0, 18, 14]} rotation={[-0.85, 0, 0]} fov={55} />
         
         {/* Optimized Lighting Setup - reduced for performance */}
         <ambientLight intensity={starPower.isActive ? 0.5 : 0.3} />

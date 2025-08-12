@@ -73,8 +73,8 @@ const Note3D = ({ position, fret, isChord, noteTime, currentTime, noteSpeed = 1.
     <group position={position}>
       {/* Outer glow effect for approaching notes */}
       {isApproaching && (
-        <mesh rotation={[0, 0, Math.PI / 4]}>
-          <boxGeometry args={isChord ? [1.9, 1.9, 0.1] : [1.6, 1.6, 0.1]} />
+        <mesh rotation={[Math.PI / 2, 0, 0]}>
+          <circleGeometry args={[isChord ? 1.6 : 1.3, 32]} />
           <meshBasicMaterial 
             color={color}
             transparent
@@ -85,8 +85,8 @@ const Note3D = ({ position, fret, isChord, noteTime, currentTime, noteSpeed = 1.
 
       {/* Perfect zone indicator */}
       {isInPerfectZone && (
-        <mesh rotation={[0, 0, Math.PI / 4]}>
-          <boxGeometry args={isChord ? [2.2, 2.2, 0.1] : [2.0, 2.0, 0.1]} />
+        <mesh rotation={[Math.PI / 2, 0, 0]}>
+          <circleGeometry args={[isChord ? 1.9 : 1.7, 32]} />
           <meshBasicMaterial 
             color="#ffd700"
             transparent
@@ -96,8 +96,8 @@ const Note3D = ({ position, fret, isChord, noteTime, currentTime, noteSpeed = 1.
       )}
 
       {/* Main note gem - rectangular like Guitar Hero */}
-      <mesh ref={noteRef} rotation={[0, 0, Math.PI / 4]}>
-        <boxGeometry args={isChord ? [1.2, 1.2, 0.35] : [0.9, 0.9, 0.3]} />
+      <mesh ref={noteRef}>
+        <sphereGeometry args={[isChord ? 0.7 : 0.55, 24, 24]} />
         <meshStandardMaterial 
           color={color}
           emissive={color}
@@ -116,10 +116,9 @@ const Note3D = ({ position, fret, isChord, noteTime, currentTime, noteSpeed = 1.
       {/* Chord indicator - additional visual elements */}
       {isChord && (
         <>
-          {/* Star points for chord notes */}
           {[-0.3, 0.3].map((offset, i) => (
-            <mesh key={i} position={[offset, offset, 0]} rotation={[0, 0, Math.PI / 4]}>
-              <boxGeometry args={[0.3, 0.3, 0.15]} />
+            <mesh key={i} position={[offset, offset, 0]}>
+              <sphereGeometry args={[0.18, 16, 16]} />
               <meshStandardMaterial 
                 color={color}
                 emissive={color}
@@ -134,8 +133,8 @@ const Note3D = ({ position, fret, isChord, noteTime, currentTime, noteSpeed = 1.
 
       {/* Hit zone glow effect */}
       {isInHitZone && (
-        <mesh rotation={[0, 0, Math.PI / 4]}>
-          <boxGeometry args={[2.2, 2.2, 0.1]} />
+        <mesh rotation={[Math.PI / 2, 0, 0]}>
+          <circleGeometry args={[isChord ? 1.9 : 1.7, 32]} />
           <meshBasicMaterial 
             color={isInPerfectZone ? "#ffd700" : color}
             transparent
@@ -150,10 +149,9 @@ const Note3D = ({ position, fret, isChord, noteTime, currentTime, noteSpeed = 1.
           {[...Array(3)].map((_, i) => (
             <mesh 
               key={i} 
-              position={[0, 0, -0.3 * (i + 1)]} 
-              rotation={[0, 0, Math.PI / 4]}
+              position={[0, 0, -0.3 * (i + 1)]}
             >
-              <boxGeometry args={isChord ? [0.9, 0.9, 0.1] : [0.6, 0.6, 0.1]} />
+              <sphereGeometry args={[isChord ? 0.45 : 0.35, 16, 16]} />
               <meshBasicMaterial 
                 color={color}
                 transparent
