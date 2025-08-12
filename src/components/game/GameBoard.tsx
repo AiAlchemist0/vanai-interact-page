@@ -133,12 +133,12 @@ const GameBoard = ({
 
       // Update active notes (notes that should be visible on screen)
       const upcoming = notes.filter(note => 
-        note.time > time && note.time < time + 3000 // 3 second window
+        note.time > time - 1000 && note.time < time + 4000 // 5 second window (1s past, 4s future)
       );
       
-      // Debug: Log active notes
+      // Debug: Log active notes and timing
       if (upcoming.length !== activeNotes.length) {
-        console.log(`Active notes changed: ${upcoming.length} notes visible`, upcoming);
+        console.log(`Time: ${time}ms, Active notes: ${upcoming.length}`, upcoming.slice(0, 3));
       }
       
       setActiveNotes(upcoming);

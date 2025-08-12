@@ -17,9 +17,9 @@ const GameBoard3D = ({ activeNotes, currentTime, pressedFrets }: GameBoard3DProp
       <Canvas
         gl={{ antialias: true, alpha: true }}
         dpr={[1, 2]}
-        camera={{ position: [0, 2, 8], fov: 45 }}
+        camera={{ position: [0, 3, 8], fov: 60 }}
       >
-        <PerspectiveCamera makeDefault position={[0, 2, 8]} fov={45} />
+        <PerspectiveCamera makeDefault position={[0, 3, 8]} fov={60} />
         
         {/* Lighting */}
         <ambientLight intensity={0.3} />
