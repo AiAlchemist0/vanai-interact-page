@@ -5,7 +5,7 @@ import { Slider } from "@/components/ui/slider";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { LyricLine } from "@/components/SynchronizedLyrics";
-import deepfakesCover from "@/assets/deepfakes-cover.jpg";
+import deepfakesCover from "/lovable-uploads/2a6f9f46-8a29-4c56-aec2-3279635b85f0.png";
 import pixelWizardCover from "@/assets/pixel-wizard-cover.jpg";
 import macCover from "@/assets/mac-cover.jpg";
 import bcAiHackathonCover from "@/assets/bc-ai-hackathon-cover.jpg";
