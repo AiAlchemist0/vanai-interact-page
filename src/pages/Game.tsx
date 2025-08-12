@@ -35,7 +35,7 @@ const SONGS: Song[] = [
     title: "BC AI Hackathon by Rival Tech",
     artist: "Digital BC AI Girl",
     audioFile: getAudioUrl("BC AI Hackathon by Rival Tech.mp3"),
-    coverArt: "/src/assets/bc-ai-hackathon-cover.jpg",
+    coverArt: "/lovable-uploads/2f51d7bb-96fc-4f06-b7f6-fc9abbbceb32.png",
     bpm: 128,
     duration: 210000,
   },

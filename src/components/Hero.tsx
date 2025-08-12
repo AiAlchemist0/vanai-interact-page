@@ -98,7 +98,7 @@ const Hero = () => {
                 {/* Featured Song Cover */}
                 <div className="relative">
                   <img 
-                    src="/src/assets/bc-ai-hackathon-cover.jpg" 
+                    src="/lovable-uploads/2f51d7bb-96fc-4f06-b7f6-fc9abbbceb32.png" 
                     alt="BC AI Hackathon by Rival Tech cover"
                     className="w-16 h-16 rounded-lg object-cover border border-primary/30 group-hover:border-primary/60 transition-all duration-300 group-hover:scale-105 shadow-md"
                   />

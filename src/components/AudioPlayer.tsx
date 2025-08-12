@@ -8,7 +8,7 @@ import { LyricLine } from "@/components/SynchronizedLyrics";
 import deepfakesCover from "/lovable-uploads/2a6f9f46-8a29-4c56-aec2-3279635b85f0.png";
 import pixelWizardCover from "@/assets/pixel-wizard-cover.jpg";
 import macCover from "@/assets/mac-cover.jpg";
-import bcAiHackathonCover from "@/assets/bc-ai-hackathon-cover.jpg";
+import bcAiHackathonCover from "/lovable-uploads/2f51d7bb-96fc-4f06-b7f6-fc9abbbceb32.png";
 import drPatrickCover from "/lovable-uploads/4d050983-b56d-4606-a958-1c7e2c7253e8.png";
 
 // Supabase Storage URLs for audio files
