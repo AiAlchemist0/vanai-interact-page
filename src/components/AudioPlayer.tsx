@@ -14,6 +14,29 @@ import bcAiHackathonCover from "@/assets/bc-ai-hackathon-cover.jpg";
 
 const SONGS = [
   {
+    id: "hr-macmillan",
+    title: "H.R MacMillan Space Centre - Alien Abduction",
+    artist: "That Sole Survivor BC AI Gurl",
+    src: "/H.R%20MacMillan%20Space%20Centre%20_%20Alian%20Abduction.mp3",
+    coverArt: hrMacMillanCover,
+    lyrics: [
+      { time: 0, text: "Under the dome of starlit night" },
+      { time: 4, text: "The MacMillan Centre stands tall" },
+      { time: 8, text: "Cosmic mysteries come to light" },
+      { time: 12, text: "As alien visitors call" },
+      { time: 16, text: "" },
+      { time: 18, text: "Beams of light pierce through the sky" },
+      { time: 22, text: "Drawing souls up to their ship" },
+      { time: 26, text: "Time and space begin to fly" },
+      { time: 30, text: "On this otherworldly trip" },
+      { time: 34, text: "" },
+      { time: 36, text: "At the Space Centre we dream" },
+      { time: 40, text: "Of worlds beyond our own" },
+      { time: 44, text: "Nothing's quite what it may seem" },
+      { time: 48, text: "When you're not alone" }
+    ] as LyricLine[]
+  },
+  {
     id: "bc-ai-hackathon",
     title: "BC AI Hackathon by Rival Tech",
     artist: "Digital BC AI Girl",
@@ -85,29 +108,6 @@ const SONGS = [
       { time: 51.5, text: "Creating faces from thin air" },
       { time: 55, text: "While we watch our world collide" },
       { time: 58.5, text: "With the artificial nightmare" }
-    ] as LyricLine[]
-  },
-  {
-    id: "hr-macmillan",
-    title: "H.R MacMillan Space Centre - Alien Abduction",
-    artist: "That Sole Survivor BC AI Gurl",
-    src: "/H.R%20MacMillan%20Space%20Centre%20_%20Alian%20Abduction.mp3",
-    coverArt: hrMacMillanCover,
-    lyrics: [
-      { time: 0, text: "Under the dome of starlit night" },
-      { time: 4, text: "The MacMillan Centre stands tall" },
-      { time: 8, text: "Cosmic mysteries come to light" },
-      { time: 12, text: "As alien visitors call" },
-      { time: 16, text: "" },
-      { time: 18, text: "Beams of light pierce through the sky" },
-      { time: 22, text: "Drawing souls up to their ship" },
-      { time: 26, text: "Time and space begin to fly" },
-      { time: 30, text: "On this otherworldly trip" },
-      { time: 34, text: "" },
-      { time: 36, text: "At the Space Centre we dream" },
-      { time: 40, text: "Of worlds beyond our own" },
-      { time: 44, text: "Nothing's quite what it may seem" },
-      { time: 48, text: "When you're not alone" }
     ] as LyricLine[]
   },
   {
