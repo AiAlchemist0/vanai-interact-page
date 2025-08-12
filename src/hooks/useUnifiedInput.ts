@@ -96,7 +96,7 @@ export const useUnifiedInput = (onStrum: () => void, gameState: string) => {
       Array.from(e.changedTouches).forEach(touch => {
         const element = document.elementFromPoint(touch.clientX, touch.clientY);
         
-        // Look for fret buttons by checking multiple selectors
+        // Enhanced fret detection with better logging
         const fretElement = element?.closest('[data-fret]') || 
                            element?.closest('.fret-button') ||
                            element?.closest('[class*="fret-"]');
@@ -105,6 +105,8 @@ export const useUnifiedInput = (onStrum: () => void, gameState: string) => {
         const directFretElement = element as HTMLElement;
         const hasFretAttribute = directFretElement?.hasAttribute?.('data-fret');
         
+        console.log(`Touch debug: element=${element?.tagName}, fretElement=${!!fretElement}, hasFretAttribute=${hasFretAttribute}`);
+        
         if (fretElement || hasFretAttribute) {
           const fretId = parseInt(
             fretElement?.getAttribute('data-fret') || 
@@ -112,20 +114,26 @@ export const useUnifiedInput = (onStrum: () => void, gameState: string) => {
             '0'
           );
           
-          console.log(`Touch on fret ${fretId} detected`);
-          setTouchPoints(prev => new Map([...prev, [touch.identifier, fretId]]));
-          setPressedFrets(prev => new Set([...prev, fretId]));
+          if (!isNaN(fretId) && fretId >= 0 && fretId <= 4) {
+            console.log(`✓ Touch on fret ${fretId} detected at (${touch.clientX}, ${touch.clientY})`);
+            setTouchPoints(prev => new Map([...prev, [touch.identifier, fretId]]));
+            setPressedFrets(prev => new Set([...prev, fretId]));
+          } else {
+            console.log(`✗ Invalid fret ID: ${fretId}`);
+          }
         } else {
-          // Check for strum area
+          // Enhanced strum detection
           const strumElement = element?.closest('[data-strum]') || 
                               element?.closest('.strum-button') ||
-                              element?.closest('[class*="strum"]');
+                              element?.closest('button[class*="strum"]');
           
-          if (strumElement || element?.tagName === 'BUTTON') {
-            console.log('Strum touch detected');
+          console.log(`Strum debug: strumElement=${!!strumElement}, tagName=${element?.tagName}`);
+          
+          if (strumElement) {
+            console.log(`✓ Strum touch detected at (${touch.clientX}, ${touch.clientY})`);
             handleStrum();
           } else {
-            console.log('Touch outside game area, ignoring');
+            console.log(`✗ Touch outside game area at (${touch.clientX}, ${touch.clientY}), element: ${element?.tagName}`);
           }
         }
       });

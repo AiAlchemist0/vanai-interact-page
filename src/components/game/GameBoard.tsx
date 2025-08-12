@@ -495,6 +495,7 @@ const GameBoard = ({
       <FretBoard
         pressedFrets={pressedFrets}
         onStrum={handleStrum}
+        inputMethod={inputMethod}
       />
 
       {/* Pause Overlay */}
