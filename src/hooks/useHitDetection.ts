@@ -15,7 +15,7 @@ export interface HitWindowSettings {
 }
 
 export const useHitDetection = (hitWindow?: HitWindowSettings) => {
-  const defaultHitWindow = hitWindow || { perfect: 25, good: 50, okay: 100 };
+  const defaultHitWindow = hitWindow || { perfect: 50, good: 100, okay: 200 };
   const [totalNotesHit, setTotalNotesHit] = useState(0);
   const [perfectHits, setPerfectHits] = useState(0);
   const [goodHits, setGoodHits] = useState(0);

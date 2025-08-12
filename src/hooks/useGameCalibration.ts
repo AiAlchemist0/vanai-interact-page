@@ -17,9 +17,9 @@ export const useGameCalibration = () => {
     visualOffset: 0,
     noteSpeed: 1.0,
     hitWindow: {
-      perfect: 25,
-      good: 50,
-      okay: 100
+      perfect: 50,
+      good: 100,
+      okay: 200
     }
   });
 
@@ -38,20 +38,20 @@ export const useGameCalibration = () => {
   const adjustForDifficulty = useCallback((difficulty: 'easy' | 'medium' | 'hard' | 'expert') => {
     const difficultySettings = {
       easy: {
-        noteSpeed: 0.8,
-        hitWindow: { perfect: 35, good: 70, okay: 120 }
+        noteSpeed: 0.7,
+        hitWindow: { perfect: 70, good: 140, okay: 250 }
       },
       medium: {
-        noteSpeed: 1.0,
-        hitWindow: { perfect: 30, good: 60, okay: 110 }
+        noteSpeed: 0.9,
+        hitWindow: { perfect: 60, good: 120, okay: 220 }
       },
       hard: {
-        noteSpeed: 1.2,
-        hitWindow: { perfect: 25, good: 50, okay: 100 }
+        noteSpeed: 1.1,
+        hitWindow: { perfect: 50, good: 100, okay: 200 }
       },
       expert: {
-        noteSpeed: 1.4,
-        hitWindow: { perfect: 20, good: 40, okay: 80 }
+        noteSpeed: 1.3,
+        hitWindow: { perfect: 40, good: 80, okay: 160 }
       }
     };
 
@@ -103,9 +103,9 @@ export const useGameCalibration = () => {
       visualOffset: 0,
       noteSpeed: 1.0,
       hitWindow: {
-        perfect: 25,
-        good: 50,
-        okay: 100
+        perfect: 50,
+        good: 100,
+        okay: 200
       }
     });
   }, []);

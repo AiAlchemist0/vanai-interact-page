@@ -165,9 +165,18 @@ const Game = () => {
           Back
         </Button>
         
-        <div className="text-center">
-          <h1 className="font-bold">{selectedSong?.title}</h1>
-          <p className="text-sm text-muted-foreground">{selectedSong?.artist}</p>
+        <div className="flex items-center gap-3">
+          {selectedSong?.coverArt && (
+            <img 
+              src={selectedSong.coverArt} 
+              alt={`${selectedSong.title} cover`}
+              className="w-10 h-10 rounded object-cover"
+            />
+          )}
+          <div className="text-center">
+            <h1 className="font-bold">{selectedSong?.title}</h1>
+            <p className="text-sm text-muted-foreground">{selectedSong?.artist}</p>
+          </div>
         </div>
         
         <div className="flex items-center gap-4 text-sm">
