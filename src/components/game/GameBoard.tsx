@@ -5,6 +5,7 @@ import { Song, Difficulty, GameState, NotePattern } from "@/pages/Game";
 import FretBoard from "./FretBoard";
 import ScoreDisplay from "./ScoreDisplay";
 import GameOverModal from "./GameOverModal";
+import GameBoard3D from "./GameBoard3D";
 import { Pause, Play, Square, Home } from "lucide-react";
 
 interface GameBoardProps {
@@ -316,51 +317,16 @@ const GameBoard = ({
 
       {/* Game Area */}
       <div className="relative flex-1 flex flex-col">
-        {/* Note Highway */}
-        <div className="flex-1 relative perspective-1000">
-          <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-transparent to-transparent transform-gpu" 
-               style={{ 
-                 background: 'linear-gradient(180deg, transparent 0%, transparent 70%, hsl(var(--background)) 100%)',
-               }} />
+        {/* 3D Note Highway */}
+        <div className="flex-1 relative">
+          <GameBoard3D 
+            activeNotes={activeNotes}
+            currentTime={currentTime}
+            pressedFrets={pressedFrets}
+          />
           
-          {/* Note Tracks */}
-          <div className="absolute inset-0 flex justify-center">
-            <div className="relative w-80 h-full">
-              {/* Track Lines */}
-              {[0, 1, 2, 3, 4].map(track => (
-                <div
-                  key={track}
-                  className="absolute top-0 bottom-20 w-16 border-l border-r border-border/30"
-                  style={{ left: `${track * 16 * 4}px` }}
-                >
-                  {/* Falling Notes */}
-                  {activeNotes
-                    .filter(note => note.frets.includes(track))
-                    .map((note, index) => {
-                      const notePosition = ((note.time - currentTime) / 3000) * 100;
-                      return (
-                        <div
-                          key={`${note.time}-${track}-${index}`}
-                          className={`absolute w-14 h-6 rounded transition-all duration-75 ${
-                            track === 0 ? 'bg-ai-green' :
-                            track === 1 ? 'bg-destructive' :
-                            track === 2 ? 'bg-ai-orange' :
-                            track === 3 ? 'bg-ai-blue' :
-                            'bg-ai-purple'
-                          } ${note.type === 'chord' ? 'glow-primary' : ''}`}
-                          style={{
-                            bottom: `${notePosition}%`,
-                            left: '1px',
-                            transform: `translateY(${Math.max(0, notePosition - 100)}%)`,
-                            opacity: notePosition > 0 ? 1 : 0
-                          }}
-                        />
-                      );
-                    })}
-                </div>
-              ))}
-            </div>
-          </div>
+          {/* Gradient overlay for depth */}
+          <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-transparent to-transparent pointer-events-none" />
         </div>
 
         {/* Fret Board */}
