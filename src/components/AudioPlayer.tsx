@@ -98,7 +98,7 @@ const SONGS = [
   {
     id: "mac",
     title: "Mind, AI, & Consciousness (MAC)",
-    artist: "BCAI Collective",
+    artist: "Loki Jörgenson",
     src: "/Mind, AI, & Consciousness (MAC).mp3",
     coverArt: "/lovable-uploads/1c4667b0-798c-4df2-872f-a4638d2a2755.png",
     lyrics: [
