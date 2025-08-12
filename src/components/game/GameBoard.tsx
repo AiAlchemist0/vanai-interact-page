@@ -90,6 +90,7 @@ const GameBoard = ({
     audioRef.current = audio;
     
     const generatedNotes = generateNotePattern(song, difficulty);
+    console.log(`Generated ${generatedNotes.length} notes for ${song.title} on ${difficulty} difficulty:`, generatedNotes.slice(0, 5));
     setNotes(generatedNotes);
     setTotalNotes(generatedNotes.length);
     
@@ -134,6 +135,12 @@ const GameBoard = ({
       const upcoming = notes.filter(note => 
         note.time > time && note.time < time + 3000 // 3 second window
       );
+      
+      // Debug: Log active notes
+      if (upcoming.length !== activeNotes.length) {
+        console.log(`Active notes changed: ${upcoming.length} notes visible`, upcoming);
+      }
+      
       setActiveNotes(upcoming);
 
       // Check for missed notes

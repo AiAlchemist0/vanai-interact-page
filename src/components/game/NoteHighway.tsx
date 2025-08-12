@@ -81,7 +81,12 @@ const NoteHighway = ({ activeNotes, currentTime, pressedFrets }: NoteHighwayProp
       {/* Notes */}
       {activeNotes.map((note, noteIndex) => 
         note.frets.map((fret, fretIndex) => {
-          const noteZ = ((note.time - currentTime) / 3000) * 20 - 20; // Convert time to Z position
+          // Calculate note position: notes start far away and move towards player
+          const timeToHit = (note.time - currentTime) / 1000; // Time in seconds
+          const noteZ = timeToHit * 5 - 15; // Notes travel at 5 units per second, starting 15 units away
+          
+          // Only render notes that are in visible range
+          if (noteZ < -25 || noteZ > 5) return null;
           
           return (
             <Note3D
