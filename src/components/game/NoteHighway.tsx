@@ -15,6 +15,7 @@ interface NoteHighwayProps {
     good: number;
     okay: number;
   };
+  hitFlashTimes: Set<number>;
 }
 
 const NoteHighway = ({ activeNotes, currentTime, pressedFrets, combo = 0, noteSpeed = 1.0, hitWindow, hitFlashTimes }: NoteHighwayProps) => {
