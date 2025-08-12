@@ -35,10 +35,10 @@ const SONGS: Song[] = [
     duration: 180000, // 3 minutes in ms
   },
   {
-    id: "pixel-wizard",
-    title: "Mr. Pixel Wizard",
-    artist: "AI Generated",
-    audioFile: "/Mr_Pixel_Wizard.mp3",
+    id: "pixel-wizard-bc",
+    title: "Mr. Pixel Wizard BC AI",
+    artist: "BC AI",
+    audioFile: "/Mr_Pixel_Wizard BC AI.mp3",
     coverArt: "/src/assets/pixel-wizard-cover.jpg",
     bpm: 140,
     duration: 200000,

@@ -68,6 +68,29 @@ const SONGS = [
     ] as LyricLine[]
   },
   {
+    id: "pixel-wizard",
+    title: "Mr. Pixel Wizard BC AI",
+    artist: "BC AI",
+    src: "/Mr_Pixel_Wizard BC AI.mp3",
+    coverArt: "/lovable-uploads/b05a11cd-74b0-4eda-9093-a9a558c0a56e.png",
+    lyrics: [
+      { time: 0, text: "In the realm of digital art" },
+      { time: 3.5, text: "Mr. Pixel Wizard stands" },
+      { time: 7, text: "Creating magic, bit by part" },
+      { time: 10.5, text: "With his algorithmic hands" },
+      { time: 14, text: "" },
+      { time: 16, text: "Pixels dance at his command" },
+      { time: 19.5, text: "Colors flow like liquid light" },
+      { time: 23, text: "In this artificial land" },
+      { time: 26.5, text: "Beauty born from code so bright" },
+      { time: 30, text: "" },
+      { time: 32, text: "Mr. Pixel Wizard weaves" },
+      { time: 35.5, text: "Dreams in binary streams" },
+      { time: 39, text: "What the digital mind believes" },
+      { time: 42.5, text: "Nothing's quite what it seems" }
+    ] as LyricLine[]
+  },
+  {
     id: "mac",
     title: "Mind, AI, & Consciousness (MAC)",
     artist: "Loki Jörgenson",
