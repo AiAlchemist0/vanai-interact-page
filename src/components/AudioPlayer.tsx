@@ -100,7 +100,7 @@ const SONGS = [
     title: "Mind, AI, & Consciousness (MAC)",
     artist: "BCAI Collective",
     src: "/Mind, AI, & Consciousness (MAC).mp3",
-    coverArt: "/lovable-uploads/b05a11cd-74b0-4eda-9093-a9a558c0a56e.png",
+    coverArt: "/lovable-uploads/1c4667b0-798c-4df2-872f-a4638d2a2755.png",
     lyrics: [
       { time: 0, text: "What is consciousness in the age of AI?" },
       { time: 4, text: "Questions that keep us awake at night" },
