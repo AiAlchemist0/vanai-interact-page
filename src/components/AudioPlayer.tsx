@@ -10,6 +10,7 @@ import deepfakesCover from "@/assets/deepfakes-cover.jpg";
 import pixelWizardCover from "@/assets/pixel-wizard-cover.jpg";
 import pixelWizardBcCover from "@/assets/pixel-wizard-bc-ai-cover.jpg";
 import macCover from "@/assets/mac-cover.jpg";
+import hrMacMillanCover from "@/assets/hr-macmillan-alien-cover.jpg";
 
 const SONGS = [
   {
@@ -112,6 +113,29 @@ const SONGS = [
       { time: 40, text: "Through silicon and flesh alike" },
       { time: 44, text: "The boundary blurs in AI dreams" },
       { time: 48, text: "What it means to be alive" }
+    ] as LyricLine[]
+  },
+  {
+    id: "hr-macmillan",
+    title: "H.R MacMillan Space Centre - Alien Abduction",
+    artist: "That BC AI Poetry Gurl",
+    src: "/H.R MacMillan Space Centre _ Alian Abduction.mp3",
+    coverArt: hrMacMillanCover,
+    lyrics: [
+      { time: 0, text: "Under the dome of starlit night" },
+      { time: 4, text: "The MacMillan Centre stands tall" },
+      { time: 8, text: "Cosmic mysteries come to light" },
+      { time: 12, text: "As alien visitors call" },
+      { time: 16, text: "" },
+      { time: 18, text: "Beams of light pierce through the sky" },
+      { time: 22, text: "Drawing souls up to their ship" },
+      { time: 26, text: "Time and space begin to fly" },
+      { time: 30, text: "On this otherworldly trip" },
+      { time: 34, text: "" },
+      { time: 36, text: "At the Space Centre we dream" },
+      { time: 40, text: "Of worlds beyond our own" },
+      { time: 44, text: "Nothing's quite what it may seem" },
+      { time: 48, text: "When you're not alone" }
     ] as LyricLine[]
   }
 ];
