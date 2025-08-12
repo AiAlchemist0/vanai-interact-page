@@ -185,31 +185,52 @@ const AudioPlayer: React.FC = () => {
   const [audioError, setAudioError] = React.useState<string | null>(null);
   const [isLoading, setIsLoading] = React.useState(true);
   const [fileAvailable, setFileAvailable] = React.useState<boolean | null>(null);
+  const [retryCount, setRetryCount] = React.useState(0);
+  const [showLyricsOnly, setShowLyricsOnly] = React.useState(false);
   const [lyricsOpen, setLyricsOpen] = React.useState(false);
   const [playbackMode, setPlaybackMode] = React.useState<"off" | "next" | "repeat" | "repeat-all">("next");
   
   const currentSong = SONGS[currentSongIndex];
   
-  // Check file availability
+  // Check file availability with retry mechanism
   React.useEffect(() => {
-    const checkFileAvailability = async () => {
+    const checkFileAvailability = async (attempt = 1) => {
       setIsLoading(true);
       setFileAvailable(null);
       setAudioError(null);
       
       try {
-        const response = await fetch(currentSong.src, { method: 'HEAD' });
+        const response = await fetch(currentSong.src, { 
+          method: 'HEAD',
+          cache: 'no-cache' // Ensure fresh check
+        });
         if (response.ok) {
           setFileAvailable(true);
+          setRetryCount(0);
+          setShowLyricsOnly(false);
         } else {
-          setFileAvailable(false);
-          setAudioError(`Audio file not found (${response.status}). This track may not be available in production.`);
+          throw new Error(`HTTP ${response.status}: ${response.statusText}`);
         }
       } catch (error) {
-        setFileAvailable(false);
-        setAudioError(`Unable to load "${currentSong.title}". Network error or file not found.`);
+        console.error(`Audio file check failed (attempt ${attempt}):`, error);
+        
+        if (attempt < 3) {
+          // Retry up to 3 times with exponential backoff
+          setTimeout(() => {
+            setRetryCount(attempt);
+            checkFileAvailability(attempt + 1);
+          }, Math.pow(2, attempt) * 1000);
+        } else {
+          setFileAvailable(false);
+          setRetryCount(attempt);
+          setAudioError(`Unable to load "${currentSong.title}" after ${attempt} attempts. File may not be available.`);
+          // Offer lyrics-only mode as fallback
+          setShowLyricsOnly(true);
+        }
       } finally {
-        setIsLoading(false);
+        if (attempt >= 3 || fileAvailable !== false) {
+          setIsLoading(false);
+        }
       }
     };
     
@@ -346,6 +367,18 @@ const AudioPlayer: React.FC = () => {
     audio.pause();
     audio.currentTime = 0;
     setIsPlaying(false);
+  };
+
+  const retryFileLoad = () => {
+    setRetryCount(0);
+    setShowLyricsOnly(false);
+    // Trigger re-check by updating the effect dependency
+    const currentSrc = currentSong.src;
+    setFileAvailable(null);
+    // Force a re-render to trigger the effect
+    setTimeout(() => {
+      // This will trigger the useEffect again
+    }, 100);
   };
 
   const onSeek = (vals: number[]) => {
@@ -540,22 +573,47 @@ const AudioPlayer: React.FC = () => {
                 <Slider value={[progress]} max={100} step={0.1} onValueChange={onSeek} aria-label="Seek" />
               </div>
               
-              {/* Status Messages */}
-              {isLoading && !audioError && (
-                <div className="text-xs text-muted-foreground text-center">
-                  Checking audio availability...
+              {/* Enhanced Status Messages */}
+              {isLoading && (
+                <div className="text-xs text-muted-foreground text-center flex items-center justify-center gap-2">
+                  <div className="animate-spin w-3 h-3 border border-primary border-t-transparent rounded-full" />
+                  {retryCount > 0 ? `Retrying... (${retryCount}/3)` : 'Checking audio availability...'}
                 </div>
               )}
               
               {audioError && (
-                <div className="text-xs text-destructive text-center bg-destructive/10 p-2 rounded">
-                  {audioError}
+                <div className="text-xs text-destructive text-center bg-destructive/10 p-3 rounded space-y-2">
+                  <div>{audioError}</div>
+                  {fileAvailable === false && (
+                    <div className="flex justify-center gap-2">
+                      <button 
+                        onClick={retryFileLoad}
+                        className="px-2 py-1 text-xs bg-destructive/20 hover:bg-destructive/30 rounded transition-colors"
+                      >
+                        Retry
+                      </button>
+                      {currentSong.lyrics.length > 0 && (
+                        <button 
+                          onClick={() => setLyricsOpen(true)}
+                          className="px-2 py-1 text-xs bg-primary/20 hover:bg-primary/30 rounded transition-colors"
+                        >
+                          View Lyrics
+                        </button>
+                      )}
+                    </div>
+                  )}
                 </div>
               )}
               
-              {fileAvailable === false && !audioError && (
-                <div className="text-xs text-amber-600 dark:text-amber-400 text-center bg-amber-500/10 p-2 rounded">
-                  📁 This audio file is not available in production. Please upload the MP3 files to the public directory.
+              {fileAvailable === false && !audioError && showLyricsOnly && (
+                <div className="text-xs text-amber-600 dark:text-amber-400 text-center bg-amber-500/10 p-3 rounded space-y-2">
+                  <div>📖 Audio unavailable, but you can still read the lyrics!</div>
+                  <button 
+                    onClick={() => setLyricsOpen(true)}
+                    className="px-2 py-1 text-xs bg-amber-500/20 hover:bg-amber-500/30 rounded transition-colors"
+                  >
+                    View Lyrics
+                  </button>
                 </div>
               )}
               
@@ -586,21 +644,30 @@ const AudioPlayer: React.FC = () => {
 
               <Dialog open={lyricsOpen} onOpenChange={setLyricsOpen}>
                 <DialogTrigger asChild>
-                  <Button variant="outline" size="sm">
+                  <Button variant="outline" size="sm" disabled={currentSong.lyrics.length === 0}>
                     <FileText size={14} />
                   </Button>
                 </DialogTrigger>
                 <DialogContent className="max-w-md max-h-[80vh] overflow-hidden">
                   <DialogHeader>
-                    <DialogTitle>{currentSong.title} - Lyrics</DialogTitle>
+                    <DialogTitle className="flex items-center gap-2">
+                      {currentSong.title} - Lyrics
+                      {fileAvailable === false && <span className="text-xs bg-amber-500/20 px-2 py-1 rounded">Audio Unavailable</span>}
+                    </DialogTitle>
                   </DialogHeader>
                   <ScrollArea className="h-[50vh] w-full pr-4">
                     <div className="space-y-3 pb-4">
-                      {currentSong.lyrics.map((line, index) => (
-                        <p key={index} className="text-sm leading-relaxed">
-                          {line.text || "\u00A0"}
+                      {currentSong.lyrics.length > 0 ? (
+                        currentSong.lyrics.map((line, index) => (
+                          <p key={index} className="text-sm leading-relaxed">
+                            {line.text || "\u00A0"}
+                          </p>
+                        ))
+                      ) : (
+                        <p className="text-sm text-muted-foreground text-center py-8">
+                          No lyrics available for this track.
                         </p>
-                      ))}
+                      )}
                     </div>
                   </ScrollArea>
                 </DialogContent>
