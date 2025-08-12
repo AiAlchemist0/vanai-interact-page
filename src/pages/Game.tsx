@@ -61,6 +61,15 @@ const SONGS: Song[] = [
     bpm: 95,
     duration: 220000,
   },
+  {
+    id: "bc-ai-hackathon",
+    title: "BC AI Hackathon by Rival Tech",
+    artist: "Digital Girl",
+    audioFile: "/BC AI Hackathon by Rival Tech.mp3",
+    coverArt: "/src/assets/bc-ai-hackathon-cover.jpg",
+    bpm: 128,
+    duration: 210000,
+  },
 ];
 
 const Game = () => {

@@ -11,6 +11,7 @@ import pixelWizardCover from "@/assets/pixel-wizard-cover.jpg";
 import pixelWizardBcCover from "@/assets/pixel-wizard-bc-ai-cover.jpg";
 import macCover from "@/assets/mac-cover.jpg";
 import hrMacMillanCover from "@/assets/hr-macmillan-alien-cover.jpg";
+import bcAiHackathonCover from "@/assets/bc-ai-hackathon-cover.jpg";
 
 const SONGS = [
   {
@@ -136,6 +137,29 @@ const SONGS = [
       { time: 40, text: "Of worlds beyond our own" },
       { time: 44, text: "Nothing's quite what it may seem" },
       { time: 48, text: "When you're not alone" }
+    ] as LyricLine[]
+  },
+  {
+    id: "bc-ai-hackathon",
+    title: "BC AI Hackathon by Rival Tech",
+    artist: "Digital Girl",
+    src: "/BC AI Hackathon by Rival Tech.mp3",
+    coverArt: bcAiHackathonCover,
+    lyrics: [
+      { time: 0, text: "Code flows through the digital night" },
+      { time: 4, text: "BC AI hackathon has begun" },
+      { time: 8, text: "Rival Tech brings innovation bright" },
+      { time: 12, text: "Building futures, one by one" },
+      { time: 16, text: "" },
+      { time: 18, text: "Digital minds collaborate" },
+      { time: 22, text: "In Vancouver's tech-filled halls" },
+      { time: 26, text: "Creating what we innovate" },
+      { time: 30, text: "As inspiration calls" },
+      { time: 34, text: "" },
+      { time: 36, text: "BC AI hackathon dreams" },
+      { time: 40, text: "Technology meets art" },
+      { time: 44, text: "Building tomorrow's schemes" },
+      { time: 48, text: "With a digital heart" }
     ] as LyricLine[]
   }
 ];
