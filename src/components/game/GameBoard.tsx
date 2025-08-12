@@ -94,6 +94,7 @@ const GameBoard = ({
   const [hitEffects, setHitEffects] = useState<HitEffect[]>([]);
   const [floatingTexts, setFloatingTexts] = useState<FloatingTextItem[]>([]);
   const [showCalibration, setShowCalibration] = useState(false);
+  const [touchPressedFrets, setTouchPressedFrets] = useState<Set<number>>(new Set());
 
   // Calibration, hit detection, and effects systems
   const calibration = useGameCalibration();
@@ -280,6 +281,9 @@ const GameBoard = ({
   const handleStrum = () => {
     const calibratedTime = currentTime + calibration.settings.audioOffset;
 
+    // Use touch controls if available, otherwise use keyboard
+    const activePressedFrets = touchPressedFrets.size > 0 ? touchPressedFrets : pressedFrets;
+
     // Find notes within calibrated hit window
     const hittableNotes = notes.filter(note => 
       calibration.isNoteHittable(note.time, currentTime)
@@ -294,9 +298,9 @@ const GameBoard = ({
 
     // Check if pressed frets match the note
     const requiredFrets = new Set(closestNote.frets);
-    const pressedFretsArray = Array.from(pressedFrets);
+    const pressedFretsArray = Array.from(activePressedFrets);
     
-    const isCorrect = requiredFrets.size === pressedFrets.size && 
+    const isCorrect = requiredFrets.size === activePressedFrets.size && 
                      pressedFretsArray.every(fret => requiredFrets.has(fret));
 
     const fretPositions = [-1.5, -0.75, 0, 0.75, 1.5];
@@ -468,7 +472,7 @@ const GameBoard = ({
           <GameBoard3D 
             activeNotes={activeNotes}
             currentTime={currentTime}
-            pressedFrets={pressedFrets}
+            pressedFrets={touchPressedFrets.size > 0 ? touchPressedFrets : pressedFrets}
             combo={combo}
             hitEffects={hitEffects}
             floatingTexts={floatingTexts}
@@ -484,7 +488,8 @@ const GameBoard = ({
         <div className="absolute top-4 left-4 bg-black/50 text-white p-2 rounded text-xs">
           <div>Time: {currentTime.toFixed(0)}ms</div>
           <div>Active Notes: {activeNotes.length}</div>
-          <div>Pressed: [{Array.from(pressedFrets).join(', ')}]</div>
+          <div>Keyboard: [{Array.from(pressedFrets).join(', ')}]</div>
+          <div>Touch: [{Array.from(touchPressedFrets).join(', ')}]</div>
         </div>
       </div>
 
@@ -493,6 +498,7 @@ const GameBoard = ({
         <FretBoard 
           pressedFrets={pressedFrets}
           onStrum={handleStrum}
+          onFretChange={setTouchPressedFrets}
         />
       </div>
 
