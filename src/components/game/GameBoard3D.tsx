@@ -1,8 +1,6 @@
 import { Canvas } from '@react-three/fiber';
-import { Environment, PerspectiveCamera } from '@react-three/drei';
-import { EffectComposer, Bloom } from '@react-three/postprocessing';
+import { PerspectiveCamera } from '@react-three/drei';
 import NoteHighway from './NoteHighway';
-import Background3D from './Background3D';
 import { NotePattern } from '@/pages/Game';
 
 interface GameBoard3DProps {
@@ -39,26 +37,12 @@ const GameBoard3D = ({ activeNotes, currentTime, pressedFrets }: GameBoard3DProp
         <pointLight position={[-3, 3, -3]} intensity={0.4} color="#ff00ff" />
         <pointLight position={[3, 3, -3]} intensity={0.4} color="#ffff00" />
 
-        {/* 3D Background */}
-        <Background3D />
-
         {/* Note Highway */}
         <NoteHighway 
           activeNotes={activeNotes}
           currentTime={currentTime}
           pressedFrets={pressedFrets}
         />
-
-        {/* Environment and Post-processing */}
-        <Environment preset="night" />
-        
-        <EffectComposer>
-          <Bloom 
-            intensity={0.8}
-            luminanceThreshold={0.7}
-            luminanceSmoothing={0.025}
-          />
-        </EffectComposer>
       </Canvas>
       
       {/* Canvas Status Indicator */}

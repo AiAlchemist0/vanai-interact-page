@@ -33,22 +33,20 @@ const NoteHighway = ({ activeNotes, currentTime, pressedFrets }: NoteHighwayProp
           {/* Fret Rail - Extended and brighter */}
           <mesh position={[x, -1, -25]}>
             <boxGeometry args={[0.15, 3, 50]} />
-            <meshStandardMaterial 
+            <meshBasicMaterial 
               color={fretColors[index]}
-              emissive={fretColors[index]}
-              emissiveIntensity={pressedFrets.has(index) ? 0.7 : 0.2}
               transparent
-              opacity={0.8}
+              opacity={pressedFrets.has(index) ? 1.0 : 0.6}
             />
           </mesh>
 
           {/* Fret Base (where notes hit) - Larger and more visible */}
           <mesh position={[x, -2.5, 5]}>
             <cylinderGeometry args={[0.4, 0.4, 0.3]} />
-            <meshStandardMaterial 
+            <meshBasicMaterial 
               color={fretColors[index]}
-              emissive={fretColors[index]}
-              emissiveIntensity={pressedFrets.has(index) ? 1.2 : 0.4}
+              transparent
+              opacity={pressedFrets.has(index) ? 1.0 : 0.8}
             />
           </mesh>
 
@@ -56,12 +54,10 @@ const NoteHighway = ({ activeNotes, currentTime, pressedFrets }: NoteHighwayProp
           {pressedFrets.has(index) && (
             <mesh position={[x, -2.5, 5]}>
               <cylinderGeometry args={[1, 1, 0.1]} />
-              <meshStandardMaterial 
+              <meshBasicMaterial 
                 color={fretColors[index]}
-                emissive={fretColors[index]}
-                emissiveIntensity={1}
                 transparent
-                opacity={0.7}
+                opacity={0.9}
               />
             </mesh>
           )}
@@ -71,23 +67,21 @@ const NoteHighway = ({ activeNotes, currentTime, pressedFrets }: NoteHighwayProp
       {/* Highway Floor - More visible */}
       <mesh position={[0, -4, -10]} rotation={[-Math.PI / 2, 0, 0]}>
         <planeGeometry args={[12, 60]} />
-        <meshStandardMaterial 
+        <meshBasicMaterial 
           color="#000033"
           transparent
-          opacity={0.9}
+          opacity={0.7}
         />
       </mesh>
 
       {/* Highway Grid Lines */}
-      {Array.from({ length: 20 }, (_, i) => (
-        <mesh key={i} position={[0, -3.9, -30 + i * 3]} rotation={[-Math.PI / 2, 0, 0]}>
+      {Array.from({ length: 10 }, (_, i) => (
+        <mesh key={i} position={[0, -3.9, -20 + i * 4]} rotation={[-Math.PI / 2, 0, 0]}>
           <planeGeometry args={[12, 0.1]} />
-          <meshStandardMaterial 
+          <meshBasicMaterial 
             color="#0066ff"
-            emissive="#0066ff"
-            emissiveIntensity={0.3}
             transparent
-            opacity={0.6}
+            opacity={0.5}
           />
         </mesh>
       ))}
@@ -123,11 +117,7 @@ const NoteHighway = ({ activeNotes, currentTime, pressedFrets }: NoteHighwayProp
       {/* Test note to verify visibility */}
       <mesh position={[0, 0, 0]}>
         <sphereGeometry args={[0.5]} />
-        <meshStandardMaterial 
-          color="#ffffff"
-          emissive="#ffffff"
-          emissiveIntensity={0.5}
-        />
+        <meshBasicMaterial color="#ffffff" />
       </mesh>
     </group>
   );
