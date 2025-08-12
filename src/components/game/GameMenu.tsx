@@ -77,8 +77,20 @@ const GameMenu = ({
               onClick={() => onSongSelect(song)}
             >
               <CardHeader className="pb-4">
-                <div className="aspect-square bg-gradient-primary rounded-lg mb-4 flex items-center justify-center">
-                  <Music className="w-12 h-12 text-primary-foreground" />
+                <div className="aspect-square bg-gradient-primary rounded-lg mb-4 overflow-hidden">
+                  <img 
+                    src={song.coverArt} 
+                    alt={`${song.title} cover art`}
+                    className="w-full h-full object-cover"
+                    onError={(e) => {
+                      // Fallback to icon if image fails to load
+                      e.currentTarget.style.display = 'none';
+                      e.currentTarget.nextElementSibling?.classList.remove('hidden');
+                    }}
+                  />
+                  <div className="hidden w-full h-full flex items-center justify-center">
+                    <Music className="w-12 h-12 text-primary-foreground" />
+                  </div>
                 </div>
                 <CardTitle className="text-lg">{song.title}</CardTitle>
                 <p className="text-muted-foreground">{song.artist}</p>
