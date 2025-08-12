@@ -82,20 +82,23 @@ export const useGameCalibration = () => {
   }, [settings.audioOffset, settings.noteSpeed]);
 
   const isNoteHittable = useCallback((noteTime: number, currentTime: number) => {
-    const adjustedCurrentTime = currentTime + settings.audioOffset;
-    const timeDiff = Math.abs(noteTime - adjustedCurrentTime);
+    // currentTime is already calibrated in GameBoard, so don't add offset again
+    const timeDiff = Math.abs(noteTime - currentTime);
     return timeDiff <= settings.hitWindow.okay;
-  }, [settings.audioOffset, settings.hitWindow.okay]);
+  }, [settings.hitWindow.okay]);
 
   const getHitGrade = useCallback((noteTime: number, currentTime: number) => {
-    const adjustedCurrentTime = currentTime + settings.audioOffset;
-    const timeDiff = Math.abs(noteTime - adjustedCurrentTime);
+    // currentTime is already calibrated in GameBoard, so don't add offset again
+    const timeDiff = Math.abs(noteTime - currentTime);
+    
+    console.log(`Hit grade check: noteTime=${noteTime}, currentTime=${currentTime}, timeDiff=${timeDiff}`);
+    console.log(`Hit windows: perfect=${settings.hitWindow.perfect}, good=${settings.hitWindow.good}, okay=${settings.hitWindow.okay}`);
     
     if (timeDiff <= settings.hitWindow.perfect) return 'perfect';
     if (timeDiff <= settings.hitWindow.good) return 'good';
     if (timeDiff <= settings.hitWindow.okay) return 'okay';
     return 'miss';
-  }, [settings.audioOffset, settings.hitWindow]);
+  }, [settings.hitWindow]);
 
   const resetToDefaults = useCallback(() => {
     setSettings({

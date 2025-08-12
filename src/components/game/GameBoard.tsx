@@ -287,10 +287,15 @@ const GameBoard = ({
     // Use touch controls if available, otherwise use keyboard
     const activePressedFrets = touchPressedFrets.size > 0 ? touchPressedFrets : pressedFrets;
 
-    // Find notes within calibrated hit window
+    // Debug logging
+    console.log(`Strum at: ${currentTime.toFixed(0)}ms, Calibrated: ${calibratedTime.toFixed(0)}ms`);
+
+    // Find notes within calibrated hit window - use calibratedTime instead of currentTime
     const hittableNotes = notes.filter(note => 
-      calibration.isNoteHittable(note.time, currentTime)
+      calibration.isNoteHittable(note.time, calibratedTime)
     );
+
+    console.log(`Hittable notes: ${hittableNotes.length}, Active notes: ${activeNotes.length}`);
 
     if (hittableNotes.length === 0) return;
 
