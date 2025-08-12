@@ -309,12 +309,12 @@ const AudioPlayer: React.FC = () => {
                     <FileText size={14} />
                   </Button>
                 </DialogTrigger>
-                <DialogContent className="max-w-md">
+                <DialogContent className="max-w-md max-h-[80vh] overflow-hidden">
                   <DialogHeader>
                     <DialogTitle>{currentSong.title} - Lyrics</DialogTitle>
                   </DialogHeader>
-                  <ScrollArea className="max-h-[60vh] pr-4">
-                    <div className="space-y-2">
+                  <ScrollArea className="h-[50vh] w-full pr-4">
+                    <div className="space-y-3 pb-4">
                       {currentSong.lyrics.map((line, index) => (
                         <p key={index} className="text-sm leading-relaxed">
                           {line.text || "\u00A0"}
