@@ -5,8 +5,7 @@ import { Slider } from "@/components/ui/slider";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
-import SynchronizedLyrics, { LyricLine } from "@/components/SynchronizedLyrics";
+import { LyricLine } from "@/components/SynchronizedLyrics";
 import deepfakesCover from "@/assets/deepfakes-cover.jpg";
 import pixelWizardCover from "@/assets/pixel-wizard-cover.jpg";
 
@@ -114,7 +113,7 @@ const AudioPlayer: React.FC = () => {
   const [duration, setDuration] = React.useState(0);
   const [currentTime, setCurrentTime] = React.useState(0);
   const [autoplayBlocked, setAutoplayBlocked] = React.useState(false);
-  const [showLyrics, setShowLyrics] = React.useState(false);
+  const [lyricsOpen, setLyricsOpen] = React.useState(false);
   
   const currentSong = SONGS[currentSongIndex];
 
@@ -304,14 +303,27 @@ const AudioPlayer: React.FC = () => {
 
             {/* Action Buttons */}
             <div className="flex flex-col gap-2">
-              <Button 
-                variant="outline" 
-                size="sm"
-                onClick={() => setShowLyrics(!showLyrics)}
-                className={showLyrics ? "bg-accent" : ""}
-              >
-                <FileText size={14} />
-              </Button>
+              <Dialog open={lyricsOpen} onOpenChange={setLyricsOpen}>
+                <DialogTrigger asChild>
+                  <Button variant="outline" size="sm">
+                    <FileText size={14} />
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="max-w-md">
+                  <DialogHeader>
+                    <DialogTitle>{currentSong.title} - Lyrics</DialogTitle>
+                  </DialogHeader>
+                  <ScrollArea className="max-h-[60vh] pr-4">
+                    <div className="space-y-2">
+                      {currentSong.lyrics.map((line, index) => (
+                        <p key={index} className="text-sm leading-relaxed">
+                          {line.text || "\u00A0"}
+                        </p>
+                      ))}
+                    </div>
+                  </ScrollArea>
+                </DialogContent>
+              </Dialog>
 
               <Button variant="secondary" size="sm" asChild>
                 <a href={currentSong.src} download aria-label="Download MP3">
@@ -320,19 +332,6 @@ const AudioPlayer: React.FC = () => {
               </Button>
             </div>
           </div>
-
-          {/* Synchronized Lyrics */}
-          <Collapsible open={showLyrics}>
-            <CollapsibleContent>
-              <div className="mt-4 p-4 rounded-lg bg-accent/20 border border-accent/30">
-                <SynchronizedLyrics 
-                  lyrics={currentSong.lyrics as LyricLine[]} 
-                  currentTime={currentTime}
-                  className="min-h-[80px]"
-                />
-              </div>
-            </CollapsibleContent>
-          </Collapsible>
         </div>
       </div>
     </div>
