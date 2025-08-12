@@ -18,7 +18,7 @@ const SONGS = [
     id: "bc-ai-hackathon",
     title: "BC AI Hackathon by Rival Tech",
     artist: "Digital BC AI Girl",
-    src: "/BC AI Hackathon by Rival Tech.mp3",
+    src: "/BC%20AI%20Hackathon%20by%20Rival%20Tech.mp3",
     coverArt: bcAiHackathonCover,
     lyrics: [
       { time: 0, text: "Code flows through the digital night" },
@@ -41,7 +41,7 @@ const SONGS = [
     id: "mac",
     title: "Mind, AI, & Consciousness (MAC)",
     artist: "Loki Jörgenson",
-    src: "/Mind, AI, & Consciousness (MAC).mp3",
+    src: "/Mind,%20AI,%20&%20Consciousness%20(MAC).mp3",
     coverArt: "/lovable-uploads/1c4667b0-798c-4df2-872f-a4638d2a2755.png",
     lyrics: [
       { time: 0, text: "What is consciousness in the age of AI?" },
@@ -64,7 +64,7 @@ const SONGS = [
     id: "deepfakes",
     title: "Deepfakes in the Rain",
     artist: "KK / BCAI",
-    src: "/Deepfakes in the Rain_KK_BCAI.mp3",
+    src: "/Deepfakes%20in%20the%20Rain_KK_BCAI.mp3",
     coverArt: "/lovable-uploads/d9e36528-0e0f-46c3-abe0-5508d700b908.png",
     lyrics: [
       { time: 0, text: "In the digital rain we fall" },
@@ -92,7 +92,7 @@ const SONGS = [
     id: "hr-macmillan",
     title: "H.R MacMillan Space Centre - Alien Abduction",
     artist: "That Sole Survivor BC AI Gurl",
-    src: "/H.R MacMillan Space Centre _ Alian Abduction.mp3",
+    src: "/H.R%20MacMillan%20Space%20Centre%20_%20Alian%20Abduction.mp3",
     coverArt: hrMacMillanCover,
     lyrics: [
       { time: 0, text: "Under the dome of starlit night" },
@@ -115,7 +115,7 @@ const SONGS = [
     id: "pixel-wizard",
     title: "Mr. Pixel Wizard BC AI",
     artist: "Kevin Friel",
-    src: "/Mr_Pixel_Wizard BC AI.mp3",
+    src: "/Mr_Pixel_Wizard%20BC%20AI.mp3",
     coverArt: pixelWizardBcCover,
     lyrics: [
       { time: 0, text: "In the realm of digital art" },
@@ -138,7 +138,7 @@ const SONGS = [
     id: "dr-patrick",
     title: "Dr. Patrick Parra Pennefather",
     artist: "Academic Orchestra",
-    src: "/Dr. Patrick Parra Pennefather.mp3",
+    src: "/Dr.%20Patrick%20Parra%20Pennefather.mp3",
     coverArt: "/lovable-uploads/fc226621-2faf-4a33-8885-28d7dc934861.png",
     lyrics: [
       { time: 0, text: "In the halls of learning high" },
