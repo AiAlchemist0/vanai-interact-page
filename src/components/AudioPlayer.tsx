@@ -1,5 +1,5 @@
 import React from "react";
-import { Play, Pause, StopCircle, Download, Music, SkipBack, SkipForward, FileText } from "lucide-react";
+import { Play, Pause, StopCircle, Download, Music, SkipBack, SkipForward, FileText, Repeat, Repeat1, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -114,6 +114,7 @@ const AudioPlayer: React.FC = () => {
   const [currentTime, setCurrentTime] = React.useState(0);
   const [autoplayBlocked, setAutoplayBlocked] = React.useState(false);
   const [lyricsOpen, setLyricsOpen] = React.useState(false);
+  const [playbackMode, setPlaybackMode] = React.useState<"off" | "next" | "repeat" | "repeat-all">("next");
   
   const currentSong = SONGS[currentSongIndex];
 
@@ -131,9 +132,29 @@ const AudioPlayer: React.FC = () => {
     };
     const onEnded = () => {
       setIsPlaying(false);
-      // Auto-advance to next song
-      if (currentSongIndex < SONGS.length - 1) {
-        setCurrentSongIndex(currentSongIndex + 1);
+      
+      // Handle different playback modes
+      switch (playbackMode) {
+        case "next":
+          if (currentSongIndex < SONGS.length - 1) {
+            setCurrentSongIndex(currentSongIndex + 1);
+          }
+          break;
+        case "repeat":
+          // Repeat current song
+          audio.currentTime = 0;
+          audio.play().catch(() => setAutoplayBlocked(true));
+          setIsPlaying(true);
+          break;
+        case "repeat-all":
+          // Go to next song, or loop back to first
+          const nextIndex = currentSongIndex < SONGS.length - 1 ? currentSongIndex + 1 : 0;
+          setCurrentSongIndex(nextIndex);
+          break;
+        case "off":
+        default:
+          // Do nothing
+          break;
       }
     };
 
@@ -205,6 +226,43 @@ const AudioPlayer: React.FC = () => {
   const goToNextSong = () => {
     const newIndex = currentSongIndex < SONGS.length - 1 ? currentSongIndex + 1 : 0;
     setCurrentSongIndex(newIndex);
+  };
+
+  const togglePlaybackMode = () => {
+    const modes: Array<"off" | "next" | "repeat" | "repeat-all"> = ["off", "next", "repeat", "repeat-all"];
+    const currentIndex = modes.indexOf(playbackMode);
+    const nextIndex = (currentIndex + 1) % modes.length;
+    setPlaybackMode(modes[nextIndex]);
+  };
+
+  const getPlaybackModeIcon = () => {
+    switch (playbackMode) {
+      case "off":
+        return <StopCircle size={14} />;
+      case "next":
+        return <ArrowRight size={14} />;
+      case "repeat":
+        return <Repeat1 size={14} />;
+      case "repeat-all":
+        return <Repeat size={14} />;
+      default:
+        return <ArrowRight size={14} />;
+    }
+  };
+
+  const getPlaybackModeLabel = () => {
+    switch (playbackMode) {
+      case "off":
+        return "No auto-play";
+      case "next":
+        return "Auto-play next";
+      case "repeat":
+        return "Repeat current";
+      case "repeat-all":
+        return "Repeat all";
+      default:
+        return "Auto-play next";
+    }
   };
 
   return (
@@ -303,6 +361,16 @@ const AudioPlayer: React.FC = () => {
 
             {/* Action Buttons */}
             <div className="flex flex-col gap-2">
+              <Button 
+                variant="outline" 
+                size="sm" 
+                onClick={togglePlaybackMode}
+                title={getPlaybackModeLabel()}
+                aria-label={getPlaybackModeLabel()}
+              >
+                {getPlaybackModeIcon()}
+              </Button>
+
               <Dialog open={lyricsOpen} onOpenChange={setLyricsOpen}>
                 <DialogTrigger asChild>
                   <Button variant="outline" size="sm">
