@@ -17,7 +17,7 @@ const SONGS = [
   {
     id: "bc-ai-hackathon",
     title: "BC AI Hackathon by Rival Tech",
-    artist: "Digital Girl",
+    artist: "Mother of the Void",
     src: "/BC AI Hackathon by Rival Tech.mp3",
     coverArt: bcAiHackathonCover,
     lyrics: [

@@ -64,7 +64,7 @@ const SONGS: Song[] = [
   {
     id: "bc-ai-hackathon",
     title: "BC AI Hackathon by Rival Tech",
-    artist: "Digital Girl",
+    artist: "Mother of the Void",
     audioFile: "/BC AI Hackathon by Rival Tech.mp3",
     coverArt: "/src/assets/bc-ai-hackathon-cover.jpg",
     bpm: 128,
