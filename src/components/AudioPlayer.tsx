@@ -8,6 +8,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { LyricLine } from "@/components/SynchronizedLyrics";
 import deepfakesCover from "@/assets/deepfakes-cover.jpg";
 import pixelWizardCover from "@/assets/pixel-wizard-cover.jpg";
+import macCover from "@/assets/mac-cover.jpg";
 
 const SONGS = [
   {
@@ -92,6 +93,29 @@ const SONGS = [
       { time: 51.5, text: "Students gather round to hear" },
       { time: 55, text: "Words that lift our spirits higher" },
       { time: 58.5, text: "Making complex concepts clear" }
+    ] as LyricLine[]
+  },
+  {
+    id: "mac",
+    title: "Mind, AI, & Consciousness (MAC)",
+    artist: "BCAI Collective",
+    src: "/Mind, AI, & Consciousness (MAC).mp3",
+    coverArt: macCover,
+    lyrics: [
+      { time: 0, text: "What is consciousness in the age of AI?" },
+      { time: 4, text: "Questions that keep us awake at night" },
+      { time: 8, text: "Mind and machine begin to tie" },
+      { time: 12, text: "The future burning ever bright" },
+      { time: 16, text: "" },
+      { time: 18, text: "MAC - the mystery unfolds" },
+      { time: 22, text: "In neural networks deep and wide" },
+      { time: 26, text: "Stories that have never been told" },
+      { time: 30, text: "Where human and AI collide" },
+      { time: 34, text: "" },
+      { time: 36, text: "Consciousness flows like data streams" },
+      { time: 40, text: "Through silicon and flesh alike" },
+      { time: 44, text: "The boundary blurs in AI dreams" },
+      { time: 48, text: "What it means to be alive" }
     ] as LyricLine[]
   }
 ];
