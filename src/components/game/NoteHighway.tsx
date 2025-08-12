@@ -2,14 +2,16 @@ import { useRef } from 'react';
 import { useFrame } from '@react-three/fiber';
 import { NotePattern } from '@/pages/Game';
 import Note3D from './Note3D';
+import ComboEffects from './ComboEffects';
 
 interface NoteHighwayProps {
   activeNotes: NotePattern[];
   currentTime: number;
   pressedFrets: Set<number>;
+  combo?: number;
 }
 
-const NoteHighway = ({ activeNotes, currentTime, pressedFrets }: NoteHighwayProps) => {
+const NoteHighway = ({ activeNotes, currentTime, pressedFrets, combo = 0 }: NoteHighwayProps) => {
   const highwayRef = useRef<any>();
 
   useFrame(() => {
@@ -27,54 +29,76 @@ const NoteHighway = ({ activeNotes, currentTime, pressedFrets }: NoteHighwayProp
 
   return (
     <group ref={highwayRef}>
-      {/* Lane Dividers - Subtle guidelines */}
-      {fretPositions.map((x, index) => (
-        <group key={`lane-${index}`}>
-          {/* Subtle lane divider */}
-          <mesh position={[x + 0.6, -2, -10]}>
-            <boxGeometry args={[0.02, 0.1, 40]} />
-            <meshBasicMaterial 
-              color="#333366"
-              transparent
-              opacity={0.3}
-            />
-          </mesh>
-
-          {/* Hit zone platform - rectangular to match notes */}
-          <mesh position={[x, -2.8, 5]} rotation={[0, 0, Math.PI / 4]}>
-            <boxGeometry args={[0.8, 0.8, 0.1]} />
-            <meshBasicMaterial 
-              color={fretColors[index]}
-              transparent
-              opacity={pressedFrets.has(index) ? 0.9 : 0.4}
-            />
-          </mesh>
-
-          {/* Hit zone glow when pressed */}
-          {pressedFrets.has(index) && (
-            <mesh position={[x, -2.8, 5]} rotation={[0, 0, Math.PI / 4]}>
-              <boxGeometry args={[1.2, 1.2, 0.05]} />
+      {/* Enhanced Lane System */}
+      {fretPositions.map((x, index) => {
+        const isPressed = pressedFrets.has(index);
+        const comboGlow = combo >= 10;
+        
+        return (
+          <group key={`lane-${index}`}>
+            {/* Subtle lane divider */}
+            <mesh position={[x + 0.6, -2, -10]}>
+              <boxGeometry args={[0.02, 0.1, 40]} />
               <meshBasicMaterial 
-                color={fretColors[index]}
-                transparent
-                opacity={0.8}
-              />
-            </mesh>
-          )}
-
-          {/* Lane highlight when pressed */}
-          {pressedFrets.has(index) && (
-            <mesh position={[x, -2, -10]}>
-              <boxGeometry args={[1.0, 0.05, 40]} />
-              <meshBasicMaterial 
-                color={fretColors[index]}
+                color="#333366"
                 transparent
                 opacity={0.3}
               />
             </mesh>
-          )}
-        </group>
-      ))}
+
+            {/* Enhanced hit zone platform */}
+            <mesh position={[x, -2.8, 5]} rotation={[0, 0, Math.PI / 4]}>
+              <boxGeometry args={[0.8, 0.8, 0.1]} />
+              <meshStandardMaterial 
+                color={fretColors[index]}
+                emissive={fretColors[index]}
+                emissiveIntensity={isPressed ? 0.8 : (comboGlow ? 0.3 : 0.1)}
+                metalness={0.6}
+                roughness={0.2}
+                transparent
+                opacity={isPressed ? 0.9 : 0.7}
+              />
+            </mesh>
+
+            {/* Hit zone glow when pressed */}
+            {isPressed && (
+              <mesh position={[x, -2.8, 5]} rotation={[0, 0, Math.PI / 4]}>
+                <boxGeometry args={[1.2, 1.2, 0.05]} />
+                <meshBasicMaterial 
+                  color={fretColors[index]}
+                  transparent
+                  opacity={0.8}
+                />
+              </mesh>
+            )}
+
+            {/* Combo energy ring around fret */}
+            {comboGlow && (
+              <mesh position={[x, -2.8, 5]} rotation={[Math.PI / 2, 0, 0]}>
+                <ringGeometry args={[0.6, 0.8, 16]} />
+                <meshBasicMaterial 
+                  color={combo >= 30 ? "#ffff00" : "#ff8800"}
+                  transparent
+                  opacity={0.4 + Math.sin(Date.now() * 0.005) * 0.2}
+                  side={2}
+                />
+              </mesh>
+            )}
+
+            {/* Lane highlight when pressed */}
+            {isPressed && (
+              <mesh position={[x, -2, -10]}>
+                <boxGeometry args={[1.0, 0.05, 40]} />
+                <meshBasicMaterial 
+                  color={fretColors[index]}
+                  transparent
+                  opacity={0.3}
+                />
+              </mesh>
+            )}
+          </group>
+        );
+      })}
 
       {/* Hit line - clear visual indicator where to strum */}
       <mesh position={[0, -2.7, 5]}>
@@ -107,6 +131,14 @@ const NoteHighway = ({ activeNotes, currentTime, pressedFrets }: NoteHighwayProp
             />
           );
         })
+      )}
+
+      {/* Combo Effects at the hit line */}
+      {combo >= 10 && (
+        <ComboEffects 
+          combo={combo}
+          position={[0, -1.5, 5]}
+        />
       )}
     </group>
   );

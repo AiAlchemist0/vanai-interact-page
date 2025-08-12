@@ -394,6 +394,7 @@ const GameBoard = ({
             activeNotes={activeNotes}
             currentTime={currentTime}
             pressedFrets={pressedFrets}
+            combo={combo}
             hitEffects={hitEffects}
             floatingTexts={floatingTexts}
             onEffectComplete={handleEffectComplete}

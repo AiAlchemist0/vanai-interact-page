@@ -9,6 +9,7 @@ interface GameBoard3DProps {
   activeNotes: NotePattern[];
   currentTime: number;
   pressedFrets: Set<number>;
+  combo: number;
   hitEffects: HitEffect[];
   floatingTexts: FloatingTextItem[];
   onEffectComplete: (id: string) => void;
@@ -18,7 +19,8 @@ interface GameBoard3DProps {
 const GameBoard3D = ({ 
   activeNotes, 
   currentTime, 
-  pressedFrets, 
+  pressedFrets,
+  combo,
   hitEffects, 
   floatingTexts,
   onEffectComplete,
@@ -56,6 +58,7 @@ const GameBoard3D = ({
           activeNotes={activeNotes}
           currentTime={currentTime}
           pressedFrets={pressedFrets}
+          combo={combo}
         />
 
         {/* Hit Effects */}
