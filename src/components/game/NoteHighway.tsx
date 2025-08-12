@@ -52,17 +52,28 @@ const NoteHighway = ({ activeNotes, currentTime, pressedFrets, combo = 0, noteSp
               />
             </mesh>
 
-            {/* Enhanced hit zone platform */}
-            <mesh position={[x, -2.8, 5]} rotation={[0, 0, Math.PI / 4]}>
-              <boxGeometry args={[0.8, 0.8, 0.1]} />
+            {/* Enhanced hit zone cavity - much more visible */}
+            <mesh position={[x, -2.5, 5]}>
+              <cylinderGeometry args={[0.6, 0.4, 0.3, 16]} />
               <meshStandardMaterial 
                 color={fretColors[index]}
                 emissive={fretColors[index]}
-                emissiveIntensity={isPressed ? 0.8 : (comboGlow ? 0.3 : 0.1)}
-                metalness={0.6}
-                roughness={0.2}
+                emissiveIntensity={isPressed ? 1.2 : (comboGlow ? 0.5 : 0.3)}
+                metalness={0.4}
+                roughness={0.1}
                 transparent
-                opacity={isPressed ? 0.9 : 0.7}
+                opacity={0.9}
+              />
+            </mesh>
+
+            {/* Hit zone rim - makes the cavity more obvious */}
+            <mesh position={[x, -2.3, 5]} rotation={[Math.PI / 2, 0, 0]}>
+              <ringGeometry args={[0.6, 0.8, 16]} />
+              <meshBasicMaterial 
+                color={fretColors[index]}
+                transparent
+                opacity={isPressed ? 0.8 : 0.5}
+                side={2}
               />
             </mesh>
 
@@ -106,13 +117,23 @@ const NoteHighway = ({ activeNotes, currentTime, pressedFrets, combo = 0, noteSp
         );
       })}
 
-      {/* Hit line - clear visual indicator where to strum */}
-      <mesh position={[0, -2.7, 5]}>
-        <boxGeometry args={[7, 0.05, 0.1]} />
+      {/* Hit line - much more prominent */}
+      <mesh position={[0, -2.2, 5]}>
+        <boxGeometry args={[8, 0.1, 0.2]} />
         <meshBasicMaterial 
           color="#ffffff"
           transparent
-          opacity={0.6}
+          opacity={0.9}
+        />
+      </mesh>
+
+      {/* Hit line glow */}
+      <mesh position={[0, -2.2, 5]}>
+        <boxGeometry args={[8.5, 0.2, 0.3]} />
+        <meshBasicMaterial 
+          color="#ffffff"
+          transparent
+          opacity={0.3}
         />
       </mesh>
 

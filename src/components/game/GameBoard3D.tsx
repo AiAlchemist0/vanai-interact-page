@@ -56,7 +56,7 @@ const GameBoard3D = ({
             : 'linear-gradient(180deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%)'
         }}
       >
-        <PerspectiveCamera makeDefault position={[0, 4, 10]} fov={75} />
+        <PerspectiveCamera makeDefault position={[0, 8, 6]} fov={80} />
         
         {/* Enhanced Lighting Setup */}
         <ambientLight intensity={starPower.isActive ? 0.6 : 0.4} />
