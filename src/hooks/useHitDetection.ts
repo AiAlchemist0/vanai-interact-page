@@ -8,7 +8,14 @@ export interface HitResult {
   timingDiff: number;
 }
 
-export const useHitDetection = () => {
+export interface HitWindowSettings {
+  perfect: number;
+  good: number;
+  okay: number;
+}
+
+export const useHitDetection = (hitWindow?: HitWindowSettings) => {
+  const defaultHitWindow = hitWindow || { perfect: 25, good: 50, okay: 100 };
   const [totalNotesHit, setTotalNotesHit] = useState(0);
   const [perfectHits, setPerfectHits] = useState(0);
   const [goodHits, setGoodHits] = useState(0);
@@ -18,11 +25,11 @@ export const useHitDetection = () => {
   const calculateHitGrade = useCallback((timingDiff: number): HitGrade => {
     const absTimingDiff = Math.abs(timingDiff);
     
-    if (absTimingDiff <= 25) return 'perfect';
-    if (absTimingDiff <= 50) return 'good';
-    if (absTimingDiff <= 100) return 'okay';
+    if (absTimingDiff <= defaultHitWindow.perfect) return 'perfect';
+    if (absTimingDiff <= defaultHitWindow.good) return 'good';
+    if (absTimingDiff <= defaultHitWindow.okay) return 'okay';
     return 'miss';
-  }, []);
+  }, [defaultHitWindow]);
 
   const calculatePoints = useCallback((grade: HitGrade, isChord: boolean, combo: number): number => {
     const basePoints = isChord ? 100 : 50;

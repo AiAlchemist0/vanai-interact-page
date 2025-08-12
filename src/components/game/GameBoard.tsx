@@ -8,8 +8,10 @@ import GameOverModal from "./GameOverModal";
 import GameBoard3D from "./GameBoard3D";
 import { HitEffect } from "./HitEffects";
 import { FloatingTextItem } from "./FloatingText";
-import { useHitDetection } from "@/hooks/useHitDetection";
-import { Pause, Play, Square, Home } from "lucide-react";
+import { useHitDetection, HitWindowSettings } from "@/hooks/useHitDetection";
+import { useGameCalibration } from "@/hooks/useGameCalibration";
+import CalibrationModal from "./CalibrationModal";
+import { Pause, Play, Square, Home, Settings } from "lucide-react";
 
 interface GameBoardProps {
   song: Song;
@@ -89,9 +91,11 @@ const GameBoard = ({
   const [totalNotes, setTotalNotes] = useState(0);
   const [hitEffects, setHitEffects] = useState<HitEffect[]>([]);
   const [floatingTexts, setFloatingTexts] = useState<FloatingTextItem[]>([]);
+  const [showCalibration, setShowCalibration] = useState(false);
 
-  // Hit detection system
-  const { processHit, processMiss, resetStats, getStats } = useHitDetection();
+  // Calibration and hit detection systems
+  const calibration = useGameCalibration();
+  const { processHit, processMiss, resetStats, getStats } = useHitDetection(calibration.settings.hitWindow);
 
   // Initialize game
   useEffect(() => {
@@ -101,6 +105,9 @@ const GameBoard = ({
     const generatedNotes = generateNotePattern(song, difficulty);
     setNotes(generatedNotes);
     setTotalNotes(generatedNotes.length);
+    
+    // Adjust calibration for difficulty
+    calibration.adjustForDifficulty(difficulty);
     
     return () => {
       if (audio) {
@@ -130,8 +137,10 @@ const GameBoard = ({
       const audio = audioRef.current;
       if (!audio) return;
 
-      const time = audio.currentTime * 1000;
-      setCurrentTime(time);
+      // Use calibrated time
+      const rawTime = audio.currentTime * 1000;
+      const calibratedTime = rawTime + calibration.settings.audioOffset;
+      setCurrentTime(calibratedTime);
 
       // Check if song ended
       if (audio.ended) {
@@ -139,20 +148,22 @@ const GameBoard = ({
         return;
       }
 
-      // Update active notes (notes that should be visible on screen)
+      // Update active notes using calibration
+      const noteWindow = 6000 / calibration.settings.noteSpeed; // Adjust window for note speed
       const upcoming = notes.filter(note => 
-        note.time > time - 1000 && note.time < time + 5000 // 6 second window
+        note.time > calibratedTime - 1000 && note.time < calibratedTime + noteWindow
       );
       
       if (upcoming.length !== activeNotes.length) {
-        console.log(`Time: ${time.toFixed(0)}ms, Active notes: ${upcoming.length}`);
+        console.log(`Time: ${calibratedTime.toFixed(0)}ms, Active notes: ${upcoming.length}`);
       }
       
       setActiveNotes(upcoming);
 
-      // Check for missed notes (increased window to 150ms)
+      // Check for missed notes with calibration
+      const missWindow = calibration.settings.hitWindow.okay + 50; // 50ms grace period
       const missedNotes = notes.filter(note => 
-        note.time < time - 150 && note.time > time - 200
+        note.time < calibratedTime - missWindow && note.time > calibratedTime - (missWindow + 50)
       );
       
       if (missedNotes.length > 0) {
@@ -172,7 +183,7 @@ const GameBoard = ({
     }, 16); // ~60fps
 
     return () => clearInterval(interval);
-  }, [gameState, notes, score, onGameOver, onComboChange, activeNotes.length]);
+  }, [gameState, notes, score, onGameOver, onComboChange, activeNotes.length, calibration.settings]);
 
   // Keyboard controls
   useEffect(() => {
@@ -250,18 +261,18 @@ const GameBoard = ({
   };
 
   const handleStrum = () => {
-    const currentTimeMs = currentTime;
+    const calibratedTime = currentTime + calibration.settings.audioOffset;
 
-    // Find notes within extended hit window for detection
+    // Find notes within calibrated hit window
     const hittableNotes = notes.filter(note => 
-      Math.abs(note.time - currentTimeMs) <= 100 // 100ms max window
+      calibration.isNoteHittable(note.time, currentTime)
     );
 
     if (hittableNotes.length === 0) return;
 
-    // Get the closest note
+    // Get the closest note with calibration
     const closestNote = hittableNotes.reduce((closest, note) => 
-      Math.abs(note.time - currentTimeMs) < Math.abs(closest.time - currentTimeMs) ? note : closest
+      Math.abs(note.time - calibratedTime) < Math.abs(closest.time - calibratedTime) ? note : closest
     );
 
     // Check if pressed frets match the note
@@ -274,8 +285,8 @@ const GameBoard = ({
     const fretPositions = [-1.5, -0.75, 0, 0.75, 1.5];
 
     if (isCorrect) {
-      // Calculate timing and hit grade
-      const timingDiff = closestNote.time - currentTimeMs;
+      // Calculate timing with calibration
+      const timingDiff = closestNote.time - calibratedTime;
       const isChord = closestNote.type === "chord";
       const hitResult = processHit(timingDiff, isChord, combo);
 
@@ -370,6 +381,16 @@ const GameBoard = ({
             <Home className="w-4 h-4" />
             Menu
           </Button>
+
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => setShowCalibration(true)}
+            className="flex items-center gap-2"
+          >
+            <Settings className="w-4 h-4" />
+            Calibrate
+          </Button>
         </div>
 
         <ScoreDisplay 
@@ -399,6 +420,8 @@ const GameBoard = ({
             floatingTexts={floatingTexts}
             onEffectComplete={handleEffectComplete}
             onTextComplete={handleTextComplete}
+            noteSpeed={calibration.settings.noteSpeed}
+            hitWindow={calibration.settings.hitWindow}
           />
         </div>
         
@@ -453,6 +476,20 @@ const GameBoard = ({
               audioRef.current.currentTime = 0;
             }
           }}
+        />
+      )}
+
+      {/* Calibration Modal */}
+      {showCalibration && (
+        <CalibrationModal
+          isOpen={showCalibration}
+          onClose={() => setShowCalibration(false)}
+          onCalibrationChange={(settings) => {
+            calibration.updateAudioOffset(settings.audioOffset);
+            calibration.updateVisualOffset(settings.visualOffset);
+            calibration.updateNoteSpeed(settings.noteSpeed);
+          }}
+          currentSettings={calibration.settings}
         />
       )}
     </div>

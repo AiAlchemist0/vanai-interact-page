@@ -8,30 +8,42 @@ interface Note3DProps {
   isChord: boolean;
   noteTime: number;
   currentTime: number;
+  noteSpeed?: number; // Speed multiplier for note movement
+  hitWindow?: {
+    perfect: number;
+    good: number;
+    okay: number;
+  };
 }
 
-const Note3D = ({ position, fret, isChord, noteTime, currentTime }: Note3DProps) => {
+const Note3D = ({ position, fret, isChord, noteTime, currentTime, noteSpeed = 1.0, hitWindow }: Note3DProps) => {
   const noteRef = useRef<Mesh>(null);
   
   // Guitar Hero accurate fret colors
   const fretColors = ['#22c55e', '#ef4444', '#eab308', '#3b82f6', '#f97316']; // Green, Red, Yellow, Blue, Orange
   const color = fretColors[fret];
 
-  // Calculate timing and hit zone effects
+  // Calculate timing and hit zone effects with calibration
   const timeDiff = noteTime - currentTime;
-  const isApproaching = timeDiff <= 1000 && timeDiff >= 0; // 1 second approach window
-  const isInHitZone = Math.abs(timeDiff) <= 100; // 100ms hit window
-  const isInPerfectZone = Math.abs(timeDiff) <= 25; // 25ms perfect window
+  const isApproaching = timeDiff <= (1000 / noteSpeed) && timeDiff >= 0; // Adjust approach window for speed
   
-  // Calculate intensity based on approach
-  const approachProgress = isApproaching ? 1 - (timeDiff / 1000) : 0;
-  const hitIntensity = isInHitZone ? 1 - (Math.abs(timeDiff) / 100) : 0;
-  const perfectIntensity = isInPerfectZone ? 1 - (Math.abs(timeDiff) / 25) : 0;
+  // Use custom hit windows if provided, otherwise use defaults
+  const perfectWindow = hitWindow?.perfect || 25;
+  const goodWindow = hitWindow?.good || 50;
+  const okayWindow = hitWindow?.okay || 100;
+  
+  const isInHitZone = Math.abs(timeDiff) <= okayWindow;
+  const isInPerfectZone = Math.abs(timeDiff) <= perfectWindow;
+  
+  // Calculate intensity based on approach (adjusted for note speed)
+  const approachProgress = isApproaching ? 1 - (timeDiff / (1000 / noteSpeed)) : 0;
+  const hitIntensity = isInHitZone ? 1 - (Math.abs(timeDiff) / okayWindow) : 0;
+  const perfectIntensity = isInPerfectZone ? 1 - (Math.abs(timeDiff) / perfectWindow) : 0;
 
   useFrame(() => {
     if (noteRef.current) {
-      // Continuous subtle rotation for visual interest
-      noteRef.current.rotation.y += 0.01;
+      // Rotation speed adjusted for note speed
+      noteRef.current.rotation.y += 0.01 * noteSpeed;
       
       // Enhanced scaling effects based on timing
       let baseScale = isChord ? 1.2 : 1.0;
@@ -131,8 +143,8 @@ const Note3D = ({ position, fret, isChord, noteTime, currentTime }: Note3DProps)
         </mesh>
       )}
 
-      {/* Streak trail effect for fast approaching notes */}
-      {isApproaching && timeDiff < 500 && (
+      {/* Streak trail effect for fast approaching notes (adjusted for speed) */}
+      {isApproaching && timeDiff < (500 / noteSpeed) && (
         <>
           {[...Array(3)].map((_, i) => (
             <mesh 

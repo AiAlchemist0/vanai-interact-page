@@ -14,6 +14,12 @@ interface GameBoard3DProps {
   floatingTexts: FloatingTextItem[];
   onEffectComplete: (id: string) => void;
   onTextComplete: (id: string) => void;
+  noteSpeed: number;
+  hitWindow: {
+    perfect: number;
+    good: number;
+    okay: number;
+  };
 }
 
 const GameBoard3D = ({ 
@@ -24,7 +30,9 @@ const GameBoard3D = ({
   hitEffects, 
   floatingTexts,
   onEffectComplete,
-  onTextComplete 
+  onTextComplete,
+  noteSpeed,
+  hitWindow
 }: GameBoard3DProps) => {
   return (
     <div className="w-full h-full">
@@ -59,6 +67,8 @@ const GameBoard3D = ({
           currentTime={currentTime}
           pressedFrets={pressedFrets}
           combo={combo}
+          noteSpeed={noteSpeed}
+          hitWindow={hitWindow}
         />
 
         {/* Hit Effects */}

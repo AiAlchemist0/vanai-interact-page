@@ -9,9 +9,15 @@ interface NoteHighwayProps {
   currentTime: number;
   pressedFrets: Set<number>;
   combo?: number;
+  noteSpeed?: number;
+  hitWindow?: {
+    perfect: number;
+    good: number;
+    okay: number;
+  };
 }
 
-const NoteHighway = ({ activeNotes, currentTime, pressedFrets, combo = 0 }: NoteHighwayProps) => {
+const NoteHighway = ({ activeNotes, currentTime, pressedFrets, combo = 0, noteSpeed = 1.0, hitWindow }: NoteHighwayProps) => {
   const highwayRef = useRef<any>();
 
   useFrame(() => {
@@ -113,9 +119,10 @@ const NoteHighway = ({ activeNotes, currentTime, pressedFrets, combo = 0 }: Note
       {/* Notes */}
       {activeNotes.map((note, noteIndex) => 
         note.frets.map((fret, fretIndex) => {
-          // Calculate note position: notes start far away and move toward hit zone
+          // Calculate note position with calibration: notes start far away and move toward hit zone
           const timeToHit = (note.time - currentTime) / 1000; // Time in seconds until hit
-          const noteZ = -25 + (5 - timeToHit) * 8; // Notes start at Z=-25, hit zone at Z=5
+          const adjustedSpeed = noteSpeed || 1.0;
+          const noteZ = -25 + (5 - timeToHit) * (8 * adjustedSpeed); // Adjust movement speed
           
           // Only render notes that are in visible range
           if (noteZ < -30 || noteZ > 10) return null;
@@ -128,6 +135,8 @@ const NoteHighway = ({ activeNotes, currentTime, pressedFrets, combo = 0 }: Note
               isChord={note.type === 'chord'}
               noteTime={note.time}
               currentTime={currentTime}
+              noteSpeed={adjustedSpeed}
+              hitWindow={hitWindow}
             />
           );
         })
