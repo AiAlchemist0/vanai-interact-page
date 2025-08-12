@@ -5,6 +5,8 @@ import { Slider } from "@/components/ui/slider";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+import SynchronizedLyrics, { LyricLine } from "@/components/SynchronizedLyrics";
 import deepfakesCover from "@/assets/deepfakes-cover.jpg";
 import pixelWizardCover from "@/assets/pixel-wizard-cover.jpg";
 
@@ -15,26 +17,27 @@ const SONGS = [
     artist: "KK / BCAI",
     src: "/Deepfakes in the Rain_KK_BCAI.mp3",
     coverArt: deepfakesCover,
-    lyrics: `In the digital rain we fall
-Where reality bends and breaks
-Synthetic faces on the wall
-Nothing here is what it takes
-
-AI dreams in neon light
-Deepfakes dancing in the storm
-Binary tears fall through the night
-Truth and lies begin to swarm
-
-Chorus:
-Deepfakes in the rain
-Washing truth away
-In this digital domain
-Nothing's real today
-
-The algorithms learn to lie
-Creating faces from thin air
-While we watch our world collide
-With the artificial nightmare`
+    lyrics: [
+      { time: 0, text: "In the digital rain we fall" },
+      { time: 3.5, text: "Where reality bends and breaks" },
+      { time: 7, text: "Synthetic faces on the wall" },
+      { time: 10.5, text: "Nothing here is what it takes" },
+      { time: 14, text: "" },
+      { time: 16, text: "AI dreams in neon light" },
+      { time: 19.5, text: "Deepfakes dancing in the storm" },
+      { time: 23, text: "Binary tears fall through the night" },
+      { time: 26.5, text: "Truth and lies begin to swarm" },
+      { time: 30, text: "" },
+      { time: 32, text: "Deepfakes in the rain" },
+      { time: 35.5, text: "Washing truth away" },
+      { time: 39, text: "In this digital domain" },
+      { time: 42.5, text: "Nothing's real today" },
+      { time: 46, text: "" },
+      { time: 48, text: "The algorithms learn to lie" },
+      { time: 51.5, text: "Creating faces from thin air" },
+      { time: 55, text: "While we watch our world collide" },
+      { time: 58.5, text: "With the artificial nightmare" }
+    ] as LyricLine[]
   },
   {
     id: "pixel-wizard",
@@ -42,26 +45,27 @@ With the artificial nightmare`
     artist: "Unknown Artist",
     src: "/Mr_Pixel_Wizard.mp3",
     coverArt: pixelWizardCover,
-    lyrics: `In a land of ones and zeros
-Lives a wizard made of light
-Casting spells with pixel heroes
-Through the endless digital night
-
-Mr. Pixel Wizard stands
-With his staff of glowing code
-Magic flows from 8-bit hands
-Down the retro data road
-
-Chorus:
-Pixel magic in the air
-Sprites and bits everywhere
-In his castle made of squares
-Mr. Wizard always cares
-
-Level up and power through
-Pixelated dreams come true
-In this world of retro hue
-Magic waits for me and you`
+    lyrics: [
+      { time: 0, text: "In a land of ones and zeros" },
+      { time: 3.5, text: "Lives a wizard made of light" },
+      { time: 7, text: "Casting spells with pixel heroes" },
+      { time: 10.5, text: "Through the endless digital night" },
+      { time: 14, text: "" },
+      { time: 16, text: "Mr. Pixel Wizard stands" },
+      { time: 19.5, text: "With his staff of glowing code" },
+      { time: 23, text: "Magic flows from 8-bit hands" },
+      { time: 26.5, text: "Down the retro data road" },
+      { time: 30, text: "" },
+      { time: 32, text: "Pixel magic in the air" },
+      { time: 35.5, text: "Sprites and bits everywhere" },
+      { time: 39, text: "In his castle made of squares" },
+      { time: 42.5, text: "Mr. Wizard always cares" },
+      { time: 46, text: "" },
+      { time: 48, text: "Level up and power through" },
+      { time: 51.5, text: "Pixelated dreams come true" },
+      { time: 55, text: "In this world of retro hue" },
+      { time: 58.5, text: "Magic waits for me and you" }
+    ] as LyricLine[]
   }
 ];
 
@@ -82,6 +86,7 @@ const AudioPlayer: React.FC = () => {
   const [duration, setDuration] = React.useState(0);
   const [currentTime, setCurrentTime] = React.useState(0);
   const [autoplayBlocked, setAutoplayBlocked] = React.useState(false);
+  const [showLyrics, setShowLyrics] = React.useState(false);
   
   const currentSong = SONGS[currentSongIndex];
 
@@ -271,23 +276,14 @@ const AudioPlayer: React.FC = () => {
 
             {/* Action Buttons */}
             <div className="flex flex-col gap-2">
-              <Dialog>
-                <DialogTrigger asChild>
-                  <Button variant="outline" size="sm">
-                    <FileText size={14} />
-                  </Button>
-                </DialogTrigger>
-                <DialogContent className="max-w-md">
-                  <DialogHeader>
-                    <DialogTitle>{currentSong.title} - Lyrics</DialogTitle>
-                  </DialogHeader>
-                  <ScrollArea className="h-80">
-                    <div className="whitespace-pre-line text-sm leading-relaxed p-4">
-                      {currentSong.lyrics}
-                    </div>
-                  </ScrollArea>
-                </DialogContent>
-              </Dialog>
+              <Button 
+                variant="outline" 
+                size="sm"
+                onClick={() => setShowLyrics(!showLyrics)}
+                className={showLyrics ? "bg-accent" : ""}
+              >
+                <FileText size={14} />
+              </Button>
 
               <Button variant="secondary" size="sm" asChild>
                 <a href={currentSong.src} download aria-label="Download MP3">
@@ -296,6 +292,19 @@ const AudioPlayer: React.FC = () => {
               </Button>
             </div>
           </div>
+
+          {/* Synchronized Lyrics */}
+          <Collapsible open={showLyrics}>
+            <CollapsibleContent>
+              <div className="mt-4 p-4 rounded-lg bg-accent/20 border border-accent/30">
+                <SynchronizedLyrics 
+                  lyrics={currentSong.lyrics as LyricLine[]} 
+                  currentTime={currentTime}
+                  className="min-h-[80px]"
+                />
+              </div>
+            </CollapsibleContent>
+          </Collapsible>
         </div>
       </div>
     </div>
