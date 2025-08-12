@@ -1,9 +1,8 @@
 import React from "react";
-import { Play, Pause, StopCircle, Download, Music, SkipBack, SkipForward, FileText, Repeat, Repeat1, ArrowRight } from "lucide-react";
+import { Play, Pause, StopCircle, Download, Music, SkipBack, SkipForward, Repeat, Repeat1, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { LyricLine } from "@/components/SynchronizedLyrics";
 import deepfakesCover from "@/assets/deepfakes-cover.jpg";
@@ -187,7 +186,6 @@ const AudioPlayer: React.FC = () => {
   const [fileAvailable, setFileAvailable] = React.useState<boolean | null>(null);
   const [retryCount, setRetryCount] = React.useState(0);
   const [showLyricsOnly, setShowLyricsOnly] = React.useState(false);
-  const [lyricsOpen, setLyricsOpen] = React.useState(false);
   const [playbackMode, setPlaybackMode] = React.useState<"off" | "next" | "repeat" | "repeat-all">("next");
   
   const currentSong = SONGS[currentSongIndex];
@@ -585,35 +583,21 @@ const AudioPlayer: React.FC = () => {
                 <div className="text-xs text-destructive text-center bg-destructive/10 p-3 rounded space-y-2">
                   <div>{audioError}</div>
                   {fileAvailable === false && (
-                    <div className="flex justify-center gap-2">
-                      <button 
-                        onClick={retryFileLoad}
-                        className="px-2 py-1 text-xs bg-destructive/20 hover:bg-destructive/30 rounded transition-colors"
-                      >
-                        Retry
-                      </button>
-                      {currentSong.lyrics.length > 0 && (
-                        <button 
-                          onClick={() => setLyricsOpen(true)}
-                          className="px-2 py-1 text-xs bg-primary/20 hover:bg-primary/30 rounded transition-colors"
-                        >
-                          View Lyrics
-                        </button>
-                      )}
-                    </div>
+                  <div className="flex justify-center gap-2">
+                    <button 
+                      onClick={retryFileLoad}
+                      className="px-2 py-1 text-xs bg-destructive/20 hover:bg-destructive/30 rounded transition-colors"
+                    >
+                      Retry
+                    </button>
+                  </div>
                   )}
                 </div>
               )}
               
               {fileAvailable === false && !audioError && showLyricsOnly && (
-                <div className="text-xs text-amber-600 dark:text-amber-400 text-center bg-amber-500/10 p-3 rounded space-y-2">
-                  <div>📖 Audio unavailable, but you can still read the lyrics!</div>
-                  <button 
-                    onClick={() => setLyricsOpen(true)}
-                    className="px-2 py-1 text-xs bg-amber-500/20 hover:bg-amber-500/30 rounded transition-colors"
-                  >
-                    View Lyrics
-                  </button>
+                <div className="text-xs text-amber-600 dark:text-amber-400 text-center bg-amber-500/10 p-3 rounded">
+                  📁 Audio file is not available. Please upload the MP3 files to the public directory.
                 </div>
               )}
               
@@ -642,36 +626,6 @@ const AudioPlayer: React.FC = () => {
                 {getPlaybackModeIcon()}
               </Button>
 
-              <Dialog open={lyricsOpen} onOpenChange={setLyricsOpen}>
-                <DialogTrigger asChild>
-                  <Button variant="outline" size="sm" disabled={currentSong.lyrics.length === 0}>
-                    <FileText size={14} />
-                  </Button>
-                </DialogTrigger>
-                <DialogContent className="max-w-md max-h-[80vh] overflow-hidden">
-                  <DialogHeader>
-                    <DialogTitle className="flex items-center gap-2">
-                      {currentSong.title} - Lyrics
-                      {fileAvailable === false && <span className="text-xs bg-amber-500/20 px-2 py-1 rounded">Audio Unavailable</span>}
-                    </DialogTitle>
-                  </DialogHeader>
-                  <ScrollArea className="h-[50vh] w-full pr-4">
-                    <div className="space-y-3 pb-4">
-                      {currentSong.lyrics.length > 0 ? (
-                        currentSong.lyrics.map((line, index) => (
-                          <p key={index} className="text-sm leading-relaxed">
-                            {line.text || "\u00A0"}
-                          </p>
-                        ))
-                      ) : (
-                        <p className="text-sm text-muted-foreground text-center py-8">
-                          No lyrics available for this track.
-                        </p>
-                      )}
-                    </div>
-                  </ScrollArea>
-                </DialogContent>
-              </Dialog>
 
               <Button variant="secondary" size="sm" asChild>
                 <a href={currentSong.src} download aria-label="Download MP3">
