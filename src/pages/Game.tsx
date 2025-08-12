@@ -55,7 +55,7 @@ const SONGS: Song[] = [
   {
     id: "hr-macmillan",
     title: "H.R MacMillan Space Centre - Alien Abduction",
-    artist: "That BC AI Poetry Gurl",
+    artist: "That Sole Survivor BC AI Gurl",
     audioFile: "/H.R MacMillan Space Centre _ Alian Abduction.mp3",
     coverArt: "/src/assets/hr-macmillan-alien-cover.jpg",
     bpm: 95,

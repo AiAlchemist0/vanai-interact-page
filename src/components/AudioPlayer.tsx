@@ -118,7 +118,7 @@ const SONGS = [
   {
     id: "hr-macmillan",
     title: "H.R MacMillan Space Centre - Alien Abduction",
-    artist: "That BC AI Poetry Gurl",
+    artist: "That Sole Survivor BC AI Gurl",
     src: "/H.R MacMillan Space Centre _ Alian Abduction.mp3",
     coverArt: hrMacMillanCover,
     lyrics: [
