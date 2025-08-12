@@ -71,7 +71,7 @@ const SONGS = [
     title: "Dr. Patrick Parra Pennefather",
     artist: "Academic Orchestra",
     src: "/Dr. Patrick Parra Pennefather.mp3",
-    coverArt: "/lovable-uploads/fc226621-2faf-4a33-8885-28d7dc934861.png",
+    coverArt: "/lovable-uploads/f2990fe4-cc44-4a98-967a-c76ac1271763.png",
     lyrics: [
       { time: 0, text: "In the halls of learning high" },
       { time: 3.5, text: "Dr. Patrick leads the way" },
