@@ -40,34 +40,6 @@ const SONGS = [
     ] as LyricLine[]
   },
   {
-    id: "pixel-wizard",
-    title: "Mr. Pixel Wizard",
-    artist: "Unknown Artist",
-    src: "/Mr_Pixel_Wizard.mp3",
-    coverArt: pixelWizardCover,
-    lyrics: [
-      { time: 0, text: "In a land of ones and zeros" },
-      { time: 3.5, text: "Lives a wizard made of light" },
-      { time: 7, text: "Casting spells with pixel heroes" },
-      { time: 10.5, text: "Through the endless digital night" },
-      { time: 14, text: "" },
-      { time: 16, text: "Mr. Pixel Wizard stands" },
-      { time: 19.5, text: "With his staff of glowing code" },
-      { time: 23, text: "Magic flows from 8-bit hands" },
-      { time: 26.5, text: "Down the retro data road" },
-      { time: 30, text: "" },
-      { time: 32, text: "Pixel magic in the air" },
-      { time: 35.5, text: "Sprites and bits everywhere" },
-      { time: 39, text: "In his castle made of squares" },
-      { time: 42.5, text: "Mr. Wizard always cares" },
-      { time: 46, text: "" },
-      { time: 48, text: "Level up and power through" },
-      { time: 51.5, text: "Pixelated dreams come true" },
-      { time: 55, text: "In this world of retro hue" },
-      { time: 58.5, text: "Magic waits for me and you" }
-    ] as LyricLine[]
-  },
-  {
     id: "dr-patrick",
     title: "Dr. Patrick Parra Pennefather",
     artist: "Academic Orchestra",
