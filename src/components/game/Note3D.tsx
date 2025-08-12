@@ -8,7 +8,8 @@ interface Note3DProps {
   isChord: boolean;
   noteTime: number;
   currentTime: number;
-  noteSpeed?: number; // Speed multiplier for note movement
+  noteSpeed?: number;
+  scale?: number; // External scale multiplier for depth perception
   hitWindow?: {
     perfect: number;
     good: number;
@@ -16,7 +17,7 @@ interface Note3DProps {
   };
 }
 
-const Note3D = ({ position, fret, isChord, noteTime, currentTime, noteSpeed = 1.0, hitWindow }: Note3DProps) => {
+const Note3D = ({ position, fret, isChord, noteTime, currentTime, noteSpeed = 1.0, scale = 1.0, hitWindow }: Note3DProps) => {
   const noteRef = useRef<Mesh>(null);
   
   // Guitar Hero accurate fret colors
@@ -59,7 +60,7 @@ const Note3D = ({ position, fret, isChord, noteTime, currentTime, noteSpeed = 1.
         baseScale += approachProgress * 0.15;
       }
       
-      noteRef.current.scale.setScalar(baseScale);
+      noteRef.current.scale.setScalar(baseScale * scale);
       
       // Add subtle bounce effect for chords
       if (isChord) {

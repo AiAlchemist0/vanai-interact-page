@@ -58,19 +58,19 @@ const GameBoard3D = ({
       >
         <PerspectiveCamera makeDefault position={[0, 8, 6]} fov={80} />
         
-        {/* Enhanced Lighting Setup */}
-        <ambientLight intensity={starPower.isActive ? 0.6 : 0.4} />
+        {/* Optimized Lighting Setup - reduced for performance */}
+        <ambientLight intensity={starPower.isActive ? 0.5 : 0.3} />
         <directionalLight 
-          position={[10, 10, 5]} 
-          intensity={starPower.isActive ? 1.8 : 1.2}
+          position={[5, 8, 3]} 
+          intensity={starPower.isActive ? 1.5 : 1.0}
           color={starPower.isActive ? "#fff8dc" : "#ffffff"}
-          castShadow
-          shadow-mapSize-width={2048}
-          shadow-mapSize-height={2048}
+          castShadow={false}
         />
-        <pointLight position={[0, 2, 0]} intensity={starPower.isActive ? 1.2 : 0.8} color={starPower.isActive ? "#ffd700" : "#00ffff"} />
-        <pointLight position={[-3, 3, -3]} intensity={0.4} color={starPower.isActive ? "#ffaa00" : "#ff00ff"} />
-        <pointLight position={[3, 3, -3]} intensity={0.4} color={starPower.isActive ? "#ffaa00" : "#ffff00"} />
+        <pointLight 
+          position={[0, 2, 0]} 
+          intensity={starPower.isActive ? 1.0 : 0.6} 
+          color={starPower.isActive ? "#ffd700" : "#00ffff"} 
+        />
 
         {/* Atmosphere and Background */}
         <Atmosphere 

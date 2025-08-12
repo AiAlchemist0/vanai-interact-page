@@ -42,15 +42,27 @@ const NoteHighway = ({ activeNotes, currentTime, pressedFrets, combo = 0, noteSp
         
         return (
           <group key={`lane-${index}`}>
-            {/* Subtle lane divider */}
+            {/* Clearer lane divider with depth */}
             <mesh position={[x + 0.6, -2, -10]}>
-              <boxGeometry args={[0.02, 0.1, 40]} />
+              <boxGeometry args={[0.04, 0.1, 40]} />
               <meshBasicMaterial 
-                color="#333366"
+                color="#4a5568"
                 transparent
-                opacity={0.3}
+                opacity={0.6}
               />
             </mesh>
+            
+            {/* Lane depth markers for better perception */}
+            {[-15, -10, -5, 0].map((z, idx) => (
+              <mesh key={idx} position={[x + 0.6, -2.1, z]}>
+                <boxGeometry args={[0.1, 0.05, 0.2]} />
+                <meshBasicMaterial 
+                  color="#6b7280"
+                  transparent
+                  opacity={0.4}
+                />
+              </mesh>
+            ))}
 
             {/* Enhanced hit zone cavity - much more visible */}
             <mesh position={[x, -2.5, 5]}>
@@ -137,27 +149,31 @@ const NoteHighway = ({ activeNotes, currentTime, pressedFrets, combo = 0, noteSp
         />
       </mesh>
 
-      {/* Notes */}
+      {/* Notes with improved positioning and depth cues */}
       {activeNotes.map((note, noteIndex) => 
         note.frets.map((fret, fretIndex) => {
-          // Calculate note position with calibration: notes start far away and move toward hit zone
-          const timeToHit = (note.time - currentTime) / 1000; // Time in seconds until hit
+          // Enhanced note positioning with better depth perception
+          const timeToHit = (note.time - currentTime) / 1000;
           const adjustedSpeed = noteSpeed || 1.0;
-          const noteZ = -25 + (5 - timeToHit) * (8 * adjustedSpeed); // Adjust movement speed
+          const noteZ = -30 + (5 - timeToHit) * (9 * adjustedSpeed);
           
-          // Only render notes that are in visible range
-          if (noteZ < -30 || noteZ > 10) return null;
+          // Only render notes in visible range with buffer
+          if (noteZ < -35 || noteZ > 8) return null;
+          
+          // Add depth-based scaling for better perception
+          const depthScale = Math.max(0.3, Math.min(1.2, (noteZ + 35) / 40));
           
           return (
             <Note3D
               key={`${note.time}-${fret}-${noteIndex}-${fretIndex}`}
-              position={[fretPositions[fret], -1, noteZ]}
+              position={[fretPositions[fret], -1 - (noteZ < -10 ? (noteZ + 10) * 0.02 : 0), noteZ]}
               fret={fret}
               isChord={note.type === 'chord'}
               noteTime={note.time}
               currentTime={currentTime}
               noteSpeed={adjustedSpeed}
               hitWindow={hitWindow}
+              scale={depthScale}
             />
           );
         })
