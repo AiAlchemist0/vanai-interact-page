@@ -4,9 +4,37 @@ import { ArrowRight, Users, BarChart3, MapPin, Gamepad2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useAudio } from "@/contexts/AudioContext";
 import heroImage from "@/assets/hero-ai-survey.jpg";
+import { useState, useEffect } from "react";
 const Hero = () => {
   const navigate = useNavigate();
   const { playSpecificSong } = useAudio();
+  
+  // Song covers for rotation
+  const songCovers = [
+    "/lovable-uploads/6b65586a-63ba-48f1-9c56-1846ec800f39.png", // BC+AI Logo (default)
+    "/lovable-uploads/2f51d7bb-96fc-4f06-b7f6-fc9abbbceb32.png", // BC AI Hackathon
+    "/lovable-uploads/cc181a8b-6dad-4af6-8731-9a8cbd3ba5d0.png", // MAC
+    "/lovable-uploads/2a6f9f46-8a29-4c56-aec2-3279635b85f0.png", // Deepfakes
+    "/src/assets/pixel-wizard-bc-ai-cover.jpg", // Pixel Wizard
+    "/lovable-uploads/4d050983-b56d-4606-a958-1c7e2c7253e8.png", // Dr Patrick
+    "/lovable-uploads/8a59c6e4-39f4-41e2-bb0d-544e22e3030a.png", // HR MacMillan
+  ];
+  
+  const [currentCoverIndex, setCurrentCoverIndex] = useState(0);
+  const [isFlashing, setIsFlashing] = useState(false);
+  
+  useEffect(() => {
+    const flashInterval = setInterval(() => {
+      setIsFlashing(true);
+      // Change cover during flash
+      setTimeout(() => {
+        setCurrentCoverIndex((prev) => (prev + 1) % songCovers.length);
+        setIsFlashing(false);
+      }, 200); // Flash duration
+    }, 2000); // Flash every 2 seconds
+    
+    return () => clearInterval(flashInterval);
+  }, [songCovers.length]);
   
   const handlePlayBCAIHackathon = () => {
     playSpecificSong("bc-ai-hackathon");
@@ -42,9 +70,11 @@ const Hero = () => {
         {/* Logo and Title Section */}
         <div className="flex flex-col md:flex-row items-center justify-center gap-6 mb-6">
           <img 
-            src="/lovable-uploads/6b65586a-63ba-48f1-9c56-1846ec800f39.png" 
+            src={songCovers[currentCoverIndex]} 
             alt="BC+AI Ecosystem Logo" 
-            className="w-40 md:w-48 h-auto filter drop-shadow-lg flex-shrink-0"
+            className={`w-40 md:w-48 h-auto filter drop-shadow-lg flex-shrink-0 transition-all duration-200 ${
+              isFlashing ? 'brightness-200 scale-110' : 'brightness-100 scale-100'
+            }`}
           />
           <h1 className="text-4xl md:text-6xl font-bold text-gradient leading-tight text-center md:text-left">
             BC AI Survey
