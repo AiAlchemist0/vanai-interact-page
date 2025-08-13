@@ -33,7 +33,7 @@ const VisionBanner = () => {
     {
       icon: Users,
       text: "AI Community",
-      description: "Shared future",
+      description: "Shared love",
       color: "text-ai-green",
       glow: "glow-green"
     }
