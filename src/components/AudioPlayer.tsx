@@ -582,26 +582,7 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ audioPlayerHook }) => {
       <div className="bg-card/95 backdrop-blur-md text-card-foreground shadow-lg border-b border-border/20">
         <div className="container mx-auto px-4 py-3">
           {/* Banner Layout */}
-          <div className="flex items-center gap-4">
-            {/* Cover Art */}
-            <div className="flex-shrink-0">
-              <img 
-                src={currentSong.coverArt} 
-                alt={`${currentSong.title} cover`} 
-                className="w-12 h-12 object-cover rounded-lg border shadow-sm"
-              />
-            </div>
-
-            {/* Song Info */}
-            <div className="flex-1 min-w-0">
-              <h3 className="font-semibold text-sm truncate">
-                {currentSong.title}
-              </h3>
-              <p className="text-xs text-muted-foreground truncate">
-                {currentSong.artist}
-              </p>
-            </div>
-
+          <div className="flex items-center gap-6">
             {/* Song Selector */}
             <Select value={currentSong.id} onValueChange={onSongChange}>
               <SelectTrigger className="w-[400px] hidden lg:flex">
