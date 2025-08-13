@@ -254,15 +254,6 @@ const AudioPlayer: React.FC = () => {
         case "next":
           if (currentSongIndex < SONGS.length - 1) {
             setCurrentSongIndex(currentSongIndex + 1);
-            // Auto-play will be handled in useEffect
-            setTimeout(() => {
-              const newAudio = audioRef.current;
-              if (newAudio) {
-                newAudio.play().then(() => {
-                  setIsPlaying(true);
-                }).catch(() => setAutoplayBlocked(true));
-              }
-            }, 100);
           }
           break;
         case "repeat":
@@ -276,15 +267,6 @@ const AudioPlayer: React.FC = () => {
           // Go to next song, or loop back to first
           const nextIndex = currentSongIndex < SONGS.length - 1 ? currentSongIndex + 1 : 0;
           setCurrentSongIndex(nextIndex);
-          // Auto-play will be handled in useEffect
-          setTimeout(() => {
-            const newAudio = audioRef.current;
-            if (newAudio) {
-              newAudio.play().then(() => {
-                setIsPlaying(true);
-              }).catch(() => setAutoplayBlocked(true));
-            }
-          }, 100);
           break;
         case "off":
         default:
@@ -298,8 +280,7 @@ const AudioPlayer: React.FC = () => {
     audio.addEventListener("ended", onEnded);
     audio.addEventListener("error", onError);
 
-    // Reset states when song changes
-    setIsPlaying(false);
+    // Only reset states on initial song load, not on every effect run
     setProgress(0);
     setCurrentTime(0);
     setAutoplayBlocked(false);
@@ -313,11 +294,30 @@ const AudioPlayer: React.FC = () => {
       audio.removeEventListener("error", onError);
       audioRef.current = null;
     };
-  }, [currentSong, currentSongIndex, hasUserInteracted, playbackMode, fileAvailable]);
+  }, [currentSong.src, fileAvailable]); // Simplified dependencies - only recreate when song source changes
 
+  // Separate effect for handling auto-play when song changes
+  React.useEffect(() => {
+    if (currentSongIndex !== undefined && hasUserInteracted && audioRef.current) {
+      const audio = audioRef.current;
+      // Only auto-play if we were previously playing
+      if (isPlaying) {
+        setTimeout(() => {
+          audio.play().then(() => {
+            setIsPlaying(true);
+          }).catch(() => setAutoplayBlocked(true));
+        }, 100);
+      }
+    }
+  }, [currentSongIndex]);
+
+  const [isToggling, setIsToggling] = React.useState(false);
+  
   const togglePlay = async () => {
     const audio = audioRef.current;
-    if (!audio || fileAvailable === false) return;
+    if (!audio || fileAvailable === false || isToggling) return;
+    
+    setIsToggling(true);
     
     // Mark that user has interacted with the player
     setHasUserInteracted(true);
@@ -337,6 +337,8 @@ const AudioPlayer: React.FC = () => {
       audio.pause();
       setIsPlaying(false);
     }
+    
+    setTimeout(() => setIsToggling(false), 200);
   };
 
   const stop = () => {
