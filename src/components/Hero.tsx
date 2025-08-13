@@ -4,6 +4,7 @@ import { ArrowRight, Users, BarChart3, MapPin, Gamepad2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useAudio } from "@/contexts/AudioContext";
 import heroImage from "@/assets/hero-ai-survey.jpg";
+import VisionBanner from "@/components/VisionBanner";
 const Hero = () => {
   const navigate = useNavigate();
   const { playSpecificSong } = useAudio();
@@ -19,12 +20,17 @@ const Hero = () => {
     }, 200);
   };
   
-  return <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      {/* Background Image with Overlay */}
-      <div className="absolute inset-0 z-0">
-        <img src={heroImage} alt="AI Survey Dashboard" className="w-full h-full object-cover" />
-        <div className="absolute inset-0 bg-background/90 backdrop-blur-sm" />
-      </div>
+  return (
+    <>
+      {/* Vision Banner */}
+      <VisionBanner />
+      
+      <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+        {/* Background Image with Overlay */}
+        <div className="absolute inset-0 z-0">
+          <img src={heroImage} alt="AI Survey Dashboard" className="w-full h-full object-cover" />
+          <div className="absolute inset-0 bg-background/90 backdrop-blur-sm" />
+        </div>
 
       {/* Animated Background Elements */}
       <div className="absolute inset-0 z-10">
@@ -163,6 +169,8 @@ const Hero = () => {
           
         </div>
       </div>
-    </section>;
+      </section>
+    </>
+  );
 };
 export default Hero;
