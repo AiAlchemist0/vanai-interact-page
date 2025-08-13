@@ -40,19 +40,17 @@ const Hero = () => {
         </Badge>
 
         {/* Logo and Title Section */}
-        <div className="flex flex-col md:flex-row items-center justify-center gap-6 mb-6 overflow-visible">
+        <div className="flex flex-col md:flex-row items-center justify-center gap-6 mb-6">
           <img 
             src="/lovable-uploads/6b65586a-63ba-48f1-9c56-1846ec800f39.png" 
             alt="BC+AI Ecosystem Logo" 
             className="w-40 md:w-48 h-auto filter drop-shadow-lg flex-shrink-0"
           />
-          <div className="flex-1 min-w-0 overflow-visible">
-            <h1 className="text-4xl md:text-6xl font-bold text-gradient leading-[1.1] tracking-tight text-center md:text-left break-words">
-              BC AI Survey
-              <br />
-              Insights
-            </h1>
-          </div>
+          <h1 className="text-4xl md:text-6xl font-bold text-gradient leading-tight text-center md:text-left">
+            BC AI Survey
+            <br />
+            Insights
+          </h1>
         </div>
 
         <p className="text-xl md:text-2xl text-muted-foreground mb-8 max-w-4xl mx-auto leading-relaxed">
