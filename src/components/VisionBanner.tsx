@@ -136,7 +136,7 @@ const VisionBanner = () => {
 
         {/* Elegant subtitle */}
         <div className="text-center mt-6 animate-fade-in" style={{animationDelay: '1.5s'}}>
-          <p className="text-lg md:text-xl text-muted-foreground italic">
+          <p className="text-xl md:text-2xl text-muted-foreground italic">
             "Where <span className="text-primary font-medium">data</span> becomes <span className="text-accent font-medium">rhythm</span>, and <span className="text-primary font-medium">insights</span> become <span className="text-accent font-medium">community</span>"
           </p>
         </div>
