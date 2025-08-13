@@ -12,14 +12,14 @@ const Hero = () => {
       {/* Background Image with Overlay */}
       <div className="absolute inset-0 z-0">
         <img src={heroImage} alt="AI Survey Dashboard" className="w-full h-full object-cover" />
-        <div className="absolute inset-0 bg-background/95 backdrop-blur-sm" />
+        <div className="absolute inset-0 bg-background/75 backdrop-blur-sm" />
       </div>
 
       {/* Animated Background Elements */}
       <div className="absolute inset-0 z-10">
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 gradient-primary rounded-full opacity-10 blur-3xl animate-pulse" />
-        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 gradient-secondary rounded-full opacity-10 blur-3xl animate-pulse delay-1000" />
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] gradient-accent rounded-full opacity-5 blur-3xl animate-pulse delay-500" />
+        <div className="absolute top-1/4 left-1/4 w-64 h-64 gradient-primary rounded-full opacity-5 blur-3xl animate-[pulse_4s_ease-in-out_infinite]" />
+        <div className="absolute bottom-1/4 right-1/4 w-64 h-64 gradient-secondary rounded-full opacity-5 blur-3xl animate-[pulse_4s_ease-in-out_infinite] [animation-delay:2s]" />
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-80 h-80 gradient-accent rounded-full opacity-3 blur-3xl animate-[pulse_4s_ease-in-out_infinite] [animation-delay:1s]" />
       </div>
 
       {/* Main Content Container */}
