@@ -602,6 +602,27 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ audioPlayerHook }) => {
               </p>
             </div>
 
+            {/* Song Selector */}
+            <Select value={currentSong.id} onValueChange={onSongChange}>
+              <SelectTrigger className="w-[200px] hidden lg:flex">
+                <SelectValue placeholder="Select a song" />
+              </SelectTrigger>
+              <SelectContent className="bg-popover">
+                {SONGS.map((song) => (
+                  <SelectItem key={song.id} value={song.id}>
+                    <div className="flex items-center gap-2">
+                      <img 
+                        src={song.coverArt} 
+                        alt={`${song.title} cover`} 
+                        className="w-6 h-6 object-cover rounded" 
+                      />
+                      <span className="truncate">{song.title}</span>
+                    </div>
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+
             {/* Controls */}
             <div className="flex items-center gap-2 flex-shrink-0">
               <button
@@ -676,27 +697,6 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ audioPlayerHook }) => {
                   </Button>
                 </>
               )}
-
-              {/* Song Selector */}
-              <Select value={currentSong.id} onValueChange={onSongChange}>
-                <SelectTrigger className="w-[200px] hidden lg:flex">
-                  <SelectValue placeholder="Select a song" />
-                </SelectTrigger>
-                <SelectContent className="bg-popover">
-                  {SONGS.map((song) => (
-                    <SelectItem key={song.id} value={song.id}>
-                      <div className="flex items-center gap-2">
-                        <img 
-                          src={song.coverArt} 
-                          alt={`${song.title} cover`} 
-                          className="w-6 h-6 object-cover rounded" 
-                        />
-                        <span className="truncate">{song.title}</span>
-                      </div>
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
             </div>
           </div>
 
