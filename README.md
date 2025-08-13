@@ -1,8 +1,10 @@
-# AI Consciousness & Music Platform
+# BC AI Survey Insights & Music Platform
+## Innvoative way to inspire and connect Vancouver AI commmunity
+## DATA into Insights > Insights into Music > Music leads to Dancing > Dancing leads to loving AI Community
 
 **Created by Dean Shev**
 
-**URL**: https://lovable.dev/projects/b24d8310-d53b-4f91-8214-62f3617dcdf1
+**URL**: [https://lovable.dev/projects/b24d8310-d53b-4f91-8214-62f3617dcdf1](https://bcai.dev/)
 
 ## Project Overview
 
