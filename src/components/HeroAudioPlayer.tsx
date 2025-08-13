@@ -116,77 +116,80 @@ const HeroAudioPlayer = () => {
         ))}
       </div>
 
-      {/* Controls */}
-      <div className="flex items-center justify-center gap-4 mb-8">
-        <Button 
-          variant="ghost" 
-          size="icon" 
-          className="hover:bg-primary/10"
-          onClick={previousSong}
-        >
-          <SkipBack className="h-5 w-5 text-muted-foreground" />
-        </Button>
-
-        <Button
-          onClick={togglePlay}
-          className="h-16 w-16 rounded-full gradient-primary hover:glow-primary transition-smooth group shadow-lg"
-        >
-          {isPlaying ? (
-            <Pause className="h-6 w-6 text-primary-foreground" />
-          ) : (
-            <Play className="h-6 w-6 text-primary-foreground ml-0.5" />
-          )}
-        </Button>
-
-        <Button 
-          variant="ghost" 
-          size="icon" 
-          className="hover:bg-primary/10"
-          onClick={nextSong}
-        >
-          <SkipForward className="h-5 w-5 text-muted-foreground" />
-        </Button>
-      </div>
-
-      {/* Song Playlist */}
-      <div className="mb-6">
-        <h4 className="text-sm font-semibold text-foreground mb-4">Full Playlist</h4>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 max-h-64 overflow-y-auto">
-          {songs.map((song, index) => (
-            <button
-              key={song.id}
-              onClick={() => playSpecificSong(song.id)}
-              className={`flex items-center gap-3 p-3 rounded-xl transition-all duration-200 text-left ${
-                index === currentSongIndex 
-                  ? 'bg-primary/10 border border-primary/20' 
-                  : 'bg-muted/20 hover:bg-muted/40 border border-transparent'
-              }`}
-            >
-              <div className="relative">
-                <img 
-                  src={song.coverArt} 
-                  alt={`${song.title} cover`} 
-                  className="w-12 h-12 rounded-lg object-cover"
-                />
-                {index === currentSongIndex && isPlaying && (
-                  <div className="absolute inset-0 bg-primary/20 rounded-lg flex items-center justify-center">
-                    <div className="w-2 h-2 bg-primary rounded-full animate-pulse" />
-                  </div>
+      {/* Playlist and Controls Layout */}
+      <div className="flex gap-6 mb-8">
+        {/* Song Playlist - Left Side */}
+        <div className="flex-1">
+          <h4 className="text-sm font-semibold text-foreground mb-4">Full Playlist</h4>
+          <div className="grid grid-cols-1 gap-3 max-h-64 overflow-y-auto">
+            {songs.map((song, index) => (
+              <button
+                key={song.id}
+                onClick={() => playSpecificSong(song.id)}
+                className={`flex items-center gap-3 p-3 rounded-xl transition-all duration-200 text-left ${
+                  index === currentSongIndex 
+                    ? 'bg-primary/10 border border-primary/20' 
+                    : 'bg-muted/20 hover:bg-muted/40 border border-transparent'
+                }`}
+              >
+                <div className="relative">
+                  <img 
+                    src={song.coverArt} 
+                    alt={`${song.title} cover`} 
+                    className="w-10 h-10 rounded-lg object-cover"
+                  />
+                  {index === currentSongIndex && isPlaying && (
+                    <div className="absolute inset-0 bg-primary/20 rounded-lg flex items-center justify-center">
+                      <div className="w-2 h-2 bg-primary rounded-full animate-pulse" />
+                    </div>
+                  )}
+                </div>
+                <div className="flex-1 min-w-0">
+                  <h5 className={`text-sm font-medium truncate ${
+                    index === currentSongIndex ? 'text-primary' : 'text-foreground'
+                  }`}>
+                    {song.title}
+                  </h5>
+                  <p className="text-xs text-muted-foreground truncate">{song.artist}</p>
+                </div>
+                {index === currentSongIndex && (
+                  <div className="text-xs text-primary font-medium">♪</div>
                 )}
-              </div>
-              <div className="flex-1 min-w-0">
-                <h5 className={`text-sm font-medium truncate ${
-                  index === currentSongIndex ? 'text-primary' : 'text-foreground'
-                }`}>
-                  {song.title}
-                </h5>
-                <p className="text-xs text-muted-foreground truncate">{song.artist}</p>
-              </div>
-              {index === currentSongIndex && (
-                <div className="text-xs text-primary font-medium">♪</div>
-              )}
-            </button>
-          ))}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Controls - Right Side */}
+        <div className="flex flex-col items-center justify-center gap-4 min-w-fit">
+          <Button 
+            variant="ghost" 
+            size="icon" 
+            className="hover:bg-primary/10"
+            onClick={previousSong}
+          >
+            <SkipBack className="h-5 w-5 text-muted-foreground" />
+          </Button>
+
+          <Button
+            onClick={togglePlay}
+            className="h-16 w-16 rounded-full gradient-primary hover:glow-primary transition-smooth group shadow-lg"
+          >
+            {isPlaying ? (
+              <Pause className="h-6 w-6 text-primary-foreground" />
+            ) : (
+              <Play className="h-6 w-6 text-primary-foreground ml-0.5" />
+            )}
+          </Button>
+
+          <Button 
+            variant="ghost" 
+            size="icon" 
+            className="hover:bg-primary/10"
+            onClick={nextSong}
+          >
+            <SkipForward className="h-5 w-5 text-muted-foreground" />
+          </Button>
         </div>
       </div>
 
