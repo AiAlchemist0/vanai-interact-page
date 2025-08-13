@@ -146,7 +146,7 @@ const SONGS: Song[] = [
   {
     id: "hr-macmillan",
     title: "H.R MacMillan Space Centre - Alien Abduction",
-    artist: "Loraine Lowe",
+    artist: "Lorraine Lowe",
     src: getAudioUrl("H.R MacMillan Space Centre _ Alian Abduction.mp3"),
     coverArt: hrMacMillanCover,
     lyrics: [
