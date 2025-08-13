@@ -10,16 +10,16 @@ const NowPlayingBanner: React.FC = () => {
 
   return (
     <div className="fixed top-0 left-0 right-0 z-40 bg-primary/90 backdrop-blur-md border-b border-border/20">
-      <div className="container mx-auto px-4 py-2">
+      <div className="container mx-auto px-3 sm:px-4 py-1.5 sm:py-2">
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3 min-w-0 flex-1">
+          <div className="flex items-center gap-2 sm:gap-3 min-w-0 flex-1">
             <img 
               src={currentSong.coverArt} 
               alt={currentSong.title}
-              className="w-8 h-8 rounded object-cover"
+              className="w-7 h-7 sm:w-8 sm:h-8 rounded object-cover flex-shrink-0"
             />
             <div className="min-w-0 flex-1">
-              <p className="text-primary-foreground font-medium text-sm truncate">
+              <p className="text-primary-foreground font-medium text-xs sm:text-sm truncate">
                 {currentSong.title}
               </p>
               <p className="text-primary-foreground/70 text-xs truncate">
@@ -28,14 +28,14 @@ const NowPlayingBanner: React.FC = () => {
             </div>
           </div>
 
-          <div className="flex items-center gap-1">
-            <Button size="sm" variant="ghost" className="h-8 w-8 p-0 text-primary-foreground hover:bg-primary-foreground/20">
+          <div className="flex items-center gap-0.5 sm:gap-1">
+            <Button size="sm" variant="ghost" className="h-9 w-9 sm:h-8 sm:w-8 p-0 text-primary-foreground hover:bg-primary-foreground/20 touch-manipulation">
               <SkipBack className="h-4 w-4" />
             </Button>
-            <Button size="sm" variant="ghost" className="h-8 w-8 p-0 text-primary-foreground hover:bg-primary-foreground/20">
+            <Button size="sm" variant="ghost" className="h-9 w-9 sm:h-8 sm:w-8 p-0 text-primary-foreground hover:bg-primary-foreground/20 touch-manipulation">
               {isPlaying ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4" />}
             </Button>
-            <Button size="sm" variant="ghost" className="h-8 w-8 p-0 text-primary-foreground hover:bg-primary-foreground/20">
+            <Button size="sm" variant="ghost" className="h-9 w-9 sm:h-8 sm:w-8 p-0 text-primary-foreground hover:bg-primary-foreground/20 touch-manipulation">
               <SkipForward className="h-4 w-4" />
             </Button>
           </div>

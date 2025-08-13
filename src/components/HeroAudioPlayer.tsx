@@ -21,10 +21,10 @@ const HeroAudioPlayer = () => {
   } = useAudio();
 
   return (
-    <div className="bg-card/20 backdrop-blur-xl border border-border/20 rounded-3xl p-4 shadow-elegant">
+    <div className="bg-card/20 backdrop-blur-xl border border-border/20 rounded-3xl p-3 sm:p-4 shadow-elegant">
       {/* Compact Header */}
-      <div className="mb-4">
-        <h3 className="text-lg font-semibold text-foreground mb-2">
+      <div className="mb-3 sm:mb-4">
+        <h3 className="text-base sm:text-lg font-semibold text-foreground mb-2 truncate">
           {isPlaying ? `♪ ${currentSong.title}` : 'BC AI Audio Experience'}
         </h3>
         <div className="w-full bg-muted/30 rounded-full h-1.5 relative overflow-hidden">
@@ -36,19 +36,19 @@ const HeroAudioPlayer = () => {
       </div>
 
       {/* Detailed Song List */}
-      <div className="space-y-2">
+      <div className="space-y-1.5 sm:space-y-2">
         {songs.map((song, index) => (
           <div
             key={song.id}
-            className={`flex items-center gap-3 p-3 rounded-xl transition-all duration-200 border ${
+            className={`flex items-center gap-2 sm:gap-3 p-2 sm:p-3 rounded-xl transition-all duration-200 border touch-manipulation ${
               index === currentSongIndex 
                 ? 'bg-primary/10 border-primary/30 shadow-lg' 
                 : 'bg-muted/20 hover:bg-muted/40 border-border/20'
             }`}
           >
             {/* Track Number */}
-            <div className="flex-shrink-0 w-6 text-center">
-              <span className={`text-sm font-medium ${
+            <div className="flex-shrink-0 w-5 sm:w-6 text-center">
+              <span className={`text-xs sm:text-sm font-medium ${
                 index === currentSongIndex ? 'text-primary' : 'text-muted-foreground'
               }`}>
                 {index + 1}
@@ -60,23 +60,23 @@ const HeroAudioPlayer = () => {
               <img 
                 src={song.coverArt} 
                 alt={`${song.title} cover`} 
-                className="w-16 h-16 rounded-lg object-cover shadow-md"
+                className="w-12 h-12 sm:w-16 sm:h-16 rounded-lg object-cover shadow-md"
               />
               {index === currentSongIndex && isPlaying && (
                 <div className="absolute inset-0 bg-primary/30 rounded-lg flex items-center justify-center">
-                  <div className="w-5 h-5 border-2 border-white rounded-full animate-pulse" />
+                  <div className="w-4 h-4 sm:w-5 sm:h-5 border-2 border-white rounded-full animate-pulse" />
                 </div>
               )}
             </div>
             
             {/* Song Details */}
             <div className="flex-1 min-w-0">
-              <h4 className={`text-sm font-semibold ${
+              <h4 className={`text-xs sm:text-sm font-semibold truncate ${
                 index === currentSongIndex ? 'text-primary' : 'text-foreground'
               }`}>
                 {song.title}
               </h4>
-              <p className="text-sm text-muted-foreground font-medium">
+              <p className="text-xs sm:text-sm text-muted-foreground font-medium truncate">
                 {song.artist}
               </p>
               
@@ -96,7 +96,7 @@ const HeroAudioPlayer = () => {
               variant="ghost"
               size="icon"
               onClick={() => playSpecificSong(song.id)}
-              className={`h-10 w-10 flex-shrink-0 rounded-full transition-all duration-200 ${
+              className={`h-9 w-9 sm:h-10 sm:w-10 flex-shrink-0 rounded-full transition-all duration-200 touch-manipulation ${
                 index === currentSongIndex 
                   ? 'bg-primary/20 hover:bg-primary/30 text-primary' 
                   : 'hover:bg-primary/20 text-muted-foreground hover:text-primary'
