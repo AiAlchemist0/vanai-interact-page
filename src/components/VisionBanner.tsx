@@ -40,7 +40,7 @@ const VisionBanner = () => {
   ];
 
   return (
-    <div className="relative py-8 px-6 bg-gradient-to-r from-background/95 via-primary/5 to-background/95 backdrop-blur-sm border-b border-primary/10">
+    <div id="vision" className="relative py-8 px-6 bg-gradient-to-r from-background/95 via-primary/5 to-background/95 backdrop-blur-sm border-b border-primary/10">
       {/* Floating particles */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-1/4 left-1/4 w-2 h-2 bg-primary/30 rounded-full animate-pulse" style={{animationDelay: '0s'}} />

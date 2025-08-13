@@ -88,11 +88,18 @@ const Hero = () => {
 
         {/* CTA Buttons */}
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <Button size="lg" className="gradient-primary hover:glow-primary transition-smooth group text-lg px-8 py-6" onClick={() => document.getElementById('insights')?.scrollIntoView({
+          <Button size="lg" className="gradient-primary hover:glow-primary transition-smooth group text-lg px-8 py-6" onClick={() => document.getElementById('vision')?.scrollIntoView({
           behavior: 'smooth'
         })}>
-            Explore Survey Data
+            Project's Vision
             <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+          </Button>
+
+          <Button size="lg" className="gradient-secondary hover:glow-secondary transition-smooth group text-lg px-8 py-6" onClick={() => document.getElementById('insights')?.scrollIntoView({
+          behavior: 'smooth'
+        })}>
+            <BarChart3 className="mr-2 w-5 h-5 group-hover:scale-110 transition-transform" />
+            Survey Data Deep Dive
           </Button>
 
           <Button 
@@ -102,12 +109,6 @@ const Hero = () => {
           >
             <Gamepad2 className="mr-2 w-5 h-5 group-hover:scale-110 transition-transform" />
             PLAY BC AI GAME
-          </Button>
-          
-          <Button variant="outline" size="lg" className="border-gradient text-lg px-8 py-6 hover:bg-primary/10 transition-smooth" onClick={() => document.getElementById('methodology')?.scrollIntoView({
-          behavior: 'smooth'
-        })}>
-            View Methodology
           </Button>
         </div>
 
