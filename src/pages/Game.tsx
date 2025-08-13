@@ -71,7 +71,7 @@ const SONGS: Song[] = [
     title: "Mr. Pixel Wizard BC AI",
     artist: "Kevin Friel",
     audioFile: getAudioUrl("Mr_Pixel_Wizard BC AI.mp3"),
-    coverArt: "/src/assets/pixel-wizard-bc-ai-cover.jpg",
+    coverArt: "/lovable-uploads/2c251b22-3f09-4812-bc92-ad7c64062f4b.png",
     bpm: 140,
     duration: 200000,
   },
