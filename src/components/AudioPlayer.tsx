@@ -580,14 +580,14 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ audioPlayerHook }) => {
   return (
     <div className={`fixed z-50 ${
       isMobile 
-        ? "bottom-0 left-0 right-0 pb-safe" 
-        : "bottom-4 right-4 md:w-[380px]"
+        ? "top-0 left-0 right-0 pt-safe" 
+        : "top-4 right-4 md:w-[420px]"
     }`}>
       <div className={`${
         isMobile 
-          ? "rounded-t-xl border-t border-l border-r" 
+          ? "rounded-b-xl border-b border-l border-r" 
           : "rounded-xl border"
-      } bg-card/90 backdrop-blur-md text-card-foreground shadow-2xl ring-1 ring-primary/10`}>
+      } bg-card/95 backdrop-blur-md text-card-foreground shadow-2xl ring-1 ring-primary/10`}>
         <div className={isMobile ? "p-3 space-y-3" : "p-4 space-y-4"}>
           {/* Song Selection - Mobile Optimized */}
           {!isMobile && (

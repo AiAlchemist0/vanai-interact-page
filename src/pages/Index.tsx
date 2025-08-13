@@ -12,7 +12,6 @@ const Index = () => {
   return (
     <AudioPlayerProvider>
       <div className="min-h-screen bg-background">
-        <NowPlayingBanner />
         <div className="pt-0">
           <Hero />
           <VisionBanner />
