@@ -39,11 +39,19 @@ const Hero = () => {
           Vancouver AI Hackathon Round 3
         </Badge>
 
-        <h1 className="text-6xl md:text-8xl font-bold mb-6 text-gradient leading-tight">
-          BC AI Survey
-          <br />
-          Insights
-        </h1>
+        {/* Logo and Title Section */}
+        <div className="flex flex-col items-center mb-6">
+          <img 
+            src="/lovable-uploads/6b65586a-63ba-48f1-9c56-1846ec800f39.png" 
+            alt="BC+AI Ecosystem Logo" 
+            className="w-48 md:w-64 h-auto mb-4 filter drop-shadow-lg"
+          />
+          <h1 className="text-4xl md:text-6xl font-bold text-gradient leading-tight">
+            BC AI Survey
+            <br />
+            Insights
+          </h1>
+        </div>
 
         <p className="text-xl md:text-2xl text-muted-foreground mb-8 max-w-4xl mx-auto leading-relaxed">
           Discover what <span className="text-primary font-semibold">1,001 British Columbians</span> think about artificial intelligence. 
