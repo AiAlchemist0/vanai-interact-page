@@ -3,9 +3,18 @@ import { Song } from '@/hooks/useAudioPlayer';
 
 interface AudioContextType {
   playSpecificSong: (songId: string) => void;
+  togglePlay: () => void;
+  nextSong: () => void;
+  previousSong: () => void;
+  stopPlayback: () => void;
   isPlaying: boolean;
   currentSongIndex: number;
   currentSong: Song;
+  songs: Song[];
+  progress: number;
+  currentTime: number;
+  duration: number;
+  setCurrentSongIndex: (index: number) => void;
 }
 
 const AudioContext = createContext<AudioContextType | undefined>(undefined);
