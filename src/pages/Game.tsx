@@ -51,7 +51,7 @@ const SONGS: Song[] = [
   {
     id: "deepfakes",
     title: "Deepfakes in the Rain",
-    artist: "KK / BCAI",
+    artist: "Kris Krüg",
     audioFile: getAudioUrl("Deepfakes in the Rain_KK_BCAI.mp3"),
     coverArt: "/lovable-uploads/2a6f9f46-8a29-4c56-aec2-3279635b85f0.png",
     bpm: 120,
