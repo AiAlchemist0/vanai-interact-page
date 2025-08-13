@@ -6,6 +6,7 @@ import { Slider } from "@/components/ui/slider";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { LyricLine } from "@/components/SynchronizedLyrics";
+import { useIsMobile } from "@/hooks/use-mobile";
 import deepfakesCover from "/lovable-uploads/2a6f9f46-8a29-4c56-aec2-3279635b85f0.png";
 import pixelWizardCover from "@/assets/pixel-wizard-cover.jpg";
 import macCover from "/lovable-uploads/cc181a8b-6dad-4af6-8731-9a8cbd3ba5d0.png";
@@ -208,6 +209,8 @@ interface AudioPlayerProps {
 }
 
 const AudioPlayer: React.FC<AudioPlayerProps> = ({ audioPlayerHook }) => {
+  const isMobile = useIsMobile();
+  
   const {
     audioRef,
     currentSongIndex,
@@ -239,6 +242,32 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ audioPlayerHook }) => {
     currentSong,
     playSpecificSong,
   } = audioPlayerHook;
+  
+  // Add state for animated marquee text on mobile
+  const [isTextOverflowing, setIsTextOverflowing] = React.useState(false);
+  const titleRef = React.useRef<HTMLHeadingElement>(null);
+  const artistRef = React.useRef<HTMLParagraphElement>(null);
+  
+  // Check for text overflow on mobile
+  React.useEffect(() => {
+    if (!isMobile) return;
+    
+    const checkOverflow = () => {
+      const titleEl = titleRef.current;
+      const artistEl = artistRef.current;
+      
+      if (titleEl && artistEl) {
+        const titleOverflow = titleEl.scrollWidth > titleEl.clientWidth;
+        const artistOverflow = artistEl.scrollWidth > artistEl.clientWidth;
+        setIsTextOverflowing(titleOverflow || artistOverflow);
+      }
+    };
+    
+    checkOverflow();
+    window.addEventListener('resize', checkOverflow);
+    
+    return () => window.removeEventListener('resize', checkOverflow);
+  }, [currentSong, isMobile]);
   
   // Check file availability with retry mechanism
   React.useEffect(() => {
@@ -549,63 +578,125 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ audioPlayerHook }) => {
   };
 
   return (
-    <div className="fixed bottom-4 left-4 right-4 z-50 md:left-auto md:w-[520px]">
-      <div className="rounded-xl border bg-card text-card-foreground shadow-md">
-        <div className="p-4 space-y-4">
-          {/* Song Selection */}
-          <div className="flex items-center gap-3">
-            <Select value={currentSong.id} onValueChange={onSongChange}>
-              <SelectTrigger className="w-full">
-                <SelectValue placeholder="Select a song" />
-              </SelectTrigger>
-              <SelectContent className="bg-popover">
-                {SONGS.map((song) => (
-                  <SelectItem key={song.id} value={song.id}>
-                    <div className="flex items-center gap-2">
-                      <img 
-                        src={song.coverArt} 
-                        alt={`${song.title} cover`} 
-                        className="w-8 h-8 object-cover rounded" 
-                      />
-                      <span>{song.title} — {song.artist}</span>
-                    </div>
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
+    <div className={`fixed z-50 ${
+      isMobile 
+        ? "bottom-0 left-0 right-0 pb-safe" 
+        : "bottom-4 left-4 right-4 md:left-auto md:w-[520px]"
+    }`}>
+      <div className={`${
+        isMobile 
+          ? "rounded-t-xl border-t border-l border-r" 
+          : "rounded-xl border"
+      } bg-card text-card-foreground shadow-md`}>
+        <div className={isMobile ? "p-3 space-y-3" : "p-4 space-y-4"}>
+          {/* Song Selection - Mobile Optimized */}
+          {!isMobile && (
+            <div className="flex items-center gap-3">
+              <Select value={currentSong.id} onValueChange={onSongChange}>
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="Select a song" />
+                </SelectTrigger>
+                <SelectContent className="bg-popover">
+                  {SONGS.map((song) => (
+                    <SelectItem key={song.id} value={song.id}>
+                      <div className="flex items-center gap-2">
+                        <img 
+                          src={song.coverArt} 
+                          alt={`${song.title} cover`} 
+                          className="w-8 h-8 object-cover rounded" 
+                        />
+                        <span className="truncate">{song.title} — {song.artist}</span>
+                      </div>
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          )}
 
-          {/* Enhanced Player Layout */}
-          <div className="flex items-center gap-4">
-            {/* Larger Cover Art */}
+          {/* Mobile Song Selection - Horizontal Scroll */}
+          {isMobile && (
+            <div className="flex items-center gap-2 mb-2">
+              <Select value={currentSong.id} onValueChange={onSongChange}>
+                <SelectTrigger className="w-full min-h-[44px]">
+                  <SelectValue placeholder="Select a song" />
+                </SelectTrigger>
+                <SelectContent className="bg-popover max-h-60">
+                  {SONGS.map((song) => (
+                    <SelectItem key={song.id} value={song.id} className="min-h-[44px]">
+                      <div className="flex items-center gap-2 w-full">
+                        <img 
+                          src={song.coverArt} 
+                          alt={`${song.title} cover`} 
+                          className="w-8 h-8 object-cover rounded flex-shrink-0" 
+                        />
+                        <div className="flex-1 min-w-0">
+                          <div className="text-sm font-medium truncate">{song.title}</div>
+                          <div className="text-xs text-muted-foreground truncate">{song.artist}</div>
+                        </div>
+                      </div>
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          )}
+
+          {/* Enhanced Player Layout - Responsive */}
+          <div className={`flex items-center ${isMobile ? "gap-3" : "gap-4"}`}>
+            {/* Cover Art - Mobile Optimized */}
             <div className="flex-shrink-0">
               <img 
                 src={currentSong.coverArt} 
                 alt={`${currentSong.title} cover`} 
-                className="w-20 h-20 object-cover rounded-lg border shadow-sm" 
+                className={`object-cover rounded-lg border shadow-sm ${
+                  isMobile ? "w-16 h-16" : "w-20 h-20"
+                }`}
               />
             </div>
 
-            {/* Controls and Info */}
-            <div className="flex-1 space-y-3">
-              {/* Song Info */}
-              <div className="text-center">
-                <h3 className="font-semibold text-sm truncate">{currentSong.title}</h3>
-                <p className="text-xs text-muted-foreground truncate">{currentSong.artist}</p>
+            {/* Controls and Info - Mobile Optimized */}
+            <div className={`flex-1 ${isMobile ? "space-y-2" : "space-y-3"} min-w-0`}>
+              {/* Song Info with Marquee on Mobile */}
+              <div className={isMobile ? "text-left" : "text-center"}>
+                <h3 
+                  ref={titleRef}
+                  className={`font-semibold ${isMobile ? "text-sm" : "text-sm"} ${
+                    isMobile && isTextOverflowing 
+                      ? "animate-marquee whitespace-nowrap" 
+                      : "truncate"
+                  }`}
+                >
+                  {currentSong.title}
+                </h3>
+                <p 
+                  ref={artistRef}
+                  className={`text-xs text-muted-foreground ${
+                    isMobile && isTextOverflowing 
+                      ? "animate-marquee whitespace-nowrap" 
+                      : "truncate"
+                  }`}
+                >
+                  {currentSong.artist}
+                </p>
               </div>
 
-              {/* Navigation and Play Controls */}
-              <div className="flex items-center justify-center gap-2">
+              {/* Navigation and Play Controls - Touch Optimized */}
+              <div className="flex items-center justify-center gap-1">
                 <button
-                  className="inline-flex h-9 w-9 items-center justify-center rounded-md border bg-background hover:bg-accent hover:text-accent-foreground transition-colors"
+                  className={`inline-flex items-center justify-center rounded-md border bg-background hover:bg-accent hover:text-accent-foreground transition-colors touch-manipulation ${
+                    isMobile ? "h-11 w-11" : "h-9 w-9"
+                  }`}
                   aria-label="Previous Song"
                   onClick={goToPreviousSong}
                 >
-                  <SkipBack size={16} />
+                  <SkipBack size={isMobile ? 18 : 16} />
                 </button>
 
                 <button
-                  className={`inline-flex h-10 w-10 items-center justify-center rounded-md border transition-colors ${
+                  className={`inline-flex items-center justify-center rounded-md border transition-colors touch-manipulation ${
+                    isMobile ? "h-12 w-12 mx-1" : "h-10 w-10"
+                  } ${
                     fileAvailable === false 
                       ? 'bg-muted text-muted-foreground cursor-not-allowed opacity-50' 
                       : 'bg-background hover:bg-accent hover:text-accent-foreground'
@@ -615,56 +706,81 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ audioPlayerHook }) => {
                   disabled={fileAvailable === false || isLoading}
                 >
                   {isLoading ? (
-                    <div className="animate-spin w-4 h-4 border-2 border-primary border-t-transparent rounded-full" />
+                    <div className={`animate-spin border-2 border-primary border-t-transparent rounded-full ${
+                      isMobile ? "w-5 h-5" : "w-4 h-4"
+                    }`} />
                   ) : isPlaying ? (
-                    <Pause size={18} />
+                    <Pause size={isMobile ? 20 : 18} />
                   ) : (
-                    <Play size={18} />
+                    <Play size={isMobile ? 20 : 18} />
                   )}
                 </button>
 
                 <button
-                  className="inline-flex h-9 w-9 items-center justify-center rounded-md border bg-background hover:bg-accent hover:text-accent-foreground transition-colors"
+                  className={`inline-flex items-center justify-center rounded-md border bg-background hover:bg-accent hover:text-accent-foreground transition-colors touch-manipulation ${
+                    isMobile ? "h-11 w-11" : "h-9 w-9"
+                  }`}
                   aria-label="Next Song"
                   onClick={goToNextSong}
                 >
-                  <SkipForward size={16} />
+                  <SkipForward size={isMobile ? 18 : 16} />
                 </button>
 
                 <button
-                  className="inline-flex h-9 w-9 items-center justify-center rounded-md border bg-background hover:bg-accent hover:text-accent-foreground transition-colors"
+                  className={`inline-flex items-center justify-center rounded-md border bg-background hover:bg-accent hover:text-accent-foreground transition-colors touch-manipulation ${
+                    isMobile ? "h-11 w-11" : "h-9 w-9"
+                  }`}
                   aria-label="Stop"
                   onClick={stop}
                 >
-                  <StopCircle size={16} />
+                  <StopCircle size={isMobile ? 18 : 16} />
                 </button>
               </div>
 
-              {/* Progress and Time */}
+              {/* Progress and Time - Mobile Optimized */}
               <div className="space-y-1">
-                <div className="flex items-center justify-between text-xs text-muted-foreground">
+                <div className={`flex items-center justify-between text-muted-foreground ${
+                  isMobile ? "text-xs" : "text-xs"
+                }`}>
                   <span>{formatTime(currentTime)}</span>
                   <span>{formatTime(duration)}</span>
                 </div>
-                <Slider value={[progress]} max={100} step={0.1} onValueChange={onSeek} aria-label="Seek" />
+                <div className={isMobile ? "px-1" : ""}>
+                  <Slider 
+                    value={[progress]} 
+                    max={100} 
+                    step={0.1} 
+                    onValueChange={onSeek} 
+                    aria-label="Seek"
+                    className={isMobile ? "touch-manipulation" : ""}
+                  />
+                </div>
               </div>
               
-              {/* Enhanced Status Messages */}
+              {/* Enhanced Status Messages - Mobile Optimized */}
               {isLoading && (
-                <div className="text-xs text-muted-foreground text-center flex items-center justify-center gap-2">
-                  <div className="animate-spin w-3 h-3 border border-primary border-t-transparent rounded-full" />
-                  {retryCount > 0 ? `Retrying... (${retryCount}/3)` : 'Checking audio availability...'}
+                <div className={`text-muted-foreground text-center flex items-center justify-center gap-2 ${
+                  isMobile ? "text-xs" : "text-xs"
+                }`}>
+                  <div className={`animate-spin border border-primary border-t-transparent rounded-full ${
+                    isMobile ? "w-3 h-3" : "w-3 h-3"
+                  }`} />
+                  {retryCount > 0 ? `Retrying... (${retryCount}/3)` : 'Loading...'}
                 </div>
               )}
               
               {audioError && (
-                <div className="text-xs text-destructive text-center bg-destructive/10 p-3 rounded space-y-2">
-                  <div>{audioError}</div>
+                <div className={`text-destructive text-center bg-destructive/10 rounded space-y-2 ${
+                  isMobile ? "text-xs p-2" : "text-xs p-3"
+                }`}>
+                  <div className="line-clamp-2">{audioError}</div>
                   {fileAvailable === false && (
                   <div className="flex justify-center gap-2">
                     <button 
                       onClick={retryFileLoad}
-                      className="px-2 py-1 text-xs bg-destructive/20 hover:bg-destructive/30 rounded transition-colors"
+                      className={`bg-destructive/20 hover:bg-destructive/30 rounded transition-colors touch-manipulation ${
+                        isMobile ? "px-3 py-2 text-xs min-h-[44px]" : "px-2 py-1 text-xs"
+                      }`}
                     >
                       Retry
                     </button>
@@ -674,43 +790,72 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ audioPlayerHook }) => {
               )}
               
               {fileAvailable === false && !audioError && showLyricsOnly && (
-                <div className="text-xs text-amber-600 dark:text-amber-400 text-center bg-amber-500/10 p-3 rounded">
-                  📁 Audio file is not available. Please upload the MP3 files to the public directory.
+                <div className={`text-amber-600 dark:text-amber-400 text-center bg-amber-500/10 rounded ${
+                  isMobile ? "text-xs p-2" : "text-xs p-3"
+                }`}>
+                  📁 Audio file unavailable
                 </div>
               )}
               
               {autoplayBlocked && !audioError && fileAvailable && (
-                <div className="text-xs text-amber-600 dark:text-amber-400 text-center bg-amber-500/10 p-2 rounded">
-                  🎵 Ready to play! Click the play button to start.
+                <div className={`text-amber-600 dark:text-amber-400 text-center bg-amber-500/10 rounded ${
+                  isMobile ? "text-xs p-2" : "text-xs p-2"
+                }`}>
+                  🎵 Ready! Tap play to start
                 </div>
               )}
               
               {!hasUserInteracted && !autoplayBlocked && !audioError && fileAvailable && !isLoading && (
-                <div className="text-xs text-muted-foreground text-center">
-                  Click play to begin listening to the BC AI Hackathon podcast
+                <div className={`text-muted-foreground text-center ${
+                  isMobile ? "text-xs" : "text-xs"
+                }`}>
+                  {isMobile ? "Tap play to start" : "Click play to begin listening"}
                 </div>
               )}
             </div>
 
-            {/* Action Buttons */}
-            <div className="flex flex-col gap-2">
-              <Button 
-                variant="outline" 
-                size="sm" 
-                onClick={togglePlaybackMode}
-                title={getPlaybackModeLabel()}
-                aria-label={getPlaybackModeLabel()}
-              >
-                {getPlaybackModeIcon()}
-              </Button>
+            {/* Action Buttons - Mobile Optimized */}
+            {!isMobile && (
+              <div className="flex flex-col gap-2 flex-shrink-0">
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  onClick={togglePlaybackMode}
+                  title={getPlaybackModeLabel()}
+                  aria-label={getPlaybackModeLabel()}
+                >
+                  {getPlaybackModeIcon()}
+                </Button>
 
+                <Button variant="secondary" size="sm" asChild>
+                  <a href={currentSong.src} download aria-label="Download MP3">
+                    <Download size={14} />
+                  </a>
+                </Button>
+              </div>
+            )}
+            
+            {/* Mobile Action Buttons - Horizontal Layout */}
+            {isMobile && (
+              <div className="flex flex-col gap-1 flex-shrink-0">
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  onClick={togglePlaybackMode}
+                  title={getPlaybackModeLabel()}
+                  aria-label={getPlaybackModeLabel()}
+                  className="h-11 w-11 p-0 touch-manipulation"
+                >
+                  {getPlaybackModeIcon()}
+                </Button>
 
-              <Button variant="secondary" size="sm" asChild>
-                <a href={currentSong.src} download aria-label="Download MP3">
-                  <Download size={14} />
-                </a>
-              </Button>
-            </div>
+                <Button variant="secondary" size="sm" asChild className="h-11 w-11 p-0 touch-manipulation">
+                  <a href={currentSong.src} download aria-label="Download MP3">
+                    <Download size={16} />
+                  </a>
+                </Button>
+              </div>
+            )}
           </div>
         </div>
       </div>
