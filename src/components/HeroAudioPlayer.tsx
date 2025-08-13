@@ -35,47 +35,82 @@ const HeroAudioPlayer = () => {
         </div>
       </div>
 
-      {/* Compact Song Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+      {/* Detailed Song List */}
+      <div className="space-y-3">
         {songs.map((song, index) => (
           <div
             key={song.id}
-            className={`flex items-center gap-3 p-3 rounded-xl transition-all duration-200 border ${
+            className={`flex items-center gap-4 p-4 rounded-xl transition-all duration-200 border ${
               index === currentSongIndex 
-                ? 'bg-primary/10 border-primary/30' 
+                ? 'bg-primary/10 border-primary/30 shadow-lg' 
                 : 'bg-muted/20 hover:bg-muted/40 border-border/20'
             }`}
           >
+            {/* Track Number */}
+            <div className="flex-shrink-0 w-8 text-center">
+              <span className={`text-sm font-medium ${
+                index === currentSongIndex ? 'text-primary' : 'text-muted-foreground'
+              }`}>
+                {index + 1}
+              </span>
+            </div>
+
+            {/* Album Art */}
             <div className="relative flex-shrink-0">
               <img 
                 src={song.coverArt} 
                 alt={`${song.title} cover`} 
-                className="w-10 h-10 rounded-lg object-cover"
+                className="w-20 h-20 rounded-lg object-cover shadow-md"
               />
               {index === currentSongIndex && isPlaying && (
-                <div className="absolute inset-0 bg-primary/30 rounded-lg" />
+                <div className="absolute inset-0 bg-primary/30 rounded-lg flex items-center justify-center">
+                  <div className="w-6 h-6 border-2 border-white rounded-full animate-pulse" />
+                </div>
               )}
             </div>
             
-            <div className="flex-1 min-w-0">
-              <h5 className={`text-sm font-medium truncate ${
+            {/* Song Details */}
+            <div className="flex-1 min-w-0 space-y-1">
+              <h4 className={`text-base font-semibold ${
                 index === currentSongIndex ? 'text-primary' : 'text-foreground'
               }`}>
                 {song.title}
-              </h5>
-              <p className="text-xs text-muted-foreground truncate">{song.artist}</p>
+              </h4>
+              <p className="text-sm text-muted-foreground font-medium">
+                {song.artist}
+              </p>
+              <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                <span>Track {index + 1} of {songs.length}</span>
+                <span>•</span>
+                <span>Audio Experience</span>
+              </div>
+              
+              {/* Mini Progress Bar for Current Song */}
+              {index === currentSongIndex && (
+                <div className="w-full bg-muted/30 rounded-full h-1 mt-2">
+                  <div 
+                    className="h-full bg-primary rounded-full transition-all duration-300 ease-out"
+                    style={{ width: `${progress}%` }}
+                  />
+                </div>
+              )}
             </div>
             
+            {/* Play Button */}
             <Button
               variant="ghost"
               size="icon"
               onClick={() => playSpecificSong(song.id)}
-              className="h-8 w-8 flex-shrink-0 hover:bg-primary/20"
+              className={`h-12 w-12 flex-shrink-0 rounded-full transition-all duration-200 ${
+                index === currentSongIndex 
+                  ? 'bg-primary/20 hover:bg-primary/30 text-primary' 
+                  : 'hover:bg-primary/20 text-muted-foreground hover:text-primary'
+              }`}
             >
               {index === currentSongIndex && isPlaying ? (
-                <Pause className="h-4 w-4 text-primary" />
+                <Pause className="h-5 w-5" />
               ) : (
-                <Play className="h-4 w-4 text-muted-foreground" />
+                <Play className="h-5 w-5" />
               )}
             </Button>
           </div>
