@@ -42,7 +42,7 @@ const SONGS: Song[] = [
   {
     id: "mac",
     title: "Mind, AI, & Consciousness (MAC)",
-    artist: "Loki Jörgenson",
+    artist: "Ziggy Minddust",
     audioFile: getAudioUrl("Mind, AI, & Consciousness (MAC).mp3"),
     coverArt: "/lovable-uploads/b705b1df-f820-44d3-bff0-05699a6d1462.png",
     bpm: 95,
