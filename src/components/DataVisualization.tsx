@@ -63,76 +63,76 @@ const DataVisualization = () => {
   ];
 
   return (
-    <section className="py-24 bg-muted/30">
-      <div className="container mx-auto px-6">
-        <div className="text-center mb-16">
-          <Badge variant="outline" className="mb-4">
-            <BarChart3 className="w-4 h-4 mr-2" />
+    <section className="py-12 sm:py-16 lg:py-24 bg-muted/30">
+      <div className="container mx-auto px-4 sm:px-6">
+        <div className="text-center mb-12 sm:mb-16">
+          <Badge variant="outline" className="mb-3 sm:mb-4 text-xs sm:text-sm">
+            <BarChart3 className="w-3 sm:w-4 h-3 sm:h-4 mr-1 sm:mr-2" />
             Data Visualization
           </Badge>
-          <h2 className="text-4xl md:text-5xl font-bold mb-6">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-4 sm:mb-6 leading-tight">
             Survey Data at a Glance
           </h2>
-          <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+          <p className="text-base sm:text-lg lg:text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
             Interactive visualizations revealing patterns and insights from 1,001 British Columbians.
           </p>
         </div>
 
         <Tabs defaultValue="sentiment" className="w-full">
-          <TabsList className="grid w-full grid-cols-3 mb-8">
-            <TabsTrigger value="sentiment" className="text-sm">Sentiment Analysis</TabsTrigger>
-            <TabsTrigger value="demographics" className="text-sm">Demographics</TabsTrigger>
-            <TabsTrigger value="regional" className="text-sm">Regional Data</TabsTrigger>
+          <TabsList className="grid w-full grid-cols-3 mb-6 sm:mb-8 h-auto">
+            <TabsTrigger value="sentiment" className="text-xs sm:text-sm px-2 py-3 min-h-[44px]">Sentiment Analysis</TabsTrigger>
+            <TabsTrigger value="demographics" className="text-xs sm:text-sm px-2 py-3 min-h-[44px]">Demographics</TabsTrigger>
+            <TabsTrigger value="regional" className="text-xs sm:text-sm px-2 py-3 min-h-[44px]">Regional Data</TabsTrigger>
           </TabsList>
 
-          <TabsContent value="sentiment" className="space-y-8">
-            <div className="grid md:grid-cols-2 gap-8">
+          <TabsContent value="sentiment" className="space-y-6 sm:space-y-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 lg:gap-8">
               {sentimentData.map((data, index) => (
                 <Card key={index} className="border-gradient hover:glow-primary transition-smooth">
-                  <CardHeader>
-                    <div className="flex items-center gap-3">
-                      <div className="p-2 rounded-lg gradient-primary">
-                        <data.icon className="w-5 h-5 text-primary-foreground" />
+                  <CardHeader className="pb-3 sm:pb-6">
+                    <div className="flex items-center gap-2 sm:gap-3">
+                      <div className="p-1.5 sm:p-2 rounded-lg gradient-primary flex-shrink-0">
+                        <data.icon className="w-4 sm:w-5 h-4 sm:h-5 text-primary-foreground" />
                       </div>
-                      <div>
-                        <CardTitle className="text-lg">{data.category}</CardTitle>
-                        <p className="text-sm text-muted-foreground">{data.total} responses</p>
+                      <div className="min-w-0">
+                        <CardTitle className="text-base sm:text-lg leading-tight truncate">{data.category}</CardTitle>
+                        <p className="text-xs sm:text-sm text-muted-foreground">{data.total} responses</p>
                       </div>
                     </div>
                   </CardHeader>
-                  <CardContent>
-                    <div className="space-y-4">
-                      <div className="space-y-2">
+                  <CardContent className="pt-0">
+                    <div className="space-y-3 sm:space-y-4">
+                      <div className="space-y-1 sm:space-y-2">
                         <div className="flex justify-between items-center">
-                          <span className="text-sm font-medium flex items-center gap-2">
-                            <div className="w-3 h-3 rounded-full bg-ai-green"></div>
+                          <span className="text-xs sm:text-sm font-medium flex items-center gap-1 sm:gap-2">
+                            <div className="w-2 sm:w-3 h-2 sm:h-3 rounded-full bg-ai-green"></div>
                             Positive
                           </span>
-                          <span className="text-sm text-muted-foreground">{data.positive}%</span>
+                          <span className="text-xs sm:text-sm text-muted-foreground">{data.positive}%</span>
                         </div>
-                        <Progress value={data.positive} className="h-2" />
+                        <Progress value={data.positive} className="h-1.5 sm:h-2" />
                       </div>
 
-                      <div className="space-y-2">
+                      <div className="space-y-1 sm:space-y-2">
                         <div className="flex justify-between items-center">
-                          <span className="text-sm font-medium flex items-center gap-2">
-                            <div className="w-3 h-3 rounded-full bg-ai-blue"></div>
+                          <span className="text-xs sm:text-sm font-medium flex items-center gap-1 sm:gap-2">
+                            <div className="w-2 sm:w-3 h-2 sm:h-3 rounded-full bg-ai-blue"></div>
                             Neutral
                           </span>
-                          <span className="text-sm text-muted-foreground">{data.neutral}%</span>
+                          <span className="text-xs sm:text-sm text-muted-foreground">{data.neutral}%</span>
                         </div>
-                        <Progress value={data.neutral} className="h-2" />
+                        <Progress value={data.neutral} className="h-1.5 sm:h-2" />
                       </div>
 
-                      <div className="space-y-2">
+                      <div className="space-y-1 sm:space-y-2">
                         <div className="flex justify-between items-center">
-                          <span className="text-sm font-medium flex items-center gap-2">
-                            <div className="w-3 h-3 rounded-full bg-ai-orange"></div>
+                          <span className="text-xs sm:text-sm font-medium flex items-center gap-1 sm:gap-2">
+                            <div className="w-2 sm:w-3 h-2 sm:h-3 rounded-full bg-ai-orange"></div>
                             Negative
                           </span>
-                          <span className="text-sm text-muted-foreground">{data.negative}%</span>
+                          <span className="text-xs sm:text-sm text-muted-foreground">{data.negative}%</span>
                         </div>
-                        <Progress value={data.negative} className="h-2" />
+                        <Progress value={data.negative} className="h-1.5 sm:h-2" />
                       </div>
                     </div>
                   </CardContent>
@@ -221,22 +221,22 @@ const DataVisualization = () => {
         </Tabs>
 
         {/* Summary Stats */}
-        <div className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-6">
+        <div className="mt-12 sm:mt-16 grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 lg:gap-6">
           <div className="text-center">
-            <div className="text-3xl font-bold text-primary mb-2">17</div>
-            <div className="text-sm text-muted-foreground">Core Questions</div>
+            <div className="text-xl sm:text-2xl lg:text-3xl font-bold text-primary mb-1 sm:mb-2">17</div>
+            <div className="text-xs sm:text-sm text-muted-foreground">Core Questions</div>
           </div>
           <div className="text-center">
-            <div className="text-3xl font-bold text-ai-cyan mb-2">5,000+</div>
-            <div className="text-sm text-muted-foreground">Text Responses</div>
+            <div className="text-xl sm:text-2xl lg:text-3xl font-bold text-ai-cyan mb-1 sm:mb-2">5,000+</div>
+            <div className="text-xs sm:text-sm text-muted-foreground">Text Responses</div>
           </div>
           <div className="text-center">
-            <div className="text-3xl font-bold text-ai-green mb-2">100+</div>
-            <div className="text-sm text-muted-foreground">Data Fields</div>
+            <div className="text-xl sm:text-2xl lg:text-3xl font-bold text-ai-green mb-1 sm:mb-2">100+</div>
+            <div className="text-xs sm:text-sm text-muted-foreground">Data Fields</div>
           </div>
           <div className="text-center">
-            <div className="text-3xl font-bold text-ai-orange mb-2">6</div>
-            <div className="text-sm text-muted-foreground">Key Categories</div>
+            <div className="text-xl sm:text-2xl lg:text-3xl font-bold text-ai-orange mb-1 sm:mb-2">6</div>
+            <div className="text-xs sm:text-sm text-muted-foreground">Key Categories</div>
           </div>
         </div>
       </div>

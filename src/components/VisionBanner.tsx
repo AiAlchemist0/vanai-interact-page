@@ -40,7 +40,7 @@ const VisionBanner = () => {
   ];
 
   return (
-    <div id="vision" className="relative py-8 px-6 bg-gradient-to-r from-background/95 via-primary/5 to-background/95 backdrop-blur-sm border-b border-primary/10">
+    <div id="vision" className="relative py-6 sm:py-8 px-4 sm:px-6 bg-gradient-to-r from-background/95 via-primary/5 to-background/95 backdrop-blur-sm border-b border-primary/10">
       {/* Floating particles */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-1/4 left-1/4 w-2 h-2 bg-primary/30 rounded-full animate-pulse" style={{animationDelay: '0s'}} />
@@ -50,17 +50,17 @@ const VisionBanner = () => {
 
       <div className="container mx-auto">
         {/* Vision Statement */}
-        <div className="text-center mb-6">
-          <h2 className="text-3xl md:text-5xl font-bold text-gradient mb-4 animate-fade-in">
+        <div className="text-center mb-4 sm:mb-6">
+          <h2 className="text-2xl sm:text-3xl md:text-5xl font-bold text-gradient mb-3 sm:mb-4 animate-fade-in leading-tight">
             Our Vision: The Journey from Data to Community
           </h2>
-          <p className="text-lg text-muted-foreground animate-fade-in" style={{animationDelay: '0.3s'}}>
+          <p className="text-sm sm:text-base lg:text-lg text-muted-foreground animate-fade-in px-4" style={{animationDelay: '0.3s'}}>
             Transform raw data into meaningful connections that bring us together
           </p>
         </div>
 
         {/* Vision Flow - Desktop */}
-        <div className="hidden md:flex items-center justify-center gap-3 lg:gap-6 max-w-5xl mx-auto">
+        <div className="hidden md:flex items-center justify-center gap-2 lg:gap-4 max-w-5xl mx-auto">
           {visionSteps.map((step, index) => (
             <div key={step.text} className="flex items-center">
               {/* Step */}
@@ -68,28 +68,28 @@ const VisionBanner = () => {
                 className="flex flex-col items-center group cursor-pointer animate-scale-in"
                 style={{animationDelay: `${index * 0.2}s`}}
               >
-                <div className={`relative p-3 lg:p-4 rounded-full bg-card/50 backdrop-blur-sm border border-primary/20 group-hover:border-primary/40 transition-all duration-300 group-hover:scale-105 ${step.glow} group-hover:shadow-lg`}>
-                  <step.icon className={`w-5 h-5 lg:w-6 lg:h-6 ${step.color} group-hover:scale-110 transition-transform duration-300`} />
+                <div className={`relative p-2 lg:p-3 rounded-full bg-card/50 backdrop-blur-sm border border-primary/20 group-hover:border-primary/40 transition-all duration-300 group-hover:scale-105 ${step.glow} group-hover:shadow-lg`}>
+                  <step.icon className={`w-4 lg:w-5 h-4 lg:h-5 ${step.color} group-hover:scale-110 transition-transform duration-300`} />
                   
                   {/* Pulse effect */}
                   <div className="absolute inset-0 rounded-full border-2 border-primary/30 animate-ping opacity-75 group-hover:opacity-100" style={{animationDelay: `${index * 0.5}s`}} />
                 </div>
                 
-                <h3 className="text-sm lg:text-base font-semibold text-foreground mt-2 group-hover:text-primary transition-colors">
+                <h3 className="text-xs lg:text-sm font-semibold text-foreground mt-1 lg:mt-2 group-hover:text-primary transition-colors">
                   {step.text}
                 </h3>
-                <p className="text-sm text-muted-foreground hidden lg:block">
+                <p className="text-xs text-muted-foreground hidden lg:block">
                   {step.description}
                 </p>
               </div>
 
               {/* Arrow connector */}
               {index < visionSteps.length - 1 && (
-                <div className="flex items-center mx-2 lg:mx-4">
+                <div className="flex items-center mx-1 lg:mx-2">
                   {/* Flowing arrow */}
                   <div className="relative">
                     <svg 
-                      className="w-8 lg:w-12 h-4 text-primary/40 animate-pulse" 
+                      className="w-6 lg:w-8 h-3 lg:h-4 text-primary/40 animate-pulse" 
                       fill="none" 
                       stroke="currentColor" 
                       viewBox="0 0 24 24"
@@ -114,20 +114,20 @@ const VisionBanner = () => {
         </div>
 
         {/* Vision Flow - Mobile */}
-        <div className="md:hidden grid grid-cols-5 gap-2 max-w-sm mx-auto">
+        <div className="md:hidden grid grid-cols-5 gap-1 max-w-xs mx-auto">
           {visionSteps.map((step, index) => (
             <div key={step.text} className="flex flex-col items-center">
               <div 
                 className={`relative p-2 rounded-full bg-card/50 backdrop-blur-sm border border-primary/20 transition-all duration-300 animate-scale-in`}
                 style={{animationDelay: `${index * 0.2}s`}}
               >
-                <step.icon className={`w-4 h-4 ${step.color}`} />
+                <step.icon className={`w-3 h-3 ${step.color}`} />
                 
                 {/* Pulse effect */}
                 <div className="absolute inset-0 rounded-full border border-primary/30 animate-ping opacity-75" style={{animationDelay: `${index * 0.5}s`}} />
               </div>
               
-              <h3 className="text-sm font-medium text-foreground mt-1 text-center leading-tight">
+              <h3 className="text-xs font-medium text-foreground mt-1 text-center leading-tight truncate w-full">
                 {step.text}
               </h3>
             </div>
@@ -135,8 +135,8 @@ const VisionBanner = () => {
         </div>
 
         {/* Elegant subtitle */}
-        <div className="text-center mt-6 animate-fade-in" style={{animationDelay: '1.5s'}}>
-          <p className="text-xl md:text-4xl text-muted-foreground italic">
+        <div className="text-center mt-4 sm:mt-6 animate-fade-in px-4" style={{animationDelay: '1.5s'}}>
+          <p className="text-base sm:text-lg md:text-2xl lg:text-4xl text-muted-foreground italic leading-relaxed">
             "Where <span className="text-primary font-medium">data</span> becomes <span className="text-accent font-medium">rhythm</span>, and <span className="text-primary font-medium">insights</span> become <span className="text-accent font-medium">community</span>"
           </p>
         </div>

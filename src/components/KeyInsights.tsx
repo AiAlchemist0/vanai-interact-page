@@ -44,47 +44,47 @@ const KeyInsights = () => {
   ];
 
   return (
-    <section id="insights" className="py-24 bg-muted/30">
-      <div className="container mx-auto px-6">
-        <div className="text-center mb-16">
-          <Badge variant="outline" className="mb-4">
-            <Lightbulb className="w-4 h-4 mr-2" />
+    <section id="insights" className="py-12 sm:py-16 lg:py-24 bg-muted/30">
+      <div className="container mx-auto px-4 sm:px-6">
+        <div className="text-center mb-12 sm:mb-16">
+          <Badge variant="outline" className="mb-3 sm:mb-4 text-xs sm:text-sm">
+            <Lightbulb className="w-3 sm:w-4 h-3 sm:h-4 mr-1 sm:mr-2" />
             Key Findings
           </Badge>
-          <h2 className="text-4xl md:text-5xl font-bold mb-6 text-gradient">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-4 sm:mb-6 text-gradient leading-tight">
             What British Columbians Think About AI
           </h2>
-          <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+          <p className="text-base sm:text-lg lg:text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
             Comprehensive insights from across the province reveal diverse perspectives on artificial intelligence's role in society.
           </p>
         </div>
 
         {/* Main Insights Grid */}
-        <div className="grid md:grid-cols-3 gap-8 mb-16">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 mb-12 sm:mb-16">
           {insights.map((insight, index) => (
             <Card key={index} className="border-gradient hover:glow-primary transition-smooth group">
-              <CardHeader>
-                <div className="flex items-center gap-3 mb-2">
-                  <div className="p-2 rounded-lg gradient-primary">
-                    <insight.icon className="w-6 h-6 text-primary-foreground" />
+              <CardHeader className="pb-3 sm:pb-6">
+                <div className="flex items-center gap-2 sm:gap-3 mb-2">
+                  <div className="p-1.5 sm:p-2 rounded-lg gradient-primary flex-shrink-0">
+                    <insight.icon className="w-4 sm:w-5 lg:w-6 h-4 sm:h-5 lg:h-6 text-primary-foreground" />
                   </div>
-                  <CardTitle className="text-xl group-hover:text-primary transition-smooth">
+                  <CardTitle className="text-lg sm:text-xl group-hover:text-primary transition-smooth leading-tight">
                     {insight.title}
                   </CardTitle>
                 </div>
-                <p className="text-muted-foreground">
+                <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">
                   {insight.description}
                 </p>
               </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
+              <CardContent className="pt-0">
+                <div className="space-y-3 sm:space-y-4">
                   {insight.stats.map((stat, statIndex) => (
-                    <div key={statIndex} className="space-y-2">
+                    <div key={statIndex} className="space-y-1 sm:space-y-2">
                       <div className="flex justify-between items-center">
-                        <span className="text-sm font-medium">{stat.label}</span>
-                        <span className="text-sm text-muted-foreground">{stat.value}%</span>
+                        <span className="text-xs sm:text-sm font-medium truncate pr-2">{stat.label}</span>
+                        <span className="text-xs sm:text-sm text-muted-foreground flex-shrink-0">{stat.value}%</span>
                       </div>
-                      <Progress value={stat.value} className="h-2" />
+                      <Progress value={stat.value} className="h-1.5 sm:h-2" />
                     </div>
                   ))}
                 </div>
@@ -95,32 +95,32 @@ const KeyInsights = () => {
 
         {/* Geographic Distribution */}
         <Card className="border-gradient">
-          <CardHeader>
-            <div className="flex items-center gap-3 mb-2">
-              <div className="p-2 rounded-lg gradient-accent">
-                <MapPin className="w-6 h-6 text-accent-foreground" />
+          <CardHeader className="pb-3 sm:pb-6">
+            <div className="flex items-center gap-2 sm:gap-3 mb-2">
+              <div className="p-1.5 sm:p-2 rounded-lg gradient-accent flex-shrink-0">
+                <MapPin className="w-4 sm:w-5 lg:w-6 h-4 sm:h-5 lg:h-6 text-accent-foreground" />
               </div>
-              <CardTitle className="text-2xl">Geographic Distribution</CardTitle>
+              <CardTitle className="text-lg sm:text-xl lg:text-2xl leading-tight">Geographic Distribution</CardTitle>
             </div>
-            <p className="text-muted-foreground">
+            <p className="text-sm sm:text-base text-muted-foreground">
               Survey responses from across British Columbia
             </p>
           </CardHeader>
           <CardContent>
-            <div className="grid md:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6">
               {geographicData.map((region, index) => (
-                <div key={index} className="text-center p-6 rounded-lg bg-card border border-border">
-                  <div className="text-3xl font-bold text-primary mb-2">
+                <div key={index} className="text-center p-4 sm:p-6 rounded-lg bg-card border border-border">
+                  <div className="text-2xl sm:text-3xl font-bold text-primary mb-1 sm:mb-2">
                     {region.percentage}%
                   </div>
-                  <div className="text-lg font-semibold mb-1">
+                  <div className="text-base sm:text-lg font-semibold mb-1 truncate">
                     {region.region}
                   </div>
-                  <div className="text-sm text-muted-foreground">
+                  <div className="text-xs sm:text-sm text-muted-foreground">
                     {region.population}
                   </div>
-                  <div className="mt-3">
-                    <Progress value={region.percentage} className="h-3" />
+                  <div className="mt-2 sm:mt-3">
+                    <Progress value={region.percentage} className="h-2 sm:h-3" />
                   </div>
                 </div>
               ))}
@@ -129,12 +129,12 @@ const KeyInsights = () => {
         </Card>
 
         {/* Call to Action */}
-        <div className="text-center mt-16">
-          <div className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-primary/10 border border-primary/20 mb-6">
-            <Users className="w-5 h-5 text-primary" />
-            <span className="text-primary font-medium">1,001 voices from across BC</span>
+        <div className="text-center mt-12 sm:mt-16">
+          <div className="inline-flex items-center gap-2 px-4 sm:px-6 py-2 sm:py-3 rounded-full bg-primary/10 border border-primary/20 mb-4 sm:mb-6">
+            <Users className="w-4 sm:w-5 h-4 sm:h-5 text-primary" />
+            <span className="text-primary font-medium text-sm sm:text-base">1,001 voices from across BC</span>
           </div>
-          <p className="text-lg text-muted-foreground">
+          <p className="text-base sm:text-lg text-muted-foreground leading-relaxed">
             Each data point represents real perspectives from British Columbians about our AI future.
           </p>
         </div>
