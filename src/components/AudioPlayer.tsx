@@ -178,6 +178,19 @@ const SONGS: Song[] = [
       { time: 8, text: "Each brushstroke tells what I've been through" },
       { time: 12, text: "In this digital world I make my stand" }
     ] as LyricLine[]
+  },
+  {
+    id: "indigenomics-ai",
+    title: "Indigenomics AI, that's where we start",
+    artist: "BC AI Collective",
+    src: getAudioUrl("Indigenomics AI, that's where we start.mp3"),
+    coverArt: "/placeholder.svg",
+    lyrics: [
+      { time: 0, text: "Indigenomics AI, that's where we start" },
+      { time: 4, text: "Building bridges with technology's art" },
+      { time: 8, text: "Ancient wisdom meets digital flow" },
+      { time: 12, text: "Together we learn, together we grow" }
+    ] as LyricLine[]
   }
 ];
 

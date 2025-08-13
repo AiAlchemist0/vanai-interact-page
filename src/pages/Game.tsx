@@ -93,6 +93,15 @@ const SONGS: Song[] = [
     bpm: 110,
     duration: 249000,
   },
+  {
+    id: "indigenomics-ai",
+    title: "Indigenomics AI, that's where we start",
+    artist: "BC AI Collective",
+    audioFile: getAudioUrl("Indigenomics AI, that's where we start.mp3"),
+    coverArt: "/placeholder.svg",
+    bpm: 120,
+    duration: 210000,
+  },
 ];
 
 const Game = () => {
