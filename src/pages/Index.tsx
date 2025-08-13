@@ -1,4 +1,5 @@
 import Hero from "@/components/Hero";
+import VisionBanner from "@/components/VisionBanner";
 import KeyInsights from "@/components/KeyInsights";
 import QuestionCategories from "@/components/QuestionCategories";
 import DataVisualization from "@/components/DataVisualization";
@@ -11,6 +12,7 @@ const Index = () => {
     <AudioPlayerProvider>
       <div className="min-h-screen bg-background">
         <Hero />
+        <VisionBanner />
         <KeyInsights />
         <QuestionCategories />
         <DataVisualization />

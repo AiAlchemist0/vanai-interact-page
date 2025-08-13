@@ -4,7 +4,6 @@ import { ArrowRight, Users, BarChart3, MapPin, Gamepad2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useAudio } from "@/contexts/AudioContext";
 import heroImage from "@/assets/hero-ai-survey.jpg";
-import VisionBanner from "@/components/VisionBanner";
 const Hero = () => {
   const navigate = useNavigate();
   const { playSpecificSong } = useAudio();
@@ -21,11 +20,7 @@ const Hero = () => {
   };
   
   return (
-    <>
-      {/* Vision Banner */}
-      <VisionBanner />
-      
-      <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
         {/* Background Image with Overlay */}
         <div className="absolute inset-0 z-0">
           <img src={heroImage} alt="AI Survey Dashboard" className="w-full h-full object-cover" />
@@ -170,7 +165,6 @@ const Hero = () => {
         </div>
       </div>
       </section>
-    </>
   );
 };
 export default Hero;
