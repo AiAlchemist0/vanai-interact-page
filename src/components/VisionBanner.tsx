@@ -1,11 +1,11 @@
-import { Database, Lightbulb, Music, Activity, Users } from "lucide-react";
+import { Database, Lightbulb, Music, Heart, Users } from "lucide-react";
 
 const VisionBanner = () => {
   const visionSteps = [
     {
       icon: Database,
-      text: "Survey to Data",
-      description: "Surveys become data",
+      text: "Data",
+      description: "Raw insights",
       color: "text-ai-cyan",
       glow: "glow-cyan"
     },
@@ -24,9 +24,9 @@ const VisionBanner = () => {
       glow: "glow-purple"
     },
     {
-      icon: Activity,
-      text: "Dancing",
-      description: "Rhythmic expression",
+      icon: Heart,
+      text: "Movement",
+      description: "Human connection",
       color: "text-ai-pink",
       glow: "glow-pink"
     },
@@ -52,7 +52,7 @@ const VisionBanner = () => {
         {/* Vision Statement */}
         <div className="text-center mb-6">
           <h2 className="text-lg md:text-xl font-medium text-gradient mb-2 animate-fade-in">
-            Our Vision: The Journey from Surveys to Community
+            Our Vision: The Journey from Data to Community
           </h2>
           <p className="text-sm text-muted-foreground animate-fade-in" style={{animationDelay: '0.3s'}}>
             Transform raw data into meaningful connections that bring us together
@@ -137,7 +137,7 @@ const VisionBanner = () => {
         {/* Elegant subtitle */}
         <div className="text-center mt-6 animate-fade-in" style={{animationDelay: '1.5s'}}>
           <p className="text-sm md:text-base text-muted-foreground italic">
-            "Where <span className="text-primary font-medium">surveys</span> become <span className="text-accent font-medium">rhythm</span>, and <span className="text-primary font-medium">insights</span> become <span className="text-accent font-medium">community</span>"
+            "Where <span className="text-primary font-medium">data</span> becomes <span className="text-accent font-medium">rhythm</span>, and <span className="text-primary font-medium">insights</span> become <span className="text-accent font-medium">community</span>"
           </p>
         </div>
       </div>
