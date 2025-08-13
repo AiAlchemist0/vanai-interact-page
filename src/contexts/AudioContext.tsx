@@ -1,34 +1,26 @@
 import React, { createContext, useContext, ReactNode } from 'react';
+import { Song } from '@/hooks/useAudioPlayer';
 
 interface AudioContextType {
   playSpecificSong: (songId: string) => void;
   isPlaying: boolean;
   currentSongIndex: number;
+  currentSong: Song;
 }
 
 const AudioContext = createContext<AudioContextType | undefined>(undefined);
 
 interface AudioProviderProps {
   children: ReactNode;
-  playSpecificSong: (songId: string) => void;
-  isPlaying: boolean;
-  currentSongIndex: number;
+  value: AudioContextType;
 }
 
 export const AudioProvider: React.FC<AudioProviderProps> = ({
   children,
-  playSpecificSong,
-  isPlaying,
-  currentSongIndex,
+  value,
 }) => {
   return (
-    <AudioContext.Provider
-      value={{
-        playSpecificSong,
-        isPlaying,
-        currentSongIndex,
-      }}
-    >
+    <AudioContext.Provider value={value}>
       {children}
     </AudioContext.Provider>
   );

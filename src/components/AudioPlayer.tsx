@@ -1,6 +1,6 @@
 import React from "react";
 import { Play, Pause, StopCircle, Download, Music, SkipBack, SkipForward, Repeat, Repeat1, ArrowRight } from "lucide-react";
-import { AudioProvider } from "@/contexts/AudioContext";
+import { useAudioPlayer, Song } from "@/hooks/useAudioPlayer";
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -16,7 +16,7 @@ import drPatrickCover from "/lovable-uploads/4d050983-b56d-4606-a958-1c7e2c7253e
 const SUPABASE_URL = "https://oojckbecymzrrdtvcmqi.supabase.co";
 const getAudioUrl = (filename: string) => `${SUPABASE_URL}/storage/v1/object/public/audio-files/${filename}`;
 
-const SONGS = [
+const SONGS: Song[] = [
   {
     id: "bc-ai-hackathon",
     title: "BC AI Hackathon by Rival Tech",
@@ -153,41 +153,42 @@ const formatTime = (s: number) => {
   return `${m}:${sec}`;
 };
 
-const AudioPlayer: React.FC = () => {
-  const audioRef = React.useRef<HTMLAudioElement | null>(null);
-  const [currentSongIndex, setCurrentSongIndex] = React.useState(0);
-  const [isPlaying, setIsPlaying] = React.useState(false);
-  const [progress, setProgress] = React.useState(0); // 0-100
-  const [duration, setDuration] = React.useState(0);
-  const [currentTime, setCurrentTime] = React.useState(0);
-  const [autoplayBlocked, setAutoplayBlocked] = React.useState(false);
-  const [hasUserInteracted, setHasUserInteracted] = React.useState(false);
-  const [audioError, setAudioError] = React.useState<string | null>(null);
-  const [isLoading, setIsLoading] = React.useState(true);
-  const [fileAvailable, setFileAvailable] = React.useState<boolean | null>(null);
-  const [retryCount, setRetryCount] = React.useState(0);
-  const [showLyricsOnly, setShowLyricsOnly] = React.useState(false);
-  const [playbackMode, setPlaybackMode] = React.useState<"off" | "next" | "repeat" | "repeat-all">("next");
-  
-  const currentSong = SONGS[currentSongIndex];
-  
-  // Function to play a specific song by ID
-  const playSpecificSong = React.useCallback((songId: string) => {
-    const songIndex = SONGS.findIndex(song => song.id === songId);
-    if (songIndex !== -1) {
-      setCurrentSongIndex(songIndex);
-      setHasUserInteracted(true);
-      // Small delay to ensure audio element is ready
-      setTimeout(() => {
-        const audio = audioRef.current;
-        if (audio) {
-          audio.play().then(() => {
-            setIsPlaying(true);
-          }).catch(() => setAutoplayBlocked(true));
-        }
-      }, 100);
-    }
-  }, []);
+interface AudioPlayerProps {
+  audioPlayerHook: ReturnType<typeof useAudioPlayer>;
+}
+
+const AudioPlayer: React.FC<AudioPlayerProps> = ({ audioPlayerHook }) => {
+  const {
+    audioRef,
+    currentSongIndex,
+    setCurrentSongIndex,
+    isPlaying,
+    setIsPlaying,
+    progress,
+    setProgress,
+    duration,
+    setDuration,
+    currentTime,
+    setCurrentTime,
+    autoplayBlocked,
+    setAutoplayBlocked,
+    hasUserInteracted,
+    setHasUserInteracted,
+    audioError,
+    setAudioError,
+    isLoading,
+    setIsLoading,
+    fileAvailable,
+    setFileAvailable,
+    retryCount,
+    setRetryCount,
+    showLyricsOnly,
+    setShowLyricsOnly,
+    playbackMode,
+    setPlaybackMode,
+    currentSong,
+    playSpecificSong,
+  } = audioPlayerHook;
   
   // Check file availability with retry mechanism
   React.useEffect(() => {
@@ -472,14 +473,9 @@ const AudioPlayer: React.FC = () => {
   };
 
   return (
-    <AudioProvider 
-      playSpecificSong={playSpecificSong}
-      isPlaying={isPlaying}
-      currentSongIndex={currentSongIndex}
-    >
-      <div className="fixed bottom-4 left-4 right-4 z-50 md:left-auto md:w-[520px]">
-        <div className="rounded-xl border bg-card text-card-foreground shadow-md">
-          <div className="p-4 space-y-4">
+    <div className="fixed bottom-4 left-4 right-4 z-50 md:left-auto md:w-[520px]">
+      <div className="rounded-xl border bg-card text-card-foreground shadow-md">
+        <div className="p-4 space-y-4">
           {/* Song Selection */}
           <div className="flex items-center gap-3">
             <Select value={currentSong.id} onValueChange={onSongChange}>
@@ -640,11 +636,14 @@ const AudioPlayer: React.FC = () => {
               </Button>
             </div>
           </div>
-          </div>
         </div>
       </div>
-    </AudioProvider>
+    </div>
   );
 };
+
+// Export both the component and the hook data for context
+export { SONGS };
+export type { Song };
 
 export default AudioPlayer;
