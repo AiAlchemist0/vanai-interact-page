@@ -582,7 +582,7 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ audioPlayerHook }) => {
       <div className="bg-card/95 backdrop-blur-md text-card-foreground shadow-lg border-b border-border/20">
         <div className="container mx-auto px-3 sm:px-4 py-2 sm:py-3">
           {/* Banner Layout */}
-          <div className="flex items-center gap-3 sm:gap-6">
+          <div className="flex items-center justify-between gap-3 sm:gap-6">
             {/* Song Selector */}
             <Select value={currentSong.id} onValueChange={onSongChange}>
               <SelectTrigger className="w-[160px] sm:w-[200px] md:w-[280px] lg:w-[400px] bg-background/95 backdrop-blur-sm border-border/40">
