@@ -171,7 +171,7 @@ const SONGS: Song[] = [
     title: "My art's all human, soul-deep and true",
     artist: "Michelle Diamond",
     src: getAudioUrl("My art's all human, soul-deep and true.mp3"),
-    coverArt: pixelWizardCover,
+    coverArt: "/lovable-uploads/e52951f3-74b4-4f95-8ac4-6f6eaf3027ad.png",
     lyrics: [
       { time: 0, text: "My art's all human, soul-deep and true" },
       { time: 4, text: "No algorithms guide my hand" },
