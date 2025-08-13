@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { ArrowRight, Users, BarChart3, MapPin, Gamepad2 } from "lucide-react";
+import { ArrowRight, Users, BarChart3, MapPin, Gamepad2, Headphones, Play } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useAudio } from "@/contexts/AudioContext";
 import heroImage from "@/assets/hero-ai-survey.jpg";
@@ -112,51 +112,56 @@ const Hero = () => {
           </Button>
         </div>
 
-        {/* Featured Song Banner */}
-        <div className="mt-8 max-w-2xl mx-auto">
-          <div className="relative group cursor-pointer" onClick={handlePlayBCAIHackathon}>
-            <div className="relative overflow-hidden rounded-2xl border border-primary/20 bg-gradient-to-r from-primary/5 via-accent/5 to-primary/5 p-4 backdrop-blur-sm transition-all duration-300 hover:border-primary/40 hover:shadow-lg">
-              {/* Content */}
-              <div className="relative z-10 flex items-center gap-4">
-                {/* Featured Song Cover */}
-                <div className="relative">
-                  <img 
-                    src="/lovable-uploads/2f51d7bb-96fc-4f06-b7f6-fc9abbbceb32.png" 
-                    alt="BC AI Hackathon by Rival Tech cover"
-                    className="w-16 h-16 rounded-lg object-cover border border-primary/30 group-hover:border-primary/60 transition-all duration-300 group-hover:scale-105 shadow-md"
-                  />
-                  <div className="absolute -top-1 -right-1 w-4 h-4 bg-accent rounded-full flex items-center justify-center">
-                    <span className="text-xs">🤖</span>
-                  </div>
-                </div>
-                
-                {/* Song Info */}
-                <div className="flex-1">
-                  <div className="flex items-center justify-center gap-2 mb-1">
-                    <span className="px-2 py-1 bg-accent/15 text-accent font-medium text-xs rounded-full animate-pulse">
-                      🤖 BC AI HACKATHON ANTHEM - NOW PLAYING! 🎵
-                    </span>
-                  </div>
-                  <h3 className="text-lg font-bold text-foreground mb-1 group-hover:text-primary transition-colors">
-                    BC AI Hackathon by Rival Tech
-                  </h3>
-                  <p className="text-muted-foreground text-sm">The Official Vancouver AI Hackathon Theme</p>
-                </div>
-                
-                {/* Play Button */}
-                <div className="flex items-center">
-                  <div className="w-12 h-12 bg-gradient-to-r from-primary to-accent rounded-full flex items-center justify-center group-hover:scale-105 transition-transform duration-300 shadow-md">
-                    <svg className="w-6 h-6 text-primary-foreground ml-0.5" fill="currentColor" viewBox="0 0 24 24">
-                      <path d="M8 5v14l11-7z"/>
-                    </svg>
-                  </div>
-                </div>
+        {/* Enhanced Featured Song Section */}
+        <div className="mt-8 space-y-4">
+          <div className="bg-gradient-to-r from-primary/20 to-primary/10 backdrop-blur-sm rounded-xl p-6 border border-primary/20 max-w-2xl mx-auto">
+            <div className="flex items-center justify-between mb-4">
+              <div>
+                <h3 className="text-white font-bold text-lg">🎵 Featured Audio Experience</h3>
+                <p className="text-white/80 text-sm">Immerse yourself in our BC AI journey</p>
+              </div>
+              <div className="flex items-center gap-2 text-white/60 text-xs">
+                <Headphones className="h-4 w-4" />
+                <span>High Quality Audio</span>
               </div>
             </div>
             
-            {/* Subtle floating tech icons */}
-            <div className="absolute -top-1 -right-1 text-accent/60 text-sm animate-bounce">🚀</div>
-            <div className="absolute -bottom-1 -left-1 text-primary/60 text-sm animate-bounce" style={{animationDelay: '1s'}}>⚡</div>
+            <div className="flex items-center gap-4">
+              <div className="relative">
+                <Button 
+                  onClick={handlePlayBCAIHackathon}
+                  size="lg"
+                  className="h-14 w-14 rounded-full bg-primary hover:bg-primary/90 shadow-lg group"
+                >
+                  <Play className="h-6 w-6 text-primary-foreground ml-0.5 group-hover:scale-110 transition-transform" />
+                </Button>
+                <div className="absolute -inset-2 bg-primary/30 rounded-full animate-pulse opacity-60" />
+              </div>
+              
+              <div className="flex-1">
+                <h4 className="text-white font-semibold text-base">BC AI Hackathon</h4>
+                <p className="text-white/70 text-sm">by Rival Tech</p>
+                <div className="flex items-center gap-2 mt-1">
+                  <div className="flex gap-1">
+                    {[...Array(4)].map((_, i) => (
+                      <div key={i} className="w-1 h-1 bg-primary rounded-full animate-pulse" style={{animationDelay: `${i * 0.2}s`}} />
+                    ))}
+                  </div>
+                  <span className="text-white/50 text-xs">Click to explore our audio journey</span>
+                </div>
+              </div>
+              
+              <div className="hidden sm:block">
+                <Button 
+                  onClick={handlePlayBCAIHackathon}
+                  variant="outline" 
+                  className="bg-white/10 hover:bg-white/20 text-white border-white/30 backdrop-blur-sm"
+                >
+                  <Play className="h-4 w-4 mr-2" />
+                  Start Listening
+                </Button>
+              </div>
+            </div>
           </div>
         </div>
 
