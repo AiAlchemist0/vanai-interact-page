@@ -11,6 +11,7 @@ import pixelWizardCover from "@/assets/pixel-wizard-cover.jpg";
 import macCover from "/lovable-uploads/cc181a8b-6dad-4af6-8731-9a8cbd3ba5d0.png";
 import bcAiHackathonCover from "/lovable-uploads/2f51d7bb-96fc-4f06-b7f6-fc9abbbceb32.png";
 import drPatrickCover from "/lovable-uploads/4d050983-b56d-4606-a958-1c7e2c7253e8.png";
+import hrMacMillanCover from "@/assets/hr-macmillan-alien-cover.jpg";
 
 // Supabase Storage URLs for audio files
 const SUPABASE_URL = "https://oojckbecymzrrdtvcmqi.supabase.co";
@@ -140,6 +141,29 @@ const SONGS: Song[] = [
       { time: 51.5, text: "Students gather round to hear" },
       { time: 55, text: "Words that lift our spirits higher" },
       { time: 58.5, text: "Making complex concepts clear" }
+    ] as LyricLine[]
+  },
+  {
+    id: "hr-macmillan",
+    title: "H.R MacMillan Space Centre - Alien Abduction",
+    artist: "That Sole Survivor BC AI Gurl",
+    src: getAudioUrl("H.R MacMillan Space Centre _ Alian Abduction.mp3"),
+    coverArt: hrMacMillanCover,
+    lyrics: [
+      { time: 0, text: "In the depths of space we float" },
+      { time: 4, text: "At the MacMillan Centre high" },
+      { time: 8, text: "Where the stars and planets note" },
+      { time: 12, text: "Mysteries across the sky" },
+      { time: 16, text: "" },
+      { time: 18, text: "Alien lights begin to dance" },
+      { time: 22, text: "In the cosmic exhibition hall" },
+      { time: 26, text: "Abduction stories in a trance" },
+      { time: 30, text: "Visitors both large and small" },
+      { time: 34, text: "" },
+      { time: 36, text: "H.R MacMillan shows the way" },
+      { time: 40, text: "To the wonders of the stars" },
+      { time: 44, text: "Where imagination holds sway" },
+      { time: 48, text: "And we dream of life on Mars" }
     ] as LyricLine[]
   }
 ];
