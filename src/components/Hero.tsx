@@ -83,7 +83,7 @@ const Hero = () => {
 
             {/* CTA Buttons */}
             <div className="space-y-3 sm:space-y-4">
-              <div className="flex flex-col sm:flex-row gap-3">
+              <div className="flex flex-row gap-3">
                 <Button size="lg" className="gradient-primary hover:glow-primary transition-smooth group flex-1 px-4 py-3 sm:px-6 sm:py-3 min-h-[44px] text-sm sm:text-base" onClick={() => document.getElementById('vision')?.scrollIntoView({
                 behavior: 'smooth'
               })}>
