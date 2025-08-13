@@ -165,6 +165,20 @@ const SONGS: Song[] = [
       { time: 44, text: "Where imagination holds sway" },
       { time: 48, text: "And we dream of life on Mars" }
     ] as LyricLine[]
+  },
+  {
+    id: "my-arts-all-human",
+    title: "My art's all human, soul-deep and true",
+    artist: "Unknown Artist", // Please provide the artist name
+    src: getAudioUrl("My art's all human, soul-deep and true.mp3"),
+    coverArt: pixelWizardCover, // Using placeholder - please specify which cover to use
+    lyrics: [
+      { time: 0, text: "My art's all human, soul-deep and true" },
+      { time: 4, text: "No algorithms guide my hand" },
+      { time: 8, text: "Each brushstroke tells what I've been through" },
+      { time: 12, text: "In this digital world I make my stand" }
+      // Add more lyrics as needed
+    ] as LyricLine[]
   }
 ];
 

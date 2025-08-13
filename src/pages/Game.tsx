@@ -84,6 +84,15 @@ const SONGS: Song[] = [
     bpm: 110,
     duration: 190000,
   },
+  {
+    id: "my-arts-all-human",
+    title: "My art's all human, soul-deep and true",
+    artist: "Unknown Artist", // Please provide the artist name
+    audioFile: getAudioUrl("My art's all human, soul-deep and true.mp3"),
+    coverArt: "/src/assets/pixel-wizard-bc-ai-cover.jpg", // Using placeholder - please specify which cover to use
+    bpm: 120, // Please provide the actual BPM
+    duration: 180000, // Please provide the actual duration in milliseconds
+  },
 ];
 
 const Game = () => {
