@@ -60,9 +60,9 @@ const SONGS: Song[] = [
   {
     id: "hr-macmillan",
     title: "H.R MacMillan Space Centre - Alien Abduction",
-    artist: "That Sole Survivor BC AI Gurl",
+    artist: "Loraine Lowe",
     audioFile: getAudioUrl("H.R MacMillan Space Centre _ Alian Abduction.mp3"),
-    coverArt: "/src/assets/hr-macmillan-alien-cover.jpg",
+    coverArt: "/lovable-uploads/8a59c6e4-39f4-41e2-bb0d-544e22e3030a.png",
     bpm: 95,
     duration: 220000,
   },

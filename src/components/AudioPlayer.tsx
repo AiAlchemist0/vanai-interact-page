@@ -11,7 +11,7 @@ import pixelWizardCover from "@/assets/pixel-wizard-cover.jpg";
 import macCover from "/lovable-uploads/cc181a8b-6dad-4af6-8731-9a8cbd3ba5d0.png";
 import bcAiHackathonCover from "/lovable-uploads/2f51d7bb-96fc-4f06-b7f6-fc9abbbceb32.png";
 import drPatrickCover from "/lovable-uploads/4d050983-b56d-4606-a958-1c7e2c7253e8.png";
-import hrMacMillanCover from "@/assets/hr-macmillan-alien-cover.jpg";
+import hrMacMillanCover from "/lovable-uploads/8a59c6e4-39f4-41e2-bb0d-544e22e3030a.png";
 
 // Supabase Storage URLs for audio files
 const SUPABASE_URL = "https://oojckbecymzrrdtvcmqi.supabase.co";
@@ -146,7 +146,7 @@ const SONGS: Song[] = [
   {
     id: "hr-macmillan",
     title: "H.R MacMillan Space Centre - Alien Abduction",
-    artist: "That Sole Survivor BC AI Gurl",
+    artist: "Loraine Lowe",
     src: getAudioUrl("H.R MacMillan Space Centre _ Alian Abduction.mp3"),
     coverArt: hrMacMillanCover,
     lyrics: [
