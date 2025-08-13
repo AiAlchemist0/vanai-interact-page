@@ -184,7 +184,7 @@ const SONGS: Song[] = [
     title: "Indigenomics AI, that's where we start",
     artist: "BC AI Collective",
     src: getAudioUrl("Indigenomics AI, that's where we start.mp3"),
-    coverArt: "/placeholder.svg",
+    coverArt: "/lovable-uploads/a2b7d1ec-40d7-4ee1-bd2b-0f11221f5773.png",
     lyrics: [
       { time: 0, text: "Indigenomics AI, that's where we start" },
       { time: 4, text: "Building bridges with technology's art" },
