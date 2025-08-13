@@ -182,7 +182,7 @@ const SONGS: Song[] = [
   {
     id: "indigenomics-ai",
     title: "Indigenomics AI, that's where we start",
-    artist: "BC AI Collective",
+    artist: "Carol Anne Hilton",
     src: getAudioUrl("Indigenomics AI, that's where we start.mp3"),
     coverArt: "/lovable-uploads/2b274fdd-00f6-41b1-ba3d-5f21d65f87ab.png",
     lyrics: [
