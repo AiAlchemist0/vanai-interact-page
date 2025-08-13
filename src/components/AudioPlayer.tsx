@@ -1,5 +1,6 @@
 import React from "react";
 import { Play, Pause, StopCircle, Download, Music, SkipBack, SkipForward, Repeat, Repeat1, ArrowRight } from "lucide-react";
+import { AudioProvider } from "@/contexts/AudioContext";
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -169,6 +170,24 @@ const AudioPlayer: React.FC = () => {
   const [playbackMode, setPlaybackMode] = React.useState<"off" | "next" | "repeat" | "repeat-all">("next");
   
   const currentSong = SONGS[currentSongIndex];
+  
+  // Function to play a specific song by ID
+  const playSpecificSong = React.useCallback((songId: string) => {
+    const songIndex = SONGS.findIndex(song => song.id === songId);
+    if (songIndex !== -1) {
+      setCurrentSongIndex(songIndex);
+      setHasUserInteracted(true);
+      // Small delay to ensure audio element is ready
+      setTimeout(() => {
+        const audio = audioRef.current;
+        if (audio) {
+          audio.play().then(() => {
+            setIsPlaying(true);
+          }).catch(() => setAutoplayBlocked(true));
+        }
+      }, 100);
+    }
+  }, []);
   
   // Check file availability with retry mechanism
   React.useEffect(() => {
@@ -453,9 +472,14 @@ const AudioPlayer: React.FC = () => {
   };
 
   return (
-    <div className="fixed bottom-4 left-4 right-4 z-50 md:left-auto md:w-[520px]">
-      <div className="rounded-xl border bg-card text-card-foreground shadow-md">
-        <div className="p-4 space-y-4">
+    <AudioProvider 
+      playSpecificSong={playSpecificSong}
+      isPlaying={isPlaying}
+      currentSongIndex={currentSongIndex}
+    >
+      <div className="fixed bottom-4 left-4 right-4 z-50 md:left-auto md:w-[520px]">
+        <div className="rounded-xl border bg-card text-card-foreground shadow-md">
+          <div className="p-4 space-y-4">
           {/* Song Selection */}
           <div className="flex items-center gap-3">
             <Select value={currentSong.id} onValueChange={onSongChange}>
@@ -616,9 +640,10 @@ const AudioPlayer: React.FC = () => {
               </Button>
             </div>
           </div>
+          </div>
         </div>
       </div>
-    </div>
+    </AudioProvider>
   );
 };
 

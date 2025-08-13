@@ -2,9 +2,22 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ArrowRight, Users, BarChart3, MapPin, Gamepad2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { useAudio } from "@/contexts/AudioContext";
 import heroImage from "@/assets/hero-ai-survey.jpg";
 const Hero = () => {
   const navigate = useNavigate();
+  const { playSpecificSong } = useAudio();
+  
+  const handlePlayBCAIHackathon = () => {
+    playSpecificSong("bc-ai-hackathon");
+    // Optional: scroll to audio player to show it's playing
+    setTimeout(() => {
+      const audioPlayer = document.querySelector('[class*="fixed bottom-4"]');
+      if (audioPlayer) {
+        audioPlayer.scrollIntoView({ behavior: 'smooth', block: 'end' });
+      }
+    }, 200);
+  };
   
   return <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
       {/* Background Image with Overlay */}
@@ -91,7 +104,7 @@ const Hero = () => {
 
         {/* Featured Song Banner */}
         <div className="mt-8 max-w-2xl mx-auto">
-          <div className="relative group cursor-pointer" onClick={() => navigate("/game")}>
+          <div className="relative group cursor-pointer" onClick={handlePlayBCAIHackathon}>
             <div className="relative overflow-hidden rounded-2xl border border-primary/20 bg-gradient-to-r from-primary/5 via-accent/5 to-primary/5 p-4 backdrop-blur-sm transition-all duration-300 hover:border-primary/40 hover:shadow-lg">
               {/* Content */}
               <div className="relative z-10 flex items-center gap-4">
