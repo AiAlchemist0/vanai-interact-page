@@ -21,7 +21,7 @@ const Hero = () => {
       </div>
 
       {/* Main Content Container */}
-      <div className="relative z-20 container mx-auto px-4 sm:px-6 py-8 sm:py-12">
+      <div className="relative z-20 container mx-auto px-2 sm:px-6 py-8 sm:py-12">
         <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center min-h-screen">
           
           {/* Left Side - Content */}
