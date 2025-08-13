@@ -51,7 +51,7 @@ const VisionBanner = () => {
       <div className="container mx-auto">
         {/* Vision Statement */}
         <div className="text-center mb-6">
-          <h2 className="text-4xl md:text-6xl font-bold text-gradient mb-4 animate-fade-in">
+          <h2 className="text-3xl md:text-5xl font-bold text-gradient mb-4 animate-fade-in">
             Our Vision: The Journey from Data to Community
           </h2>
           <p className="text-lg text-muted-foreground animate-fade-in" style={{animationDelay: '0.3s'}}>
