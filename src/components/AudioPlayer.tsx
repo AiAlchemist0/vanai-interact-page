@@ -291,6 +291,19 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ audioPlayerHook }) => {
       return;
     }
     
+    // Cleanup any existing audio element before creating a new one
+    const existingAudio = audioRef.current;
+    if (existingAudio) {
+      existingAudio.pause();
+      existingAudio.currentTime = 0;
+      existingAudio.src = '';
+      // Remove all event listeners
+      existingAudio.removeEventListener("loadedmetadata", () => {});
+      existingAudio.removeEventListener("timeupdate", () => {});
+      existingAudio.removeEventListener("ended", () => {});
+      existingAudio.removeEventListener("error", () => {});
+    }
+    
     const audio = new Audio(currentSong.src);
     audioRef.current = audio;
     audio.preload = "auto";
@@ -357,7 +370,10 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ audioPlayerHook }) => {
     setAudioError(null);
 
     return () => {
+      // Comprehensive cleanup to prevent any lingering audio
       audio.pause();
+      audio.currentTime = 0;
+      audio.src = '';
       audio.removeEventListener("loadedmetadata", onLoaded);
       audio.removeEventListener("timeupdate", onTime);
       audio.removeEventListener("ended", onEnded);
@@ -416,7 +432,10 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ audioPlayerHook }) => {
     if (!audio) return;
     audio.pause();
     audio.currentTime = 0;
+    audio.src = ''; // Clear the source to ensure no further playback
     setIsPlaying(false);
+    setProgress(0);
+    setCurrentTime(0);
   };
 
   const retryFileLoad = () => {
@@ -443,6 +462,13 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ audioPlayerHook }) => {
   const onSongChange = (songId: string) => {
     const songIndex = SONGS.findIndex(s => s.id === songId);
     if (songIndex !== -1) {
+      // Stop current audio before changing songs
+      const currentAudio = audioRef.current;
+      if (currentAudio) {
+        currentAudio.pause();
+        currentAudio.currentTime = 0;
+        setIsPlaying(false);
+      }
       setCurrentSongIndex(songIndex);
     }
   };
