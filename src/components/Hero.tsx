@@ -55,7 +55,7 @@ const Hero = () => {
             </div>
 
             {/* Key Stats */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
+            <div className="grid grid-cols-3 gap-2 sm:gap-4">
               <div className="bg-card/50 backdrop-blur-sm border border-border rounded-xl px-3 sm:px-4 py-3 sm:py-4 text-center">
                 <div className="flex items-center justify-center mb-1 sm:mb-2">
                   <Users className="w-5 sm:w-6 h-5 sm:h-6 text-primary" />
