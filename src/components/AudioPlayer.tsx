@@ -118,7 +118,7 @@ const SONGS: Song[] = [
   {
     id: "dr-patrick",
     title: "Dr. Patrick Parra Pennefather",
-    artist: "Academic Orchestra",
+    artist: "UBC AI Orchestra",
     src: getAudioUrl("Dr. Patrick Parra Pennefather.mp3"),
     coverArt: drPatrickCover,
     lyrics: [
