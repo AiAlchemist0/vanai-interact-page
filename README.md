@@ -4,7 +4,7 @@
 
 **Created by Dean Shev**
 
-**URL**: [https://lovable.dev/projects/b24d8310-d53b-4f91-8214-62f3617dcdf1](https://bcai.dev/)
+**URL**: (https://bcai.dev/)
 
 ## Project Overview
 
