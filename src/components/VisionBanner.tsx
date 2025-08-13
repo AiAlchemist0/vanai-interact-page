@@ -5,7 +5,7 @@ const VisionBanner = () => {
     {
       icon: Database,
       text: "Data",
-      description: "Raw insights",
+      description: "Raw Numbers",
       color: "text-ai-cyan",
       glow: "glow-cyan"
     },
