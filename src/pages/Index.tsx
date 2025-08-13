@@ -11,7 +11,7 @@ import NowPlayingBanner from "@/components/NowPlayingBanner";
 const Index = () => {
   return (
     <AudioPlayerProvider>
-      <div className="min-h-screen bg-background">
+      <div className="min-h-screen bg-background pt-20">
         <div className="pt-0">
           <Hero />
           <VisionBanner />
