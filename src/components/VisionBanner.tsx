@@ -51,10 +51,10 @@ const VisionBanner = () => {
       <div className="container mx-auto">
         {/* Vision Statement */}
         <div className="text-center mb-6">
-          <h2 className="text-lg md:text-xl font-medium text-gradient mb-2 animate-fade-in">
+          <h2 className="text-2xl md:text-3xl font-bold text-gradient mb-4 animate-fade-in">
             Our Vision: The Journey from Data to Community
           </h2>
-          <p className="text-sm text-muted-foreground animate-fade-in" style={{animationDelay: '0.3s'}}>
+          <p className="text-lg text-muted-foreground animate-fade-in" style={{animationDelay: '0.3s'}}>
             Transform raw data into meaningful connections that bring us together
           </p>
         </div>
@@ -75,10 +75,10 @@ const VisionBanner = () => {
                   <div className="absolute inset-0 rounded-full border-2 border-primary/30 animate-ping opacity-75 group-hover:opacity-100" style={{animationDelay: `${index * 0.5}s`}} />
                 </div>
                 
-                <h3 className="text-xs lg:text-sm font-semibold text-foreground mt-2 group-hover:text-primary transition-colors">
+                <h3 className="text-sm lg:text-base font-semibold text-foreground mt-2 group-hover:text-primary transition-colors">
                   {step.text}
                 </h3>
-                <p className="text-xs text-muted-foreground hidden lg:block">
+                <p className="text-sm text-muted-foreground hidden lg:block">
                   {step.description}
                 </p>
               </div>
@@ -127,7 +127,7 @@ const VisionBanner = () => {
                 <div className="absolute inset-0 rounded-full border border-primary/30 animate-ping opacity-75" style={{animationDelay: `${index * 0.5}s`}} />
               </div>
               
-              <h3 className="text-xs font-medium text-foreground mt-1 text-center leading-tight">
+              <h3 className="text-sm font-medium text-foreground mt-1 text-center leading-tight">
                 {step.text}
               </h3>
             </div>
@@ -136,7 +136,7 @@ const VisionBanner = () => {
 
         {/* Elegant subtitle */}
         <div className="text-center mt-6 animate-fade-in" style={{animationDelay: '1.5s'}}>
-          <p className="text-sm md:text-base text-muted-foreground italic">
+          <p className="text-lg md:text-xl text-muted-foreground italic">
             "Where <span className="text-primary font-medium">data</span> becomes <span className="text-accent font-medium">rhythm</span>, and <span className="text-primary font-medium">insights</span> become <span className="text-accent font-medium">community</span>"
           </p>
         </div>
