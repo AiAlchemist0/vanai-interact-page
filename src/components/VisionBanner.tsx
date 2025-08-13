@@ -25,7 +25,7 @@ const VisionBanner = () => {
     },
     {
       icon: Heart,
-      text: "Movement",
+      text: "Dancing",
       description: "Human connection",
       color: "text-ai-pink",
       glow: "glow-pink"
