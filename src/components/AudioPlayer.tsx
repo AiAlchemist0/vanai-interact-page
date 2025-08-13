@@ -604,19 +604,22 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ audioPlayerHook }) => {
 
             {/* Song Selector */}
             <Select value={currentSong.id} onValueChange={onSongChange}>
-              <SelectTrigger className="w-[200px] hidden lg:flex">
+              <SelectTrigger className="w-[400px] hidden lg:flex">
                 <SelectValue placeholder="Select a song" />
               </SelectTrigger>
-              <SelectContent className="bg-popover">
+              <SelectContent className="bg-popover w-[400px]">
                 {SONGS.map((song) => (
                   <SelectItem key={song.id} value={song.id}>
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-3 w-full">
                       <img 
                         src={song.coverArt} 
                         alt={`${song.title} cover`} 
-                        className="w-6 h-6 object-cover rounded" 
+                        className="w-8 h-8 object-cover rounded flex-shrink-0" 
                       />
-                      <span className="truncate">{song.title}</span>
+                      <div className="flex-1 min-w-0">
+                        <div className="font-medium text-sm">{song.title}</div>
+                        <div className="text-xs text-muted-foreground">{song.artist}</div>
+                      </div>
                     </div>
                   </SelectItem>
                 ))}
