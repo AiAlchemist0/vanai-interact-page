@@ -6,9 +6,7 @@ import heroImage from "@/assets/hero-ai-survey.jpg";
 import HeroAudioPlayer from "./HeroAudioPlayer";
 const Hero = () => {
   const navigate = useNavigate();
-  
-  return (
-    <section className="relative min-h-screen overflow-hidden">
+  return <section className="relative min-h-screen overflow-hidden">
       {/* Background Image with Overlay */}
       <div className="absolute inset-0 z-0">
         <img src={heroImage} alt="AI Survey Dashboard" className="w-full h-full object-cover" />
@@ -36,11 +34,7 @@ const Hero = () => {
             {/* Logo and Title Section */}
             <div className="space-y-4 sm:space-y-6">
               <div className="flex flex-row items-start gap-3 sm:gap-6">
-                <img 
-                  src="/lovable-uploads/6b65586a-63ba-48f1-9c56-1846ec800f39.png" 
-                  alt="BC+AI Ecosystem Logo" 
-                  className="w-32 sm:w-36 lg:w-40 h-auto filter drop-shadow-lg flex-shrink-0"
-                />
+                <img src="/lovable-uploads/6b65586a-63ba-48f1-9c56-1846ec800f39.png" alt="BC+AI Ecosystem Logo" className="w-32 sm:w-36 lg:w-40 h-auto filter drop-shadow-lg flex-shrink-0" />
                 <div className="flex-1 min-w-0">
                   <h1 className="text-2xl sm:text-3xl lg:text-7xl font-bold text-gradient leading-tight mb-2 sm:mb-3">
                     BC AI Survey
@@ -90,30 +84,22 @@ const Hero = () => {
             {/* CTA Buttons */}
             <div className="space-y-3 sm:space-y-4">
               <div className="flex flex-col sm:flex-row gap-3">
-                <Button 
-                  size="lg" 
-                  className="gradient-primary hover:glow-primary transition-smooth group flex-1 px-4 py-3 sm:px-6 sm:py-3 min-h-[44px] text-sm sm:text-base" 
-                  onClick={() => document.getElementById('vision')?.scrollIntoView({ behavior: 'smooth' })}
-                >
+                <Button size="lg" className="gradient-primary hover:glow-primary transition-smooth group flex-1 px-4 py-3 sm:px-6 sm:py-3 min-h-[44px] text-sm sm:text-base" onClick={() => document.getElementById('vision')?.scrollIntoView({
+                behavior: 'smooth'
+              })}>
                   Project's Vision
                   <ArrowRight className="ml-2 w-3 sm:w-4 h-3 sm:h-4 group-hover:translate-x-1 transition-transform" />
                 </Button>
 
-                <Button 
-                  size="lg" 
-                  className="gradient-secondary hover:glow-secondary transition-smooth group flex-1 px-4 py-3 sm:px-6 sm:py-3 min-h-[44px] text-sm sm:text-base" 
-                  onClick={() => document.getElementById('insights')?.scrollIntoView({ behavior: 'smooth' })}
-                >
+                <Button size="lg" className="gradient-secondary hover:glow-secondary transition-smooth group flex-1 px-4 py-3 sm:px-6 sm:py-3 min-h-[44px] text-sm sm:text-base" onClick={() => document.getElementById('insights')?.scrollIntoView({
+                behavior: 'smooth'
+              })}>
                   <BarChart3 className="mr-2 w-3 sm:w-4 h-3 sm:h-4 group-hover:scale-110 transition-transform" />
                   Survey Deep Dive
                 </Button>
               </div>
 
-              <Button 
-                size="lg" 
-                className="gradient-accent hover:glow-accent transition-smooth group w-full px-4 py-3 sm:px-6 sm:py-3 min-h-[44px] text-sm sm:text-base" 
-                onClick={() => navigate('/game')}
-              >
+              <Button size="lg" className="gradient-accent hover:glow-accent transition-smooth group w-full px-4 py-3 sm:px-6 sm:py-3 min-h-[44px] text-sm sm:text-base" onClick={() => navigate('/game')}>
                 <Gamepad2 className="mr-2 w-4 sm:w-5 h-4 sm:h-5 group-hover:scale-110 transition-transform" />
                 PLAY BC AI GAME
               </Button>
@@ -128,12 +114,7 @@ const Hero = () => {
       </div>
 
       {/* Scroll Indicator */}
-      <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce z-30">
-        <div className="w-6 h-10 border-2 border-primary/50 rounded-full flex justify-center">
-          <div className="w-1 h-3 bg-primary rounded-full mt-2 animate-pulse" />
-        </div>
-      </div>
-    </section>
-  );
+      
+    </section>;
 };
 export default Hero;
