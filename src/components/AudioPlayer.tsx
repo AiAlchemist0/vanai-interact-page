@@ -588,7 +588,7 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ audioPlayerHook }) => {
               <SelectTrigger className="w-[180px] sm:w-[200px] md:w-[280px] lg:w-[400px] bg-background border-border/40 shadow-sm">
                 <SelectValue placeholder="Select a song" />
               </SelectTrigger>
-              <SelectContent className="bg-background border-border shadow-lg z-[100] w-[280px] sm:w-[320px] md:w-[400px] max-h-[300px] overflow-y-auto">
+              <SelectContent className="bg-background border-border shadow-lg z-[100] w-[320px] sm:w-[400px] md:w-[500px] lg:w-[600px] max-h-[300px] overflow-y-auto">
                 {SONGS.map((song) => (
                   <SelectItem key={song.id} value={song.id} className="bg-background hover:bg-muted/80 focus:bg-muted/80">
                     <div className="flex items-center gap-2 w-full">
