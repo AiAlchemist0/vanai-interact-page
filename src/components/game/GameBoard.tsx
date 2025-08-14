@@ -8,8 +8,8 @@ import GameOverModal from "./GameOverModal";
 import GameBoard3D from "./GameBoard3D";
 import { HitEffect } from "./HitEffects";
 import { FloatingTextItem } from "./FloatingText";
-import { useSimplifiedHitDetection } from "@/hooks/useSimplifiedHitDetection";
-import { useUnifiedInput } from "@/hooks/useUnifiedInput";
+import { useAdvancedHitDetection } from "@/hooks/useAdvancedHitDetection";
+import { useEnhancedInput } from "@/hooks/useEnhancedInput";
 import { useWebGLContextRecovery } from "@/hooks/useWebGLContextRecovery";
 import { useSoundEffects } from "@/hooks/useSoundEffects";
 import { useStarPower } from "@/components/game/StarPowerEffects";
@@ -97,116 +97,83 @@ const GameBoard = ({
   const [showCalibration, setShowCalibration] = useState(false);
   const [hitFlashTimes, setHitFlashTimes] = useState<Set<number>>(new Set());
 
-  // Simplified systems
-  const { processHit, processMiss, resetStats, getStats, isNoteHittable, hitWindow } = useSimplifiedHitDetection();
+  // Enhanced systems
+  const { processHit, processMiss, resetStats, getStats, isNoteHittable, hitWindow, predictHit, findHittableNotes } = useAdvancedHitDetection();
   const webglRecovery = useWebGLContextRecovery();
   const soundEffects = useSoundEffects();
   const starPowerSystem = useStarPower();
 
-  // Unified input system - forward declaration needed
+  // Enhanced input system with advanced hit detection
   const handleStrum = () => {
-    // Debug logging
-    console.log(`GameBoard Strum at: ${currentTime.toFixed(0)}ms, Pressed frets: [${Array.from(pressedFrets).join(', ')}], Input: ${inputMethod}`);
+    console.log(`🎸 GameBoard Strum at: ${currentTime.toFixed(0)}ms, Pressed frets: [${Array.from(pressedFrets).join(', ')}], Input: ${inputMethod}`);
 
-    // Find notes within hit window - simplified
-    const hittableNotes = notes.filter(note => 
-      isNoteHittable(note.time, currentTime)
-    );
+    // Use the new advanced hit detection system
+    const { result, hitNote } = processHit(notes, currentTime, pressedFrets, combo);
 
-    console.log(`Hittable notes: ${hittableNotes.length}, Active notes: ${activeNotes.length}`);
-
-    if (hittableNotes.length === 0) {
+    if (!result || !hitNote) {
       console.log('No hittable notes - ignoring strum');
       return;
     }
 
-    // Get the closest note
-    const closestNote = hittableNotes.reduce((closest, note) => 
-      Math.abs(note.time - currentTime) < Math.abs(closest.time - currentTime) ? note : closest
-    );
-
-    // Check if pressed frets match the note
-    const requiredFrets = new Set(closestNote.frets);
-    const pressedFretsArray = Array.from(pressedFrets);
-    
-    const isCorrect = requiredFrets.size === pressedFrets.size && 
-                     pressedFretsArray.every(fret => requiredFrets.has(fret));
-    
-    console.log(`Required frets: [${closestNote.frets.join(', ')}], Pressed: [${pressedFretsArray.join(', ')}], Correct: ${isCorrect}`);
-
     const fretPositions = [-1.5, -0.75, 0, 0.75, 1.5];
 
-    if (isCorrect) {
-      // Calculate timing difference
-      const timingDiff = closestNote.time - currentTime;
-      const isChord = closestNote.type === "chord";
-      const hitResult = processHit(timingDiff, isChord, combo);
+    if (result.fretMatches && result.grade !== 'miss') {
+      // Successful hit
+      const newCombo = combo + 1;
+      onComboChange(newCombo);
+      
+      // Apply star power multiplier
+      const finalPoints = result.points * starPowerSystem.starPower.multiplier;
+      onScoreChange(score + finalPoints);
+      setNotesHit(prev => prev + 1);
 
-      if (hitResult.grade !== 'miss') {
-        // Successful hit
-        const newCombo = combo + 1;
-        onComboChange(newCombo);
-        
-        // Apply star power multiplier
-        const finalPoints = hitResult.points * starPowerSystem.starPower.multiplier;
-        onScoreChange(score + finalPoints);
-        setNotesHit(prev => prev + 1);
+      // Play hit sound
+      soundEffects.playSound(`hit_${result.grade}` as any);
 
-        // Play hit sound
-        soundEffects.playSound(`hit_${hitResult.grade}` as any);
+      // Add star power energy for perfect hits
+      if (result.grade === 'perfect') {
+        starPowerSystem.addStarPowerEnergy(5);
+      } else if (result.grade === 'good') {
+        starPowerSystem.addStarPowerEnergy(2);
+      }
 
-        // Add star power energy for perfect hits
-        if (hitResult.grade === 'perfect') {
-          starPowerSystem.addStarPowerEnergy(5);
-        } else if (hitResult.grade === 'good') {
-          starPowerSystem.addStarPowerEnergy(2);
-        }
+      // Combo milestone sound
+      if (newCombo > 0 && newCombo % 10 === 0) {
+        soundEffects.playSound('combo_milestone');
+      }
 
-        // Combo milestone sound
-        if (newCombo > 0 && newCombo % 10 === 0) {
-          soundEffects.playSound('combo_milestone');
-        }
+      // Add visual effects for each fret
+      hitNote.frets.forEach(fret => {
+        addHitEffect(result.grade, [fretPositions[fret], 0, 0]);
+        const displayPoints = finalPoints / hitNote.frets.length; // Split points for chords
+        addFloatingText(result.grade, result.grade, [fretPositions[fret], 1, 0], Math.round(displayPoints));
+      });
 
-        // Add visual effects for each fret
-        closestNote.frets.forEach(fret => {
-          addHitEffect(hitResult.grade, [fretPositions[fret], 0, 0]);
-          const displayPoints = finalPoints / closestNote.frets.length; // Split points for chords
-          addFloatingText(hitResult.grade, hitResult.grade, [fretPositions[fret], 1, 0], Math.round(displayPoints));
-        });
-
-        // Flash the hit note briefly
+      // Flash the hit note briefly
+      setHitFlashTimes(prev => {
+        const s = new Set(prev);
+        s.add(hitNote.time);
+        return s;
+      });
+      setTimeout(() => {
         setHitFlashTimes(prev => {
           const s = new Set(prev);
-          s.add(closestNote.time);
+          s.delete(hitNote.time);
           return s;
         });
-        setTimeout(() => {
-          setHitFlashTimes(prev => {
-            const s = new Set(prev);
-            s.delete(closestNote.time);
-            return s;
-          });
-        }, 150);
+      }, 150);
 
-        // Remove hit note after short delay to show flash
-        setTimeout(() => {
-          setNotes(prev => prev.filter(n => n !== closestNote));
-        }, 100);
-      } else {
-        // Miss due to bad timing
-        onComboChange(0);
-        soundEffects.playSound('miss');
-        closestNote.frets.forEach(fret => {
-          addHitEffect('miss', [fretPositions[fret], 0, 0]);
-          addFloatingText('MISS', 'miss', [fretPositions[fret], 1, 0], 0);
-        });
-      }
+      // Remove hit note after short delay to show flash
+      setTimeout(() => {
+        setNotes(prev => prev.filter(n => n !== hitNote));
+      }, 100);
     } else {
-      // Wrong frets pressed
+      // Miss (either bad timing or wrong frets)
       onComboChange(0);
       soundEffects.playSound('miss');
+      
       // Show miss effect on the note's frets
-      closestNote.frets.forEach(fret => {
+      hitNote.frets.forEach(fret => {
         addHitEffect('miss', [fretPositions[fret], 0, 0]);
         addFloatingText('MISS', 'miss', [fretPositions[fret], 1, 0], 0);
       });
@@ -217,7 +184,7 @@ const GameBoard = ({
     setAccuracy(stats.accuracy);
   };
 
-  const { pressedFrets, inputMethod } = useUnifiedInput(handleStrum, gameState);
+  const { pressedFrets, inputMethod } = useEnhancedInput(handleStrum, gameState);
 
   // Initialize game
   useEffect(() => {
@@ -491,11 +458,20 @@ const GameBoard = ({
         )}
       </div>
 
-      {/* FretBoard Component - Unified for all input methods */}
+      {/* FretBoard Component - Enhanced with hit prediction */}
       <FretBoard
         pressedFrets={pressedFrets}
         onStrum={handleStrum}
         inputMethod={inputMethod}
+        nextNote={(() => {
+          const prediction = predictHit(notes, currentTime, pressedFrets);
+          return prediction.nextNote ? {
+            frets: prediction.nextNote.frets,
+            canHit: prediction.canHit,
+            grade: prediction.grade
+          } : undefined;
+        })()}
+        showHitPrediction={true}
       />
 
       {/* Pause Overlay */}

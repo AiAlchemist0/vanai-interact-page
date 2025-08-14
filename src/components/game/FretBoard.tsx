@@ -5,9 +5,11 @@ interface FretBoardProps {
   pressedFrets: Set<number>;
   onStrum: () => void;
   inputMethod: 'keyboard' | 'touch' | 'none';
+  nextNote?: { frets: number[]; canHit: boolean; grade: string | null };
+  showHitPrediction?: boolean;
 }
 
-const FretBoard = ({ pressedFrets, onStrum, inputMethod }: FretBoardProps) => {
+const FretBoard = ({ pressedFrets, onStrum, inputMethod, nextNote, showHitPrediction = true }: FretBoardProps) => {
   const isTouch = inputMethod === 'touch' || 'ontouchstart' in window;
 
   const fretColors = ['bg-green-500', 'bg-red-500', 'bg-yellow-500', 'bg-blue-500', 'bg-orange-500'];
@@ -21,6 +23,30 @@ const FretBoard = ({ pressedFrets, onStrum, inputMethod }: FretBoardProps) => {
         <div className="flex justify-center gap-2">
           {fretColors.map((color, index) => {
             const isPressed = pressedFrets.has(index);
+            const isNextNoteRequired = showHitPrediction && nextNote?.frets.includes(index);
+            const canHitNextNote = showHitPrediction && nextNote?.canHit && isNextNoteRequired;
+            
+            const baseColor = color.includes('green') ? '#22c55e' : 
+              color.includes('red') ? '#ef4444' :
+              color.includes('yellow') ? '#eab308' :
+              color.includes('blue') ? '#3b82f6' : '#f97316';
+            
+            // Enhanced visual feedback
+            let backgroundColor = baseColor;
+            let borderColor = 'rgba(255, 255, 255, 0.2)';
+            let boxShadow = 'none';
+            
+            if (isPressed) {
+              boxShadow = `0 0 20px ${baseColor}`;
+              borderColor = 'rgba(255, 255, 255, 0.6)';
+            }
+            
+            if (isNextNoteRequired && showHitPrediction) {
+              borderColor = canHitNextNote ? '#00ff00' : '#ffff00';
+              if (!isPressed) {
+                boxShadow = `0 0 15px ${canHitNextNote ? '#00ff00' : '#ffff00'}`;
+              }
+            }
             
             return (
               <div
@@ -32,22 +58,14 @@ const FretBoard = ({ pressedFrets, onStrum, inputMethod }: FretBoardProps) => {
                   width: isTouch ? '80px' : '64px',
                   height: isTouch ? '80px' : '64px',
                   borderRadius: '50%',
-                  border: '4px solid rgba(255, 255, 255, 0.2)',
+                  border: `4px solid ${borderColor}`,
                   cursor: 'pointer',
                   transition: 'all 150ms ease',
                   transform: isPressed ? 'scale(1.1)' : 'scale(1)',
                   touchAction: 'none',
                   userSelect: 'none',
-                  boxShadow: isPressed 
-                    ? `0 0 20px ${color.includes('green') ? '#22c55e' : 
-                        color.includes('red') ? '#ef4444' :
-                        color.includes('yellow') ? '#eab308' :
-                        color.includes('blue') ? '#3b82f6' : '#f97316'}`
-                    : 'none',
-                  backgroundColor: color.includes('green') ? '#22c55e' : 
-                    color.includes('red') ? '#ef4444' :
-                    color.includes('yellow') ? '#eab308' :
-                    color.includes('blue') ? '#3b82f6' : '#f97316'
+                  boxShadow,
+                  backgroundColor
                 }}
               >
                 {/* Fret indicator */}
@@ -111,7 +129,7 @@ const FretBoard = ({ pressedFrets, onStrum, inputMethod }: FretBoardProps) => {
           </Button>
         </div>
 
-        {/* Instructions */}
+        {/* Enhanced Instructions with Hit Prediction */}
         <div className="text-center space-y-1">
           <p className="text-sm text-muted-foreground">
             {isTouch 
@@ -119,6 +137,16 @@ const FretBoard = ({ pressedFrets, onStrum, inputMethod }: FretBoardProps) => {
               : 'Hold fret keys (A, S, D, F, G) and press SPACE to strum'
             }
           </p>
+          {showHitPrediction && nextNote && (
+            <p className="text-xs font-medium" style={{
+              color: nextNote.canHit ? '#00ff00' : '#ffff00'
+            }}>
+              {nextNote.canHit 
+                ? `Ready to hit! (${nextNote.grade?.toUpperCase()})` 
+                : `Hold frets: ${nextNote.frets.map(f => ['Green', 'Red', 'Yellow', 'Blue', 'Orange'][f]).join(', ')}`
+              }
+            </p>
+          )}
           {!isTouch && (
             <p className="text-xs text-muted-foreground/70">
               Tip: You can hold multiple frets for chords
