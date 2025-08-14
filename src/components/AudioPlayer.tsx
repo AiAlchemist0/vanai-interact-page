@@ -14,7 +14,7 @@ import bcAiHackathonCover from "/lovable-uploads/2f51d7bb-96fc-4f06-b7f6-fc9abbb
 import drPatrickCover from "/lovable-uploads/4d050983-b56d-4606-a958-1c7e2c7253e8.png";
 import hrMacMillanCover from "/lovable-uploads/8a59c6e4-39f4-41e2-bb0d-544e22e3030a.png";
 import lalalaAiDilemmaCover from "/lovable-uploads/7e23b796-605f-4562-927b-06daa9147648.png";
-import brendaBaileyCover from "@/assets/brenda-bailey-cover.jpg";
+
 
 // Supabase Storage URLs for audio files
 const SUPABASE_URL = "https://oojckbecymzrrdtvcmqi.supabase.co";
@@ -223,7 +223,7 @@ const SONGS: Song[] = [
     title: "Brenda Bailey: Fiscal AI Force Level Up!",
     artist: "AI Community Orchestra",
     src: getAudioUrl("Brenda lvls up BC.mp3"),
-    coverArt: brendaBaileyCover,
+    coverArt: "/lovable-uploads/9b9e9cd3-384c-4848-8fd2-a1a882698f96.png",
     lyrics: [
       { time: 0, text: "Brenda Bailey takes the stage" },
       { time: 4, text: "Fiscal force in digital age" },

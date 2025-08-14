@@ -116,7 +116,7 @@ const SONGS: Song[] = [
     title: "Brenda Bailey: Fiscal AI Force Level Up!",
     artist: "AI Community Orchestra",
     audioFile: getAudioUrl("Brenda lvls up BC.mp3"),
-    coverArt: "/lovable-uploads/fc226621-2faf-4a33-8885-28d7dc934861.png",
+    coverArt: "/lovable-uploads/9b9e9cd3-384c-4848-8fd2-a1a882698f96.png",
     bpm: 130,
     duration: 195000,
   },
