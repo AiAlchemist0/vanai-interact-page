@@ -48,7 +48,7 @@ const Hero = () => {
                 </div>
               </div>
 
-              <p className="text-base sm:text-lg text-muted-foreground leading-relaxed text-justify lg:text-2xl">
+              <p className="text-base sm:text-lg text-muted-foreground leading-relaxed text-justify lg:text-xl">
                 Discover what <span className="text-primary font-semibold">1,001 British Columbians</span> think about artificial intelligence. 
                 Explore comprehensive survey data covering AI experience, concerns, and future vision.
               </p>
