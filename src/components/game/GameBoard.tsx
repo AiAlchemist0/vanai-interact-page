@@ -16,7 +16,7 @@ import { useStarPower } from "@/components/game/StarPowerEffects";
 import { useTimingSynchronization } from "@/hooks/useTimingSynchronization";
 import { useMobileOptimization } from "@/hooks/useMobileOptimization";
 import { useEnhancedFeedback } from "@/hooks/useEnhancedFeedback";
-import EnhancedHUD from "./EnhancedHUD";
+import EnhancedHUDOptimized from "./EnhancedHUDOptimized";
 import { GameDebugPanel } from "./GameDebugPanel";
 import CalibrationModal from "./CalibrationModal";
 import { Pause, Play, Square, Home, Settings, Zap } from "lucide-react";
@@ -411,7 +411,7 @@ const GameBoard = ({
   return (
     <div className="h-full flex flex-col bg-gradient-to-b from-background via-background/95 to-background">
       {/* Enhanced HUD replacing old game controls */}
-      <EnhancedHUD 
+      <EnhancedHUDOptimized 
         score={score}
         combo={combo}
         accuracy={accuracy}
@@ -419,14 +419,6 @@ const GameBoard = ({
         songDuration={song.duration}
         gameState={gameState}
         onGameStateChange={onGameStateChange}
-        hitPrediction={(() => {
-          const prediction = predictHit(notes, currentTime, pressedFrets);
-          return prediction.nextNote ? {
-            canHit: prediction.canHit,
-            grade: prediction.grade,
-            confidence: prediction.canHit ? 0.9 : 0.6
-          } : undefined;
-        })()}
       />
 
       {/* 3D Game Area - Takes remaining space */}

@@ -29,7 +29,7 @@ const NoteHighway = ({ activeNotes, currentTime, pressedFrets, combo = 0, noteSp
   });
 
   // Fret positions (X coordinates) - Guitar Hero standard spacing
-  const fretPositions = [-5, -2.5, 0, 2.5, 5];
+  const fretPositions = [-1.5, -0.75, 0, 0.75, 1.5];
   
   // Guitar Hero accurate fret colors
   const fretColors = ['#22c55e', '#ef4444', '#eab308', '#3b82f6', '#f97316']; // Green, Red, Yellow, Blue, Orange
@@ -160,21 +160,21 @@ const NoteHighway = ({ activeNotes, currentTime, pressedFrets, combo = 0, noteSp
       {/* Notes with improved positioning and depth cues */}
       {activeNotes.map((note, noteIndex) => 
         note.frets.map((fret, fretIndex) => {
-          // Enhanced note positioning with better depth perception
+          // Fixed note positioning - notes flow from far to near
           const timeToHit = (note.time - currentTime) / 1000;
           const adjustedSpeed = noteSpeed || 1.0;
-          const noteZ = -30 + (5 - timeToHit) * (9 * adjustedSpeed);
+          const noteZ = timeToHit * 8 * adjustedSpeed; // Positive Z starts far, moves to 0
           
-          // Only render notes in visible range with buffer
-          if (noteZ < -35 || noteZ > 8) return null;
+          // Only render notes in visible range
+          if (noteZ < -2 || noteZ > 20) return null;
           
-          // Add depth-based scaling for better perception
-          const depthScale = Math.max(0.3, Math.min(1.2, (noteZ + 35) / 40));
+          // Simplified scaling - minimal depth effect
+          const depthScale = Math.max(0.8, Math.min(1.0, 1 - (noteZ / 50)));
           
           return (
             <Note3D
               key={`${note.time}-${fret}-${noteIndex}-${fretIndex}`}
-              position={[fretPositions[fret], -1 - (noteZ < -10 ? (noteZ + 10) * 0.02 : 0), noteZ]}
+              position={[fretPositions[fret], -1, noteZ]}
               fret={fret}
               isChord={note.type === 'chord'}
               noteTime={note.time}
