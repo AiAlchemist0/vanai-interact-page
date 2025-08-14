@@ -8,15 +8,11 @@ import GameOverModal from "./GameOverModal";
 import GameBoard3D from "./GameBoard3D";
 import { HitEffect } from "./HitEffects";
 import { FloatingTextItem } from "./FloatingText";
-import { useAdvancedHitDetection } from "@/hooks/useAdvancedHitDetection";
-import { useEnhancedInput } from "@/hooks/useEnhancedInput";
+import { useSimplifiedHitDetection } from "@/hooks/useSimplifiedHitDetection";
+import { useUnifiedInput } from "@/hooks/useUnifiedInput";
 import { useWebGLContextRecovery } from "@/hooks/useWebGLContextRecovery";
 import { useSoundEffects } from "@/hooks/useSoundEffects";
 import { useStarPower } from "@/components/game/StarPowerEffects";
-import { useTimingSynchronization } from "@/hooks/useTimingSynchronization";
-import { useMobileOptimization } from "@/hooks/useMobileOptimization";
-import { useEnhancedFeedback } from "@/hooks/useEnhancedFeedback";
-import EnhancedHUDOptimized from "./EnhancedHUDOptimized";
 import { GameDebugPanel } from "./GameDebugPanel";
 import CalibrationModal from "./CalibrationModal";
 import { Pause, Play, Square, Home, Settings, Zap } from "lucide-react";
@@ -101,86 +97,116 @@ const GameBoard = ({
   const [showCalibration, setShowCalibration] = useState(false);
   const [hitFlashTimes, setHitFlashTimes] = useState<Set<number>>(new Set());
 
-  // Enhanced systems
-  const { processHit, processMiss, resetStats, getStats, isNoteHittable, hitWindow, predictHit, findHittableNotes } = useAdvancedHitDetection();
+  // Simplified systems
+  const { processHit, processMiss, resetStats, getStats, isNoteHittable, hitWindow } = useSimplifiedHitDetection();
   const webglRecovery = useWebGLContextRecovery();
   const soundEffects = useSoundEffects();
   const starPowerSystem = useStarPower();
-  const timingSystem = useTimingSynchronization();
-  const mobileOptimization = useMobileOptimization();
-  const enhancedFeedback = useEnhancedFeedback();
 
-  // Enhanced input system with advanced hit detection
+  // Unified input system - forward declaration needed
   const handleStrum = () => {
-    console.log(`🎸 GameBoard Strum at: ${currentTime.toFixed(0)}ms, Pressed frets: [${Array.from(pressedFrets).join(', ')}], Input: ${inputMethod}`);
+    // Debug logging
+    console.log(`GameBoard Strum at: ${currentTime.toFixed(0)}ms, Pressed frets: [${Array.from(pressedFrets).join(', ')}], Input: ${inputMethod}`);
 
-    // Use the new advanced hit detection system
-    const { result, hitNote } = processHit(notes, currentTime, pressedFrets, combo);
+    // Find notes within hit window - simplified
+    const hittableNotes = notes.filter(note => 
+      isNoteHittable(note.time, currentTime)
+    );
 
-    if (!result || !hitNote) {
+    console.log(`Hittable notes: ${hittableNotes.length}, Active notes: ${activeNotes.length}`);
+
+    if (hittableNotes.length === 0) {
       console.log('No hittable notes - ignoring strum');
       return;
     }
 
+    // Get the closest note
+    const closestNote = hittableNotes.reduce((closest, note) => 
+      Math.abs(note.time - currentTime) < Math.abs(closest.time - currentTime) ? note : closest
+    );
+
+    // Check if pressed frets match the note
+    const requiredFrets = new Set(closestNote.frets);
+    const pressedFretsArray = Array.from(pressedFrets);
+    
+    const isCorrect = requiredFrets.size === pressedFrets.size && 
+                     pressedFretsArray.every(fret => requiredFrets.has(fret));
+    
+    console.log(`Required frets: [${closestNote.frets.join(', ')}], Pressed: [${pressedFretsArray.join(', ')}], Correct: ${isCorrect}`);
+
     const fretPositions = [-1.5, -0.75, 0, 0.75, 1.5];
 
-    if (result.fretMatches && result.grade !== 'miss') {
-      // Successful hit
-      const newCombo = combo + 1;
-      onComboChange(newCombo);
-      
-      // Apply star power multiplier
-      const finalPoints = result.points * starPowerSystem.starPower.multiplier;
-      onScoreChange(score + finalPoints);
-      setNotesHit(prev => prev + 1);
+    if (isCorrect) {
+      // Calculate timing difference
+      const timingDiff = closestNote.time - currentTime;
+      const isChord = closestNote.type === "chord";
+      const hitResult = processHit(timingDiff, isChord, combo);
 
-      // Play hit sound
-      soundEffects.playSound(`hit_${result.grade}` as any);
+      if (hitResult.grade !== 'miss') {
+        // Successful hit
+        const newCombo = combo + 1;
+        onComboChange(newCombo);
+        
+        // Apply star power multiplier
+        const finalPoints = hitResult.points * starPowerSystem.starPower.multiplier;
+        onScoreChange(score + finalPoints);
+        setNotesHit(prev => prev + 1);
 
-      // Add star power energy for perfect hits
-      if (result.grade === 'perfect') {
-        starPowerSystem.addStarPowerEnergy(5);
-      } else if (result.grade === 'good') {
-        starPowerSystem.addStarPowerEnergy(2);
-      }
+        // Play hit sound
+        soundEffects.playSound(`hit_${hitResult.grade}` as any);
 
-      // Combo milestone sound
-      if (newCombo > 0 && newCombo % 10 === 0) {
-        soundEffects.playSound('combo_milestone');
-      }
+        // Add star power energy for perfect hits
+        if (hitResult.grade === 'perfect') {
+          starPowerSystem.addStarPowerEnergy(5);
+        } else if (hitResult.grade === 'good') {
+          starPowerSystem.addStarPowerEnergy(2);
+        }
 
-      // Add visual effects for each fret
-      hitNote.frets.forEach(fret => {
-        addHitEffect(result.grade, [fretPositions[fret], 0, 0]);
-        const displayPoints = finalPoints / hitNote.frets.length; // Split points for chords
-        addFloatingText(result.grade, result.grade, [fretPositions[fret], 1, 0], Math.round(displayPoints));
-      });
+        // Combo milestone sound
+        if (newCombo > 0 && newCombo % 10 === 0) {
+          soundEffects.playSound('combo_milestone');
+        }
 
-      // Flash the hit note briefly
-      setHitFlashTimes(prev => {
-        const s = new Set(prev);
-        s.add(hitNote.time);
-        return s;
-      });
-      setTimeout(() => {
+        // Add visual effects for each fret
+        closestNote.frets.forEach(fret => {
+          addHitEffect(hitResult.grade, [fretPositions[fret], 0, 0]);
+          const displayPoints = finalPoints / closestNote.frets.length; // Split points for chords
+          addFloatingText(hitResult.grade, hitResult.grade, [fretPositions[fret], 1, 0], Math.round(displayPoints));
+        });
+
+        // Flash the hit note briefly
         setHitFlashTimes(prev => {
           const s = new Set(prev);
-          s.delete(hitNote.time);
+          s.add(closestNote.time);
           return s;
         });
-      }, 150);
+        setTimeout(() => {
+          setHitFlashTimes(prev => {
+            const s = new Set(prev);
+            s.delete(closestNote.time);
+            return s;
+          });
+        }, 150);
 
-      // Remove hit note after short delay to show flash
-      setTimeout(() => {
-        setNotes(prev => prev.filter(n => n !== hitNote));
-      }, 100);
+        // Remove hit note after short delay to show flash
+        setTimeout(() => {
+          setNotes(prev => prev.filter(n => n !== closestNote));
+        }, 100);
+      } else {
+        // Miss due to bad timing
+        onComboChange(0);
+        soundEffects.playSound('miss');
+        closestNote.frets.forEach(fret => {
+          addHitEffect('miss', [fretPositions[fret], 0, 0]);
+          addFloatingText('MISS', 'miss', [fretPositions[fret], 1, 0], 0);
+        });
+      }
     } else {
-      // Miss (either bad timing or wrong frets)
+      // Wrong frets pressed
       onComboChange(0);
       soundEffects.playSound('miss');
-      
       // Show miss effect on the note's frets
-      hitNote.frets.forEach(fret => {
+      closestNote.frets.forEach(fret => {
         addHitEffect('miss', [fretPositions[fret], 0, 0]);
         addFloatingText('MISS', 'miss', [fretPositions[fret], 1, 0], 0);
       });
@@ -191,7 +217,7 @@ const GameBoard = ({
     setAccuracy(stats.accuracy);
   };
 
-  const { pressedFrets, inputMethod } = useEnhancedInput(handleStrum, gameState);
+  const { pressedFrets, inputMethod } = useUnifiedInput(handleStrum, gameState);
 
   // Initialize game
   useEffect(() => {
@@ -224,98 +250,62 @@ const GameBoard = ({
     }
   }, [gameState]);
 
-  // Optimized game loop - reduced frequency for better performance
+  // Game loop
   useEffect(() => {
     if (gameState !== "playing") return;
 
-    let frameCount = 0;
     const interval = setInterval(() => {
       const audio = audioRef.current;
       if (!audio) return;
 
-      frameCount++;
+      // Simple time tracking - no double calibration
       const currentGameTime = audio.currentTime * 1000;
-      
-      // Update current time every frame
       setCurrentTime(currentGameTime);
 
-      // Skip heavy operations on some frames for better performance
-      const isFullUpdateFrame = frameCount % 2 === 0; // Every other frame
-      
-      if (isFullUpdateFrame) {
-        // Update star power system (reduced frequency)
-        starPowerSystem.updateStarPower(33);
+      // Update star power system
+      starPowerSystem.updateStarPower(16); // ~60fps
 
-        // Check if song ended
-        if (audio.ended) {
-          onGameOver(score);
-          return;
-        }
-
-        // Memoized active notes calculation - only update when needed
-        const noteViewWindow = 6000;
-        const upcoming = notes.filter(note => 
-          note.time > currentGameTime - 500 && note.time < currentGameTime + noteViewWindow
-        );
-        
-        // Only update if the active notes actually changed
-        setActiveNotes(prev => {
-          if (prev.length !== upcoming.length || 
-              prev.some((note, i) => note !== upcoming[i])) {
-            return upcoming;
-          }
-          return prev;
-        });
-
-        // Simplified miss detection - batch processing
-        const missWindow = hitWindow.okay + 100;
-        const missedNotes = notes.filter(note => 
-          note.time < currentGameTime - missWindow && note.time > currentGameTime - (missWindow + 50)
-        );
-        
-        if (missedNotes.length > 0) {
-          // Batch all miss effects
-          const fretPositions = [-1.5, -0.75, 0, 0.75, 1.5];
-          const newEffects: any[] = [];
-          const newTexts: any[] = [];
-          
-          missedNotes.forEach(note => {
-            note.frets.forEach(fret => {
-              newEffects.push({
-                id: Math.random().toString(36),
-                position: { x: fretPositions[fret], y: 0, z: 0 },
-                grade: 'miss' as const,
-                age: 0,
-                maxAge: 800
-              });
-              newTexts.push({
-                id: Math.random().toString(36),
-                text: 'MISS',
-                grade: 'miss' as const,
-                position: [fretPositions[fret], 1, 0] as [number, number, number],
-                age: 0,
-                maxAge: 1500
-              });
-            });
-            processMiss();
-          });
-          
-          // Batch update effects and texts
-          setHitEffects(prev => [...prev, ...newEffects]);
-          setFloatingTexts(prev => [...prev, ...newTexts]);
-          
-          soundEffects.playSound('miss');
-          onComboChange(0);
-          setNotes(prev => prev.filter(note => !missedNotes.includes(note)));
-          
-          const stats = getStats();
-          setAccuracy(stats.accuracy);
-        }
+      // Check if song ended
+      if (audio.ended) {
+        onGameOver(score);
+        return;
       }
-    }, 33); // 30fps instead of 60fps for better performance
+
+      // Simplified active notes - show notes 6 seconds ahead
+      const noteViewWindow = 6000;
+      const upcoming = notes.filter(note => 
+        note.time > currentGameTime - 500 && note.time < currentGameTime + noteViewWindow
+      );
+      
+      setActiveNotes(upcoming);
+
+      // Simplified miss detection - use hit window + grace period
+      const missWindow = hitWindow.okay + 100; // 100ms grace period
+      const missedNotes = notes.filter(note => 
+        note.time < currentGameTime - missWindow && note.time > currentGameTime - (missWindow + 50)
+      );
+      
+      if (missedNotes.length > 0) {
+        missedNotes.forEach(note => {
+          // Add miss effect and sound
+          const fretPositions = [-1.5, -0.75, 0, 0.75, 1.5];
+          note.frets.forEach(fret => {
+            addHitEffect('miss', [fretPositions[fret], 0, 0]);
+            addFloatingText('MISS', 'miss', [fretPositions[fret], 1, 0], 0);
+          });
+          processMiss();
+          soundEffects.playSound('miss');
+        });
+        
+        onComboChange(0);
+        setNotes(prev => prev.filter(note => !missedNotes.includes(note)));
+        const stats = getStats();
+        setAccuracy(stats.accuracy);
+      }
+    }, 16); // ~60fps
 
     return () => clearInterval(interval);
-  }, [gameState, notes.length, score, onGameOver, onComboChange, hitWindow]); // Removed activeNotes.length dependency
+  }, [gameState, notes, score, onGameOver, onComboChange, activeNotes.length, hitWindow]);
 
   // Shift key for star power (handled separately from unified input)
   useEffect(() => {
@@ -336,7 +326,7 @@ const GameBoard = ({
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [gameState, starPowerSystem, soundEffects]);
 
-  // Optimized helper functions for effects with automatic cleanup
+  // Helper functions for effects
   const addHitEffect = (grade: 'perfect' | 'good' | 'okay' | 'miss', position: [number, number, number]) => {
     const effect: HitEffect = {
       id: Math.random().toString(36),
@@ -345,13 +335,7 @@ const GameBoard = ({
       age: 0,
       maxAge: grade === 'miss' ? 800 : 600
     };
-    
-    setHitEffects(prev => {
-      // Limit maximum effects for performance
-      const maxEffects = 20;
-      const newEffects = [...prev, effect];
-      return newEffects.length > maxEffects ? newEffects.slice(-maxEffects) : newEffects;
-    });
+    setHitEffects(prev => [...prev, effect]);
   };
 
   const addFloatingText = (text: string, grade: 'perfect' | 'good' | 'okay' | 'miss', position: [number, number, number], points: number) => {
@@ -363,16 +347,10 @@ const GameBoard = ({
       age: 0,
       maxAge: 1500
     };
-    
-    setFloatingTexts(prev => {
-      // Limit maximum floating texts for performance
-      const maxTexts = 15;
-      const newTexts = [...prev, floatingText];
-      return newTexts.length > maxTexts ? newTexts.slice(-maxTexts) : newTexts;
-    });
+    setFloatingTexts(prev => [...prev, floatingText]);
   };
 
-  // Optimized effect cleanup handlers with batching
+  // Effect cleanup handlers
   const handleEffectComplete = (id: string) => {
     setHitEffects(prev => prev.filter(effect => effect.id !== id));
   };
@@ -380,23 +358,6 @@ const GameBoard = ({
   const handleTextComplete = (id: string) => {
     setFloatingTexts(prev => prev.filter(text => text.id !== id));
   };
-
-  // Auto cleanup old effects periodically
-  useEffect(() => {
-    const cleanupInterval = setInterval(() => {
-      const now = Date.now();
-      
-      setHitEffects(prev => prev.filter(effect => 
-        (now - effect.age) < effect.maxAge
-      ));
-      
-      setFloatingTexts(prev => prev.filter(text => 
-        (now - text.age) < text.maxAge
-      ));
-    }, 2000); // Clean up every 2 seconds
-
-    return () => clearInterval(cleanupInterval);
-  }, []);
 
   const handlePauseToggle = () => {
     onGameStateChange(gameState === "playing" ? "paused" : "playing");
@@ -410,16 +371,80 @@ const GameBoard = ({
 
   return (
     <div className="h-full flex flex-col bg-gradient-to-b from-background via-background/95 to-background">
-      {/* Enhanced HUD replacing old game controls */}
-      <EnhancedHUDOptimized 
-        score={score}
-        combo={combo}
-        accuracy={accuracy}
-        currentTime={currentTime}
-        songDuration={song.duration}
-        gameState={gameState}
-        onGameStateChange={onGameStateChange}
-      />
+      {/* Game Controls - Fixed Height */}
+      <div className="h-16 bg-card/30 backdrop-blur-sm border-b border-border/20 flex items-center justify-between px-4 shrink-0">
+        <div className="flex items-center gap-2">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={handlePauseToggle}
+            className="flex items-center gap-2"
+          >
+            {gameState === "playing" ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
+            {gameState === "playing" ? "Pause" : "Resume"}
+          </Button>
+          
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={handleStop}
+            className="flex items-center gap-2"
+          >
+            <Square className="w-4 h-4" />
+            Stop
+          </Button>
+
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={onReturnToMenu}
+            className="flex items-center gap-2"
+          >
+            <Home className="w-4 h-4" />
+            Menu
+          </Button>
+
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => setShowCalibration(true)}
+            className="flex items-center gap-2"
+          >
+            <Settings className="w-4 h-4" />
+            Calibrate
+          </Button>
+
+          {/* Star Power indicator */}
+          <div className="flex items-center gap-2 bg-card/30 px-3 py-1 rounded">
+            <Zap className="w-4 h-4 text-yellow-400" />
+            <div className="w-16 h-2 bg-muted rounded-full overflow-hidden">
+              <div 
+                className="h-full bg-gradient-to-r from-blue-400 to-yellow-400 transition-all duration-300"
+                style={{ width: `${starPowerSystem.starPower.energy}%` }}
+              />
+            </div>
+            {starPowerSystem.starPower.isActive && (
+              <span className="text-xs text-yellow-400 font-bold animate-pulse">
+                ACTIVE!
+              </span>
+            )}
+          </div>
+        </div>
+
+        <ScoreDisplay
+          score={score}
+          combo={combo}
+          accuracy={accuracy}
+        />
+      </div>
+
+      {/* Progress Bar */}
+      <div className="px-4 py-2 shrink-0">
+        <Progress value={progress} className="h-2" />
+        <div className="text-xs text-muted-foreground mt-1 text-center">
+          {Math.floor(currentTime / 1000)}s / {Math.floor(song.duration / 1000)}s
+        </div>
+      </div>
 
       {/* 3D Game Area - Takes remaining space */}
       <div className="flex-1 relative min-h-0">
@@ -466,20 +491,11 @@ const GameBoard = ({
         )}
       </div>
 
-      {/* FretBoard Component - Enhanced with hit prediction */}
+      {/* FretBoard Component - Unified for all input methods */}
       <FretBoard
         pressedFrets={pressedFrets}
         onStrum={handleStrum}
         inputMethod={inputMethod}
-        nextNote={(() => {
-          const prediction = predictHit(notes, currentTime, pressedFrets);
-          return prediction.nextNote ? {
-            frets: prediction.nextNote.frets,
-            canHit: prediction.canHit,
-            grade: prediction.grade
-          } : undefined;
-        })()}
-        showHitPrediction={true}
       />
 
       {/* Pause Overlay */}

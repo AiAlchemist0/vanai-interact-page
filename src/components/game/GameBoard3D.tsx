@@ -48,15 +48,8 @@ const GameBoard3D = ({
   return (
     <div className="w-full h-full">
       <Canvas
-        gl={{ 
-          antialias: false, // Disable for better performance
-          alpha: false,
-          powerPreference: "high-performance",
-          stencil: false,
-          depth: true
-        }}
-        dpr={[1, 1.5]} // Reduced DPR for better performance
-        frameloop="demand" // Only render when needed
+        gl={{ antialias: true, alpha: false }}
+        dpr={[1, 2]}
         style={{ 
           width: '100%', 
           height: '100%',
