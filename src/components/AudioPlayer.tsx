@@ -220,7 +220,7 @@ const SONGS: Song[] = [
   },
   {
     id: "brenda-bailey",
-    title: "Brenda Bailey: Fiscal AI Force Level Up!",
+    title: "Brenda Bailey: GoT Jedi Force fight for BC AI!",
     artist: "AI Community Orchestra",
     src: getAudioUrl("Brenda lvls up BC.mp3"),
     coverArt: "/lovable-uploads/9b9e9cd3-384c-4848-8fd2-a1a882698f96.png",
