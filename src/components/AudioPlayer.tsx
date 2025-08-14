@@ -13,6 +13,7 @@ import macCover from "/lovable-uploads/cc181a8b-6dad-4af6-8731-9a8cbd3ba5d0.png"
 import bcAiHackathonCover from "/lovable-uploads/2f51d7bb-96fc-4f06-b7f6-fc9abbbceb32.png";
 import drPatrickCover from "/lovable-uploads/4d050983-b56d-4606-a958-1c7e2c7253e8.png";
 import hrMacMillanCover from "/lovable-uploads/8a59c6e4-39f4-41e2-bb0d-544e22e3030a.png";
+import lalalaAiDilemmaCover from "@/assets/lalala-ai-dilemma-cover.jpg";
 
 // Supabase Storage URLs for audio files
 const SUPABASE_URL = "https://oojckbecymzrrdtvcmqi.supabase.co";
@@ -191,6 +192,29 @@ const SONGS: Song[] = [
       { time: 4, text: "Building bridges with technology's art" },
       { time: 8, text: "Ancient wisdom meets digital flow" },
       { time: 12, text: "Together we learn, together we grow" }
+    ] as LyricLine[]
+  },
+  {
+    id: "lalala-ai-dilemma",
+    title: "Lalala AI Dilemma",
+    artist: "Matthew & Sister Shwartzman (Fw. Dean Shev)",
+    src: getAudioUrl("Lalala AI Dilemma.mp3"),
+    coverArt: lalalaAiDilemmaCover,
+    lyrics: [
+      { time: 0, text: "Lalala, in the digital maze we wander" },
+      { time: 4, text: "AI dreams and human thoughts collide" },
+      { time: 8, text: "Lalala, as we ponder and we wonder" },
+      { time: 12, text: "What lies beyond this algorithmic tide" },
+      { time: 16, text: "" },
+      { time: 18, text: "The dilemma grows stronger every day" },
+      { time: 22, text: "Matthew sings while Sister harmonizes" },
+      { time: 26, text: "With Dean Shev showing us the way" },
+      { time: 30, text: "Through questions that the mind devises" },
+      { time: 34, text: "" },
+      { time: 36, text: "Lalala AI dilemma, what will we become?" },
+      { time: 40, text: "Human hearts with silicon dreams" },
+      { time: 44, text: "Lalala AI dilemma, the future's yet to come" },
+      { time: 48, text: "Nothing's quite what it seems" }
     ] as LyricLine[]
   }
 ];

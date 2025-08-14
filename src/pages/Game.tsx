@@ -102,6 +102,15 @@ const SONGS: Song[] = [
     bpm: 120,
     duration: 210000,
   },
+  {
+    id: "lalala-ai-dilemma",
+    title: "Lalala AI Dilemma",
+    artist: "Matthew & Sister Shwartzman (Fw. Dean Shev)",
+    audioFile: getAudioUrl("Lalala AI Dilemma.mp3"),
+    coverArt: "/src/assets/lalala-ai-dilemma-cover.jpg",
+    bpm: 125,
+    duration: 205000,
+  },
 ];
 
 const Game = () => {
