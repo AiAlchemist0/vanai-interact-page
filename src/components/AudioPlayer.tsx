@@ -187,7 +187,7 @@ const SONGS: Song[] = [
     title: "Indigenomics AI, that's where we start",
     artist: "Carol Anne Hilton",
     src: getAudioUrl("Indigenomics AI, that's where we start.mp3"),
-    coverArt: "/lovable-uploads/2b274fdd-00f6-41b1-ba3d-5f21d65f87ab.png",
+    coverArt: "/lovable-uploads/8d6e4150-076b-4f1c-840b-595c15a55048.png",
     lyrics: [
       { time: 0, text: "Indigenomics AI, that's where we start" },
       { time: 4, text: "Building bridges with technology's art" },
