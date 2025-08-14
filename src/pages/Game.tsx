@@ -111,6 +111,15 @@ const SONGS: Song[] = [
     bpm: 125,
     duration: 205000,
   },
+  {
+    id: "brenda-bailey",
+    title: "Brenda Bailey: Fiscal AI Force Level Up!",
+    artist: "AI Community Orchestra",
+    audioFile: getAudioUrl("Brenda lvls up BC.mp3"),
+    coverArt: "/lovable-uploads/fc226621-2faf-4a33-8885-28d7dc934861.png",
+    bpm: 130,
+    duration: 195000,
+  },
 ];
 
 const Game = () => {
