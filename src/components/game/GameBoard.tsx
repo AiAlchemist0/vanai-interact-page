@@ -13,6 +13,10 @@ import { useEnhancedInput } from "@/hooks/useEnhancedInput";
 import { useWebGLContextRecovery } from "@/hooks/useWebGLContextRecovery";
 import { useSoundEffects } from "@/hooks/useSoundEffects";
 import { useStarPower } from "@/components/game/StarPowerEffects";
+import { useTimingSynchronization } from "@/hooks/useTimingSynchronization";
+import { useMobileOptimization } from "@/hooks/useMobileOptimization";
+import { useEnhancedFeedback } from "@/hooks/useEnhancedFeedback";
+import EnhancedHUD from "./EnhancedHUD";
 import { GameDebugPanel } from "./GameDebugPanel";
 import CalibrationModal from "./CalibrationModal";
 import { Pause, Play, Square, Home, Settings, Zap } from "lucide-react";
@@ -102,6 +106,9 @@ const GameBoard = ({
   const webglRecovery = useWebGLContextRecovery();
   const soundEffects = useSoundEffects();
   const starPowerSystem = useStarPower();
+  const timingSystem = useTimingSynchronization();
+  const mobileOptimization = useMobileOptimization();
+  const enhancedFeedback = useEnhancedFeedback();
 
   // Enhanced input system with advanced hit detection
   const handleStrum = () => {
@@ -338,80 +345,24 @@ const GameBoard = ({
 
   return (
     <div className="h-full flex flex-col bg-gradient-to-b from-background via-background/95 to-background">
-      {/* Game Controls - Fixed Height */}
-      <div className="h-16 bg-card/30 backdrop-blur-sm border-b border-border/20 flex items-center justify-between px-4 shrink-0">
-        <div className="flex items-center gap-2">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={handlePauseToggle}
-            className="flex items-center gap-2"
-          >
-            {gameState === "playing" ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
-            {gameState === "playing" ? "Pause" : "Resume"}
-          </Button>
-          
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={handleStop}
-            className="flex items-center gap-2"
-          >
-            <Square className="w-4 h-4" />
-            Stop
-          </Button>
-
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={onReturnToMenu}
-            className="flex items-center gap-2"
-          >
-            <Home className="w-4 h-4" />
-            Menu
-          </Button>
-
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => setShowCalibration(true)}
-            className="flex items-center gap-2"
-          >
-            <Settings className="w-4 h-4" />
-            Calibrate
-          </Button>
-
-          {/* Star Power indicator */}
-          <div className="flex items-center gap-2 bg-card/30 px-3 py-1 rounded">
-            <Zap className="w-4 h-4 text-yellow-400" />
-            <div className="w-16 h-2 bg-muted rounded-full overflow-hidden">
-              <div 
-                className="h-full bg-gradient-to-r from-blue-400 to-yellow-400 transition-all duration-300"
-                style={{ width: `${starPowerSystem.starPower.energy}%` }}
-              />
-            </div>
-            {starPowerSystem.starPower.isActive && (
-              <span className="text-xs text-yellow-400 font-bold animate-pulse">
-                ACTIVE!
-              </span>
-            )}
-          </div>
-        </div>
-
-        <ScoreDisplay
-          score={score}
-          combo={combo}
-          accuracy={accuracy}
-        />
-      </div>
-
-      {/* Progress Bar */}
-      <div className="px-4 py-2 shrink-0">
-        <Progress value={progress} className="h-2" />
-        <div className="text-xs text-muted-foreground mt-1 text-center">
-          {Math.floor(currentTime / 1000)}s / {Math.floor(song.duration / 1000)}s
-        </div>
-      </div>
+      {/* Enhanced HUD replacing old game controls */}
+      <EnhancedHUD 
+        score={score}
+        combo={combo}
+        accuracy={accuracy}
+        currentTime={currentTime}
+        songDuration={song.duration}
+        gameState={gameState}
+        onGameStateChange={onGameStateChange}
+        hitPrediction={(() => {
+          const prediction = predictHit(notes, currentTime, pressedFrets);
+          return prediction.nextNote ? {
+            canHit: prediction.canHit,
+            grade: prediction.grade,
+            confidence: prediction.canHit ? 0.9 : 0.6
+          } : undefined;
+        })()}
+      />
 
       {/* 3D Game Area - Takes remaining space */}
       <div className="flex-1 relative min-h-0">
