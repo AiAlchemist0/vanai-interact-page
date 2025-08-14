@@ -41,16 +41,24 @@ export const useEnhancedInput = (onStrum: () => void, gameState: string) => {
     });
   }, []);
 
+  // Throttled fret press handler for better performance
+  const lastFretPressTime = useRef<Map<number, number>>(new Map());
+  
   const handleFretPress = useCallback((fretId: number, position?: { x: number; y: number }) => {
     if (fretId < 0 || fretId > 4) return;
     
     const now = performance.now();
+    const lastPress = lastFretPressTime.current.get(fretId) || 0;
+    
+    // Throttle rapid presses on same fret
+    if (now - lastPress < 50) return;
+    lastFretPressTime.current.set(fretId, now);
+    
     fretHoldStart.current.set(fretId, now);
     
     setPressedFrets(prev => {
       if (prev.has(fretId)) return prev;
       const newSet = new Set([...prev, fretId]);
-      console.log(`✓ Fret ${fretId} pressed, total: [${Array.from(newSet).join(', ')}]`);
       return newSet;
     });
 
@@ -68,11 +76,11 @@ export const useEnhancedInput = (onStrum: () => void, gameState: string) => {
     const now = performance.now();
     const holdDuration = now - (fretHoldStart.current.get(fretId) || now);
     fretHoldStart.current.delete(fretId);
+    lastFretPressTime.current.delete(fretId);
     
     setPressedFrets(prev => {
       const newSet = new Set(prev);
       newSet.delete(fretId);
-      console.log(`✗ Fret ${fretId} released (held ${holdDuration.toFixed(0)}ms), remaining: [${Array.from(newSet).join(', ')}]`);
       return newSet;
     });
 

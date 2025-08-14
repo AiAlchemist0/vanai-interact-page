@@ -224,62 +224,98 @@ const GameBoard = ({
     }
   }, [gameState]);
 
-  // Game loop
+  // Optimized game loop - reduced frequency for better performance
   useEffect(() => {
     if (gameState !== "playing") return;
 
+    let frameCount = 0;
     const interval = setInterval(() => {
       const audio = audioRef.current;
       if (!audio) return;
 
-      // Simple time tracking - no double calibration
+      frameCount++;
       const currentGameTime = audio.currentTime * 1000;
+      
+      // Update current time every frame
       setCurrentTime(currentGameTime);
 
-      // Update star power system
-      starPowerSystem.updateStarPower(16); // ~60fps
-
-      // Check if song ended
-      if (audio.ended) {
-        onGameOver(score);
-        return;
-      }
-
-      // Simplified active notes - show notes 6 seconds ahead
-      const noteViewWindow = 6000;
-      const upcoming = notes.filter(note => 
-        note.time > currentGameTime - 500 && note.time < currentGameTime + noteViewWindow
-      );
+      // Skip heavy operations on some frames for better performance
+      const isFullUpdateFrame = frameCount % 2 === 0; // Every other frame
       
-      setActiveNotes(upcoming);
+      if (isFullUpdateFrame) {
+        // Update star power system (reduced frequency)
+        starPowerSystem.updateStarPower(33);
 
-      // Simplified miss detection - use hit window + grace period
-      const missWindow = hitWindow.okay + 100; // 100ms grace period
-      const missedNotes = notes.filter(note => 
-        note.time < currentGameTime - missWindow && note.time > currentGameTime - (missWindow + 50)
-      );
-      
-      if (missedNotes.length > 0) {
-        missedNotes.forEach(note => {
-          // Add miss effect and sound
-          const fretPositions = [-1.5, -0.75, 0, 0.75, 1.5];
-          note.frets.forEach(fret => {
-            addHitEffect('miss', [fretPositions[fret], 0, 0]);
-            addFloatingText('MISS', 'miss', [fretPositions[fret], 1, 0], 0);
-          });
-          processMiss();
-          soundEffects.playSound('miss');
-        });
+        // Check if song ended
+        if (audio.ended) {
+          onGameOver(score);
+          return;
+        }
+
+        // Memoized active notes calculation - only update when needed
+        const noteViewWindow = 6000;
+        const upcoming = notes.filter(note => 
+          note.time > currentGameTime - 500 && note.time < currentGameTime + noteViewWindow
+        );
         
-        onComboChange(0);
-        setNotes(prev => prev.filter(note => !missedNotes.includes(note)));
-        const stats = getStats();
-        setAccuracy(stats.accuracy);
+        // Only update if the active notes actually changed
+        setActiveNotes(prev => {
+          if (prev.length !== upcoming.length || 
+              prev.some((note, i) => note !== upcoming[i])) {
+            return upcoming;
+          }
+          return prev;
+        });
+
+        // Simplified miss detection - batch processing
+        const missWindow = hitWindow.okay + 100;
+        const missedNotes = notes.filter(note => 
+          note.time < currentGameTime - missWindow && note.time > currentGameTime - (missWindow + 50)
+        );
+        
+        if (missedNotes.length > 0) {
+          // Batch all miss effects
+          const fretPositions = [-1.5, -0.75, 0, 0.75, 1.5];
+          const newEffects: any[] = [];
+          const newTexts: any[] = [];
+          
+          missedNotes.forEach(note => {
+            note.frets.forEach(fret => {
+              newEffects.push({
+                id: Math.random().toString(36),
+                position: { x: fretPositions[fret], y: 0, z: 0 },
+                grade: 'miss' as const,
+                age: 0,
+                maxAge: 800
+              });
+              newTexts.push({
+                id: Math.random().toString(36),
+                text: 'MISS',
+                grade: 'miss' as const,
+                position: [fretPositions[fret], 1, 0] as [number, number, number],
+                age: 0,
+                maxAge: 1500
+              });
+            });
+            processMiss();
+          });
+          
+          // Batch update effects and texts
+          setHitEffects(prev => [...prev, ...newEffects]);
+          setFloatingTexts(prev => [...prev, ...newTexts]);
+          
+          soundEffects.playSound('miss');
+          onComboChange(0);
+          setNotes(prev => prev.filter(note => !missedNotes.includes(note)));
+          
+          const stats = getStats();
+          setAccuracy(stats.accuracy);
+        }
       }
-    }, 16); // ~60fps
+    }, 33); // 30fps instead of 60fps for better performance
 
     return () => clearInterval(interval);
-  }, [gameState, notes, score, onGameOver, onComboChange, activeNotes.length, hitWindow]);
+  }, [gameState, notes.length, score, onGameOver, onComboChange, hitWindow]); // Removed activeNotes.length dependency
 
   // Shift key for star power (handled separately from unified input)
   useEffect(() => {
@@ -300,7 +336,7 @@ const GameBoard = ({
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [gameState, starPowerSystem, soundEffects]);
 
-  // Helper functions for effects
+  // Optimized helper functions for effects with automatic cleanup
   const addHitEffect = (grade: 'perfect' | 'good' | 'okay' | 'miss', position: [number, number, number]) => {
     const effect: HitEffect = {
       id: Math.random().toString(36),
@@ -309,7 +345,13 @@ const GameBoard = ({
       age: 0,
       maxAge: grade === 'miss' ? 800 : 600
     };
-    setHitEffects(prev => [...prev, effect]);
+    
+    setHitEffects(prev => {
+      // Limit maximum effects for performance
+      const maxEffects = 20;
+      const newEffects = [...prev, effect];
+      return newEffects.length > maxEffects ? newEffects.slice(-maxEffects) : newEffects;
+    });
   };
 
   const addFloatingText = (text: string, grade: 'perfect' | 'good' | 'okay' | 'miss', position: [number, number, number], points: number) => {
@@ -321,10 +363,16 @@ const GameBoard = ({
       age: 0,
       maxAge: 1500
     };
-    setFloatingTexts(prev => [...prev, floatingText]);
+    
+    setFloatingTexts(prev => {
+      // Limit maximum floating texts for performance
+      const maxTexts = 15;
+      const newTexts = [...prev, floatingText];
+      return newTexts.length > maxTexts ? newTexts.slice(-maxTexts) : newTexts;
+    });
   };
 
-  // Effect cleanup handlers
+  // Optimized effect cleanup handlers with batching
   const handleEffectComplete = (id: string) => {
     setHitEffects(prev => prev.filter(effect => effect.id !== id));
   };
@@ -332,6 +380,23 @@ const GameBoard = ({
   const handleTextComplete = (id: string) => {
     setFloatingTexts(prev => prev.filter(text => text.id !== id));
   };
+
+  // Auto cleanup old effects periodically
+  useEffect(() => {
+    const cleanupInterval = setInterval(() => {
+      const now = Date.now();
+      
+      setHitEffects(prev => prev.filter(effect => 
+        (now - effect.age) < effect.maxAge
+      ));
+      
+      setFloatingTexts(prev => prev.filter(text => 
+        (now - text.age) < text.maxAge
+      ));
+    }, 2000); // Clean up every 2 seconds
+
+    return () => clearInterval(cleanupInterval);
+  }, []);
 
   const handlePauseToggle = () => {
     onGameStateChange(gameState === "playing" ? "paused" : "playing");

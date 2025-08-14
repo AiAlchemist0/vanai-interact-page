@@ -42,35 +42,43 @@ const Note3D = ({ position, fret, isChord, noteTime, currentTime, noteSpeed = 1.
   const hitIntensity = isInHitZone ? 1 - (Math.abs(timeDiff) / okayWindow) : 0;
   const perfectIntensity = isInPerfectZone ? 1 - (Math.abs(timeDiff) / perfectWindow) : 0;
 
-  useFrame(() => {
-    if (noteRef.current) {
-      // Rotation speed adjusted for note speed (slightly reduced for clarity)
-      noteRef.current.rotation.y += 0.006 * noteSpeed;
-      
-      // Enhanced scaling effects based on timing
-      let baseScale = isChord ? 1.2 : 1.0;
-      
-      if (isInPerfectZone) {
-        // Perfect zone - large scale with pulsing
-        baseScale += 0.4 + Math.sin(Date.now() * 0.01) * 0.1;
-      } else if (isInHitZone) {
-        // Hit zone - moderate scale
-        baseScale += hitIntensity * 0.3;
-      } else if (isApproaching) {
-        // Approaching - slight scale increase
-        baseScale += approachProgress * 0.15;
-      }
-      
-      if (isHit) {
-        baseScale += 0.35;
-      }
-      
-      noteRef.current.scale.setScalar(baseScale * scale);
-      
-      // Add subtle bounce effect for chords
-      if (isChord) {
-        noteRef.current.position.y = position[1] + Math.sin(Date.now() * 0.005) * 0.05;
-      }
+  // Optimized animation with throttled updates
+  const lastUpdateTime = useRef(0);
+  
+  useFrame((state) => {
+    if (!noteRef.current) return;
+    
+    // Throttle animations to 30fps for better performance
+    const now = state.clock.getElapsedTime() * 1000;
+    if (now - lastUpdateTime.current < 33) return; // 30fps
+    lastUpdateTime.current = now;
+    
+    // Reduced rotation speed for smoother animation
+    noteRef.current.rotation.y += 0.003 * noteSpeed;
+    
+    // Simplified scaling effects
+    let baseScale = isChord ? 1.2 : 1.0;
+    
+    if (isInPerfectZone) {
+      // Perfect zone - simplified pulsing
+      baseScale += 0.3 + Math.sin(now * 0.005) * 0.05;
+    } else if (isInHitZone) {
+      // Hit zone - reduced intensity
+      baseScale += hitIntensity * 0.2;
+    } else if (isApproaching) {
+      // Approaching - minimal scale change
+      baseScale += approachProgress * 0.1;
+    }
+    
+    if (isHit) {
+      baseScale += 0.2; // Reduced hit scale
+    }
+    
+    noteRef.current.scale.setScalar(baseScale * scale);
+    
+    // Simplified bounce effect for chords
+    if (isChord) {
+      noteRef.current.position.y = position[1] + Math.sin(now * 0.003) * 0.03;
     }
   });
 
