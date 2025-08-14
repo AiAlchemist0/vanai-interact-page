@@ -1,5 +1,4 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { Haptics, ImpactStyle } from '@capacitor/haptics';
 
 export interface MobileOptimizationSettings {
   hapticFeedback: boolean;
@@ -34,55 +33,28 @@ export const useMobileOptimization = () => {
   const gestureHistory = useRef<TouchGesture[]>([]);
   const performanceMetrics = useRef({ frameDrops: 0, avgFrameTime: 16.67 });
 
-  // Detect if device supports haptics
-  const supportsHaptics = useCallback(async (): Promise<boolean> => {
-    try {
-      // Try Capacitor haptics first
-      await Haptics.impact({ style: ImpactStyle.Light });
-      return true;
-    } catch {
-      // Fallback to web vibration API
-      return 'vibrate' in navigator;
-    }
+  // Detect if device supports haptics (Web Vibration API)
+  const supportsHaptics = useCallback((): boolean => {
+    return 'vibrate' in navigator;
   }, []);
 
-  // Enhanced haptic feedback with different intensities
-  const triggerHapticFeedback = useCallback(async (type: 'light' | 'medium' | 'heavy' | 'success' | 'error') => {
-    if (!settings.hapticFeedback) return;
+  // Enhanced haptic feedback with different intensities (Web Vibration API)
+  const triggerHapticFeedback = useCallback((type: 'light' | 'medium' | 'heavy' | 'success' | 'error') => {
+    if (!settings.hapticFeedback || !('vibrate' in navigator)) return;
 
+    // Use web vibration API with different patterns
+    const vibrationPatterns = {
+      light: [10],
+      medium: [25],
+      heavy: [50],
+      success: [10, 50, 10],
+      error: [100]
+    };
+    
     try {
-      // Try Capacitor haptics first for native feel
-      switch (type) {
-        case 'light':
-          await Haptics.impact({ style: ImpactStyle.Light });
-          break;
-        case 'medium':
-          await Haptics.impact({ style: ImpactStyle.Medium });
-          break;
-        case 'heavy':
-          await Haptics.impact({ style: ImpactStyle.Heavy });
-          break;
-        case 'success':
-          await Haptics.impact({ style: ImpactStyle.Light });
-          setTimeout(() => Haptics.impact({ style: ImpactStyle.Light }), 50);
-          break;
-        case 'error':
-          await Haptics.impact({ style: ImpactStyle.Heavy });
-          break;
-      }
-    } catch {
-      // Fallback to web vibration API
-      const vibrationPatterns = {
-        light: [10],
-        medium: [25],
-        heavy: [50],
-        success: [10, 50, 10],
-        error: [100]
-      };
-      
-      if ('vibrate' in navigator) {
-        navigator.vibrate(vibrationPatterns[type]);
-      }
+      navigator.vibrate(vibrationPatterns[type]);
+    } catch (error) {
+      console.log('Vibration not supported or failed:', error);
     }
   }, [settings.hapticFeedback]);
 

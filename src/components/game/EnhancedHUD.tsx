@@ -67,13 +67,13 @@ const EnhancedHUD = ({
   const suggestions = getSuggestions();
   const progress = (currentTime / songDuration) * 100;
 
-  const handlePracticeToggle = async () => {
-    await triggerHapticFeedback('light');
+  const handlePracticeToggle = () => {
+    triggerHapticFeedback('light');
     togglePracticeMode();
   };
 
-  const handleMetronomeToggle = async () => {
-    await triggerHapticFeedback('medium');
+  const handleMetronomeToggle = () => {
+    triggerHapticFeedback('medium');
     toggleMetronome();
   };
 
