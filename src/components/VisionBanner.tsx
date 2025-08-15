@@ -31,6 +31,17 @@ const VisionBanner = () => {
     color: "text-ai-green",
     glow: "glow-green"
   }];
-  return;
+  return (
+    <section id="vision" className="py-16 bg-gradient-to-b from-background/50 to-background">
+      <div className="container mx-auto px-6">
+        <div className="text-center max-w-4xl mx-auto">
+          <h2 className="text-4xl font-bold text-gradient mb-6">Our Vision</h2>
+          <p className="text-lg text-muted-foreground leading-relaxed">
+            We believe in a <span className="text-primary font-semibold" id="novel-concept">novel concept</span>: transforming dry survey data into engaging musical experiences that bring communities together.
+          </p>
+        </div>
+      </div>
+    </section>
+  );
 };
 export default VisionBanner;
