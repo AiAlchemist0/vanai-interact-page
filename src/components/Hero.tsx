@@ -28,7 +28,7 @@ const Hero = () => {
           
           {/* Left Side - Content */}
           <div className="space-y-4 sm:space-y-8 lg:pr-8">
-            <div className="flex flex-col sm:flex-row sm:flex-wrap items-start sm:items-center gap-2 sm:gap-4 mb-3 sm:mb-6">
+            <div className="flex flex-col sm:flex-row sm:flex-wrap items-center justify-center sm:justify-start gap-2 sm:gap-4 mb-3 sm:mb-6">
               <Badge variant="secondary" className="border-gradient glow-primary text-xs sm:text-sm">
                 <BarChart3 className="w-3 sm:w-4 h-3 sm:h-4 mr-1 sm:mr-2" />
                 Vancouver AI Hackathon Round 3
