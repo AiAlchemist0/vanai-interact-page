@@ -180,7 +180,7 @@ const AIMusicAnalytics = () => {
             {musicGenres.map((genre, index) => {
               const Icon = genre.icon;
               return (
-                <Card key={index} className="p-8 bg-gradient-subtle border-gradient hover:glow-accent transition-all duration-300 hover-scale">
+                <Card key={index} className="p-4 sm:p-8 bg-gradient-subtle border-gradient hover:glow-accent transition-all duration-300 hover-scale">
                   <div className="text-center">
                     <div className={`w-16 h-16 mx-auto mb-6 rounded-full bg-gradient-to-br ${genre.color} flex items-center justify-center`}>
                       <Icon className="w-8 h-8 text-white" />
