@@ -10,8 +10,10 @@ interface AudioPlayerProviderProps {
 const AudioPlayerProvider: React.FC<AudioPlayerProviderProps> = ({ children }) => {
   const audioPlayerHook = useAudioPlayer(SONGS);
   const { 
-    playSpecificSong, 
+    loadSpecificSong,
+    startPlayback,
     isPlaying, 
+    isLoadedAndReady,
     currentSongIndex, 
     currentSong,
     progress,
@@ -60,12 +62,14 @@ const AudioPlayerProvider: React.FC<AudioPlayerProviderProps> = ({ children }) =
   };
 
   const contextValue = {
-    playSpecificSong,
+    loadSpecificSong,
+    startPlayback,
     togglePlay,
     nextSong,
     previousSong,
     stopPlayback,
     isPlaying,
+    isLoadedAndReady,
     currentSongIndex,
     currentSong,
     songs: SONGS,

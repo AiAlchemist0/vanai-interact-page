@@ -2,12 +2,14 @@ import React, { createContext, useContext, ReactNode } from 'react';
 import { Song } from '@/hooks/useAudioPlayer';
 
 interface AudioContextType {
-  playSpecificSong: (songId: string) => void;
+  loadSpecificSong: (songId: string) => void;
+  startPlayback: () => void;
   togglePlay: () => void;
   nextSong: () => void;
   previousSong: () => void;
   stopPlayback: () => void;
   isPlaying: boolean;
+  isLoadedAndReady: boolean;
   currentSongIndex: number;
   currentSong: Song;
   songs: Song[];

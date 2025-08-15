@@ -13,12 +13,22 @@ const formatTime = (s: number) => {
 const HeroAudioPlayer = () => {
   const { 
     isPlaying, 
+    isLoadedAndReady,
     currentSong, 
     songs, 
     progress, 
-    playSpecificSong,
+    loadSpecificSong,
+    startPlayback,
     currentSongIndex
   } = useAudio();
+
+  const handlePlayClick = (songId: string, songIndex: number) => {
+    if (songIndex === currentSongIndex && isLoadedAndReady) {
+      startPlayback();
+    } else {
+      loadSpecificSong(songId);
+    }
+  };
 
   return (
     <div className="bg-card/20 backdrop-blur-xl border border-border/20 rounded-3xl p-3 sm:p-4 shadow-elegant">
@@ -80,8 +90,15 @@ const HeroAudioPlayer = () => {
                 {song.artist}
               </p>
               
+              {/* Status Message for Loaded Song */}
+              {index === currentSongIndex && isLoadedAndReady && (
+                <div className="text-xs text-green-600 font-medium mt-1">
+                  Song loaded and ready to play!
+                </div>
+              )}
+              
               {/* Mini Progress Bar for Current Song */}
-              {index === currentSongIndex && (
+              {index === currentSongIndex && isPlaying && (
                 <div className="w-full bg-muted/30 rounded-full h-1 mt-1">
                   <div 
                     className="h-full bg-primary rounded-full transition-all duration-300 ease-out"
@@ -95,9 +112,11 @@ const HeroAudioPlayer = () => {
             <Button
               variant="ghost"
               size="icon"
-              onClick={() => playSpecificSong(song.id)}
+              onClick={() => handlePlayClick(song.id, index)}
               className={`h-9 w-9 sm:h-10 sm:w-10 flex-shrink-0 rounded-full transition-all duration-200 touch-manipulation ${
-                index === currentSongIndex 
+                index === currentSongIndex && isLoadedAndReady
+                  ? 'bg-green-500/20 hover:bg-green-500/30 text-green-600 border border-green-500/30' 
+                  : index === currentSongIndex && isPlaying
                   ? 'bg-primary/20 hover:bg-primary/30 text-primary' 
                   : 'hover:bg-primary/20 text-muted-foreground hover:text-primary'
               }`}

@@ -15,11 +15,11 @@ const AudioPlayerEnhanced: React.FC<AudioPlayerEnhancedProps> = ({
   variant = 'minimal',
   songId 
 }) => {
-  const { currentSong, isPlaying, playSpecificSong } = useAudio();
+  const { currentSong, isPlaying, loadSpecificSong } = useAudio();
 
   const handlePlay = () => {
     if (songId) {
-      playSpecificSong(songId);
+      loadSpecificSong(songId);
     }
   };
 

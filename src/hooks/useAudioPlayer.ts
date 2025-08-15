@@ -25,26 +25,36 @@ export const useAudioPlayer = (songs: Song[]) => {
   const [retryCount, setRetryCount] = React.useState(0);
   const [showLyricsOnly, setShowLyricsOnly] = React.useState(false);
   const [playbackMode, setPlaybackMode] = React.useState<"off" | "next" | "repeat" | "repeat-all">("next");
+  const [isLoadedAndReady, setIsLoadedAndReady] = React.useState(false);
 
   const currentSong = songs[currentSongIndex];
 
-  // Function to play a specific song by ID
-  const playSpecificSong = React.useCallback((songId: string) => {
+  // Function to load and prepare a specific song by ID
+  const loadSpecificSong = React.useCallback((songId: string) => {
     const songIndex = songs.findIndex(song => song.id === songId);
     if (songIndex !== -1) {
       setCurrentSongIndex(songIndex);
       setHasUserInteracted(true);
-      // Small delay to ensure audio element is ready
+      setIsLoadedAndReady(true);
+      setIsLoading(false);
+      setAudioError(null);
+    }
+  }, [songs]);
+
+  // Function to start playing the loaded song
+  const startPlayback = React.useCallback(() => {
+    if (isLoadedAndReady) {
       setTimeout(() => {
         const audio = audioRef.current;
         if (audio) {
           audio.play().then(() => {
             setIsPlaying(true);
+            setIsLoadedAndReady(false);
           }).catch(() => setAutoplayBlocked(true));
         }
       }, 100);
     }
-  }, [songs]);
+  }, [isLoadedAndReady]);
 
   return {
     // Refs
@@ -77,11 +87,14 @@ export const useAudioPlayer = (songs: Song[]) => {
     setShowLyricsOnly,
     playbackMode,
     setPlaybackMode,
+    isLoadedAndReady,
+    setIsLoadedAndReady,
     
     // Computed
     currentSong,
     
     // Functions
-    playSpecificSong,
+    loadSpecificSong,
+    startPlayback,
   };
 };

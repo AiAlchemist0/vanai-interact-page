@@ -288,7 +288,8 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ audioPlayerHook }) => {
     playbackMode,
     setPlaybackMode,
     currentSong,
-    playSpecificSong,
+    loadSpecificSong,
+    startPlayback,
   } = audioPlayerHook;
   
   // Add state for animated marquee text on mobile
