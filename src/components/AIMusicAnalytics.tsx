@@ -115,11 +115,11 @@ const AIMusicAnalytics = () => {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto">
-            <Card className="p-8 bg-gradient-to-br from-red-50 to-orange-50 dark:from-red-900/20 dark:to-orange-900/20 border-red-200 dark:border-red-800">
+            <Card className="p-8 bg-gradient-to-br from-red-900 to-red-800 border-red-600">
               <div className="text-center">
-                <BarChart3 className="w-16 h-16 text-red-500 mx-auto mb-6" />
-                <h4 className="text-2xl font-bold mb-4 text-red-700 dark:text-red-400">Traditional Analytics</h4>
-                <ul className="text-left space-y-3 text-muted-foreground">
+                <BarChart3 className="w-16 h-16 text-red-400 mx-auto mb-6" />
+                <h4 className="text-2xl font-bold mb-4 text-white">Traditional Analytics</h4>
+                <ul className="text-left space-y-3 text-gray-200">
                   <li>• Cold numbers and statistics</li>
                   <li>• Disconnected from human emotion</li>
                   <li>• Hard to relate to personally</li>
@@ -129,11 +129,11 @@ const AIMusicAnalytics = () => {
               </div>
             </Card>
 
-            <Card className="p-8 bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 border-green-200 dark:border-green-800">
+            <Card className="p-8 bg-gradient-to-br from-green-900 to-emerald-800 border-green-600">
               <div className="text-center">
-                <Heart className="w-16 h-16 text-green-500 mx-auto mb-6" />
-                <h4 className="text-2xl font-bold mb-4 text-green-700 dark:text-green-400">What We Need</h4>
-                <ul className="text-left space-y-3 text-muted-foreground">
+                <Heart className="w-16 h-16 text-green-400 mx-auto mb-6" />
+                <h4 className="text-2xl font-bold mb-4 text-white">What We Need</h4>
+                <ul className="text-left space-y-3 text-gray-200">
                   <li>• Emotional resonance and connection</li>
                   <li>• Personal and relatable experiences</li>
                   <li>• Community building and sharing</li>
