@@ -41,10 +41,10 @@ const Hero = () => {
 
             {/* Logo and Title Section */}
             <div className="space-y-3 sm:space-y-6">
-              <div className="flex flex-col sm:flex-row items-center sm:justify-center gap-3 sm:gap-6">
-                <img src="/lovable-uploads/6b65586a-63ba-48f1-9c56-1846ec800f39.png" alt="BC+AI Ecosystem Logo" className="w-32 sm:w-36 lg:w-40 h-auto filter drop-shadow-lg flex-shrink-0" />
+              <div className="flex flex-col sm:flex-row items-center sm:items-start gap-4 sm:gap-8">
+                <img src="/lovable-uploads/6b65586a-63ba-48f1-9c56-1846ec800f39.png" alt="BC+AI Ecosystem Logo" className="w-40 sm:w-48 lg:w-56 h-auto filter drop-shadow-lg flex-shrink-0" />
                 <div className="flex-1 min-w-0 text-center sm:text-left">
-                  <h1 className="text-2xl sm:text-3xl font-bold text-gradient leading-tight lg:text-6xl">
+                  <h1 className="text-3xl sm:text-4xl lg:text-7xl xl:text-8xl font-bold text-gradient leading-tight">
                     BC + AI Survey
                     <br />
                     Insights
