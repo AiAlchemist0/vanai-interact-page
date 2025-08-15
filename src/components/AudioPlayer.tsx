@@ -433,7 +433,17 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ audioPlayerHook }) => {
       switch (playbackMode) {
         case "next":
           if (currentSongIndex < SONGS.length - 1) {
-            setCurrentSongIndex(currentSongIndex + 1);
+            const nextIndex = currentSongIndex + 1;
+            setCurrentSongIndex(nextIndex);
+            // Auto-play the next song after a brief delay
+            setTimeout(() => {
+              const newAudio = audioRef.current;
+              if (newAudio) {
+                newAudio.play().then(() => {
+                  setIsPlaying(true);
+                }).catch(() => setAutoplayBlocked(true));
+              }
+            }, 500);
           }
           break;
         case "repeat":
@@ -447,6 +457,15 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ audioPlayerHook }) => {
           // Go to next song, or loop back to first
           const nextIndex = currentSongIndex < SONGS.length - 1 ? currentSongIndex + 1 : 0;
           setCurrentSongIndex(nextIndex);
+          // Auto-play the next song after a brief delay
+          setTimeout(() => {
+            const newAudio = audioRef.current;
+            if (newAudio) {
+              newAudio.play().then(() => {
+                setIsPlaying(true);
+              }).catch(() => setAutoplayBlocked(true));
+            }
+          }, 500);
           break;
         case "off":
         default:
@@ -479,16 +498,23 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ audioPlayerHook }) => {
     };
   }, [currentSong.src, fileAvailable]); // Simplified dependencies - only recreate when song source changes
 
+  // Track if we should auto-play after song change
+  const [shouldAutoPlay, setShouldAutoPlay] = React.useState(false);
+
   // Separate effect for handling auto-play when song changes
   React.useEffect(() => {
     if (currentSongIndex !== undefined && hasUserInteracted && audioRef.current) {
       const audio = audioRef.current;
-      // Only auto-play if we were previously playing
-      if (isPlaying) {
+      // Only auto-play if we were previously playing or marked for auto-play
+      if (isPlaying || shouldAutoPlay) {
         setTimeout(() => {
           audio.play().then(() => {
             setIsPlaying(true);
-          }).catch(() => setAutoplayBlocked(true));
+            setShouldAutoPlay(false);
+          }).catch(() => {
+            setAutoplayBlocked(true);
+            setShouldAutoPlay(false);
+          });
         }, 100);
       }
     }
