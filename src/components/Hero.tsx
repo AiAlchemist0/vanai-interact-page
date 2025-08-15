@@ -121,6 +121,14 @@ const Hero = () => {
                     </DialogHeader>
                     <div className="space-y-4 text-sm text-muted-foreground">
                       <div className="space-y-2">
+                        <h4 className="font-semibold text-foreground">Document Information</h4>
+                        <p>
+                          <strong>Date:</strong> August 15, 2025<br/>
+                          <strong>For concerns, contact:</strong> <a href="mailto:Deanshev@gmail.com" className="text-primary hover:underline">Deanshev@gmail.com</a>
+                        </p>
+                      </div>
+
+                      <div className="space-y-2">
                         <h4 className="font-semibold text-foreground">Legal Jurisdiction</h4>
                         <p>
                           This project and all associated materials are governed by the laws of British Columbia, Canada. Any legal disputes or matters arising from this project shall be subject to the exclusive jurisdiction of the courts of Vancouver, British Columbia, Canada.
