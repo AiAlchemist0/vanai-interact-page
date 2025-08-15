@@ -1,5 +1,6 @@
 import Hero from "@/components/Hero";
 import VisionBanner from "@/components/VisionBanner";
+import AIMusicAnalytics from "@/components/AIMusicAnalytics";
 import KeyInsights from "@/components/KeyInsights";
 import QuestionCategories from "@/components/QuestionCategories";
 import DataVisualization from "@/components/DataVisualization";
@@ -15,6 +16,7 @@ const Index = () => {
         <div className="pt-0">
           <Hero />
           <VisionBanner />
+          <AIMusicAnalytics />
           <KeyInsights />
           <QuestionCategories />
           <DataVisualization />
