@@ -19,11 +19,14 @@ const HeroAudioPlayer = () => {
     progress, 
     loadSpecificSong,
     startPlayback,
+    togglePlay,
     currentSongIndex
   } = useAudio();
 
   const handlePlayClick = (songId: string, songIndex: number) => {
-    if (songIndex === currentSongIndex && isLoadedAndReady) {
+    if (songIndex === currentSongIndex && isPlaying) {
+      togglePlay();
+    } else if (songIndex === currentSongIndex && isLoadedAndReady) {
       startPlayback();
     } else {
       loadSpecificSong(songId);
