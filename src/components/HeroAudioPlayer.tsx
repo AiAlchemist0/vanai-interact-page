@@ -101,14 +101,14 @@ const HeroAudioPlayer = () => {
         {songs.map((song, index) => (
           <div
             key={song.id}
-            className={`flex items-center gap-2 sm:gap-3 p-2 sm:p-3 rounded-xl transition-all duration-200 border touch-manipulation ${
+            className={`flex items-center gap-2 sm:gap-3 p-2 sm:p-3 rounded-xl transition-colors duration-200 border touch-manipulation min-h-[64px] sm:min-h-[80px] ${
               index === currentSongIndex 
                 ? 'bg-primary/10 border-primary/30 shadow-lg' 
                 : 'bg-muted/20 hover:bg-muted/40 border-border/20'
             }`}
           >
             {/* Track Number */}
-            <div className="flex-shrink-0 w-5 sm:w-6 text-center">
+            <div className="flex-shrink-0 w-5 sm:w-6 text-center self-start pt-1">
               <span className={`text-xs sm:text-sm font-medium ${
                 index === currentSongIndex ? 'text-primary' : 'text-muted-foreground'
               }`}>
@@ -117,7 +117,7 @@ const HeroAudioPlayer = () => {
             </div>
 
             {/* Album Art */}
-            <div className="relative flex-shrink-0">
+            <div className="relative flex-shrink-0 self-start">
               <img 
                 src={song.coverArt} 
                 alt={`${song.title} cover`} 
@@ -131,65 +131,64 @@ const HeroAudioPlayer = () => {
             </div>
             
             {/* Song Details */}
-            <div className="flex-1 min-w-0">
-               <h4 className={`text-xs sm:text-sm font-semibold truncate ${
+            <div className="flex-1 min-w-0 overflow-hidden">
+               <h4 className={`text-xs sm:text-sm font-semibold truncate leading-tight ${
                  index === currentSongIndex ? 'text-primary' : 'text-foreground'
                }`}>
                  {song.title}
                </h4>
-               <div className="flex items-center justify-between gap-2">
-                 <p className="text-xs sm:text-sm text-muted-foreground font-medium truncate">
+               <div className="flex items-center justify-between gap-2 mt-0.5">
+                 <p className="text-xs sm:text-sm text-muted-foreground font-medium truncate flex-1 min-w-0">
                    {song.artist}
                  </p>
-                 {!statsLoading && (
-                   <span className="text-xs text-muted-foreground/70 font-medium flex-shrink-0">
-                     ♪ {getPlayCount(song.id)}
-                   </span>
-                 )}
-                 {statsLoading && (
-                   <span className="text-xs text-muted-foreground/50 font-medium flex-shrink-0 animate-pulse">
-                     ♪ ...
-                   </span>
-                 )}
+                 <span className="text-xs text-muted-foreground/70 font-medium flex-shrink-0 ml-2">
+                   {!statsLoading ? `♪ ${getPlayCount(song.id)}` : '♪ ...'}
+                 </span>
                </div>
               
-              {/* Status Message for Loaded Song */}
-              {index === currentSongIndex && isLoadedAndReady && (
-                <div className="text-xs text-green-600 font-medium mt-1">
-                  Song loaded and ready to play!
-                </div>
-              )}
+              {/* Status Message for Loaded Song - Fixed Height */}
+              <div className="h-4 mt-1">
+                {index === currentSongIndex && isLoadedAndReady && (
+                  <div className="text-xs text-green-600 font-medium truncate">
+                    Ready to play!
+                  </div>
+                )}
+              </div>
               
-              {/* Mini Progress Bar for Current Song */}
-              {index === currentSongIndex && isPlaying && (
-                <div className="w-full bg-muted/30 rounded-full h-1 mt-1">
-                  <div 
-                    className="h-full bg-primary rounded-full transition-all duration-300 ease-out"
-                    style={{ width: `${progress}%` }}
-                  />
-                </div>
-              )}
+              {/* Mini Progress Bar for Current Song - Fixed Height */}
+              <div className="h-1 mt-1">
+                {index === currentSongIndex && isPlaying && (
+                  <div className="w-full bg-muted/30 rounded-full h-1">
+                    <div 
+                      className="h-full bg-primary rounded-full transition-all duration-300 ease-out"
+                      style={{ width: `${progress}%` }}
+                    />
+                  </div>
+                )}
+              </div>
             </div>
             
-            {/* Play Button */}
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => handlePlayClick(song.id, index)}
-              className={`h-9 w-9 sm:h-10 sm:w-10 flex-shrink-0 rounded-full transition-all duration-200 touch-manipulation ${
-                index === currentSongIndex && isLoadedAndReady
-                  ? 'bg-green-500/20 hover:bg-green-500/30 text-green-600 border border-green-500/30' 
-                  : index === currentSongIndex && isPlaying
-                  ? 'bg-primary/20 hover:bg-primary/30 text-primary' 
-                  : 'hover:bg-primary/20 text-muted-foreground hover:text-primary'
-              }`}
-            >
-              {index === currentSongIndex && isPlaying ? (
-                <Pause className="h-4 w-4" />
-              ) : (
-                <Play className="h-4 w-4" />
-              )}
-            </Button>
+            {/* Play Button - Fixed Size */}
+            <div className="flex-shrink-0 w-9 h-9 sm:w-10 sm:h-10 self-start">
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => handlePlayClick(song.id, index)}
+                className={`w-full h-full rounded-full transition-colors duration-200 touch-manipulation ${
+                  index === currentSongIndex && isLoadedAndReady
+                    ? 'bg-green-500/20 hover:bg-green-500/30 text-green-600 border border-green-500/30' 
+                    : index === currentSongIndex && isPlaying
+                    ? 'bg-primary/20 hover:bg-primary/30 text-primary' 
+                    : 'hover:bg-primary/20 text-muted-foreground hover:text-primary'
+                }`}
+              >
+                {index === currentSongIndex && isPlaying ? (
+                  <Pause className="h-4 w-4" />
+                ) : (
+                  <Play className="h-4 w-4" />
+                )}
+              </Button>
+            </div>
           </div>
         ))}
       </div>
