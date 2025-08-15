@@ -1,7 +1,8 @@
 import React from 'react';
 import { Button } from "@/components/ui/button";
-import { Play, Pause } from "lucide-react";
+import { Play, Pause, BarChart3 } from "lucide-react";
 import { useAudio } from "@/contexts/AudioContext";
+import { useSongStatistics } from '@/hooks/useSongStatistics';
 
 const formatTime = (s: number) => {
   if (!isFinite(s)) return "0:00";
@@ -13,7 +14,7 @@ const formatTime = (s: number) => {
 const HeroAudioPlayer = () => {
   const { 
     isPlaying, 
-    isLoadedAndReady,
+    isLoadedAndReady, 
     currentSong, 
     songs, 
     progress, 
@@ -22,6 +23,8 @@ const HeroAudioPlayer = () => {
     togglePlay,
     currentSongIndex
   } = useAudio();
+  
+  const { getPlayCount, getTotalPlays, loading: statsLoading } = useSongStatistics();
 
   const handlePlayClick = (songId: string, songIndex: number) => {
     if (songIndex === currentSongIndex && isPlaying) {
@@ -36,17 +39,25 @@ const HeroAudioPlayer = () => {
   return (
     <div className="bg-card/20 backdrop-blur-xl border border-border/20 rounded-3xl p-3 sm:p-4 shadow-elegant">
       {/* Compact Header */}
-      <div className="mb-3 sm:mb-4">
-        <h3 className="text-base sm:text-lg font-semibold text-foreground mb-2 truncate">
-          {isPlaying ? `♪ ${currentSong.title}` : 'BC AI Audio Experience'}
-        </h3>
-        <div className="w-full bg-muted/30 rounded-full h-1.5 relative overflow-hidden">
-          <div 
-            className="h-full bg-gradient-primary rounded-full transition-all duration-300 ease-out"
-            style={{ width: `${progress}%` }}
-          />
-        </div>
-      </div>
+       <div className="mb-3 sm:mb-4">
+         <div className="flex items-center justify-between gap-2 mb-2">
+           <h3 className="text-base sm:text-lg font-semibold text-foreground truncate">
+             {isPlaying ? `♪ ${currentSong.title}` : 'BC AI Audio Experience'}
+           </h3>
+           {!statsLoading && getTotalPlays() > 0 && (
+             <div className="flex items-center gap-1 text-muted-foreground">
+               <BarChart3 className="w-3 h-3 sm:w-4 sm:h-4" />
+               <span className="text-xs font-medium">{getTotalPlays()}</span>
+             </div>
+           )}
+         </div>
+         <div className="w-full bg-muted/30 rounded-full h-1.5 relative overflow-hidden">
+           <div 
+             className="h-full bg-gradient-primary rounded-full transition-all duration-300 ease-out"
+             style={{ width: `${progress}%` }}
+           />
+         </div>
+       </div>
 
       {/* Detailed Song List */}
       <div className="space-y-1.5 sm:space-y-2">
@@ -84,14 +95,21 @@ const HeroAudioPlayer = () => {
             
             {/* Song Details */}
             <div className="flex-1 min-w-0">
-              <h4 className={`text-xs sm:text-sm font-semibold truncate ${
-                index === currentSongIndex ? 'text-primary' : 'text-foreground'
-              }`}>
-                {song.title}
-              </h4>
-              <p className="text-xs sm:text-sm text-muted-foreground font-medium truncate">
-                {song.artist}
-              </p>
+               <h4 className={`text-xs sm:text-sm font-semibold truncate ${
+                 index === currentSongIndex ? 'text-primary' : 'text-foreground'
+               }`}>
+                 {song.title}
+               </h4>
+               <div className="flex items-center justify-between gap-2">
+                 <p className="text-xs sm:text-sm text-muted-foreground font-medium truncate">
+                   {song.artist}
+                 </p>
+                 {!statsLoading && getPlayCount(song.id) > 0 && (
+                   <span className="text-xs text-muted-foreground/70 font-medium flex-shrink-0">
+                     ♪ {getPlayCount(song.id)}
+                   </span>
+                 )}
+               </div>
               
               {/* Status Message for Loaded Song */}
               {index === currentSongIndex && isLoadedAndReady && (

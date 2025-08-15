@@ -7,6 +7,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { LyricLine } from "@/components/SynchronizedLyrics";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { useSongStatistics } from "@/hooks/useSongStatistics";
 import deepfakesCover from "/lovable-uploads/2a6f9f46-8a29-4c56-aec2-3279635b85f0.png";
 import pixelWizardCover from "@/assets/pixel-wizard-cover.jpg";
 import macCover from "/lovable-uploads/cc181a8b-6dad-4af6-8731-9a8cbd3ba5d0.png";
@@ -277,6 +278,7 @@ interface AudioPlayerProps {
 
 const AudioPlayer: React.FC<AudioPlayerProps> = ({ audioPlayerHook }) => {
   const isMobile = useIsMobile();
+  const { recordPlay } = useSongStatistics();
   
   const {
     audioRef,
@@ -310,6 +312,9 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ audioPlayerHook }) => {
     loadSpecificSong,
     startPlayback,
   } = audioPlayerHook;
+  
+  const [shouldAutoPlay, setShouldAutoPlay] = React.useState(false);
+  const [hasRecordedPlay, setHasRecordedPlay] = React.useState(false);
   
   // Add state for animated marquee text on mobile
   const [isTextOverflowing, setIsTextOverflowing] = React.useState(false);
@@ -481,27 +486,43 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ audioPlayerHook }) => {
     };
   }, [currentSong.src, fileAvailable]); // Simplified dependencies - only recreate when song source changes
 
-  // Track if we should auto-play after song change
-  const [shouldAutoPlay, setShouldAutoPlay] = React.useState(false);
-
-  // Separate effect for handling auto-play when song changes
+  // Reset play tracking when song changes
   React.useEffect(() => {
-    if (currentSongIndex !== undefined && hasUserInteracted && audioRef.current) {
-      const audio = audioRef.current;
-      // Only auto-play if we were previously playing or marked for auto-play
-      if (isPlaying || shouldAutoPlay) {
-        setTimeout(() => {
-          audio.play().then(() => {
-            setIsPlaying(true);
-            setShouldAutoPlay(false);
-          }).catch(() => {
-            setAutoplayBlocked(true);
-            setShouldAutoPlay(false);
-          });
-        }, 100);
-      }
-    }
+    setHasRecordedPlay(false);
   }, [currentSongIndex]);
+
+  // Effect to handle auto-play after song changes
+  React.useEffect(() => {
+    if (shouldAutoPlay && audioRef.current && !isPlaying) {
+      const audio = audioRef.current;
+      
+      // Wait for the audio to be ready before attempting to play
+      const attemptAutoPlay = () => {
+        if (audio.readyState >= 2) { // HAVE_CURRENT_DATA or higher
+          audio.play()
+            .then(() => {
+              setIsPlaying(true);
+              setShouldAutoPlay(false);
+              // Record play when auto-playing
+              if (!hasRecordedPlay) {
+                recordPlay(currentSong.id);
+                setHasRecordedPlay(true);
+              }
+            })
+            .catch((error) => {
+              console.error('Auto-play failed:', error);
+              setAutoplayBlocked(true);
+              setShouldAutoPlay(false);
+            });
+        } else {
+          // If not ready, wait a bit and try again
+          setTimeout(attemptAutoPlay, 100);
+        }
+      };
+      
+      attemptAutoPlay();
+    }
+  }, [shouldAutoPlay, currentSongIndex, isPlaying, recordPlay, currentSong.id, hasRecordedPlay]);
 
   const [isToggling, setIsToggling] = React.useState(false);
   
@@ -520,6 +541,11 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ audioPlayerHook }) => {
         setIsPlaying(true);
         setAutoplayBlocked(false);
         setAudioError(null);
+        // Record play when manually starting
+        if (!hasRecordedPlay) {
+          recordPlay(currentSong.id);
+          setHasRecordedPlay(true);
+        }
       } catch (e) {
         console.error('Audio play failed:', e);
         setAutoplayBlocked(true);

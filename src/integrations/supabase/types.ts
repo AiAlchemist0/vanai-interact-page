@@ -7,20 +7,77 @@ export type Json =
   | Json[]
 
 export type Database = {
-  // Allows to automatically instanciate createClient with right options
+  // Allows to automatically instantiate createClient with right options
   // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
   __InternalSupabase: {
     PostgrestVersion: "13.0.4"
   }
   public: {
     Tables: {
-      [_ in never]: never
+      song_plays: {
+        Row: {
+          created_at: string
+          id: string
+          played_at: string
+          song_id: string
+          user_session_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          played_at?: string
+          song_id: string
+          user_session_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          played_at?: string
+          song_id?: string
+          user_session_id?: string | null
+        }
+        Relationships: []
+      }
+      song_statistics: {
+        Row: {
+          created_at: string
+          id: string
+          last_played_at: string | null
+          song_id: string
+          total_plays: number
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          last_played_at?: string | null
+          song_id: string
+          total_plays?: number
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          last_played_at?: string | null
+          song_id?: string
+          total_plays?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      get_song_statistics: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          last_played_at: string
+          song_id: string
+          total_plays: number
+        }[]
+      }
     }
     Enums: {
       [_ in never]: never
