@@ -70,6 +70,14 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      get_public_song_statistics: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          last_played_at: string
+          song_id: string
+          total_plays: number
+        }[]
+      }
       get_song_statistics: {
         Args: Record<PropertyKey, never>
         Returns: {

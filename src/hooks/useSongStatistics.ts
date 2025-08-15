@@ -16,10 +16,9 @@ export const useSongStatistics = () => {
     try {
       console.log('Fetching song statistics...');
       setLoading(true);
-      const { data, error } = await supabase
-        .from('song_statistics')
-        .select('song_id, total_plays, last_played_at')
-        .order('total_plays', { ascending: false });
+      
+      // Use the secure statistics function that provides aggregated data only
+      const { data, error } = await supabase.rpc('get_song_statistics');
 
       if (error) {
         console.error('Supabase error:', error);
@@ -27,7 +26,13 @@ export const useSongStatistics = () => {
       }
       
       console.log('Statistics data received:', data);
-      setStatistics(data || []);
+      // Transform the data to match our interface
+      const transformedData = (data || []).map(item => ({
+        song_id: item.song_id,
+        total_plays: item.total_plays,
+        last_played_at: item.last_played_at
+      }));
+      setStatistics(transformedData);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to fetch statistics');
       console.error('Error fetching song statistics:', err);
