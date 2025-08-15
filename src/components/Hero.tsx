@@ -87,23 +87,24 @@ const Hero = () => {
 
             {/* CTA Buttons */}
             <div className="space-y-3 sm:space-y-4">
-              <div className="flex justify-center gap-4">
+              {/* Mobile View - Square Icon Buttons */}
+              <div className="flex sm:hidden justify-center gap-3">
                 <Button 
                   size="icon" 
-                  className="gradient-primary hover:glow-primary transition-smooth w-12 h-12 sm:w-14 sm:h-14" 
+                  className="gradient-primary hover:glow-primary transition-smooth w-12 h-12" 
                   onClick={() => document.getElementById('novel-concept')?.scrollIntoView({ behavior: 'smooth' })}
                   aria-label="Project's Vision"
                 >
-                  <Lightbulb className="w-6 h-6 sm:w-7 sm:h-7" />
+                  <Lightbulb className="w-5 h-5" />
                 </Button>
 
                 <Button 
                   size="icon" 
-                  className="gradient-secondary hover:glow-secondary transition-smooth w-12 h-12 sm:w-14 sm:h-14" 
+                  className="gradient-secondary hover:glow-secondary transition-smooth w-12 h-12" 
                   onClick={() => document.getElementById('insights')?.scrollIntoView({ behavior: 'smooth' })}
                   aria-label="Survey Deep Dive"
                 >
-                  <BarChart3 className="w-6 h-6 sm:w-7 sm:h-7" />
+                  <BarChart3 className="w-5 h-5" />
                 </Button>
 
                 <Dialog>
@@ -111,10 +112,123 @@ const Hero = () => {
                     <Button 
                       size="icon" 
                       variant="outline" 
-                      className="border-muted-foreground/30 hover:border-muted-foreground transition-smooth w-12 h-12 sm:w-14 sm:h-14" 
+                      className="border-muted-foreground/30 hover:border-muted-foreground transition-smooth w-12 h-12" 
                       aria-label="Legal Disclaimer"
                     >
-                      <Shield className="w-6 h-6 sm:w-7 sm:h-7" />
+                      <Shield className="w-5 h-5" />
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto mx-4 sm:mx-auto">
+                    <DialogHeader>
+                      <DialogTitle className="flex items-center gap-2">
+                        <Shield className="w-5 h-5" />
+                        Legal Disclaimer
+                      </DialogTitle>
+                    </DialogHeader>
+                    <div className="space-y-4 text-sm text-muted-foreground">
+                      <div className="space-y-2">
+                        <h4 className="font-semibold text-foreground">Document Information</h4>
+                        <p>
+                          <strong>Date:</strong> August 15, 2025<br/>
+                          <strong>For concerns, contact:</strong> <a href="mailto:Deanshev@gmail.com" className="text-primary hover:underline">Deanshev@gmail.com</a>
+                        </p>
+                      </div>
+
+                      <div className="space-y-2">
+                        <h4 className="font-semibold text-foreground">Legal Jurisdiction</h4>
+                        <p>
+                          This project and all associated materials are governed by the laws of British Columbia, Canada. Any legal disputes or matters arising from this project shall be subject to the exclusive jurisdiction of the courts of Vancouver, British Columbia, Canada.
+                        </p>
+                      </div>
+
+                      <div className="space-y-2">
+                        <h4 className="font-semibold text-foreground">Educational Purpose & Concept Rights</h4>
+                        <p>
+                          The intent of this project is within educational content only as per hackathon guidelines and falls under fair dealing provisions of the Canadian Copyright Act for educational purposes. This project introduces the concept of AI-Music Powered Analytics. The author of the project holds the right to the concept and can release the rights to BC + AI and Rival Tech for further exploration and usage. Copying the concept apart from these two parties must be contacted to the author Dean Shev directly.
+                        </p>
+                      </div>
+
+                      <div className="space-y-2">
+                        <h4 className="font-semibold text-foreground">Copyright & Intellectual Property</h4>
+                        <p>
+                          All original content, including but not limited to code, design, concepts, and methodologies, are protected under Canadian copyright law. The use of any copyrighted materials in this project falls under the fair dealing exception of the Copyright Act (R.S.C., 1985, c. C-42) for educational, research, and non-commercial purposes only.
+                        </p>
+                        <p>
+                          Any third-party content, data, or materials used are either licensed appropriately, fall under fair dealing provisions, or are used with permission. All rights to original survey data and analysis belong to the project author and designated parties as outlined above.
+                        </p>
+                      </div>
+                      
+                      <div className="space-y-2">
+                        <h4 className="font-semibold text-foreground">Song Creation Intent</h4>
+                        <p>
+                          All songs are created without an intent to offend, upset or commit any defamatory act of any sorts to the individuals in the songs. The songs are created as artistic expression and community engagement pieces.
+                        </p>
+                        <p>
+                          The intent of the songs is to connect wonderful individuals, "artists" of the BC + AI community and cherish their participation and support and not to defame or cause harm to any individual's reputation.
+                        </p>
+                      </div>
+                      
+                      <div className="space-y-2">
+                        <h4 className="font-semibold text-foreground">Post-Hackathon Usage & Distribution</h4>
+                        <p>
+                          Beyond the hackathon, all songs will not be released, distributed, or used in any capacity without first obtaining explicit written permission and consent from the person(s) featured or referenced in the content.
+                        </p>
+                        <p>
+                          This includes but is not limited to: commercial use, public performance, streaming platforms, broadcast media, or any form of monetization.
+                        </p>
+                      </div>
+                      
+                      <div className="space-y-2">
+                        <h4 className="font-semibold text-foreground">Social Media & Public Sharing</h4>
+                        <p>
+                          Songs will not be shared on social media platforms, posted publicly, or distributed through any digital channels unless explicitly approved by written consent from the associated artist or individual featured in the content.
+                        </p>
+                        <p>
+                          This policy protects individual privacy rights and ensures compliance with Canadian privacy legislation and personal information protection standards.
+                        </p>
+                      </div>
+
+                      <div className="space-y-2">
+                        <h4 className="font-semibold text-foreground">Limitation of Liability</h4>
+                        <p>
+                          This project is provided "as is" for educational and demonstration purposes. The author and associated parties disclaim any warranties and shall not be liable for any damages arising from the use of this project or its content.
+                        </p>
+                      </div>
+                    </div>
+                  </DialogContent>
+                </Dialog>
+
+                <Button 
+                  size="icon" 
+                  className="gradient-accent hover:glow-accent transition-smooth w-12 h-12" 
+                  onClick={() => navigate('/game')}
+                  aria-label="Play BC AI Game"
+                >
+                  <Gamepad2 className="w-5 h-5" />
+                </Button>
+              </div>
+
+              {/* Desktop View - Text Buttons */}
+              <div className="hidden sm:flex flex-col sm:grid sm:grid-cols-3 gap-3">
+                <Button size="lg" className="gradient-primary hover:glow-primary transition-smooth group px-4 py-4 sm:px-4 sm:py-3 min-h-[48px] text-sm sm:text-sm font-medium" onClick={() => document.getElementById('novel-concept')?.scrollIntoView({
+                behavior: 'smooth'
+              })}>
+                  Project's Vision
+                  <Lightbulb className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                </Button>
+
+                <Button size="lg" className="gradient-secondary hover:glow-secondary transition-smooth group px-4 py-4 sm:px-4 sm:py-3 min-h-[48px] text-sm sm:text-sm font-medium" onClick={() => document.getElementById('insights')?.scrollIntoView({
+                behavior: 'smooth'
+              })}>
+                  <BarChart3 className="mr-2 w-4 h-4 group-hover:scale-110 transition-transform" />
+                  Survey Deep Dive
+                </Button>
+
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <Button size="lg" variant="outline" className="border-muted-foreground/30 hover:border-muted-foreground transition-smooth group px-4 py-4 sm:px-4 sm:py-3 min-h-[48px] text-sm sm:text-sm font-medium">
+                      <Shield className="mr-2 w-4 h-4 group-hover:scale-110 transition-transform" />
+                      Legal Disclaimer
                     </Button>
                   </DialogTrigger>
                   <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto mx-4 sm:mx-auto">
@@ -198,7 +312,7 @@ const Hero = () => {
                 </Dialog>
               </div>
 
-              <Button size="lg" className="gradient-accent hover:glow-accent transition-smooth group w-full px-4 py-4 sm:px-6 sm:py-3 min-h-[52px] text-base sm:text-base font-semibold" onClick={() => navigate('/game')}>
+              <Button size="lg" className="hidden sm:flex gradient-accent hover:glow-accent transition-smooth group w-full px-4 py-4 sm:px-6 sm:py-3 min-h-[52px] text-base sm:text-base font-semibold" onClick={() => navigate('/game')}>
                 <Gamepad2 className="mr-2 w-5 h-5 group-hover:scale-110 transition-transform" />
                 PLAY BC AI GAME
               </Button>
