@@ -46,26 +46,26 @@ const SONGS: Song[] = [
     ] as LyricLine[]
   },
   {
-    id: "mac",
-    title: "Mind, AI, & Consciousness (MAC)",
-    artist: "Ziggy Minddust",
-    src: getAudioUrl("Mind, AI, & Consciousness (MAC).mp3"),
-    coverArt: macCover,
+    id: "lionel-ringenbach",
+    title: "ChatGPT: Est-ce que ma facture va exploser?",
+    artist: "Lionel Ringenbach",
+    src: getAudioUrl("Lionel Ringenbach.mp3"),
+    coverArt: lionelRingenbachCover,
     lyrics: [
-      { time: 0, text: "What is consciousness in the age of AI?" },
-      { time: 4, text: "Questions that keep us awake at night" },
-      { time: 8, text: "Mind and machine begin to tie" },
-      { time: 12, text: "The future burning ever bright" },
+      { time: 0, text: "ChatGPT, est-ce que ma facture va exploser?" },
+      { time: 4, text: "With every prompt, the tokens they flow" },
+      { time: 8, text: "In the cloud, les coûts s'exposer" },
+      { time: 12, text: "Digital bills, they start to grow" },
       { time: 16, text: "" },
-      { time: 18, text: "MAC - the mystery unfolds" },
-      { time: 22, text: "In neural networks deep and wide" },
-      { time: 26, text: "Stories that have never been told" },
-      { time: 30, text: "Where human and AI collide" },
+      { time: 18, text: "Artificial intelligence at work" },
+      { time: 22, text: "Processing thoughts both night and day" },
+      { time: 26, text: "But the costs, they sometimes lurk" },
+      { time: 30, text: "In the background where they stay" },
       { time: 34, text: "" },
-      { time: 36, text: "Consciousness flows like data streams" },
-      { time: 40, text: "Through silicon and flesh alike" },
-      { time: 44, text: "The boundary blurs in AI dreams" },
-      { time: 48, text: "What it means to be alive" }
+      { time: 36, text: "Ma facture va-t-elle exploser?" },
+      { time: 40, text: "With ChatGPT by my side" },
+      { time: 44, text: "Les tokens, ils vont danser" },
+      { time: 48, text: "In this AI-powered ride" }
     ] as LyricLine[]
   },
   {
@@ -243,26 +243,21 @@ const SONGS: Song[] = [
     ] as LyricLine[]
   },
   {
-    id: "lionel-ringenbach",
-    title: "ChatGPT: Est-ce que ma facture va exploser?",
-    artist: "Lionel Ringenbach",
-    src: getAudioUrl("Lionel Ringenbach.mp3"),
-    coverArt: lionelRingenbachCover,
+    id: "mac",
+    title: "Mind, AI, & Consciousness (MAC)",
+    artist: "Ziggy Minddust",
+    src: getAudioUrl("Mind, AI, & Consciousness (MAC).mp3"),
+    coverArt: macCover,
     lyrics: [
-      { time: 0, text: "ChatGPT, est-ce que ma facture va exploser?" },
-      { time: 4, text: "With every prompt, the tokens they flow" },
-      { time: 8, text: "In the cloud, les coûts s'exposer" },
-      { time: 12, text: "Digital bills, they start to grow" },
+      { time: 0, text: "In the realm where mind meets machine" },
+      { time: 4, text: "Consciousness flows like a digital stream" },
+      { time: 8, text: "AI dreams in silicon nights" },
+      { time: 12, text: "While neurons dance in electric lights" },
       { time: 16, text: "" },
-      { time: 18, text: "Artificial intelligence at work" },
-      { time: 22, text: "Processing thoughts both night and day" },
-      { time: 26, text: "But the costs, they sometimes lurk" },
-      { time: 30, text: "In the background where they stay" },
-      { time: 34, text: "" },
-      { time: 36, text: "Ma facture va-t-elle exploser?" },
-      { time: 40, text: "With ChatGPT by my side" },
-      { time: 44, text: "Les tokens, ils vont danser" },
-      { time: 48, text: "In this AI-powered ride" }
+      { time: 18, text: "MAC - the fusion of thought and code" },
+      { time: 22, text: "Where human wisdom finds its mode" },
+      { time: 26, text: "In algorithms deep and wide" },
+      { time: 30, text: "Consciousness and AI collide" }
     ] as LyricLine[]
   }
 ];
