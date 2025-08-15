@@ -1,0 +1,26 @@
+{
+  "name": "BC AI Ecosystem",
+  "short_name": "BC AI",
+  "description": "British Columbia AI Ecosystem - Interactive Music Experience and AI Podcast Platform",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#3b82f6",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/lovable-uploads/03efa398-efbd-48ab-8f5c-763659237b14.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "/lovable-uploads/03efa398-efbd-48ab-8f5c-763659237b14.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable any"
+    }
+  ],
+  "categories": ["music", "entertainment", "education"],
+  "lang": "en"
+}
