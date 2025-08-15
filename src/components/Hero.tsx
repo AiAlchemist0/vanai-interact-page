@@ -44,7 +44,7 @@ const Hero = () => {
               <div className="flex flex-row items-center justify-start gap-4 sm:gap-8">
                 <img src="/lovable-uploads/6b65586a-63ba-48f1-9c56-1846ec800f39.png" alt="BC+AI Ecosystem Logo" className="w-40 sm:w-48 lg:w-56 h-auto filter drop-shadow-lg flex-shrink-0" />
                 <div className="flex-1 min-w-0 text-center sm:text-left">
-                  <h1 className="text-3xl sm:text-4xl lg:text-7xl xl:text-8xl font-bold text-gradient leading-tight">
+                  <h1 className="text-3xl sm:text-4xl lg:text-7xl xl:text-8xl text-gradient leading-tight text-left font-bold">
                     BC + AI Survey
                     <br />
                     Insights
@@ -89,32 +89,21 @@ const Hero = () => {
             <div className="space-y-3 sm:space-y-4">
               {/* Mobile View - Square Icon Buttons */}
               <div className="flex sm:hidden justify-center gap-3">
-                <Button 
-                  size="icon" 
-                  className="gradient-primary hover:glow-primary transition-smooth w-16 h-16" 
-                  onClick={() => document.getElementById('novel-concept')?.scrollIntoView({ behavior: 'smooth' })}
-                  aria-label="Project's Vision"
-                >
+                <Button size="icon" className="gradient-primary hover:glow-primary transition-smooth w-16 h-16" onClick={() => document.getElementById('novel-concept')?.scrollIntoView({
+                behavior: 'smooth'
+              })} aria-label="Project's Vision">
                   <Lightbulb className="w-6 h-6" />
                 </Button>
 
-                <Button 
-                  size="icon" 
-                  className="gradient-secondary hover:glow-secondary transition-smooth w-16 h-16" 
-                  onClick={() => document.getElementById('insights')?.scrollIntoView({ behavior: 'smooth' })}
-                  aria-label="Survey Deep Dive"
-                >
+                <Button size="icon" className="gradient-secondary hover:glow-secondary transition-smooth w-16 h-16" onClick={() => document.getElementById('insights')?.scrollIntoView({
+                behavior: 'smooth'
+              })} aria-label="Survey Deep Dive">
                   <BarChart3 className="w-6 h-6" />
                 </Button>
 
                 <Dialog>
                   <DialogTrigger asChild>
-                    <Button 
-                      size="icon" 
-                      variant="outline" 
-                      className="border-muted-foreground/30 hover:border-muted-foreground transition-smooth w-16 h-16" 
-                      aria-label="Legal Disclaimer"
-                    >
+                    <Button size="icon" variant="outline" className="border-muted-foreground/30 hover:border-muted-foreground transition-smooth w-16 h-16" aria-label="Legal Disclaimer">
                       <Shield className="w-6 h-6" />
                     </Button>
                   </DialogTrigger>
@@ -129,7 +118,7 @@ const Hero = () => {
                       <div className="space-y-2">
                         <h4 className="font-semibold text-foreground">Document Information</h4>
                         <p>
-                          <strong>Date:</strong> August 15, 2025<br/>
+                          <strong>Date:</strong> August 15, 2025<br />
                           <strong>For concerns, contact:</strong> <a href="mailto:Deanshev@gmail.com" className="text-primary hover:underline">Deanshev@gmail.com</a>
                         </p>
                       </div>
@@ -198,12 +187,7 @@ const Hero = () => {
                   </DialogContent>
                 </Dialog>
 
-                <Button 
-                  size="icon" 
-                  className="gradient-accent hover:glow-accent transition-smooth w-16 h-16" 
-                  onClick={() => navigate('/game')}
-                  aria-label="Play BC AI Game"
-                >
+                <Button size="icon" className="gradient-accent hover:glow-accent transition-smooth w-16 h-16" onClick={() => navigate('/game')} aria-label="Play BC AI Game">
                   <Gamepad2 className="w-6 h-6" />
                 </Button>
               </div>
@@ -242,7 +226,7 @@ const Hero = () => {
                       <div className="space-y-2">
                         <h4 className="font-semibold text-foreground">Document Information</h4>
                         <p>
-                          <strong>Date:</strong> August 15, 2025<br/>
+                          <strong>Date:</strong> August 15, 2025<br />
                           <strong>For concerns, contact:</strong> <a href="mailto:Deanshev@gmail.com" className="text-primary hover:underline">Deanshev@gmail.com</a>
                         </p>
                       </div>
