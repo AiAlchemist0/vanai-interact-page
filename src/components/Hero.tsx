@@ -23,12 +23,12 @@ const Hero = () => {
       </div>
 
       {/* Main Content Container */}
-      <div className="relative z-20 container mx-auto px-2 sm:px-6 py-8 sm:py-12">
-        <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center min-h-screen">
+      <div className="relative z-20 container mx-auto px-4 sm:px-6 py-6 sm:py-12">
+        <div className="grid lg:grid-cols-2 gap-6 lg:gap-12 items-center min-h-screen">
           
           {/* Left Side - Content */}
-          <div className="space-y-6 sm:space-y-8 lg:pr-8">
-            <div className="flex flex-wrap items-center gap-4 mb-4 sm:mb-6">
+          <div className="space-y-4 sm:space-y-8 lg:pr-8">
+            <div className="flex flex-col sm:flex-row sm:flex-wrap items-start sm:items-center gap-2 sm:gap-4 mb-3 sm:mb-6">
               <Badge variant="secondary" className="border-gradient glow-primary text-xs sm:text-sm">
                 <BarChart3 className="w-3 sm:w-4 h-3 sm:h-4 mr-1 sm:mr-2" />
                 Vancouver AI Hackathon Round 3
@@ -40,11 +40,11 @@ const Hero = () => {
             </div>
 
             {/* Logo and Title Section */}
-            <div className="space-y-4 sm:space-y-6">
-              <div className="flex flex-row items-center justify-center gap-3 sm:gap-6">
-                <img src="/lovable-uploads/6b65586a-63ba-48f1-9c56-1846ec800f39.png" alt="BC+AI Ecosystem Logo" className="w-40 sm:w-36 lg:w-40 h-auto filter drop-shadow-lg flex-shrink-0" />
-                <div className="flex-1 min-w-0">
-                  <h1 className="text-3xl sm:text-3xl font-bold text-gradient leading-tight text-justify lg:text-6xl">
+            <div className="space-y-3 sm:space-y-6">
+              <div className="flex flex-col sm:flex-row items-center sm:justify-center gap-3 sm:gap-6">
+                <img src="/lovable-uploads/6b65586a-63ba-48f1-9c56-1846ec800f39.png" alt="BC+AI Ecosystem Logo" className="w-32 sm:w-36 lg:w-40 h-auto filter drop-shadow-lg flex-shrink-0" />
+                <div className="flex-1 min-w-0 text-center sm:text-left">
+                  <h1 className="text-2xl sm:text-3xl font-bold text-gradient leading-tight lg:text-6xl">
                     BC + AI Survey
                     <br />
                     Insights
@@ -52,67 +52,64 @@ const Hero = () => {
                 </div>
               </div>
 
-              <p className="text-base sm:text-lg text-muted-foreground leading-relaxed text-justify lg:text-xl">
+              <p className="text-sm sm:text-lg text-muted-foreground leading-relaxed text-center sm:text-left lg:text-xl">
                 Discover what <span className="text-primary font-semibold">1,001 British Columbians</span> think about artificial intelligence. 
                 Explore comprehensive survey data covering AI experience, concerns, and future vision.
               </p>
             </div>
 
             {/* Key Stats */}
-            <div className="grid grid-cols-3 gap-2 sm:gap-4">
-              <div className="bg-card/50 backdrop-blur-sm border border-border rounded-xl px-3 sm:px-4 py-3 sm:py-4 text-center">
+            <div className="grid grid-cols-3 gap-3 sm:gap-4">
+              <div className="bg-card/50 backdrop-blur-sm border border-border rounded-xl px-2 sm:px-4 py-3 sm:py-4 text-center min-h-[80px] sm:min-h-[100px]">
                 <div className="flex items-center justify-center mb-1 sm:mb-2">
-                  <Users className="w-5 sm:w-6 h-5 sm:h-6 text-primary" />
+                  <Users className="w-4 sm:w-6 h-4 sm:h-6 text-primary" />
                 </div>
-                <div className="text-xl sm:text-2xl font-bold text-foreground">1,001</div>
-                <div className="text-xs sm:text-sm text-muted-foreground">Respondents</div>
+                <div className="text-lg sm:text-2xl font-bold text-foreground">1,001</div>
+                <div className="text-xs sm:text-sm text-muted-foreground leading-tight">Respondents</div>
               </div>
 
-              <div className="bg-card/50 backdrop-blur-sm border border-border rounded-xl px-3 sm:px-4 py-3 sm:py-4 text-center">
+              <div className="bg-card/50 backdrop-blur-sm border border-border rounded-xl px-2 sm:px-4 py-3 sm:py-4 text-center min-h-[80px] sm:min-h-[100px]">
                 <div className="flex items-center justify-center mb-1 sm:mb-2">
-                  <BarChart3 className="w-5 sm:w-6 h-5 sm:h-6 text-ai-cyan" />
+                  <BarChart3 className="w-4 sm:w-6 h-4 sm:h-6 text-ai-cyan" />
                 </div>
-                <div className="text-xl sm:text-2xl font-bold text-foreground">5,000+</div>
-                <div className="text-xs sm:text-sm text-muted-foreground">Text Responses</div>
+                <div className="text-lg sm:text-2xl font-bold text-foreground">5,000+</div>
+                <div className="text-xs sm:text-sm text-muted-foreground leading-tight">Text Responses</div>
               </div>
 
-              <div className="bg-card/50 backdrop-blur-sm border border-border rounded-xl px-3 sm:px-4 py-3 sm:py-4 text-center">
+              <div className="bg-card/50 backdrop-blur-sm border border-border rounded-xl px-2 sm:px-4 py-3 sm:py-4 text-center min-h-[80px] sm:min-h-[100px]">
                 <div className="flex items-center justify-center mb-1 sm:mb-2">
-                  <MapPin className="w-5 sm:w-6 h-5 sm:h-6 text-ai-green" />
+                  <MapPin className="w-4 sm:w-6 h-4 sm:h-6 text-ai-green" />
                 </div>
-                <div className="text-xl sm:text-2xl font-bold text-foreground">17</div>
-                <div className="text-xs sm:text-sm text-muted-foreground">Core Questions</div>
+                <div className="text-lg sm:text-2xl font-bold text-foreground">17</div>
+                <div className="text-xs sm:text-sm text-muted-foreground leading-tight">Core Questions</div>
               </div>
             </div>
 
             {/* CTA Buttons */}
             <div className="space-y-3 sm:space-y-4">
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-3">
-                <Button size="lg" className="gradient-primary hover:glow-primary transition-smooth group px-3 py-3 sm:px-4 sm:py-3 min-h-[44px] text-xs sm:text-sm" onClick={() => document.getElementById('novel-concept')?.scrollIntoView({
+              <div className="flex flex-col sm:grid sm:grid-cols-3 gap-3">
+                <Button size="lg" className="gradient-primary hover:glow-primary transition-smooth group px-4 py-4 sm:px-4 sm:py-3 min-h-[48px] text-sm sm:text-sm font-medium" onClick={() => document.getElementById('novel-concept')?.scrollIntoView({
                 behavior: 'smooth'
               })}>
-                  <span className="hidden sm:inline">Project's Vision</span>
-                  <span className="sm:hidden">Vision</span>
-                  <ArrowRight className="ml-1 sm:ml-2 w-3 h-3 sm:w-4 sm:h-4 group-hover:translate-x-1 transition-transform" />
+                  Project's Vision
+                  <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
                 </Button>
 
-                <Button size="lg" className="gradient-secondary hover:glow-secondary transition-smooth group px-3 py-3 sm:px-4 sm:py-3 min-h-[44px] text-xs sm:text-sm" onClick={() => document.getElementById('insights')?.scrollIntoView({
+                <Button size="lg" className="gradient-secondary hover:glow-secondary transition-smooth group px-4 py-4 sm:px-4 sm:py-3 min-h-[48px] text-sm sm:text-sm font-medium" onClick={() => document.getElementById('insights')?.scrollIntoView({
                 behavior: 'smooth'
               })}>
-                  <BarChart3 className="mr-1 sm:mr-2 w-3 h-3 sm:w-4 sm:h-4 group-hover:scale-110 transition-transform" />
-                  <span className="hidden sm:inline">Survey Deep Dive</span>
-                  <span className="sm:hidden">Survey</span>
+                  <BarChart3 className="mr-2 w-4 h-4 group-hover:scale-110 transition-transform" />
+                  Survey Deep Dive
                 </Button>
 
                 <Dialog>
                   <DialogTrigger asChild>
-                    <Button size="lg" variant="outline" className="border-muted-foreground/30 hover:border-muted-foreground transition-smooth group px-3 py-3 sm:px-4 sm:py-3 min-h-[44px] text-xs sm:text-sm">
-                      <Shield className="mr-1 sm:mr-2 w-3 h-3 sm:w-4 sm:h-4 group-hover:scale-110 transition-transform" />
-                      <span className="hidden sm:inline">Legal Disclaimer</span>
-                      <span className="sm:hidden">Legal</span>
+                    <Button size="lg" variant="outline" className="border-muted-foreground/30 hover:border-muted-foreground transition-smooth group px-4 py-4 sm:px-4 sm:py-3 min-h-[48px] text-sm sm:text-sm font-medium">
+                      <Shield className="mr-2 w-4 h-4 group-hover:scale-110 transition-transform" />
+                      Legal Disclaimer
                     </Button>
                   </DialogTrigger>
-                  <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
+                  <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto mx-4 sm:mx-auto">
                     <DialogHeader>
                       <DialogTitle className="flex items-center gap-2">
                         <Shield className="w-5 h-5" />
@@ -193,15 +190,15 @@ const Hero = () => {
                 </Dialog>
               </div>
 
-              <Button size="lg" className="gradient-accent hover:glow-accent transition-smooth group w-full px-4 py-3 sm:px-6 sm:py-3 min-h-[44px] text-sm sm:text-base" onClick={() => navigate('/game')}>
-                <Gamepad2 className="mr-2 w-4 sm:w-5 h-4 sm:h-5 group-hover:scale-110 transition-transform" />
+              <Button size="lg" className="gradient-accent hover:glow-accent transition-smooth group w-full px-4 py-4 sm:px-6 sm:py-3 min-h-[52px] text-base sm:text-base font-semibold" onClick={() => navigate('/game')}>
+                <Gamepad2 className="mr-2 w-5 h-5 group-hover:scale-110 transition-transform" />
                 PLAY BC AI GAME
               </Button>
             </div>
           </div>
 
           {/* Right Side - Audio Player */}
-          <div className="lg:pl-8">
+          <div className="lg:pl-8 mt-4 lg:mt-0">
             <HeroAudioPlayer />
           </div>
         </div>
