@@ -114,6 +114,9 @@ const HeroAudioPlayer = () => {
               }`}>
                 {index + 1}
               </span>
+              <div className="text-xs text-muted-foreground/70 font-medium mt-0.5">
+                {!statsLoading ? `♪ ${getPlayCount(song.id)}` : '♪ ...'}
+              </div>
             </div>
 
             {/* Album Art */}
@@ -137,13 +140,10 @@ const HeroAudioPlayer = () => {
                }`}>
                  {song.title}
                </h4>
-               <div className="flex items-center justify-between gap-2 mt-0.5">
-                 <p className="text-xs sm:text-sm text-muted-foreground font-medium truncate flex-1 min-w-0">
+               <div className="mt-0.5">
+                 <p className="text-xs sm:text-sm text-muted-foreground font-medium truncate">
                    {song.artist}
                  </p>
-                 <span className="text-xs text-muted-foreground/70 font-medium flex-shrink-0 ml-2">
-                   {!statsLoading ? `♪ ${getPlayCount(song.id)}` : '♪ ...'}
-                 </span>
                </div>
               
               {/* Status Message for Loaded Song - Fixed Height */}
