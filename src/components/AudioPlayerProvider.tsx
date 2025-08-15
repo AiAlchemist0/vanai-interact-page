@@ -38,24 +38,11 @@ const AudioPlayerProvider: React.FC<AudioPlayerProviderProps> = ({ children }) =
     }
   };
 
-  const nextSong = (autoPlay = false) => {
-    const wasPlaying = isPlaying;
+  const nextSong = () => {
     if (currentSongIndex < SONGS.length - 1) {
       setCurrentSongIndex(currentSongIndex + 1);
     } else {
       setCurrentSongIndex(0); // Loop to first song
-    }
-    
-    // If we were playing or auto-play is requested, continue playing
-    if (wasPlaying || autoPlay) {
-      setTimeout(() => {
-        const audio = audioRef.current;
-        if (audio) {
-          audio.play().catch(() => {
-            console.error('Auto-play failed for next song');
-          });
-        }
-      }, 300);
     }
   };
 

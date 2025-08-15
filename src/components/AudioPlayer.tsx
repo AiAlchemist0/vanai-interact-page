@@ -433,17 +433,8 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ audioPlayerHook }) => {
       switch (playbackMode) {
         case "next":
           if (currentSongIndex < SONGS.length - 1) {
-            const nextIndex = currentSongIndex + 1;
-            setCurrentSongIndex(nextIndex);
-            // Auto-play the next song after a brief delay
-            setTimeout(() => {
-              const newAudio = audioRef.current;
-              if (newAudio) {
-                newAudio.play().then(() => {
-                  setIsPlaying(true);
-                }).catch(() => setAutoplayBlocked(true));
-              }
-            }, 500);
+            setCurrentSongIndex(currentSongIndex + 1);
+            setShouldAutoPlay(true);
           }
           break;
         case "repeat":
@@ -457,15 +448,7 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ audioPlayerHook }) => {
           // Go to next song, or loop back to first
           const nextIndex = currentSongIndex < SONGS.length - 1 ? currentSongIndex + 1 : 0;
           setCurrentSongIndex(nextIndex);
-          // Auto-play the next song after a brief delay
-          setTimeout(() => {
-            const newAudio = audioRef.current;
-            if (newAudio) {
-              newAudio.play().then(() => {
-                setIsPlaying(true);
-              }).catch(() => setAutoplayBlocked(true));
-            }
-          }, 500);
+          setShouldAutoPlay(true);
           break;
         case "off":
         default:
