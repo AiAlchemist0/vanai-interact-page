@@ -44,10 +44,32 @@ const HeroAudioPlayer = () => {
       {/* Compact Header */}
        <div className="mb-3 sm:mb-4">
          <div className="flex items-center justify-between gap-2 mb-2">
-           <div className="flex items-center gap-2 sm:gap-3 flex-1 min-w-0 max-w-[calc(100%-120px)]">
+           <div className="flex items-center gap-2 sm:gap-3 flex-1 min-w-0 max-w-[calc(100%-200px)]">
              <h3 className="text-base sm:text-lg font-semibold text-foreground truncate min-w-0 flex-1">
                {isPlaylistMode ? "♪ Playing all songs..." : isPlaying ? `♪ ${currentSong?.title || ''}` : 'BC AI Audio Experience'}
              </h3>
+           </div>
+           <div className="flex items-center gap-2 flex-shrink-0">
+             <div className="flex items-center gap-1 text-muted-foreground">
+               {!statsLoading && getTotalPlays() > 0 && (
+                 <>
+                   <BarChart3 className="w-3 h-3 sm:w-4 sm:h-4" />
+                   <span className="text-xs font-medium">{getTotalPlays()}</span>
+                 </>
+               )}
+               {statsLoading && (
+                 <>
+                   <BarChart3 className="w-3 h-3 sm:w-4 sm:h-4 animate-pulse" />
+                   <span className="text-xs font-medium">Loading...</span>
+                 </>
+               )}
+               {!statsLoading && getTotalPlays() === 0 && (
+                 <>
+                   <BarChart3 className="w-3 h-3 sm:w-4 sm:h-4" />
+                   <span className="text-xs font-medium">0 plays</span>
+                 </>
+               )}
+             </div>
              <Button
                onClick={isPlaylistMode ? stopPlaylistMode : startPlaylistMode}
                variant={isPlaylistMode ? "destructive" : "secondary"}
@@ -67,34 +89,14 @@ const HeroAudioPlayer = () => {
                )}
              </Button>
            </div>
-           <div className="flex items-center gap-1 text-muted-foreground flex-shrink-0">
-             {!statsLoading && getTotalPlays() > 0 && (
-               <>
-                 <BarChart3 className="w-3 h-3 sm:w-4 sm:h-4" />
-                 <span className="text-xs font-medium">{getTotalPlays()}</span>
-               </>
-             )}
-             {statsLoading && (
-               <>
-                 <BarChart3 className="w-3 h-3 sm:w-4 sm:h-4 animate-pulse" />
-                 <span className="text-xs font-medium">Loading...</span>
-               </>
-             )}
-             {!statsLoading && getTotalPlays() === 0 && (
-               <>
-                 <BarChart3 className="w-3 h-3 sm:w-4 sm:h-4" />
-                 <span className="text-xs font-medium">0 plays</span>
-               </>
-             )}
-           </div>
-         </div>
-         <div className="w-full bg-muted/30 rounded-full h-1.5 relative overflow-hidden">
-           <div 
-             className="h-full bg-gradient-primary rounded-full transition-all duration-300 ease-out"
-             style={{ width: `${progress}%` }}
-           />
-         </div>
-       </div>
+          </div>
+          <div className="w-full bg-muted/30 rounded-full h-1.5 relative overflow-hidden">
+            <div 
+              className="h-full bg-gradient-primary rounded-full transition-all duration-300 ease-out"
+              style={{ width: `${progress}%` }}
+            />
+          </div>
+        </div>
 
       {/* Detailed Song List */}
       <div className="space-y-1.5 sm:space-y-2">
