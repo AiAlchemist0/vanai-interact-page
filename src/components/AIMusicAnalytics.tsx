@@ -80,8 +80,12 @@ const AIMusicAnalytics = () => {
             AI-Music Powered Analytics
           </h2>
           
-          <p className="text-lg sm:text-xl text-muted-foreground max-w-4xl mx-auto leading-relaxed">
+          <p className="text-lg sm:text-xl text-muted-foreground max-w-4xl mx-auto leading-relaxed mb-6">
             Transforming cold data into emotional connections through the universal language of music
+          </p>
+          
+          <p className="text-base sm:text-lg md:text-2xl lg:text-3xl text-muted-foreground italic leading-relaxed max-w-5xl mx-auto">
+            "Where <span className="text-primary font-medium">data</span> becomes <span className="text-accent font-medium">rhythm</span>, and <span className="text-primary font-medium">insights</span> become <span className="text-accent font-medium">community</span>"
           </p>
         </div>
 
