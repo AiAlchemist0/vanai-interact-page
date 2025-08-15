@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogTrigger } from "@/components/ui/dialog";
-import { ArrowRight, Users, BarChart3, MapPin, Gamepad2, Sparkles, Shield } from "lucide-react";
+import { Lightbulb, Users, BarChart3, MapPin, Gamepad2, Sparkles, Shield } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import heroImage from "@/assets/hero-ai-survey.jpg";
@@ -87,26 +87,34 @@ const Hero = () => {
 
             {/* CTA Buttons */}
             <div className="space-y-3 sm:space-y-4">
-              <div className="flex flex-col sm:grid sm:grid-cols-3 gap-3">
-                <Button size="lg" className="gradient-primary hover:glow-primary transition-smooth group px-4 py-4 sm:px-4 sm:py-3 min-h-[48px] text-sm sm:text-sm font-medium" onClick={() => document.getElementById('novel-concept')?.scrollIntoView({
-                behavior: 'smooth'
-              })}>
-                  Project's Vision
-                  <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
+              <div className="flex justify-center gap-4">
+                <Button 
+                  size="icon" 
+                  className="gradient-primary hover:glow-primary transition-smooth w-12 h-12 sm:w-14 sm:h-14" 
+                  onClick={() => document.getElementById('novel-concept')?.scrollIntoView({ behavior: 'smooth' })}
+                  aria-label="Project's Vision"
+                >
+                  <Lightbulb className="w-6 h-6 sm:w-7 sm:h-7" />
                 </Button>
 
-                <Button size="lg" className="gradient-secondary hover:glow-secondary transition-smooth group px-4 py-4 sm:px-4 sm:py-3 min-h-[48px] text-sm sm:text-sm font-medium" onClick={() => document.getElementById('insights')?.scrollIntoView({
-                behavior: 'smooth'
-              })}>
-                  <BarChart3 className="mr-2 w-4 h-4 group-hover:scale-110 transition-transform" />
-                  Survey Deep Dive
+                <Button 
+                  size="icon" 
+                  className="gradient-secondary hover:glow-secondary transition-smooth w-12 h-12 sm:w-14 sm:h-14" 
+                  onClick={() => document.getElementById('insights')?.scrollIntoView({ behavior: 'smooth' })}
+                  aria-label="Survey Deep Dive"
+                >
+                  <BarChart3 className="w-6 h-6 sm:w-7 sm:h-7" />
                 </Button>
 
                 <Dialog>
                   <DialogTrigger asChild>
-                    <Button size="lg" variant="outline" className="border-muted-foreground/30 hover:border-muted-foreground transition-smooth group px-4 py-4 sm:px-4 sm:py-3 min-h-[48px] text-sm sm:text-sm font-medium">
-                      <Shield className="mr-2 w-4 h-4 group-hover:scale-110 transition-transform" />
-                      Legal Disclaimer
+                    <Button 
+                      size="icon" 
+                      variant="outline" 
+                      className="border-muted-foreground/30 hover:border-muted-foreground transition-smooth w-12 h-12 sm:w-14 sm:h-14" 
+                      aria-label="Legal Disclaimer"
+                    >
+                      <Shield className="w-6 h-6 sm:w-7 sm:h-7" />
                     </Button>
                   </DialogTrigger>
                   <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto mx-4 sm:mx-auto">
