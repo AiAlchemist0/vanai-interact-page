@@ -110,6 +110,32 @@ const AIMusicAnalytics = () => {
           </p>
         </div>
 
+        {/* Musical Genres Section */}
+        <div className="mb-16">
+          <h3 className="text-3xl sm:text-4xl font-bold text-center mb-12 text-gradient">
+            Emotional Expression Through Genres
+          </h3>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {musicGenres.map((genre, index) => {
+              const Icon = genre.icon;
+              return (
+                <Card key={index} className="p-4 sm:p-8 bg-gradient-subtle border-gradient hover:glow-accent transition-all duration-300 hover-scale">
+                  <div className="text-center">
+                    <div className={`w-16 h-16 mx-auto mb-6 rounded-full bg-gradient-to-br ${genre.color} flex items-center justify-center`}>
+                      <Icon className="w-8 h-8 text-white" />
+                    </div>
+                    <h4 className="text-xl font-bold mb-2 text-foreground">{genre.genre}</h4>
+                    <p className="text-primary font-semibold mb-3">{genre.emotion}</p>
+                    <p className="text-muted-foreground">{genre.description}</p>
+                  </div>
+                </Card>
+              );
+            })}
+          </div>
+
+        </div>
+
         {/* Problem Statement */}
         <div className="mb-16">
           <Card className="p-8 sm:p-12 bg-gradient-subtle border-gradient">
@@ -165,31 +191,6 @@ const AIMusicAnalytics = () => {
                     </div>
                   )}
                 </div>
-              );
-            })}
-          </div>
-        </div>
-
-        {/* Musical Genres Section */}
-        <div className="mb-16">
-          <h3 className="text-3xl sm:text-4xl font-bold text-center mb-12 text-gradient">
-            Emotional Expression Through Genres
-          </h3>
-          
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {musicGenres.map((genre, index) => {
-              const Icon = genre.icon;
-              return (
-                <Card key={index} className="p-4 sm:p-8 bg-gradient-subtle border-gradient hover:glow-accent transition-all duration-300 hover-scale">
-                  <div className="text-center">
-                    <div className={`w-16 h-16 mx-auto mb-6 rounded-full bg-gradient-to-br ${genre.color} flex items-center justify-center`}>
-                      <Icon className="w-8 h-8 text-white" />
-                    </div>
-                    <h4 className="text-xl font-bold mb-2 text-foreground">{genre.genre}</h4>
-                    <p className="text-primary font-semibold mb-3">{genre.emotion}</p>
-                    <p className="text-muted-foreground">{genre.description}</p>
-                  </div>
-                </Card>
               );
             })}
           </div>
