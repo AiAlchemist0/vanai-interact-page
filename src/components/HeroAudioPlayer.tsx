@@ -116,9 +116,14 @@ const HeroAudioPlayer = () => {
                  <p className="text-xs sm:text-sm text-muted-foreground font-medium truncate">
                    {song.artist}
                  </p>
-                 {!statsLoading && getPlayCount(song.id) > 0 && (
+                 {!statsLoading && (
                    <span className="text-xs text-muted-foreground/70 font-medium flex-shrink-0">
                      ♪ {getPlayCount(song.id)}
+                   </span>
+                 )}
+                 {statsLoading && (
+                   <span className="text-xs text-muted-foreground/50 font-medium flex-shrink-0 animate-pulse">
+                     ♪ ...
                    </span>
                  )}
                </div>
