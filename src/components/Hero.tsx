@@ -43,7 +43,7 @@ const Hero = () => {
                   </h1>
                   <div className="flex items-center gap-2 text-primary">
                     <Sparkles className="w-4 sm:w-5 h-4 sm:h-5" />
-                    <span className="text-xs sm:text-sm font-medium">AI-Powered Analytics</span>
+                    <span className="text-xs sm:text-sm font-medium">AI-Music Powered Analytics</span>
                   </div>
                 </div>
               </div>
