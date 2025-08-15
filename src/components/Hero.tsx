@@ -1,7 +1,9 @@
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { ArrowRight, Users, BarChart3, MapPin, Gamepad2, Sparkles } from "lucide-react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogTrigger } from "@/components/ui/dialog";
+import { ArrowRight, Users, BarChart3, MapPin, Gamepad2, Sparkles, Shield } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 import heroImage from "@/assets/hero-ai-survey.jpg";
 import HeroAudioPlayer from "./HeroAudioPlayer";
 const Hero = () => {
@@ -85,20 +87,72 @@ const Hero = () => {
 
             {/* CTA Buttons */}
             <div className="space-y-3 sm:space-y-4">
-              <div className="flex flex-row gap-3">
-                <Button size="lg" className="gradient-primary hover:glow-primary transition-smooth group flex-1 px-4 py-3 sm:px-6 sm:py-3 min-h-[44px] text-sm sm:text-base" onClick={() => document.getElementById('novel-concept')?.scrollIntoView({
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-3">
+                <Button size="lg" className="gradient-primary hover:glow-primary transition-smooth group px-3 py-3 sm:px-4 sm:py-3 min-h-[44px] text-xs sm:text-sm" onClick={() => document.getElementById('novel-concept')?.scrollIntoView({
                 behavior: 'smooth'
               })}>
-                  Project's Vision
-                  <ArrowRight className="ml-2 w-3 sm:w-4 h-3 sm:h-4 group-hover:translate-x-1 transition-transform" />
+                  <span className="hidden sm:inline">Project's Vision</span>
+                  <span className="sm:hidden">Vision</span>
+                  <ArrowRight className="ml-1 sm:ml-2 w-3 h-3 sm:w-4 sm:h-4 group-hover:translate-x-1 transition-transform" />
                 </Button>
 
-                <Button size="lg" className="gradient-secondary hover:glow-secondary transition-smooth group flex-1 px-4 py-3 sm:px-6 sm:py-3 min-h-[44px] text-sm sm:text-base" onClick={() => document.getElementById('insights')?.scrollIntoView({
+                <Button size="lg" className="gradient-secondary hover:glow-secondary transition-smooth group px-3 py-3 sm:px-4 sm:py-3 min-h-[44px] text-xs sm:text-sm" onClick={() => document.getElementById('insights')?.scrollIntoView({
                 behavior: 'smooth'
               })}>
-                  <BarChart3 className="mr-2 w-3 sm:w-4 h-3 sm:h-4 group-hover:scale-110 transition-transform" />
-                  Survey Deep Dive
+                  <BarChart3 className="mr-1 sm:mr-2 w-3 h-3 sm:w-4 sm:h-4 group-hover:scale-110 transition-transform" />
+                  <span className="hidden sm:inline">Survey Deep Dive</span>
+                  <span className="sm:hidden">Survey</span>
                 </Button>
+
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <Button size="lg" variant="outline" className="border-muted-foreground/30 hover:border-muted-foreground transition-smooth group px-3 py-3 sm:px-4 sm:py-3 min-h-[44px] text-xs sm:text-sm">
+                      <Shield className="mr-1 sm:mr-2 w-3 h-3 sm:w-4 sm:h-4 group-hover:scale-110 transition-transform" />
+                      <span className="hidden sm:inline">Legal Disclaimer</span>
+                      <span className="sm:hidden">Legal</span>
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
+                    <DialogHeader>
+                      <DialogTitle className="flex items-center gap-2">
+                        <Shield className="w-5 h-5" />
+                        Legal Disclaimer
+                      </DialogTitle>
+                    </DialogHeader>
+                    <div className="space-y-4 text-sm text-muted-foreground">
+                      <div className="space-y-2">
+                        <h4 className="font-semibold text-foreground">Educational Purpose & Concept Rights</h4>
+                        <p>
+                          The intent of this project is within educational content only as per hackathon. And introduce the idea of AI-Music Powered Analytics. The author of the project holds the right to the concept and releases the rights to BC + AI and Rival Tech for further exploration and usage. Copying the concept apart from these two parties must be contacted to the author Dean Shev directly.
+                        </p>
+                      </div>
+                      
+                      <div className="space-y-2">
+                        <h4 className="font-semibold text-foreground">Song Creation Intent</h4>
+                        <p>
+                          All songs are created without an intent to offend, upset or deflamatory act of any sorts to the individuals in the songs.
+                        </p>
+                        <p>
+                          The intent of the songs is to connect wonderful individuals, "artists" of the BC + AI community and cherish their participation and support and not to deflamatory.
+                        </p>
+                      </div>
+                      
+                      <div className="space-y-2">
+                        <h4 className="font-semibold text-foreground">Post-Hackathon Usage</h4>
+                        <p>
+                          Beyond the hackathon, All songs will not be released or used in any capacity without first asking permission and consent of the person.
+                        </p>
+                      </div>
+                      
+                      <div className="space-y-2">
+                        <h4 className="font-semibold text-foreground">Social Media Sharing</h4>
+                        <p>
+                          Songs will not be shared on social media, unless approved by consent from the associated artist.
+                        </p>
+                      </div>
+                    </div>
+                  </DialogContent>
+                </Dialog>
               </div>
 
               <Button size="lg" className="gradient-accent hover:glow-accent transition-smooth group w-full px-4 py-3 sm:px-6 sm:py-3 min-h-[44px] text-sm sm:text-base" onClick={() => navigate('/game')}>
