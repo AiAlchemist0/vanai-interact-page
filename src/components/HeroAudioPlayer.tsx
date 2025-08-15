@@ -40,7 +40,7 @@ const HeroAudioPlayer = () => {
   };
 
   return (
-    <div className="bg-card/20 backdrop-blur-xl border border-border/20 rounded-3xl p-3 sm:p-4 shadow-elegant">
+    <div className="bg-card/20 backdrop-blur-xl border border-border/20 rounded-3xl px-2 py-3 sm:p-4 shadow-elegant">
       {/* Compact Header */}
        <div className="mb-3 sm:mb-4">
          <div className="flex items-center justify-between gap-2 mb-2">
