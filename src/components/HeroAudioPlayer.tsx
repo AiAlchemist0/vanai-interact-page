@@ -43,9 +43,9 @@ const HeroAudioPlayer = () => {
     <div className="bg-card/20 backdrop-blur-xl border border-border/20 rounded-3xl px-2 py-3 sm:p-4 shadow-elegant">
       {/* Compact Header */}
        <div className="mb-3 sm:mb-4">
-         <div className="flex items-center justify-between gap-2 mb-2">
-           <div className="flex items-center gap-2 sm:gap-3 flex-1 min-w-0 max-w-[calc(100%-200px)]">
-             <h3 className="text-base sm:text-lg font-semibold text-foreground truncate min-w-0 flex-1">
+         <div className="flex items-center justify-between gap-2 mb-2 h-6 sm:h-7">
+           <div className="flex items-center gap-2 sm:gap-3 flex-1 min-w-0 max-w-[calc(100%-120px)] sm:max-w-[calc(100%-200px)]">
+             <h3 className="text-base sm:text-lg font-semibold text-foreground truncate min-w-0 flex-1 leading-tight">
                {isPlaylistMode ? "♪ Playing all songs..." : isPlaying ? `♪ ${currentSong?.title || ''}` : 'BC AI Audio Experience'}
              </h3>
            </div>
