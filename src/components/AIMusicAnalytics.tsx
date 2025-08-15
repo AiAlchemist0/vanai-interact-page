@@ -115,11 +115,11 @@ const AIMusicAnalytics = () => {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto">
-            <Card className="p-8 bg-gradient-to-br from-red-900 to-red-800 border-red-600">
+            <Card className="p-8 bg-gradient-to-br from-slate-800 to-gray-800 border-slate-600">
               <div className="text-center">
-                <BarChart3 className="w-16 h-16 text-red-400 mx-auto mb-6" />
+                <BarChart3 className="w-16 h-16 text-slate-400 mx-auto mb-6" />
                 <h4 className="text-2xl font-bold mb-4 text-white">Traditional Analytics</h4>
-                <ul className="text-left space-y-3 text-gray-200">
+                <ul className="text-left space-y-3 text-gray-300">
                   <li>• Cold numbers and statistics</li>
                   <li>• Disconnected from human emotion</li>
                   <li>• Hard to relate to personally</li>
@@ -129,11 +129,11 @@ const AIMusicAnalytics = () => {
               </div>
             </Card>
 
-            <Card className="p-8 bg-gradient-to-br from-green-900 to-emerald-800 border-green-600">
+            <Card className="p-8 bg-gradient-to-br from-slate-700 to-gray-700 border-slate-500">
               <div className="text-center">
-                <Heart className="w-16 h-16 text-green-400 mx-auto mb-6" />
+                <Heart className="w-16 h-16 text-slate-300 mx-auto mb-6" />
                 <h4 className="text-2xl font-bold mb-4 text-white">What We Need</h4>
-                <ul className="text-left space-y-3 text-gray-200">
+                <ul className="text-left space-y-3 text-gray-300">
                   <li>• Emotional resonance and connection</li>
                   <li>• Personal and relatable experiences</li>
                   <li>• Community building and sharing</li>
