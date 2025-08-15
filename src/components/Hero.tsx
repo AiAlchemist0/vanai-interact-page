@@ -26,25 +26,27 @@ const Hero = () => {
           
           {/* Left Side - Content */}
           <div className="space-y-6 sm:space-y-8 lg:pr-8">
-            <Badge variant="secondary" className="mb-4 sm:mb-6 border-gradient glow-primary text-xs sm:text-sm">
-              <BarChart3 className="w-3 sm:w-4 h-3 sm:h-4 mr-1 sm:mr-2" />
-              Vancouver AI Hackathon Round 3
-            </Badge>
+            <div className="flex flex-wrap items-center gap-4 mb-4 sm:mb-6">
+              <Badge variant="secondary" className="border-gradient glow-primary text-xs sm:text-sm">
+                <BarChart3 className="w-3 sm:w-4 h-3 sm:h-4 mr-1 sm:mr-2" />
+                Vancouver AI Hackathon Round 3
+              </Badge>
+              <div className="flex items-center gap-2 text-primary">
+                <Sparkles className="w-4 sm:w-5 h-4 sm:h-5" />
+                <span className="text-xs sm:text-sm font-medium">AI-Music Powered Analytics</span>
+              </div>
+            </div>
 
             {/* Logo and Title Section */}
             <div className="space-y-4 sm:space-y-6">
               <div className="flex flex-row items-center justify-center gap-3 sm:gap-6">
                 <img src="/lovable-uploads/6b65586a-63ba-48f1-9c56-1846ec800f39.png" alt="BC+AI Ecosystem Logo" className="w-40 sm:w-36 lg:w-40 h-auto filter drop-shadow-lg flex-shrink-0" />
                 <div className="flex-1 min-w-0">
-                  <h1 className="text-3xl sm:text-3xl font-bold text-gradient leading-tight mb-2 sm:mb-3 text-justify lg:text-6xl">
+                  <h1 className="text-3xl sm:text-3xl font-bold text-gradient leading-tight text-justify lg:text-6xl">
                     BC + AI Survey
                     <br />
                     Insights
                   </h1>
-                  <div className="flex items-center gap-2 text-primary">
-                    <Sparkles className="w-4 sm:w-5 h-4 sm:h-5" />
-                    <span className="text-xs sm:text-sm font-medium">AI-Music Powered Analytics</span>
-                  </div>
                 </div>
               </div>
 
