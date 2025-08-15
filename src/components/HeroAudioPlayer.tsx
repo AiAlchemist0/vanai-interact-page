@@ -121,45 +121,37 @@ const HeroAudioPlayer = () => {
               </div>
             </div>
 
-            {/* Album Art with Play Button Overlay */}
-            <div 
-              className="relative flex-shrink-0 self-start group cursor-pointer"
-              onClick={() => handlePlayClick(song.id, index)}
-            >
+            {/* Play Button - Left of Album Art */}
+            <div className="flex-shrink-0 self-start">
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => handlePlayClick(song.id, index)}
+                className={`w-10 h-10 sm:w-12 sm:h-12 rounded-full transition-all duration-200 touch-manipulation hover-scale ${
+                  index === currentSongIndex && isLoadedAndReady
+                    ? 'bg-green-500/20 hover:bg-green-500/30 text-green-600 border border-green-500/30 shadow-lg animate-pulse' 
+                    : index === currentSongIndex && isPlaying
+                    ? 'bg-primary/20 hover:bg-primary/30 text-primary shadow-lg' 
+                    : 'hover:bg-primary/20 text-muted-foreground hover:text-primary'
+                }`}
+              >
+                {index === currentSongIndex && isPlaying ? (
+                  <Pause className="h-4 w-4 sm:h-5 sm:w-5" />
+                ) : (
+                  <Play className="h-4 w-4 sm:h-5 sm:w-5" />
+                )}
+              </Button>
+            </div>
+
+            {/* Album Art */}
+            <div className="relative flex-shrink-0 self-start">
               <img 
                 src={song.coverArt} 
                 alt={`${song.title} cover`} 
-                className="w-12 h-12 sm:w-16 sm:h-16 rounded-lg object-cover shadow-md transition-all duration-200 group-hover:brightness-75"
+                className="w-12 h-12 sm:w-16 sm:h-16 rounded-lg object-cover shadow-md transition-all duration-200"
               />
               
-              {/* Play Button Overlay */}
-              <div className={`absolute inset-0 rounded-lg flex items-center justify-center transition-all duration-200 ${
-                index === currentSongIndex && isPlaying
-                  ? 'bg-primary/40' 
-                  : index === currentSongIndex && isLoadedAndReady
-                  ? 'bg-green-500/40'
-                  : 'bg-black/40 opacity-0 group-hover:opacity-100'
-              }`}>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className={`w-8 h-8 sm:w-10 sm:h-10 rounded-full transition-all duration-200 ${
-                    index === currentSongIndex && isLoadedAndReady
-                      ? 'bg-green-500/90 hover:bg-green-500 text-white shadow-lg scale-100' 
-                      : index === currentSongIndex && isPlaying
-                      ? 'bg-primary/90 hover:bg-primary text-white shadow-lg scale-100' 
-                      : 'bg-white/90 hover:bg-white text-black shadow-lg scale-90 group-hover:scale-100'
-                  }`}
-                >
-                  {index === currentSongIndex && isPlaying ? (
-                    <Pause className="h-3 w-3 sm:h-4 sm:w-4" />
-                  ) : (
-                    <Play className="h-3 w-3 sm:h-4 sm:w-4" />
-                  )}
-                </Button>
-              </div>
-              
-              {/* Playing Animation */}
+              {/* Playing Animation Indicator */}
               {index === currentSongIndex && isPlaying && (
                 <div className="absolute -top-1 -right-1 w-3 h-3 sm:w-4 sm:h-4 bg-primary rounded-full animate-pulse shadow-lg" />
               )}
