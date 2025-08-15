@@ -26,6 +26,7 @@ export const useAudioPlayer = (songs: Song[]) => {
   const [showLyricsOnly, setShowLyricsOnly] = React.useState(false);
   const [playbackMode, setPlaybackMode] = React.useState<"off" | "next" | "repeat" | "repeat-all">("next");
   const [isLoadedAndReady, setIsLoadedAndReady] = React.useState(false);
+  const [isPlaylistMode, setIsPlaylistMode] = React.useState(false);
 
   const currentSong = songs[currentSongIndex];
 
@@ -89,6 +90,8 @@ export const useAudioPlayer = (songs: Song[]) => {
     setPlaybackMode,
     isLoadedAndReady,
     setIsLoadedAndReady,
+    isPlaylistMode,
+    setIsPlaylistMode,
     
     // Computed
     currentSong,

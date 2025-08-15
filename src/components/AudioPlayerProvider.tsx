@@ -20,6 +20,8 @@ const AudioPlayerProvider: React.FC<AudioPlayerProviderProps> = ({ children }) =
     currentTime,
     duration,
     setCurrentSongIndex,
+    isPlaylistMode,
+    setIsPlaylistMode,
     audioRef
   } = audioPlayerHook;
 
@@ -41,6 +43,8 @@ const AudioPlayerProvider: React.FC<AudioPlayerProviderProps> = ({ children }) =
   const nextSong = () => {
     if (currentSongIndex < SONGS.length - 1) {
       setCurrentSongIndex(currentSongIndex + 1);
+    } else if (isPlaylistMode) {
+      setCurrentSongIndex(0); // Loop to first song in playlist mode
     } else {
       setCurrentSongIndex(0); // Loop to first song
     }
@@ -61,6 +65,22 @@ const AudioPlayerProvider: React.FC<AudioPlayerProviderProps> = ({ children }) =
     audio.currentTime = 0;
   };
 
+  const startPlaylistMode = () => {
+    setIsPlaylistMode(true);
+    setCurrentSongIndex(0); // Start from first song
+    setTimeout(() => {
+      const audio = audioRef.current;
+      if (audio) {
+        audio.play().catch(() => console.log('Autoplay blocked'));
+      }
+    }, 100);
+  };
+
+  const stopPlaylistMode = () => {
+    setIsPlaylistMode(false);
+    stopPlayback();
+  };
+
   const contextValue = {
     loadSpecificSong,
     startPlayback,
@@ -68,8 +88,11 @@ const AudioPlayerProvider: React.FC<AudioPlayerProviderProps> = ({ children }) =
     nextSong,
     previousSong,
     stopPlayback,
+    startPlaylistMode,
+    stopPlaylistMode,
     isPlaying,
     isLoadedAndReady,
+    isPlaylistMode,
     currentSongIndex,
     currentSong,
     songs: SONGS,

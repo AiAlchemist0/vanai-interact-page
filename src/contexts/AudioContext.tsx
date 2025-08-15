@@ -8,8 +8,11 @@ interface AudioContextType {
   nextSong: () => void;
   previousSong: () => void;
   stopPlayback: () => void;
+  startPlaylistMode: () => void;
+  stopPlaylistMode: () => void;
   isPlaying: boolean;
   isLoadedAndReady: boolean;
+  isPlaylistMode: boolean;
   currentSongIndex: number;
   currentSong: Song;
   songs: Song[];

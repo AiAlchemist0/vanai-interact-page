@@ -308,6 +308,8 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ audioPlayerHook }) => {
     setShowLyricsOnly,
     playbackMode,
     setPlaybackMode,
+    isPlaylistMode,
+    setIsPlaylistMode,
     currentSong,
     loadSpecificSong,
     startPlayback,
@@ -430,6 +432,14 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ audioPlayerHook }) => {
     
     const onEnded = () => {
       setIsPlaying(false);
+      
+      // Handle playlist mode first (highest priority)
+      if (isPlaylistMode) {
+        const nextIndex = currentSongIndex < SONGS.length - 1 ? currentSongIndex + 1 : 0;
+        setCurrentSongIndex(nextIndex);
+        setShouldAutoPlay(true);
+        return;
+      }
       
       // Only auto-advance if user has interacted with the player
       if (!hasUserInteracted) return;

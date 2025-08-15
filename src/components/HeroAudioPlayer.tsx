@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button } from "@/components/ui/button";
-import { Play, Pause, BarChart3 } from "lucide-react";
+import { Play, Pause, BarChart3, PlayCircle, StopCircle } from "lucide-react";
 import { useAudio } from "@/contexts/AudioContext";
 import { useSongStatistics } from '@/hooks/useSongStatistics';
 
@@ -21,6 +21,9 @@ const HeroAudioPlayer = () => {
     loadSpecificSong,
     startPlayback,
     togglePlay,
+    startPlaylistMode,
+    stopPlaylistMode,
+    isPlaylistMode,
     currentSongIndex
   } = useAudio();
   
@@ -41,27 +44,49 @@ const HeroAudioPlayer = () => {
       {/* Compact Header */}
        <div className="mb-3 sm:mb-4">
          <div className="flex items-center justify-between gap-2 mb-2">
-           <h3 className="text-base sm:text-lg font-semibold text-foreground truncate">
-             {isPlaying ? `♪ ${currentSong.title}` : 'BC AI Audio Experience'}
-           </h3>
-           {!statsLoading && getTotalPlays() > 0 && (
-             <div className="flex items-center gap-1 text-muted-foreground">
-               <BarChart3 className="w-3 h-3 sm:w-4 sm:h-4" />
-               <span className="text-xs font-medium">{getTotalPlays()}</span>
-             </div>
-           )}
-           {statsLoading && (
-             <div className="flex items-center gap-1 text-muted-foreground">
-               <BarChart3 className="w-3 h-3 sm:w-4 sm:h-4 animate-pulse" />
-               <span className="text-xs font-medium">Loading...</span>
-             </div>
-           )}
-           {!statsLoading && getTotalPlays() === 0 && (
-             <div className="flex items-center gap-1 text-muted-foreground/50">
-               <BarChart3 className="w-3 h-3 sm:w-4 sm:h-4" />
-               <span className="text-xs font-medium">0 plays</span>
-             </div>
-           )}
+           <div className="flex items-center gap-2 sm:gap-3 flex-1 min-w-0">
+             <h3 className="text-base sm:text-lg font-semibold text-foreground truncate">
+               {isPlaylistMode ? "♪ Playing all songs..." : isPlaying ? `♪ ${currentSong.title}` : 'BC AI Audio Experience'}
+             </h3>
+             <Button
+               onClick={isPlaylistMode ? stopPlaylistMode : startPlaylistMode}
+               variant={isPlaylistMode ? "destructive" : "secondary"}
+               size="sm"
+               className="h-7 px-2 text-xs font-medium flex-shrink-0"
+             >
+               {isPlaylistMode ? (
+                 <>
+                   <StopCircle className="h-3 w-3 mr-1" />
+                   Stop all
+                 </>
+               ) : (
+                 <>
+                   <PlayCircle className="h-3 w-3 mr-1" />
+                   Play all
+                 </>
+               )}
+             </Button>
+           </div>
+           <div className="flex items-center gap-1 text-muted-foreground flex-shrink-0">
+             {!statsLoading && getTotalPlays() > 0 && (
+               <>
+                 <BarChart3 className="w-3 h-3 sm:w-4 sm:h-4" />
+                 <span className="text-xs font-medium">{getTotalPlays()}</span>
+               </>
+             )}
+             {statsLoading && (
+               <>
+                 <BarChart3 className="w-3 h-3 sm:w-4 sm:h-4 animate-pulse" />
+                 <span className="text-xs font-medium">Loading...</span>
+               </>
+             )}
+             {!statsLoading && getTotalPlays() === 0 && (
+               <>
+                 <BarChart3 className="w-3 h-3 sm:w-4 sm:h-4" />
+                 <span className="text-xs font-medium">0 plays</span>
+               </>
+             )}
+           </div>
          </div>
          <div className="w-full bg-muted/30 rounded-full h-1.5 relative overflow-hidden">
            <div 
