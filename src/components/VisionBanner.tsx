@@ -67,7 +67,12 @@ const VisionBanner = () => {
                   </Card>
                   
                   {index < visionSteps.length - 1 && (
-                    <ArrowRight className="w-6 h-6 text-primary mx-4 my-4 lg:my-0 hidden lg:block" />
+                    <>
+                      {/* Mobile: Vertical Arrow */}
+                      <ArrowRight className="w-6 h-6 text-primary mx-4 my-4 lg:hidden rotate-90" />
+                      {/* Desktop: Horizontal Arrow */}
+                      <ArrowRight className="w-6 h-6 text-primary mx-4 my-4 hidden lg:block" />
+                    </>
                   )}
                 </div>
               );
