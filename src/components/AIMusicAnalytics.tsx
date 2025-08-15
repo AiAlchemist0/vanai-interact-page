@@ -24,6 +24,27 @@ const AIMusicAnalytics = () => {
       description: "Capturing the excitement of technological possibilities",
       icon: Radio,
       color: "from-blue-500 to-purple-500"
+    },
+    {
+      genre: "Jazz",
+      emotion: "Sophisticated Reflection",
+      description: "Improvising complex thoughts about AI's nuanced implications",
+      icon: Music,
+      color: "from-purple-500 to-indigo-500"
+    },
+    {
+      genre: "Folk",
+      emotion: "Traditional Wisdom",
+      description: "Grounding AI discussions in human values and heritage",
+      icon: Users,
+      color: "from-green-500 to-emerald-500"
+    },
+    {
+      genre: "Rock",
+      emotion: "Bold Determination",
+      description: "Channeling resilience and strength in facing AI challenges",
+      icon: Sparkles,
+      color: "from-red-500 to-pink-500"
     }
   ];
 
