@@ -125,7 +125,7 @@ const SONGS: Song[] = [
     title: "ChatGPT: Est-ce que ma facture va exploser?",
     artist: "Lionel Ringenbach",
     audioFile: getAudioUrl("Lionel Ringenbach.mp3"),
-    coverArt: "/src/assets/lionel-ringenbach-cover.jpg",
+    coverArt: "/lovable-uploads/7f8d84c3-eb81-4f66-87be-5b024084aca2.png",
     bpm: 100,
     duration: 180000,
   },
