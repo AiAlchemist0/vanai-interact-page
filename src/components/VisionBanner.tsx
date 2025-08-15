@@ -59,60 +59,6 @@ const VisionBanner = () => {
           </p>
         </div>
 
-        {/* Vision Flow - Desktop */}
-        <div className="hidden md:flex items-center justify-center gap-2 lg:gap-4 max-w-5xl mx-auto">
-          {visionSteps.map((step, index) => (
-            <div key={step.text} className="flex items-center">
-              {/* Step */}
-              <div 
-                className="flex flex-col items-center group cursor-pointer animate-scale-in"
-                style={{animationDelay: `${index * 0.2}s`}}
-              >
-                <div className={`relative p-2 lg:p-3 rounded-full bg-card/50 backdrop-blur-sm border border-primary/20 group-hover:border-primary/40 transition-all duration-300 group-hover:scale-105 ${step.glow} group-hover:shadow-lg`}>
-                  <step.icon className={`w-4 lg:w-5 h-4 lg:h-5 ${step.color} group-hover:scale-110 transition-transform duration-300`} />
-                  
-                  {/* Pulse effect */}
-                  <div className="absolute inset-0 rounded-full border-2 border-primary/30 animate-ping opacity-75 group-hover:opacity-100" style={{animationDelay: `${index * 0.5}s`}} />
-                </div>
-                
-                <h3 className="text-xs lg:text-sm font-semibold text-foreground mt-1 lg:mt-2 group-hover:text-primary transition-colors">
-                  {step.text}
-                </h3>
-                <p className="text-xs text-muted-foreground hidden lg:block">
-                  {step.description}
-                </p>
-              </div>
-
-              {/* Arrow connector */}
-              {index < visionSteps.length - 1 && (
-                <div className="flex items-center mx-1 lg:mx-2">
-                  {/* Flowing arrow */}
-                  <div className="relative">
-                    <svg 
-                      className="w-6 lg:w-8 h-3 lg:h-4 text-primary/40 animate-pulse" 
-                      fill="none" 
-                      stroke="currentColor" 
-                      viewBox="0 0 24 24"
-                      style={{animationDelay: `${index * 0.3 + 0.5}s`}}
-                    >
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                    </svg>
-                    
-                    {/* Flowing particle */}
-                    <div 
-                      className="absolute top-1/2 left-0 w-1 h-1 bg-primary/60 rounded-full animate-bounce"
-                      style={{
-                        animationDelay: `${index * 0.4 + 1}s`,
-                        animationDuration: '2s'
-                      }}
-                    />
-                  </div>
-                </div>
-              )}
-            </div>
-          ))}
-        </div>
-
         {/* Vision Flow - Mobile */}
         <div className="md:hidden flex flex-col items-center gap-6 max-w-md mx-auto">
           {visionSteps.map((step, index) => (
