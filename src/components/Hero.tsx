@@ -91,20 +91,20 @@ const Hero = () => {
               <div className="flex sm:hidden justify-center gap-3">
                 <Button 
                   size="icon" 
-                  className="gradient-primary hover:glow-primary transition-smooth w-12 h-12" 
+                  className="gradient-primary hover:glow-primary transition-smooth w-16 h-16" 
                   onClick={() => document.getElementById('novel-concept')?.scrollIntoView({ behavior: 'smooth' })}
                   aria-label="Project's Vision"
                 >
-                  <Lightbulb className="w-5 h-5" />
+                  <Lightbulb className="w-6 h-6" />
                 </Button>
 
                 <Button 
                   size="icon" 
-                  className="gradient-secondary hover:glow-secondary transition-smooth w-12 h-12" 
+                  className="gradient-secondary hover:glow-secondary transition-smooth w-16 h-16" 
                   onClick={() => document.getElementById('insights')?.scrollIntoView({ behavior: 'smooth' })}
                   aria-label="Survey Deep Dive"
                 >
-                  <BarChart3 className="w-5 h-5" />
+                  <BarChart3 className="w-6 h-6" />
                 </Button>
 
                 <Dialog>
@@ -112,10 +112,10 @@ const Hero = () => {
                     <Button 
                       size="icon" 
                       variant="outline" 
-                      className="border-muted-foreground/30 hover:border-muted-foreground transition-smooth w-12 h-12" 
+                      className="border-muted-foreground/30 hover:border-muted-foreground transition-smooth w-16 h-16" 
                       aria-label="Legal Disclaimer"
                     >
-                      <Shield className="w-5 h-5" />
+                      <Shield className="w-6 h-6" />
                     </Button>
                   </DialogTrigger>
                   <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto mx-4 sm:mx-auto">
@@ -200,11 +200,11 @@ const Hero = () => {
 
                 <Button 
                   size="icon" 
-                  className="gradient-accent hover:glow-accent transition-smooth w-12 h-12" 
+                  className="gradient-accent hover:glow-accent transition-smooth w-16 h-16" 
                   onClick={() => navigate('/game')}
                   aria-label="Play BC AI Game"
                 >
-                  <Gamepad2 className="w-5 h-5" />
+                  <Gamepad2 className="w-6 h-6" />
                 </Button>
               </div>
 
