@@ -14,13 +14,19 @@ export const useSongStatistics = () => {
 
   const fetchStatistics = async () => {
     try {
+      console.log('Fetching song statistics...');
       setLoading(true);
       const { data, error } = await supabase
         .from('song_statistics')
         .select('song_id, total_plays, last_played_at')
         .order('total_plays', { ascending: false });
 
-      if (error) throw error;
+      if (error) {
+        console.error('Supabase error:', error);
+        throw error;
+      }
+      
+      console.log('Statistics data received:', data);
       setStatistics(data || []);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to fetch statistics');
@@ -32,6 +38,8 @@ export const useSongStatistics = () => {
 
   const recordPlay = async (songId: string) => {
     try {
+      console.log('Recording play for song:', songId);
+      
       // Generate a simple session ID for anonymous tracking
       const sessionId = localStorage.getItem('session_id') || 
         Math.random().toString(36).substring(2, 15);
@@ -45,8 +53,13 @@ export const useSongStatistics = () => {
           played_at: new Date().toISOString()
         });
 
-      if (error) throw error;
+      if (error) {
+        console.error('Error recording play:', error);
+        throw error;
+      }
 
+      console.log('Play recorded successfully for song:', songId);
+      
       // Refresh statistics after recording a play
       await fetchStatistics();
     } catch (err) {

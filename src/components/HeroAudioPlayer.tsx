@@ -50,6 +50,18 @@ const HeroAudioPlayer = () => {
                <span className="text-xs font-medium">{getTotalPlays()}</span>
              </div>
            )}
+           {statsLoading && (
+             <div className="flex items-center gap-1 text-muted-foreground">
+               <BarChart3 className="w-3 h-3 sm:w-4 sm:h-4 animate-pulse" />
+               <span className="text-xs font-medium">Loading...</span>
+             </div>
+           )}
+           {!statsLoading && getTotalPlays() === 0 && (
+             <div className="flex items-center gap-1 text-muted-foreground/50">
+               <BarChart3 className="w-3 h-3 sm:w-4 sm:h-4" />
+               <span className="text-xs font-medium">0 plays</span>
+             </div>
+           )}
          </div>
          <div className="w-full bg-muted/30 rounded-full h-1.5 relative overflow-hidden">
            <div 
