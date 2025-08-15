@@ -14,6 +14,7 @@ import bcAiHackathonCover from "/lovable-uploads/2f51d7bb-96fc-4f06-b7f6-fc9abbb
 import drPatrickCover from "/lovable-uploads/4d050983-b56d-4606-a958-1c7e2c7253e8.png";
 import hrMacMillanCover from "/lovable-uploads/8a59c6e4-39f4-41e2-bb0d-544e22e3030a.png";
 import lalalaAiDilemmaCover from "/lovable-uploads/7e23b796-605f-4562-927b-06daa9147648.png";
+import lionelRingenbachCover from "@/assets/lionel-ringenbach-cover.jpg";
 
 
 // Supabase Storage URLs for audio files
@@ -239,6 +240,29 @@ const SONGS: Song[] = [
       { time: 40, text: "Fiscal AI force rising up" },
       { time: 44, text: "British Columbia's bright new day" },
       { time: 48, text: "Innovation leads the way" }
+    ] as LyricLine[]
+  },
+  {
+    id: "lionel-ringenbach",
+    title: "ChatGPT: Est-ce que ma facture va exploser?",
+    artist: "Lionel Ringenbach",
+    src: getAudioUrl("Lionel Ringenbach.mp3"),
+    coverArt: lionelRingenbachCover,
+    lyrics: [
+      { time: 0, text: "ChatGPT, est-ce que ma facture va exploser?" },
+      { time: 4, text: "With every prompt, the tokens they flow" },
+      { time: 8, text: "In the cloud, les coûts s'exposer" },
+      { time: 12, text: "Digital bills, they start to grow" },
+      { time: 16, text: "" },
+      { time: 18, text: "Artificial intelligence at work" },
+      { time: 22, text: "Processing thoughts both night and day" },
+      { time: 26, text: "But the costs, they sometimes lurk" },
+      { time: 30, text: "In the background where they stay" },
+      { time: 34, text: "" },
+      { time: 36, text: "Ma facture va-t-elle exploser?" },
+      { time: 40, text: "With ChatGPT by my side" },
+      { time: 44, text: "Les tokens, ils vont danser" },
+      { time: 48, text: "In this AI-powered ride" }
     ] as LyricLine[]
   }
 ];

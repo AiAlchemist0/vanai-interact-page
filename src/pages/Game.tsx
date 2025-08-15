@@ -120,6 +120,15 @@ const SONGS: Song[] = [
     bpm: 130,
     duration: 195000,
   },
+  {
+    id: "lionel-ringenbach",
+    title: "ChatGPT: Est-ce que ma facture va exploser?",
+    artist: "Lionel Ringenbach",
+    audioFile: getAudioUrl("Lionel Ringenbach.mp3"),
+    coverArt: "/src/assets/lionel-ringenbach-cover.jpg",
+    bpm: 100,
+    duration: 180000,
+  },
 ];
 
 const Game = () => {
