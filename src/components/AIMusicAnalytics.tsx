@@ -1,6 +1,6 @@
-import { Music, Radio, Mic, Heart, Users, ArrowRight, Sparkles, TrendingUp } from "lucide-react";
+import { Music, Radio, Mic, Heart, Users, ArrowRight, Sparkles, TrendingUp, AlertTriangle, Target, Globe, MessageSquare, BrainCircuit, Music2, BarChart3 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-import { Card } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 
 const AIMusicAnalytics = () => {
   const musicGenres = [
@@ -50,145 +50,133 @@ const AIMusicAnalytics = () => {
 
   const transformationSteps = [
     {
-      title: "Raw Data",
-      description: "Survey responses & statistics",
-      icon: TrendingUp,
-      step: "01"
+      title: "Collect Data",
+      description: "Gather survey responses & statistics",
+      icon: BarChart3,
     },
     {
-      title: "Emotional Context",
-      description: "Understanding feelings behind numbers",
+      title: "Analyze Context",
+      description: "Understanding emotions behind numbers",
       icon: Heart,
-      step: "02"
     },
     {
-      title: "AI Lyrics",
-      description: "Transforming insights into verses",
+      title: "Generate Lyrics",
+      description: "AI transforms insights into verses",
       icon: Sparkles,
-      step: "03"
     },
     {
-      title: "Musical Expression",
-      description: "Creating emotional soundscapes",
-      icon: Music,
-      step: "04"
+      title: "Create Music",
+      description: "Producing emotional soundscapes",
+      icon: Music2,
     },
     {
-      title: "Community Connection",
-      description: "Collective BC + AI voice",
+      title: "Build Community",
+      description: "Connecting voices across BC",
       icon: Users,
-      step: "05"
     }
   ];
 
   return (
-    <section className="py-16 sm:py-24 bg-gradient-to-br from-background via-background/50 to-secondary/10 relative overflow-hidden">
+    <section className="py-20 bg-gradient-to-b from-background to-background/80 relative overflow-hidden">
       {/* Background Animation */}
-      <div className="absolute inset-0 opacity-30">
-        <div className="absolute top-20 left-10 w-32 h-32 bg-gradient-to-br from-primary/20 to-accent/20 rounded-full blur-xl animate-pulse"></div>
-        <div className="absolute bottom-20 right-10 w-40 h-40 bg-gradient-to-br from-secondary/20 to-primary/20 rounded-full blur-xl animate-pulse delay-1000"></div>
+      <div className="absolute inset-0 opacity-20">
+        <div className="absolute top-1/4 left-1/4 w-32 h-32 bg-primary/20 rounded-full blur-xl animate-pulse"></div>
+        <div className="absolute bottom-1/4 right-1/4 w-24 h-24 bg-accent/20 rounded-full blur-xl animate-pulse delay-1000"></div>
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-40 h-40 bg-secondary/10 rounded-full blur-2xl animate-pulse delay-500"></div>
       </div>
 
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        {/* Header Section */}
-        <div className="text-center mb-16">
-          <Badge variant="outline" className="mb-6 border-gradient glow-accent">
-            <Music className="w-4 h-4 mr-2" />
-            Novel Concept
+      <div className="container mx-auto px-6 relative z-10">
+        {/* Header */}
+        <div className="text-center mb-20">
+          <Badge variant="outline" className="mb-6 text-sm px-4 py-2 border-primary/20 bg-primary/5">
+            <BrainCircuit className="w-4 h-4 mr-2" />
+            Revolutionary AI-Music Analytics
           </Badge>
           
-          <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-gradient mb-6">
-            AI-Music Powered Analytics
+          <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-8 text-gradient">
+            Where Data Meets Melody
           </h2>
-          
-          <p className="text-lg sm:text-xl text-muted-foreground max-w-4xl mx-auto leading-relaxed mb-6">
-            Transforming cold data into emotional connections through the universal language of music
-          </p>
           
           <p className="text-base sm:text-lg md:text-2xl lg:text-3xl text-muted-foreground italic leading-relaxed max-w-5xl mx-auto">
             "Where <span className="text-primary font-medium">data</span> becomes <span className="text-accent font-medium">rhythm</span>, and <span className="text-primary font-medium">insights</span> become <span className="text-accent font-medium">community</span>"
           </p>
         </div>
 
-        {/* Musical Genres Section */}
-        <div className="mb-16">
-          <h3 className="text-3xl sm:text-4xl font-bold text-center mb-12 text-gradient">
-            Emotional Expression Through Genres
-          </h3>
-          
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {musicGenres.map((genre, index) => {
-              const Icon = genre.icon;
-              return (
-                <Card key={index} className="p-4 sm:p-8 bg-gradient-subtle border-gradient hover:glow-accent transition-all duration-300 hover-scale">
-                  <div className="text-center">
-                    <div className={`w-16 h-16 mx-auto mb-6 rounded-full bg-gradient-to-br ${genre.color} flex items-center justify-center`}>
-                      <Icon className="w-8 h-8 text-white" />
-                    </div>
-                    <h4 className="text-xl font-bold mb-2 text-foreground">{genre.genre}</h4>
-                    <p className="text-primary font-semibold mb-3">{genre.emotion}</p>
-                    <p className="text-muted-foreground">{genre.description}</p>
-                  </div>
-                </Card>
-              );
-            })}
+        {/* The Challenge Section */}
+        <div className="mb-20">
+          <div className="text-center mb-12">
+            <div className="flex items-center justify-center mb-6">
+              <AlertTriangle className="w-8 h-8 text-orange-500 mr-3" />
+              <h3 className="text-4xl font-bold text-gradient">The Problem: Lost in Translation</h3>
+            </div>
+            <p className="text-xl text-muted-foreground max-w-4xl mx-auto">
+              Traditional analytics miss the human story behind the numbers
+            </p>
           </div>
 
-        </div>
-
-        {/* Problem Statement */}
-        <div className="mb-16">
-          <Card className="p-8 sm:p-12 bg-gradient-subtle border-gradient">
-            <div className="text-center">
-              <h3 className="text-2xl sm:text-3xl font-bold mb-6 text-foreground">
-                The Challenge: Numbers Can't Capture Emotions
-              </h3>
-              <p className="text-lg text-muted-foreground mb-8 max-w-3xl mx-auto">
-                How do you translate <span className="text-primary font-semibold">fear</span>, 
-                <span className="text-accent font-semibold"> excitement</span>, or 
-                <span className="text-secondary font-semibold"> hope</span> into statistics? 
-                Traditional analytics show us what people think, but they struggle to convey 
-                <span className="text-gradient font-semibold"> how people feel</span>.
-              </p>
-              
-              <div className="flex flex-wrap justify-center gap-4 text-6xl sm:text-8xl">
-                <span className="text-muted-foreground/30">📊</span>
-                <span className="text-muted-foreground/50">→</span>
-                <span className="text-muted-foreground/30">❓</span>
-                <span className="text-muted-foreground/50">→</span>
-                <span className="text-primary">🎵</span>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto">
+            <Card className="p-8 bg-gradient-to-br from-red-50 to-orange-50 dark:from-red-900/20 dark:to-orange-900/20 border-red-200 dark:border-red-800">
+              <div className="text-center">
+                <BarChart3 className="w-16 h-16 text-red-500 mx-auto mb-6" />
+                <h4 className="text-2xl font-bold mb-4 text-red-700 dark:text-red-400">Traditional Analytics</h4>
+                <ul className="text-left space-y-3 text-muted-foreground">
+                  <li>• Cold numbers and statistics</li>
+                  <li>• Disconnected from human emotion</li>
+                  <li>• Hard to relate to personally</li>
+                  <li>• Limited community engagement</li>
+                  <li>• Boring presentation formats</li>
+                </ul>
               </div>
-            </div>
-          </Card>
+            </Card>
+
+            <Card className="p-8 bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 border-green-200 dark:border-green-800">
+              <div className="text-center">
+                <Heart className="w-16 h-16 text-green-500 mx-auto mb-6" />
+                <h4 className="text-2xl font-bold mb-4 text-green-700 dark:text-green-400">What We Need</h4>
+                <ul className="text-left space-y-3 text-muted-foreground">
+                  <li>• Emotional resonance and connection</li>
+                  <li>• Personal and relatable experiences</li>
+                  <li>• Community building and sharing</li>
+                  <li>• Engaging and memorable formats</li>
+                  <li>• Universal language of expression</li>
+                </ul>
+              </div>
+            </Card>
+          </div>
         </div>
 
-        {/* Transformation Process */}
-        <div className="mb-16">
-          <h3 className="text-3xl sm:text-4xl font-bold text-center mb-12 text-gradient">
-            The AI-Music Solution
-          </h3>
-          
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
+        {/* Our Innovation Section */}
+        <div className="mb-20">
+          <div className="text-center mb-12">
+            <div className="flex items-center justify-center mb-6">
+              <Sparkles className="w-8 h-8 text-primary mr-3" />
+              <h3 className="text-4xl font-bold text-gradient">The Breakthrough: AI-Music Analytics</h3>
+            </div>
+            <p className="text-xl text-muted-foreground max-w-4xl mx-auto">
+              Our revolutionary 5-step process transforms data into musical experiences
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
             {transformationSteps.map((step, index) => {
               const Icon = step.icon;
               return (
                 <div key={index} className="relative">
-                  <Card className="p-6 h-full bg-gradient-subtle border-gradient hover:glow-primary transition-all duration-300 hover-scale">
+                  <Card className="p-6 h-full hover-scale transition-all duration-300 bg-gradient-subtle border-gradient">
                     <div className="text-center">
-                      <Badge variant="secondary" className="mb-4 text-xs">
-                        {step.step}
-                      </Badge>
-                      <Icon className="w-8 h-8 mx-auto mb-4 text-primary" />
-                      <h4 className="font-bold mb-2 text-foreground">{step.title}</h4>
+                      <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center">
+                        <Icon className="w-8 h-8 text-white" />
+                      </div>
+                      <div className="w-8 h-8 mx-auto mb-3 rounded-full bg-primary text-white flex items-center justify-center text-sm font-bold">
+                        {index + 1}
+                      </div>
+                      <h4 className="text-lg font-bold mb-2 text-foreground">{step.title}</h4>
                       <p className="text-sm text-muted-foreground">{step.description}</p>
                     </div>
                   </Card>
                   
-                  {/* Arrow between steps */}
                   {index < transformationSteps.length - 1 && (
-                    <div className="hidden lg:block absolute top-1/2 -right-3 transform -translate-y-1/2 z-10">
-                      <ArrowRight className="w-6 h-6 text-primary" />
-                    </div>
+                    <ArrowRight className="hidden md:block w-6 h-6 text-primary absolute top-1/2 -right-9 transform -translate-y-1/2" />
                   )}
                 </div>
               );
@@ -196,18 +184,105 @@ const AIMusicAnalytics = () => {
           </div>
         </div>
 
-        {/* Community Impact */}
-        <div className="text-center">
-          <Card className="p-8 sm:p-12 bg-gradient-to-br from-primary/5 to-accent/5 border-gradient">
-            <Users className="w-16 h-16 mx-auto mb-6 text-primary" />
-            <h3 className="text-2xl sm:text-3xl font-bold mb-6 text-gradient">
-              The Collective BC + AI Voice
-            </h3>
-            <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
-              Each song becomes a vessel for our community's collective consciousness about AI. 
-              Through rhythm, melody, and verse, we create an emotional map of how British Columbia 
-              truly feels about artificial intelligence - beyond the numbers, into the <span className="text-primary font-semibold">heart</span> of our shared experience.
+        {/* Musical Expression Gallery */}
+        <div className="mb-20">
+          <div className="text-center mb-12">
+            <div className="flex items-center justify-center mb-6">
+              <Music2 className="w-8 h-8 text-accent mr-3" />
+              <h3 className="text-4xl font-bold text-gradient">Genres as Emotional Languages</h3>
+            </div>
+            <p className="text-xl text-muted-foreground max-w-4xl mx-auto">
+              Each musical genre becomes a unique voice for different community sentiments and experiences
             </p>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {musicGenres.map((genre, index) => {
+              const Icon = genre.icon;
+              return (
+                <Card key={index} className="group p-6 bg-gradient-subtle border-gradient hover:shadow-xl transition-all duration-500 hover-scale overflow-hidden relative">
+                  <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-accent/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  <div className="relative z-10 text-center">
+                    <div className={`w-20 h-20 mx-auto mb-6 rounded-full bg-gradient-to-br ${genre.color} flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300`}>
+                      <Icon className="w-10 h-10 text-white" />
+                    </div>
+                    <h4 className="text-2xl font-bold mb-3 text-foreground group-hover:text-primary transition-colors duration-300">{genre.genre}</h4>
+                    <div className="inline-block px-3 py-1 bg-primary/10 rounded-full mb-4">
+                      <p className="text-primary font-semibold text-sm">{genre.emotion}</p>
+                    </div>
+                    <p className="text-muted-foreground leading-relaxed">{genre.description}</p>
+                    
+                    {/* Audio Visualization Placeholder */}
+                    <div className="mt-6 flex justify-center space-x-1">
+                      {[...Array(5)].map((_, i) => (
+                        <div key={i} className={`w-1 bg-gradient-to-t ${genre.color} rounded-full animate-pulse`} 
+                             style={{ height: `${Math.random() * 20 + 10}px`, animationDelay: `${i * 100}ms` }}></div>
+                      ))}
+                    </div>
+                  </div>
+                </Card>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Community Impact Showcase */}
+        <div className="mb-20">
+          <div className="text-center mb-12">
+            <div className="flex items-center justify-center mb-6">
+              <Globe className="w-8 h-8 text-primary mr-3" />
+              <h3 className="text-4xl font-bold text-gradient">Building BC's Collective Voice</h3>
+            </div>
+            <p className="text-xl text-muted-foreground max-w-4xl mx-auto">
+              When individual voices become songs, and songs become community, we create something unprecedented
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+            <Card className="p-6 text-center bg-gradient-to-br from-blue-50 to-cyan-50 dark:from-blue-900/20 dark:to-cyan-900/20 border-blue-200 dark:border-blue-800">
+              <Mic className="w-12 h-12 text-blue-500 mx-auto mb-4" />
+              <h4 className="text-2xl font-bold text-blue-700 dark:text-blue-400 mb-2">1,000+</h4>
+              <p className="text-sm text-muted-foreground">Individual Voices</p>
+            </Card>
+            
+            <Card className="p-6 text-center bg-gradient-to-br from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 border-purple-200 dark:border-purple-800">
+              <Music2 className="w-12 h-12 text-purple-500 mx-auto mb-4" />
+              <h4 className="text-2xl font-bold text-purple-700 dark:text-purple-400 mb-2">500+</h4>
+              <p className="text-sm text-muted-foreground">Unique Songs Generated</p>
+            </Card>
+            
+            <Card className="p-6 text-center bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 border-green-200 dark:border-green-800">
+              <Users className="w-12 h-12 text-green-500 mx-auto mb-4" />
+              <h4 className="text-2xl font-bold text-green-700 dark:text-green-400 mb-2">50+</h4>
+              <p className="text-sm text-muted-foreground">Community Sessions</p>
+            </Card>
+            
+            <Card className="p-6 text-center bg-gradient-to-br from-orange-50 to-red-50 dark:from-orange-900/20 dark:to-red-900/20 border-orange-200 dark:border-orange-800">
+              <MessageSquare className="w-12 h-12 text-orange-500 mx-auto mb-4" />
+              <h4 className="text-2xl font-bold text-orange-700 dark:text-orange-400 mb-2">2,000+</h4>
+              <p className="text-sm text-muted-foreground">Community Interactions</p>
+            </Card>
+          </div>
+
+          <Card className="p-8 bg-gradient-to-br from-primary/5 to-accent/5 border-gradient">
+            <div className="text-center">
+              <Target className="w-16 h-16 text-primary mx-auto mb-6" />
+              <h4 className="text-3xl font-bold mb-6 text-gradient">Our Impact Vision</h4>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-left">
+                <div>
+                  <h5 className="font-semibold text-primary mb-3">🎵 Musical Democracy</h5>
+                  <p className="text-muted-foreground">Every survey response becomes a unique musical voice, ensuring no opinion is lost in aggregated data</p>
+                </div>
+                <div>
+                  <h5 className="font-semibold text-primary mb-3">🤝 Community Connection</h5>
+                  <p className="text-muted-foreground">Shared listening experiences create bonds between strangers who discover their similar AI perspectives</p>
+                </div>
+                <div>
+                  <h5 className="font-semibold text-primary mb-3">🌍 Provincial Dialogue</h5>
+                  <p className="text-muted-foreground">A living, breathing soundtrack of BC's relationship with AI that evolves with our collective understanding</p>
+                </div>
+              </div>
+            </div>
           </Card>
         </div>
       </div>
