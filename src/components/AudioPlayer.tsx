@@ -198,7 +198,7 @@ const SONGS: Song[] = [
   {
     id: "lalala-ai-dilemma",
     title: "Lalala AI Dilemma",
-    artist: "Matthew & Aliza Shwartzman (Fw. Dean Shev)",
+    artist: "Matthew & Aliza Shwartzman",
     src: getAudioUrl("Lalala AI Dilemma.mp3"),
     coverArt: lalalaAiDilemmaCover,
     lyrics: [
