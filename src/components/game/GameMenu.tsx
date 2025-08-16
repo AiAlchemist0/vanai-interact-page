@@ -76,9 +76,9 @@ const GameMenu = ({
               }`}
               onClick={() => onSongSelect(song)}
             >
-              <CardHeader className="p-3 md:p-4">
+              <CardHeader className="p-3 md:p-2">
                 <div className="flex items-center gap-3 md:block">
-                  <div className="w-16 h-16 md:w-full md:aspect-square bg-gradient-primary rounded-lg md:mb-4 overflow-hidden flex-shrink-0">
+                  <div className="w-16 h-16 md:w-full md:aspect-square bg-gradient-primary rounded-lg md:mb-2 overflow-hidden flex-shrink-0">
                     <img 
                       src={song.coverArt} 
                       alt={`${song.title} cover art`}
@@ -90,13 +90,13 @@ const GameMenu = ({
                       }}
                     />
                     <div className="hidden w-full h-full flex items-center justify-center">
-                      <Music className="w-6 h-6 md:w-12 md:h-12 text-primary-foreground" />
+                      <Music className="w-6 h-6 md:w-8 md:h-8 text-primary-foreground" />
                     </div>
                   </div>
                   <div className="flex-1 md:block">
-                    <CardTitle className="text-sm md:text-lg line-clamp-2 leading-tight">{song.title}</CardTitle>
-                    <p className="text-xs md:text-sm text-muted-foreground line-clamp-1">{song.artist}</p>
-                    <div className="flex justify-between items-center text-xs md:text-sm text-muted-foreground mt-1 md:mt-2">
+                    <CardTitle className="text-sm md:text-sm line-clamp-2 leading-tight">{song.title}</CardTitle>
+                    <p className="text-xs md:text-xs text-muted-foreground line-clamp-1 md:mb-1">{song.artist}</p>
+                    <div className="flex justify-between items-center text-xs md:text-xs text-muted-foreground mt-1 md:mt-1">
                       <span>{song.bpm} BPM</span>
                       <span>{Math.floor(song.duration / 60000)}:{(Math.floor(song.duration / 1000) % 60).toString().padStart(2, '0')}</span>
                     </div>
