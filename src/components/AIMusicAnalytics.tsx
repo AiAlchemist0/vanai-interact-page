@@ -2,6 +2,7 @@ import { Music, Radio, Mic, Heart, Users, ArrowRight, Sparkles, TrendingUp, Aler
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import communityMusicConnection from "@/assets/community-music-connection.jpg";
+import bcCollectiveVoice from "@/assets/bc-collective-voice.jpg";
 
 const AIMusicAnalytics = () => {
   const musicGenres = [
@@ -196,9 +197,23 @@ const AIMusicAnalytics = () => {
               <Globe className="w-8 h-8 text-primary mr-3" />
               <h3 className="text-4xl font-bold text-gradient">Building BC's Collective Voice</h3>
             </div>
-            <p className="text-xl text-muted-foreground max-w-4xl mx-auto">
+            <p className="text-xl text-muted-foreground max-w-4xl mx-auto mb-8">
               When individual voices become songs, and songs become community, we create something unprecedented
             </p>
+            
+            {/* BC Collective Voice Image */}
+            <div className="relative group overflow-hidden rounded-2xl shadow-2xl max-w-4xl mx-auto">
+              <img 
+                src={bcCollectiveVoice} 
+                alt="Diverse voices from across British Columbia transforming into a collective musical symphony that connects communities from mountains to ocean" 
+                className="w-full h-64 md:h-80 object-cover transition-transform duration-700 group-hover:scale-105"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+              <div className="absolute bottom-6 left-6 text-white">
+                <h4 className="text-2xl font-bold mb-2">BC's Collective Voice</h4>
+                <p className="text-base opacity-90">Individual stories becoming a shared symphony</p>
+              </div>
+            </div>
           </div>
 
 
