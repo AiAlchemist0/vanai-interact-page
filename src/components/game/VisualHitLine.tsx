@@ -28,10 +28,8 @@ const VisualHitLine = ({ combo, isStarPowerActive }: VisualHitLineProps) => {
       }
     }
 
-    // Subtle floating animation
-    if (hitLineRef.current) {
-      hitLineRef.current.position.y = Math.sin(time * 2) * 0.05;
-    }
+    // Keep hit line at fixed position - no floating animation
+    // This ensures visual alignment with hit detection zones
   });
 
   return (
