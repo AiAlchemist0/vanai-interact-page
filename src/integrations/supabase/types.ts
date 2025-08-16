@@ -241,10 +241,6 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      check_like_rate_limit: {
-        Args: { p_song_id: string; p_user_session_id: string }
-        Returns: boolean
-      }
       get_dashboard_stats: {
         Args: Record<PropertyKey, never>
         Returns: {
