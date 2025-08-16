@@ -12,8 +12,8 @@ import { useImprovedHitDetection } from "@/hooks/useImprovedHitDetection";
 import { useOptimizedInput } from "@/hooks/useOptimizedInput";
 import { FRET_POSITIONS } from '@/game/constants';
 import { useWebGLContextRecovery } from "@/hooks/useWebGLContextRecovery";
-import { useSoundEffects } from "@/hooks/useSoundEffects";
-import { useStarPower } from "@/components/game/StarPowerEffects";
+import { useSoundEffects, SoundEffect } from "@/hooks/useSoundEffects";
+import { useStarPower } from "@/hooks/useStarPower";
 import { GameDebugPanel } from "./GameDebugPanel";
 import CalibrationModal from "./CalibrationModal";
 import { Pause, Play, Square, Home, Settings, Zap } from "lucide-react";
@@ -102,118 +102,86 @@ const GameBoard = ({
   const { processHit, processMiss, resetStats, getStats, isNoteHittable, isNoteAtHitLine, hitWindow } = useImprovedHitDetection();
   const webglRecovery = useWebGLContextRecovery();
   const soundEffects = useSoundEffects();
-  const starPowerSystem = useStarPower();
+  const starPower = useStarPower();
 
-  // Unified input system - forward declaration needed
+  // Simplified hit detection system
   const handleStrum = () => {
-    // Debug logging
-    console.log(`GameBoard Strum at: ${currentTime.toFixed(0)}ms, Pressed frets: [${Array.from(pressedFrets).join(', ')}], Input: ${inputMethod}`);
+    console.log(`🎮 STRUM: Time=${currentTime.toFixed(0)}ms, Pressed=[${Array.from(pressedFrets).join(',')}]`);
 
-    // Find notes within hit window - simplified
-    const hittableNotes = notes.filter(note => 
-      isNoteHittable(note.time, currentTime)
-    );
+    // Find notes within timing window
+    const potentialNotes = notes.filter(note => {
+      const timingDiff = Math.abs(note.time - currentTime);
+      return timingDiff <= 300; // 300ms window - very forgiving
+    });
 
-    console.log(`Hittable notes: ${hittableNotes.length}, Active notes: ${activeNotes.length}`);
-
-    if (hittableNotes.length === 0) {
-      console.log('No hittable notes - ignoring strum');
+    if (potentialNotes.length === 0) {
+      console.log('❌ No notes in timing window');
       return;
     }
 
-    // Get the closest note
-    const closestNote = hittableNotes.reduce((closest, note) => 
+    // Get closest note by timing
+    const closestNote = potentialNotes.reduce((closest, note) => 
       Math.abs(note.time - currentTime) < Math.abs(closest.time - currentTime) ? note : closest
     );
 
-    // Check if pressed frets match the note
+    const timingDiff = Math.abs(closestNote.time - currentTime);
+    console.log(`🎯 Closest note: frets=[${closestNote.frets.join(',')}], timing=${timingDiff}ms`);
+
+    // Check fret matching
     const requiredFrets = new Set(closestNote.frets);
-    const pressedFretsArray = Array.from(pressedFrets);
-    
-    const isCorrect = requiredFrets.size === pressedFrets.size && 
-                     pressedFretsArray.every(fret => requiredFrets.has(fret));
-    
-    console.log(`Required frets: [${closestNote.frets.join(', ')}], Pressed: [${pressedFretsArray.join(', ')}], Correct: ${isCorrect}`);
+    const matchingFrets = Array.from(pressedFrets).filter(fret => requiredFrets.has(fret));
+    const correctMatch = requiredFrets.size === pressedFrets.size && matchingFrets.length === requiredFrets.size;
 
-    if (isCorrect) {
-      // Calculate timing difference
-      const timingDiff = closestNote.time - currentTime;
-      const isChord = closestNote.type === "chord";
-      const hitResult = processHit(timingDiff, closestNote.time, currentTime, isChord, combo, 1.0);
+    console.log(`🎸 Fret check: required=[${closestNote.frets.join(',')}], pressed=[${Array.from(pressedFrets).join(',')}], match=${correctMatch}`);
 
-      if (hitResult.grade !== 'miss') {
-        // Successful hit
-        const newCombo = combo + 1;
-        onComboChange(newCombo);
-        
-        // Apply star power multiplier
-        const finalPoints = hitResult.points * starPowerSystem.starPower.multiplier;
-        onScoreChange(score + finalPoints);
-        setNotesHit(prev => prev + 1);
+    if (correctMatch) {
+      // Determine hit grade based on timing
+      let grade: 'perfect' | 'good' | 'okay' = 'okay';
+      if (timingDiff <= 100) grade = 'perfect';
+      else if (timingDiff <= 200) grade = 'good';
+      
+      // Calculate points
+      const basePoints = closestNote.type === 'chord' ? 100 : 50;
+      const gradeMultiplier = { perfect: 4, good: 2, okay: 1 }[grade];
+      const comboMultiplier = Math.min(Math.floor(combo / 10) + 1, 4);
+      const points = basePoints * gradeMultiplier * comboMultiplier * starPower.starPower.multiplier;
 
-        // Play hit sound
-        soundEffects.playSound(`hit_${hitResult.grade}` as any);
+      // Update score and combo
+      const newCombo = combo + 1;
+      const newScore = score + points;
+      
+      onScoreChange(newScore);
+      onComboChange(newCombo);
+      setNotesHit(prev => prev + 1);
 
-        // Add star power energy for perfect hits
-        if (hitResult.grade === 'perfect') {
-          starPowerSystem.addStarPowerEnergy(5);
-        } else if (hitResult.grade === 'good') {
-          starPowerSystem.addStarPowerEnergy(2);
-        }
+      // Add star power energy
+      if (grade === 'perfect') starPower.addStarPower(5);
+      else if (grade === 'good') starPower.addStarPower(2);
 
-        // Combo milestone sound
-        if (newCombo > 0 && newCombo % 10 === 0) {
-          soundEffects.playSound('combo_milestone');
-        }
+      // Visual feedback
+      closestNote.frets.forEach(fret => {
+        addHitEffect(grade, [FRET_POSITIONS[fret], 0, 0]);
+        addFloatingText(`+${Math.round(points/closestNote.frets.length)}`, grade, [FRET_POSITIONS[fret], 1, 0], Math.round(points/closestNote.frets.length));
+      });
 
-        // Add visual effects for each fret using standardized positions
-        closestNote.frets.forEach(fret => {
-          addHitEffect(hitResult.grade, [FRET_POSITIONS[fret], 0, 0]);
-          const displayPoints = finalPoints / closestNote.frets.length; // Split points for chords
-          addFloatingText(hitResult.grade, hitResult.grade, [FRET_POSITIONS[fret], 1, 0], Math.round(displayPoints));
-        });
-
-        // Flash the hit note briefly
-        setHitFlashTimes(prev => {
-          const s = new Set(prev);
-          s.add(closestNote.time);
-          return s;
-        });
-        setTimeout(() => {
-          setHitFlashTimes(prev => {
-            const s = new Set(prev);
-            s.delete(closestNote.time);
-            return s;
-          });
-        }, 150);
-
-        // Remove hit note after short delay to show flash
-        setTimeout(() => {
-          setNotes(prev => prev.filter(n => n !== closestNote));
-        }, 100);
-      } else {
-        // Miss due to bad timing
-        onComboChange(0);
-        soundEffects.playSound('miss');
-        closestNote.frets.forEach(fret => {
-          addHitEffect('miss', [FRET_POSITIONS[fret], 0, 0]);
-          addFloatingText('MISS', 'miss', [FRET_POSITIONS[fret], 1, 0], 0);
-        });
-      }
+      // Remove note
+      setNotes(prev => prev.filter(n => n !== closestNote));
+      
+      console.log(`✅ HIT! Grade=${grade}, Points=${points}, Score=${newScore}, Combo=${newCombo}`);
     } else {
-      // Wrong frets pressed
+      // Miss - reset combo
       onComboChange(0);
-      soundEffects.playSound('miss');
-      // Show miss effect on the note's frets using standardized positions
       closestNote.frets.forEach(fret => {
         addHitEffect('miss', [FRET_POSITIONS[fret], 0, 0]);
         addFloatingText('MISS', 'miss', [FRET_POSITIONS[fret], 1, 0], 0);
       });
+      console.log(`❌ MISS - Wrong frets`);
     }
 
-    // Update accuracy using hit detection stats
-    const stats = getStats();
-    setAccuracy(stats.accuracy);
+    // Update accuracy
+    const totalAttempts = notesHit + 1;
+    const newAccuracy = Math.round((notesHit / totalAttempts) * 100);
+    setAccuracy(newAccuracy);
   };
 
   const { pressedFrets, inputMethod } = useOptimizedInput(handleStrum, gameState);
@@ -262,7 +230,7 @@ const GameBoard = ({
       setCurrentTime(currentGameTime);
 
       // Update star power system
-      starPowerSystem.updateStarPower(16); // ~60fps
+      starPower.updateStarPower(16); // ~60fps
 
       // Check if song ended
       if (audio.ended) {
@@ -313,16 +281,16 @@ const GameBoard = ({
       // Shift key to activate star power
       if (e.code === 'ShiftLeft' || e.code === 'ShiftRight') {
         e.preventDefault();
-        if (starPowerSystem.starPower.energy >= 50) {
-          starPowerSystem.activateStarPower();
-          soundEffects.playSound('star_power');
+        if (starPower.starPower.meter >= 50) {
+          starPower.activateStarPower();
+          soundEffects.playSound('star_power' as any);
         }
       }
     };
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [gameState, starPowerSystem, soundEffects]);
+  }, [gameState, starPower, soundEffects]);
 
   // Helper functions for effects
   const addHitEffect = (grade: 'perfect' | 'good' | 'okay' | 'miss', position: [number, number, number]) => {
@@ -418,10 +386,10 @@ const GameBoard = ({
             <div className="w-16 h-2 bg-muted rounded-full overflow-hidden">
               <div 
                 className="h-full bg-gradient-to-r from-blue-400 to-yellow-400 transition-all duration-300"
-                style={{ width: `${starPowerSystem.starPower.energy}%` }}
+                style={{ width: `${starPower.starPower.meter}%` }}
               />
             </div>
-            {starPowerSystem.starPower.isActive && (
+            {starPower.starPower.isActive && (
               <span className="text-xs text-yellow-400 font-bold animate-pulse">
                 ACTIVE!
               </span>
@@ -458,7 +426,12 @@ const GameBoard = ({
             onTextComplete={handleTextComplete}
             noteSpeed={1.0}
             hitWindow={hitWindow}
-            starPower={starPowerSystem.starPower}
+            starPower={{
+              isActive: starPower.starPower.isActive,
+              energy: starPower.starPower.meter,
+              duration: starPower.starPower.duration,
+              maxDuration: 10000
+            }}
             hitFlashTimes={hitFlashTimes}
           />
         </div>
@@ -527,7 +500,7 @@ const GameBoard = ({
             setHitEffects([]);
             setFloatingTexts([]);
             resetStats();
-            starPowerSystem.resetStarPower();
+            starPower.resetStarPower();
             if (audioRef.current) {
               audioRef.current.currentTime = 0;
             }

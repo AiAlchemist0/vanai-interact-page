@@ -39,17 +39,14 @@ export const useImprovedHitDetection = () => {
     return Math.abs(noteZ - HIT_LINE_Z) <= 1.0; // 1 unit tolerance for hit line
   }, [calculateNoteZPosition]);
 
-  // Improved timing-based hit detection
+  // Simplified timing-based hit detection - focus on timing first
   const calculateHitGrade = useCallback((timingDiff: number, positionDiff: number): HitGrade => {
     const absTimingDiff = Math.abs(timingDiff);
-    const absPositionDiff = Math.abs(positionDiff);
     
-    // Combine timing and position for more accurate detection
-    const combinedDiff = absTimingDiff + (absPositionDiff * 20); // Weight position difference
-    
-    if (combinedDiff <= HIT_WINDOW_SETTINGS.perfect) return 'perfect';
-    if (combinedDiff <= HIT_WINDOW_SETTINGS.good) return 'good';
-    if (combinedDiff <= HIT_WINDOW_SETTINGS.okay) return 'okay';
+    // Primary timing-based detection with loose position validation
+    if (absTimingDiff <= HIT_WINDOW_SETTINGS.perfect && positionDiff <= 3.0) return 'perfect';
+    if (absTimingDiff <= HIT_WINDOW_SETTINGS.good && positionDiff <= 4.0) return 'good';
+    if (absTimingDiff <= HIT_WINDOW_SETTINGS.okay && positionDiff <= 5.0) return 'okay';
     return 'miss';
   }, []);
 
@@ -134,14 +131,13 @@ export const useImprovedHitDetection = () => {
     return Math.round((totalNotesHit / totalAttempts) * 100);
   }, [totalNotesHit, missedNotes]);
 
-  // Improved note hittability check - both timing and position
+  // Simplified note hittability check - primarily timing-based
   const isNoteHittable = useCallback((noteTime: number, currentTime: number, noteSpeed: number = 1.0): boolean => {
     const timingDiff = Math.abs(noteTime - currentTime);
-    const noteZ = calculateNoteZPosition(noteTime, currentTime, noteSpeed);
-    const positionDiff = Math.abs(noteZ - HIT_LINE_Z);
     
-    return timingDiff <= HIT_WINDOW_SETTINGS.okay && positionDiff <= 2.0;
-  }, [calculateNoteZPosition]);
+    // Much more forgiving - if timing is within window, it's hittable
+    return timingDiff <= HIT_WINDOW_SETTINGS.okay;
+  }, []);
 
   const getStats = useCallback((): HitStats => ({
     totalNotesHit,
