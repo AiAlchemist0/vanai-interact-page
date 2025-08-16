@@ -66,7 +66,7 @@ const Hero = () => {
             </div>
 
             {/* Key Stats - Enhanced for tablet/mobile */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 md:gap-6">
+            <div className="grid grid-cols-3 gap-2 sm:gap-4 md:gap-6">
               <div className="bg-card/50 backdrop-blur-sm border border-border rounded-xl px-3 sm:px-4 md:px-6 py-4 sm:py-4 md:py-6 text-center min-h-[90px] sm:min-h-[100px] md:min-h-[120px] transition-all hover:bg-card/70">
                 <div className="flex items-center justify-center mb-2 md:mb-3">
                   <Users className="w-5 sm:w-6 md:w-8 h-5 sm:h-6 md:h-8 text-primary" />
