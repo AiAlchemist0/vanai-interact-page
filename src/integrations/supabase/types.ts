@@ -17,21 +17,27 @@ export type Database = {
       song_plays: {
         Row: {
           created_at: string
+          duration_seconds: number | null
           id: string
+          is_valid_play: boolean | null
           played_at: string
           song_id: string
           user_session_id: string | null
         }
         Insert: {
           created_at?: string
+          duration_seconds?: number | null
           id?: string
+          is_valid_play?: boolean | null
           played_at?: string
           song_id: string
           user_session_id?: string | null
         }
         Update: {
           created_at?: string
+          duration_seconds?: number | null
           id?: string
+          is_valid_play?: boolean | null
           played_at?: string
           song_id?: string
           user_session_id?: string | null
