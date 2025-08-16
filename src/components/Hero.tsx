@@ -51,7 +51,7 @@ const Hero = () => {
                   <img src="/lovable-uploads/6b65586a-63ba-48f1-9c56-1846ec800f39.png" alt="BC+AI Ecosystem Logo" className="w-40 sm:w-48 lg:w-56 h-auto filter drop-shadow-lg flex-shrink-0" />
                 </a>
                 <div className="flex-1 min-w-0 text-center sm:text-left">
-                  <h1 className="text-3xl sm:text-4xl lg:text-7xl xl:text-8xl text-gradient leading-tight text-left font-bold">
+                  <h1 className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl text-gradient leading-tight text-left font-bold">
                     BC + AI Survey
                     <br />
                     Insights
