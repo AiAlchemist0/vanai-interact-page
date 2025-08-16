@@ -27,26 +27,28 @@ export const useImprovedHitDetection = () => {
   const [okayHits, setOkayHits] = useState(0);
   const [missedNotes, setMissedNotes] = useState(0);
 
-  // Calculate where a note should be visually at current time
+  // Calculate where a note should be visually at current time - STANDARDIZED
   const calculateNoteZPosition = useCallback((noteTime: number, currentTime: number, noteSpeed: number = 1.0): number => {
     const timeToHit = (noteTime - currentTime) / 1000;
+    // Same formula as NoteHighway: -30 + (HIT_LINE_Z - timeToHit) * (NOTE_SPEED_MULTIPLIER * noteSpeed)
     return -30 + (HIT_LINE_Z - timeToHit) * (NOTE_SPEED_MULTIPLIER * noteSpeed);
   }, []);
 
-  // Check if note is visually at hit line (position-based detection)
+  // Check if note is visually at hit line (position-based detection) - STANDARDIZED
   const isNoteAtHitLine = useCallback((noteTime: number, currentTime: number, noteSpeed: number = 1.0): boolean => {
     const noteZ = calculateNoteZPosition(noteTime, currentTime, noteSpeed);
-    return Math.abs(noteZ - HIT_LINE_Z) <= 1.0; // 1 unit tolerance for hit line
+    // More precise hit line detection - note must be very close to HIT_LINE_Z (5)
+    return Math.abs(noteZ - HIT_LINE_Z) <= 0.8; // Tighter tolerance for better accuracy
   }, [calculateNoteZPosition]);
 
-  // Simplified timing-based hit detection - focus on timing first
+  // Enhanced timing-based hit detection with tighter position validation
   const calculateHitGrade = useCallback((timingDiff: number, positionDiff: number): HitGrade => {
     const absTimingDiff = Math.abs(timingDiff);
     
-    // Primary timing-based detection with loose position validation
-    if (absTimingDiff <= HIT_WINDOW_SETTINGS.perfect && positionDiff <= 3.0) return 'perfect';
-    if (absTimingDiff <= HIT_WINDOW_SETTINGS.good && positionDiff <= 4.0) return 'good';
-    if (absTimingDiff <= HIT_WINDOW_SETTINGS.okay && positionDiff <= 5.0) return 'okay';
+    // Tighter position validation for better accuracy
+    if (absTimingDiff <= HIT_WINDOW_SETTINGS.perfect && positionDiff <= 1.5) return 'perfect';
+    if (absTimingDiff <= HIT_WINDOW_SETTINGS.good && positionDiff <= 2.5) return 'good';
+    if (absTimingDiff <= HIT_WINDOW_SETTINGS.okay && positionDiff <= 3.5) return 'okay';
     return 'miss';
   }, []);
 
@@ -101,7 +103,7 @@ export const useImprovedHitDetection = () => {
         break;
     }
 
-    console.log(`Hit: Grade=${grade}, Points=${points}, TimingDiff=${timingDiff.toFixed(1)}ms, PositionDiff=${positionDiff.toFixed(2)}, NoteZ=${noteZ.toFixed(2)}`);
+    console.log(`Hit: Grade=${grade}, Points=${points}, TimingDiff=${timingDiff.toFixed(1)}ms, PositionDiff=${positionDiff.toFixed(2)}, NoteZ=${noteZ.toFixed(2)}, HitLineZ=${HIT_LINE_Z}`);
 
     return {
       grade,
