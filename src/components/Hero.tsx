@@ -89,7 +89,7 @@ const Hero = () => {
             <div className="space-y-3 sm:space-y-4">
               {/* Mobile View - Square Icon Buttons */}
               <div className="flex sm:hidden justify-center gap-3">
-                <Button size="icon" className="gradient-primary hover:glow-primary transition-smooth w-16 h-16" onClick={() => document.getElementById('novel-concept')?.scrollIntoView({
+                <Button size="icon" className="gradient-primary hover:glow-primary transition-smooth w-16 h-16" onClick={() => document.getElementById('vision')?.scrollIntoView({
                 behavior: 'smooth'
               })} aria-label="Project's Vision">
                   <Lightbulb className="w-6 h-6" />
@@ -194,7 +194,7 @@ const Hero = () => {
 
               {/* Desktop View - Text Buttons */}
               <div className="hidden sm:flex flex-col sm:grid sm:grid-cols-3 gap-3">
-                <Button size="lg" className="gradient-primary hover:glow-primary transition-smooth group px-4 py-4 sm:px-4 sm:py-3 min-h-[48px] text-sm sm:text-sm font-medium" onClick={() => document.getElementById('novel-concept')?.scrollIntoView({
+                <Button size="lg" className="gradient-primary hover:glow-primary transition-smooth group px-4 py-4 sm:px-4 sm:py-3 min-h-[48px] text-sm sm:text-sm font-medium" onClick={() => document.getElementById('vision')?.scrollIntoView({
                 behavior: 'smooth'
               })}>
                   Project's Vision
