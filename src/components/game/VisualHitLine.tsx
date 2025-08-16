@@ -1,6 +1,7 @@
 import { useRef } from 'react';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
+import { FRET_POSITIONS } from '@/game/constants';
 
 interface VisualHitLineProps {
   combo: number;
@@ -34,39 +35,61 @@ const VisualHitLine = ({ combo, isStarPowerActive }: VisualHitLineProps) => {
 
   return (
     <group ref={hitLineRef} position={[0, 0, 5]}>
-      {/* Main hit line */}
+      {/* Enhanced main hit line - more prominent */}
       <mesh position={[0, 0, 0]}>
-        <boxGeometry args={[12, 0.1, 0.5]} />
+        <boxGeometry args={[12, 0.15, 0.8]} />
         <meshStandardMaterial 
           color={isStarPowerActive ? "#ffd700" : "#00ffff"} 
           emissive={isStarPowerActive ? "#ffa500" : "#0088ff"}
-          emissiveIntensity={0.3}
+          emissiveIntensity={0.5}
+          metalness={0.3}
+          roughness={0.2}
         />
       </mesh>
 
-      {/* Glowing effect */}
+      {/* Enhanced glowing effect */}
       <mesh ref={glowRef} position={[0, 0, 0]}>
-        <boxGeometry args={[12.5, 0.3, 1]} />
+        <boxGeometry args={[13, 0.4, 1.5]} />
         <meshBasicMaterial 
           color={isStarPowerActive ? "#ffd700" : "#00ffff"}
           transparent
-          opacity={0.3}
+          opacity={0.4}
         />
       </mesh>
 
-      {/* Fret position indicators */}
-      {[-5, -2.5, 0, 2.5, 5].map((x, index) => (
-        <mesh key={index} position={[x, 0, 0.1]}>
-          <cylinderGeometry args={[0.3, 0.3, 0.1]} />
+      {/* Precisely aligned fret position indicators using FRET_POSITIONS */}
+      {FRET_POSITIONS.map((x, index) => (
+        <mesh key={index} position={[x, 0, 0.2]}>
+          <cylinderGeometry args={[0.4, 0.4, 0.15]} />
           <meshStandardMaterial 
             color={isStarPowerActive ? "#ffd700" : "#ffffff"}
             emissive={isStarPowerActive ? "#ffa500" : "#ffffff"}
-            emissiveIntensity={0.2}
+            emissiveIntensity={0.3}
             transparent
-            opacity={0.8}
+            opacity={0.9}
+            metalness={0.5}
+            roughness={0.1}
           />
         </mesh>
       ))}
+
+      {/* Additional visual emphasis - side rails */}
+      <mesh position={[-6.5, 0, 0]}>
+        <boxGeometry args={[0.2, 0.3, 0.8]} />
+        <meshStandardMaterial 
+          color={isStarPowerActive ? "#ffd700" : "#00ffff"}
+          emissive={isStarPowerActive ? "#ffa500" : "#0088ff"}
+          emissiveIntensity={0.4}
+        />
+      </mesh>
+      <mesh position={[6.5, 0, 0]}>
+        <boxGeometry args={[0.2, 0.3, 0.8]} />
+        <meshStandardMaterial 
+          color={isStarPowerActive ? "#ffd700" : "#00ffff"}
+          emissive={isStarPowerActive ? "#ffa500" : "#0088ff"}
+          emissiveIntensity={0.4}
+        />
+      </mesh>
     </group>
   );
 };
