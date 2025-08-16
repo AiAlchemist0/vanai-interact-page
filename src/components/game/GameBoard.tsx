@@ -8,8 +8,9 @@ import GameOverModal from "./GameOverModal";
 import GameBoard3D from "./GameBoard3D";
 import { HitEffect } from "./HitEffects";
 import { FloatingTextItem } from "./FloatingText";
-import { useSimplifiedHitDetection } from "@/hooks/useSimplifiedHitDetection";
-import { useUnifiedInput } from "@/hooks/useUnifiedInput";
+import { useImprovedHitDetection } from "@/hooks/useImprovedHitDetection";
+import { useOptimizedInput } from "@/hooks/useOptimizedInput";
+import { FRET_POSITIONS } from '@/game/constants';
 import { useWebGLContextRecovery } from "@/hooks/useWebGLContextRecovery";
 import { useSoundEffects } from "@/hooks/useSoundEffects";
 import { useStarPower } from "@/components/game/StarPowerEffects";
@@ -97,8 +98,8 @@ const GameBoard = ({
   const [showCalibration, setShowCalibration] = useState(false);
   const [hitFlashTimes, setHitFlashTimes] = useState<Set<number>>(new Set());
 
-  // Simplified systems
-  const { processHit, processMiss, resetStats, getStats, isNoteHittable, hitWindow } = useSimplifiedHitDetection();
+  // Improved systems
+  const { processHit, processMiss, resetStats, getStats, isNoteHittable, isNoteAtHitLine, hitWindow } = useImprovedHitDetection();
   const webglRecovery = useWebGLContextRecovery();
   const soundEffects = useSoundEffects();
   const starPowerSystem = useStarPower();
@@ -134,13 +135,11 @@ const GameBoard = ({
     
     console.log(`Required frets: [${closestNote.frets.join(', ')}], Pressed: [${pressedFretsArray.join(', ')}], Correct: ${isCorrect}`);
 
-    const fretPositions = [-1.5, -0.75, 0, 0.75, 1.5];
-
     if (isCorrect) {
       // Calculate timing difference
       const timingDiff = closestNote.time - currentTime;
       const isChord = closestNote.type === "chord";
-      const hitResult = processHit(timingDiff, isChord, combo);
+      const hitResult = processHit(timingDiff, closestNote.time, currentTime, isChord, combo, 1.0);
 
       if (hitResult.grade !== 'miss') {
         // Successful hit
@@ -167,11 +166,11 @@ const GameBoard = ({
           soundEffects.playSound('combo_milestone');
         }
 
-        // Add visual effects for each fret
+        // Add visual effects for each fret using standardized positions
         closestNote.frets.forEach(fret => {
-          addHitEffect(hitResult.grade, [fretPositions[fret], 0, 0]);
+          addHitEffect(hitResult.grade, [FRET_POSITIONS[fret], 0, 0]);
           const displayPoints = finalPoints / closestNote.frets.length; // Split points for chords
-          addFloatingText(hitResult.grade, hitResult.grade, [fretPositions[fret], 1, 0], Math.round(displayPoints));
+          addFloatingText(hitResult.grade, hitResult.grade, [FRET_POSITIONS[fret], 1, 0], Math.round(displayPoints));
         });
 
         // Flash the hit note briefly
@@ -197,18 +196,18 @@ const GameBoard = ({
         onComboChange(0);
         soundEffects.playSound('miss');
         closestNote.frets.forEach(fret => {
-          addHitEffect('miss', [fretPositions[fret], 0, 0]);
-          addFloatingText('MISS', 'miss', [fretPositions[fret], 1, 0], 0);
+          addHitEffect('miss', [FRET_POSITIONS[fret], 0, 0]);
+          addFloatingText('MISS', 'miss', [FRET_POSITIONS[fret], 1, 0], 0);
         });
       }
     } else {
       // Wrong frets pressed
       onComboChange(0);
       soundEffects.playSound('miss');
-      // Show miss effect on the note's frets
+      // Show miss effect on the note's frets using standardized positions
       closestNote.frets.forEach(fret => {
-        addHitEffect('miss', [fretPositions[fret], 0, 0]);
-        addFloatingText('MISS', 'miss', [fretPositions[fret], 1, 0], 0);
+        addHitEffect('miss', [FRET_POSITIONS[fret], 0, 0]);
+        addFloatingText('MISS', 'miss', [FRET_POSITIONS[fret], 1, 0], 0);
       });
     }
 
@@ -217,7 +216,7 @@ const GameBoard = ({
     setAccuracy(stats.accuracy);
   };
 
-  const { pressedFrets, inputMethod } = useUnifiedInput(handleStrum, gameState);
+  const { pressedFrets, inputMethod } = useOptimizedInput(handleStrum, gameState);
 
   // Initialize game
   useEffect(() => {
@@ -287,11 +286,10 @@ const GameBoard = ({
       
       if (missedNotes.length > 0) {
         missedNotes.forEach(note => {
-          // Add miss effect and sound
-          const fretPositions = [-1.5, -0.75, 0, 0.75, 1.5];
+          // Add miss effect and sound using standardized positions
           note.frets.forEach(fret => {
-            addHitEffect('miss', [fretPositions[fret], 0, 0]);
-            addFloatingText('MISS', 'miss', [fretPositions[fret], 1, 0], 0);
+            addHitEffect('miss', [FRET_POSITIONS[fret], 0, 0]);
+            addFloatingText('MISS', 'miss', [FRET_POSITIONS[fret], 1, 0], 0);
           });
           processMiss();
           soundEffects.playSound('miss');

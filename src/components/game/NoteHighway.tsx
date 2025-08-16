@@ -3,6 +3,7 @@ import { useFrame } from '@react-three/fiber';
 import { NotePattern } from '@/pages/Game';
 import Note3D from './Note3D';
 import ComboEffects from './ComboEffects';
+import { FRET_POSITIONS, FRET_COLORS, NOTE_SPEED_MULTIPLIER, HIT_LINE_Z } from '@/game/constants';
 
 interface NoteHighwayProps {
   activeNotes: NotePattern[];
@@ -28,11 +29,9 @@ const NoteHighway = ({ activeNotes, currentTime, pressedFrets, combo = 0, noteSp
     }
   });
 
-  // Fret positions (X coordinates) - Guitar Hero standard spacing
-  const fretPositions = [-5, -2.5, 0, 2.5, 5];
-  
-  // Guitar Hero accurate fret colors
-  const fretColors = ['#22c55e', '#ef4444', '#eab308', '#3b82f6', '#f97316']; // Green, Red, Yellow, Blue, Orange
+  // Use standardized constants
+  const fretPositions = FRET_POSITIONS;
+  const fretColors = FRET_COLORS;
 
   return (
     <group ref={highwayRef}>
@@ -65,15 +64,15 @@ const NoteHighway = ({ activeNotes, currentTime, pressedFrets, combo = 0, noteSp
               </mesh>
             ))}
 
-            {/* Enhanced hit zone cavity - much more visible */}
+            {/* Enhanced hit zone cavity - positioned at standardized HIT_LINE_Z */}
             {/* Socket base */}
-            <mesh position={[x, -2.65, 5]} rotation={[Math.PI / 2, 0, 0]}>
+            <mesh position={[x, -2.65, HIT_LINE_Z]} rotation={[Math.PI / 2, 0, 0]}>
               <circleGeometry args={[1.6, 32]} />
               <meshBasicMaterial color="#111111" transparent opacity={0.8} />
             </mesh>
 
             {/* Glowing cavity core */}
-            <mesh position={[x, -2.6, 5]}>
+            <mesh position={[x, -2.6, HIT_LINE_Z]}>
               <cylinderGeometry args={[1.1, 0.9, 0.3, 24]} />
               <meshStandardMaterial 
                 color={fretColors[index]}
@@ -87,7 +86,7 @@ const NoteHighway = ({ activeNotes, currentTime, pressedFrets, combo = 0, noteSp
             </mesh>
 
             {/* Hit zone rim - thick and bright */}
-            <mesh position={[x, -2.4, 5]} rotation={[Math.PI / 2, 0, 0]}>
+            <mesh position={[x, -2.4, HIT_LINE_Z]} rotation={[Math.PI / 2, 0, 0]}>
               <ringGeometry args={[1.1, 1.45, 32]} />
               <meshBasicMaterial 
                 color={fretColors[index]}
@@ -99,7 +98,7 @@ const NoteHighway = ({ activeNotes, currentTime, pressedFrets, combo = 0, noteSp
 
             {/* Hit zone glow when pressed */}
             {isPressed && (
-              <mesh position={[x, -2.9, 5]} rotation={[Math.PI / 2, 0, 0]}>
+              <mesh position={[x, -2.9, HIT_LINE_Z]} rotation={[Math.PI / 2, 0, 0]}>
                 <circleGeometry args={[1.6, 32]} />
                 <meshBasicMaterial 
                   color={fretColors[index]}
@@ -111,7 +110,7 @@ const NoteHighway = ({ activeNotes, currentTime, pressedFrets, combo = 0, noteSp
 
             {/* Combo energy ring around fret */}
             {comboGlow && (
-              <mesh position={[x, -2.85, 5]} rotation={[Math.PI / 2, 0, 0]}>
+              <mesh position={[x, -2.85, HIT_LINE_Z]} rotation={[Math.PI / 2, 0, 0]}>
                 <ringGeometry args={[0.95, 1.25, 32]} />
                 <meshBasicMaterial 
                   color={combo >= 30 ? "#ffff00" : "#ff8800"}
@@ -137,8 +136,8 @@ const NoteHighway = ({ activeNotes, currentTime, pressedFrets, combo = 0, noteSp
         );
       })}
 
-      {/* Hit line - much more prominent */}
-      <mesh position={[0, -2.2, 5]}>
+      {/* Hit line - positioned at standardized HIT_LINE_Z */}
+      <mesh position={[0, -2.2, HIT_LINE_Z]}>
         <boxGeometry args={[16, 0.12, 0.25]} />
         <meshBasicMaterial 
           color="#ffffff"
@@ -148,7 +147,7 @@ const NoteHighway = ({ activeNotes, currentTime, pressedFrets, combo = 0, noteSp
       </mesh>
 
       {/* Hit line glow */}
-      <mesh position={[0, -2.2, 5]}>
+      <mesh position={[0, -2.2, HIT_LINE_Z]}>
         <boxGeometry args={[17, 0.22, 0.35]} />
         <meshBasicMaterial 
           color="#ffffff"
@@ -160,10 +159,10 @@ const NoteHighway = ({ activeNotes, currentTime, pressedFrets, combo = 0, noteSp
       {/* Notes with improved positioning and depth cues */}
       {activeNotes.map((note, noteIndex) => 
         note.frets.map((fret, fretIndex) => {
-          // Enhanced note positioning with better depth perception
+          // Standardized note positioning calculation
           const timeToHit = (note.time - currentTime) / 1000;
           const adjustedSpeed = noteSpeed || 1.0;
-          const noteZ = -30 + (5 - timeToHit) * (9 * adjustedSpeed);
+          const noteZ = -30 + (HIT_LINE_Z - timeToHit) * (NOTE_SPEED_MULTIPLIER * adjustedSpeed);
           
           // Only render notes in visible range with buffer
           if (noteZ < -35 || noteZ > 8) return null;
@@ -188,11 +187,11 @@ const NoteHighway = ({ activeNotes, currentTime, pressedFrets, combo = 0, noteSp
         })
       )}
 
-      {/* Combo Effects at the hit line */}
+      {/* Combo Effects at the standardized hit line */}
       {combo >= 10 && (
         <ComboEffects 
           combo={combo}
-          position={[0, -1.5, 5]}
+          position={[0, -1.5, HIT_LINE_Z]}
         />
       )}
     </group>
