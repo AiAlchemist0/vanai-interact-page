@@ -78,7 +78,7 @@ const GameMenu = ({
             >
               <CardHeader className="p-3 md:p-2">
                 <div className="flex items-center gap-3 md:block">
-                  <div className="w-16 h-16 md:w-full md:aspect-square bg-gradient-primary rounded-lg md:mb-2 overflow-hidden flex-shrink-0">
+                  <div className="w-16 h-16 md:w-full md:aspect-square bg-gradient-primary rounded-lg md:mb-2 overflow-hidden flex-shrink-0 md:h-auto">
                     <img 
                       src={song.coverArt} 
                       alt={`${song.title} cover art`}
