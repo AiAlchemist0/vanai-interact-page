@@ -528,6 +528,13 @@ const GameBoard = ({
         />
       )}
 
+      {/* Instructions Modal */}
+      <GameInstructions
+        isVisible={showInstructions}
+        onClose={() => setShowInstructions(false)}
+        inputMethod={inputMethod}
+      />
+
       {/* Calibration Modal - Disabled for now */}
       {showCalibration && (
         <div className="absolute inset-0 bg-background/80 backdrop-blur-sm flex items-center justify-center z-50">
