@@ -160,27 +160,27 @@ const AIMusicAnalytics = () => {
             </p>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
             {musicGenres.map((genre, index) => {
               const Icon = genre.icon;
               return (
-                <Card key={index} className="group p-6 bg-gradient-subtle border-gradient hover:shadow-xl transition-all duration-500 hover-scale overflow-hidden relative">
+                <Card key={index} className="group p-4 bg-gradient-subtle border-gradient hover:shadow-xl transition-all duration-500 hover-scale overflow-hidden relative">
                   <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-accent/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                   <div className="relative z-10 text-center">
-                    <div className={`w-20 h-20 mx-auto mb-6 rounded-full bg-gradient-to-br ${genre.color} flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300`}>
-                      <Icon className="w-10 h-10 text-white" />
+                    <div className={`w-12 h-12 mx-auto mb-3 rounded-full bg-gradient-to-br ${genre.color} flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300`}>
+                      <Icon className="w-6 h-6 text-white" />
                     </div>
-                    <h4 className="text-2xl font-bold mb-3 text-foreground group-hover:text-primary transition-colors duration-300">{genre.genre}</h4>
-                    <div className="inline-block px-3 py-1 bg-primary/10 rounded-full mb-4">
-                      <p className="text-primary font-semibold text-sm">{genre.emotion}</p>
+                    <h4 className="text-lg font-bold mb-2 text-foreground group-hover:text-primary transition-colors duration-300">{genre.genre}</h4>
+                    <div className="inline-block px-2 py-1 bg-primary/10 rounded-full mb-2">
+                      <p className="text-primary font-semibold text-xs">{genre.emotion}</p>
                     </div>
-                    <p className="text-muted-foreground leading-relaxed">{genre.description}</p>
+                    <p className="text-sm text-muted-foreground leading-relaxed">{genre.description}</p>
                     
-                    {/* Audio Visualization Placeholder */}
-                    <div className="mt-6 flex justify-center space-x-1">
-                      {[...Array(5)].map((_, i) => (
+                    {/* Compact Audio Visualization */}
+                    <div className="mt-3 flex justify-center space-x-1">
+                      {[...Array(3)].map((_, i) => (
                         <div key={i} className={`w-1 bg-gradient-to-t ${genre.color} rounded-full animate-pulse`} 
-                             style={{ height: `${Math.random() * 20 + 10}px`, animationDelay: `${i * 100}ms` }}></div>
+                             style={{ height: `${Math.random() * 12 + 6}px`, animationDelay: `${i * 100}ms` }}></div>
                       ))}
                     </div>
                   </div>
