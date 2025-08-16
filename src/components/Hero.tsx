@@ -283,7 +283,7 @@ const Hero = () => {
                 rel="noopener noreferrer"
                 className="transition-transform duration-300 hover:scale-105"
               >
-                <img src="/lovable-uploads/a0eac125-4e37-4de0-a7f3-8f9e43d7e65e.png" alt="RIVAL Group Company Logo" className="w-28 h-auto filter drop-shadow-lg" />
+                <img src="/lovable-uploads/a0eac125-4e37-4de0-a7f3-8f9e43d7e65e.png" alt="RIVAL Group Company Logo" className="w-28 h-auto filter drop-shadow-lg mix-blend-multiply" />
               </a>
             </div>
           </div>
