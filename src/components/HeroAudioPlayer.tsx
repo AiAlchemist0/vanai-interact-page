@@ -134,14 +134,9 @@ const HeroAudioPlayer = () => {
                 : 'bg-muted/20 hover:bg-muted/40 border-border/20'
             }`}
           >
-            {/* Track Number */}
+            {/* Like Button */}
             <div className="flex-shrink-0 w-5 sm:w-6 text-center self-start pt-1">
-              <span className={`text-xs sm:text-sm font-medium ${
-                index === currentSongIndex ? 'text-primary' : 'text-muted-foreground'
-              }`}>
-                {index + 1}
-              </span>
-              <div className="text-xs text-muted-foreground/70 font-medium mt-0.5 flex items-center justify-center">
+              <div className="text-xs text-muted-foreground/70 font-medium flex items-center justify-center">
                 <button
                   onClick={(e) => handleLikeClick(song.id, e)}
                   className="transition-all duration-200 hover:scale-110 touch-manipulation"
