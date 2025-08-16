@@ -25,7 +25,7 @@ const StrumIndicator = ({ pressedFrets, lastStrum }: StrumIndicatorProps) => {
   if (!showStrumPrompt) return null;
 
   return (
-    <div className="absolute left-4 top-1/2 transform -translate-y-1/2 z-40 pointer-events-none">
+    <div className="absolute left-4 bottom-24 z-40 pointer-events-none">
       <Card className="p-4 bg-yellow-500/95 border-yellow-300 animate-pulse max-w-48">
         <div className="text-center text-black font-bold">
           <div className="text-xl mb-1">🎸</div>
