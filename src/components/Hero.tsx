@@ -24,10 +24,10 @@ const Hero = () => {
 
       {/* Main Content Container */}
       <div className="relative z-20 container mx-auto px-4 sm:px-6 py-6 sm:py-12">
-        <div className="grid lg:grid-cols-2 gap-6 lg:gap-12 items-center min-h-screen">
+        <div className="grid lg:grid-cols-5 gap-6 lg:gap-12 items-center min-h-screen">
           
           {/* Left Side - Content */}
-          <div className="space-y-4 sm:space-y-8 lg:pr-8">
+          <div className="lg:col-span-2 space-y-4 sm:space-y-8 lg:pr-8">
             <div className="flex flex-col sm:flex-row sm:flex-wrap items-center justify-center sm:justify-start gap-2 sm:gap-4 mb-3 sm:mb-6">
               <Badge variant="secondary" className="border-gradient glow-primary text-xs sm:text-sm">
                 <BarChart3 className="w-3 sm:w-4 h-3 sm:h-4 mr-1 sm:mr-2" />
@@ -311,7 +311,7 @@ const Hero = () => {
           </div>
 
           {/* Right Side - Audio Player */}
-          <div className="lg:pl-8 mt-4 lg:mt-0">
+          <div className="lg:col-span-3 lg:pl-8 mt-4 lg:mt-0">
             <HeroAudioPlayer />
           </div>
         </div>
