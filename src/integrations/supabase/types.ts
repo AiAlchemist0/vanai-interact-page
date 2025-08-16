@@ -305,6 +305,13 @@ export type Database = {
           total_plays: number
         }[]
       }
+      toggle_song_like: {
+        Args: { p_song_id: string; p_user_session_id: string }
+        Returns: {
+          liked: boolean
+          total_likes: number
+        }[]
+      }
     }
     Enums: {
       [_ in never]: never

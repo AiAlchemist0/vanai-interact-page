@@ -1,8 +1,8 @@
 import React from 'react';
 import { Button } from "@/components/ui/button";
-import { Play, Pause, BarChart3, PlayCircle, StopCircle } from "lucide-react";
+import { Play, Pause, Heart, PlayCircle, StopCircle } from "lucide-react";
 import { useAudio } from "@/contexts/AudioContext";
-import { useSongStatistics } from '@/hooks/useSongStatistics';
+import { useSongLikes } from '@/hooks/useSongLikes';
 
 const formatTime = (s: number) => {
   if (!isFinite(s)) return "0:00";
@@ -27,7 +27,7 @@ const HeroAudioPlayer = () => {
     currentSongIndex
   } = useAudio();
   
-  const { getPlayCount, getTotalPlays, loading: statsLoading } = useSongStatistics();
+  const { getLikeCount, getTotalLikes, isLiked, toggleLike, loading: likesLoading } = useSongLikes();
 
   const handlePlayClick = (songId: string, songIndex: number) => {
     if (songIndex === currentSongIndex && isPlaying) {
@@ -37,6 +37,11 @@ const HeroAudioPlayer = () => {
     } else {
       loadSpecificSong(songId);
     }
+  };
+
+  const handleLikeClick = async (songId: string, e: React.MouseEvent) => {
+    e.stopPropagation();
+    await toggleLike(songId);
   };
 
   return (
@@ -49,27 +54,27 @@ const HeroAudioPlayer = () => {
                {isPlaylistMode ? "♪ Playing all songs..." : isPlaying ? `♪ ${currentSong?.title || ''}` : 'BC AI Audio Experience'}
              </h3>
            </div>
-           <div className="flex items-center gap-2 flex-shrink-0">
-             <div className="flex items-center gap-1 text-muted-foreground">
-               {!statsLoading && getTotalPlays() > 0 && (
-                 <>
-                   <BarChart3 className="w-3 h-3 sm:w-4 sm:h-4" />
-                   <span className="text-xs font-medium">{getTotalPlays()}</span>
-                 </>
-               )}
-               {statsLoading && (
-                 <>
-                   <BarChart3 className="w-3 h-3 sm:w-4 sm:h-4 animate-pulse" />
-                   <span className="text-xs font-medium">Loading...</span>
-                 </>
-               )}
-               {!statsLoading && getTotalPlays() === 0 && (
-                 <>
-                   <BarChart3 className="w-3 h-3 sm:w-4 sm:h-4" />
-                   <span className="text-xs font-medium">0 plays</span>
-                 </>
-               )}
-             </div>
+            <div className="flex items-center gap-2 flex-shrink-0">
+              <div className="flex items-center gap-1 text-muted-foreground">
+                {!likesLoading && getTotalLikes() > 0 && (
+                  <>
+                    <Heart className="w-3 h-3 sm:w-4 sm:h-4 text-red-500 fill-red-500" />
+                    <span className="text-xs font-medium">{getTotalLikes()}</span>
+                  </>
+                )}
+                {likesLoading && (
+                  <>
+                    <Heart className="w-3 h-3 sm:w-4 sm:h-4 animate-pulse" />
+                    <span className="text-xs font-medium">Loading...</span>
+                  </>
+                )}
+                {!likesLoading && getTotalLikes() === 0 && (
+                  <>
+                    <Heart className="w-3 h-3 sm:w-4 sm:h-4" />
+                    <span className="text-xs font-medium">0 likes</span>
+                  </>
+                )}
+              </div>
              <Button
                onClick={isPlaylistMode ? stopPlaylistMode : startPlaylistMode}
                variant={isPlaylistMode ? "destructive" : "secondary"}
@@ -116,8 +121,20 @@ const HeroAudioPlayer = () => {
               }`}>
                 {index + 1}
               </span>
-              <div className="text-xs text-muted-foreground/70 font-medium mt-0.5">
-                {!statsLoading ? `♪ ${getPlayCount(song.id)}` : '♪ ...'}
+              <div className="text-xs text-muted-foreground/70 font-medium mt-0.5 flex items-center justify-center">
+                <button
+                  onClick={(e) => handleLikeClick(song.id, e)}
+                  className="transition-all duration-200 hover:scale-110 touch-manipulation"
+                >
+                  <Heart 
+                    className={`w-3 h-3 ${
+                      isLiked(song.id) 
+                        ? 'text-red-500 fill-red-500' 
+                        : 'text-muted-foreground/50 hover:text-red-400'
+                    }`} 
+                  />
+                </button>
+                <span className="ml-1 text-xs">{getLikeCount(song.id)}</span>
               </div>
             </div>
 
