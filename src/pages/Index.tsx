@@ -8,6 +8,7 @@ import Methodology from "@/components/Methodology";
 import Footer from "@/components/Footer";
 import AudioPlayerProvider from "@/components/AudioPlayerProvider";
 import NowPlayingBanner from "@/components/NowPlayingBanner";
+import EnhancedAnalytics from "@/components/EnhancedAnalytics";
 
 const Index = () => {
   return (
@@ -20,6 +21,11 @@ const Index = () => {
           <KeyInsights />
           <QuestionCategories />
           <DataVisualization />
+          <section className="py-16 sm:py-20 lg:py-24">
+            <div className="container mx-auto px-4">
+              <EnhancedAnalytics />
+            </div>
+          </section>
           <Methodology />
           <Footer />
         </div>

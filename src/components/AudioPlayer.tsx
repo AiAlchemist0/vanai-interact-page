@@ -278,7 +278,7 @@ interface AudioPlayerProps {
 
 const AudioPlayer: React.FC<AudioPlayerProps> = ({ audioPlayerHook }) => {
   const isMobile = useIsMobile();
-  const { recordPlay } = useSongStatistics();
+  const { startPlayTracking, endPlayTracking } = useSongStatistics();
   
   const {
     audioRef,
@@ -433,6 +433,12 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ audioPlayerHook }) => {
     const onEnded = () => {
       setIsPlaying(false);
       
+      // End play tracking when song ends
+      if (hasRecordedPlay) {
+        endPlayTracking(currentSong.id);
+        setHasRecordedPlay(false);
+      }
+      
       // Handle playlist mode first (highest priority)
       if (isPlaylistMode) {
         const nextIndex = currentSongIndex < SONGS.length - 1 ? currentSongIndex + 1 : 0;
@@ -498,8 +504,12 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ audioPlayerHook }) => {
 
   // Reset play tracking when song changes
   React.useEffect(() => {
+    // End tracking for previous song if it was being tracked
+    if (hasRecordedPlay) {
+      endPlayTracking(currentSong.id);
+    }
     setHasRecordedPlay(false);
-  }, [currentSongIndex]);
+  }, [currentSongIndex, endPlayTracking, currentSong.id, hasRecordedPlay]);
 
   // Effect to handle auto-play after song changes
   React.useEffect(() => {
@@ -513,9 +523,9 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ audioPlayerHook }) => {
             .then(() => {
               setIsPlaying(true);
               setShouldAutoPlay(false);
-              // Record play when auto-playing
+              // Start play tracking when auto-playing
               if (!hasRecordedPlay) {
-                recordPlay(currentSong.id);
+                startPlayTracking(currentSong.id);
                 setHasRecordedPlay(true);
               }
             })
@@ -532,7 +542,7 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ audioPlayerHook }) => {
       
       attemptAutoPlay();
     }
-  }, [shouldAutoPlay, currentSongIndex, isPlaying, recordPlay, currentSong.id, hasRecordedPlay]);
+  }, [shouldAutoPlay, currentSongIndex, isPlaying, startPlayTracking, currentSong.id, hasRecordedPlay]);
 
   const [isToggling, setIsToggling] = React.useState(false);
   
@@ -551,9 +561,9 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ audioPlayerHook }) => {
         setIsPlaying(true);
         setAutoplayBlocked(false);
         setAudioError(null);
-        // Record play when manually starting
+        // Start play tracking when manually starting
         if (!hasRecordedPlay) {
-          recordPlay(currentSong.id);
+          startPlayTracking(currentSong.id);
           setHasRecordedPlay(true);
         }
       } catch (e) {
@@ -564,6 +574,11 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ audioPlayerHook }) => {
     } else {
       audio.pause();
       setIsPlaying(false);
+      // End play tracking when manually pausing
+      if (hasRecordedPlay) {
+        endPlayTracking(currentSong.id);
+        setHasRecordedPlay(false);
+      }
     }
     
     setTimeout(() => setIsToggling(false), 200);

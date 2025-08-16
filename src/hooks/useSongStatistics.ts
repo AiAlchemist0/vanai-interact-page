@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 
 export interface SongStatistics {
@@ -11,6 +11,7 @@ export const useSongStatistics = () => {
   const [statistics, setStatistics] = useState<SongStatistics[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const playStartTimes = useRef<Map<string, { startTime: number; recordId: string }>>(new Map());
 
   const fetchStatistics = async () => {
     try {
@@ -41,34 +42,83 @@ export const useSongStatistics = () => {
     }
   };
 
-  const recordPlay = async (songId: string) => {
+  const startPlayTracking = async (songId: string) => {
     try {
-      console.log('Recording play for song:', songId);
+      console.log('Starting play tracking for song:', songId);
       
       // Generate a simple session ID for anonymous tracking
       const sessionId = localStorage.getItem('session_id') || 
         Math.random().toString(36).substring(2, 15);
       localStorage.setItem('session_id', sessionId);
 
-      const { error } = await supabase
+      // Insert initial record with is_valid_play = false
+      const { data, error } = await supabase
         .from('song_plays')
         .insert({
           song_id: songId,
           user_session_id: sessionId,
-          played_at: new Date().toISOString()
-        });
+          played_at: new Date().toISOString(),
+          duration_seconds: 0,
+          is_valid_play: false
+        })
+        .select('id')
+        .single();
 
       if (error) {
-        console.error('Error recording play:', error);
+        console.error('Error starting play tracking:', error);
         throw error;
       }
 
-      console.log('Play recorded successfully for song:', songId);
-      
-      // Refresh statistics after recording a play
-      await fetchStatistics();
+      // Store start time and record ID for duration calculation
+      playStartTimes.current.set(songId, {
+        startTime: Date.now(),
+        recordId: data.id
+      });
+
+      console.log('Play tracking started for song:', songId, 'Record ID:', data.id);
     } catch (err) {
-      console.error('Error recording song play:', err);
+      console.error('Error starting play tracking:', err);
+    }
+  };
+
+  const endPlayTracking = async (songId: string) => {
+    try {
+      const trackingData = playStartTimes.current.get(songId);
+      if (!trackingData) {
+        console.log('No tracking data found for song:', songId);
+        return;
+      }
+
+      const duration = Math.floor((Date.now() - trackingData.startTime) / 1000);
+      const isValidPlay = duration >= 30; // 30+ seconds counts as a valid play
+
+      console.log(`Ending play tracking for song: ${songId}, Duration: ${duration}s, Valid: ${isValidPlay}`);
+
+      // Update the record with duration and validity
+      const { error } = await supabase
+        .from('song_plays')
+        .update({
+          duration_seconds: duration,
+          is_valid_play: isValidPlay
+        })
+        .eq('id', trackingData.recordId);
+
+      if (error) {
+        console.error('Error updating play duration:', error);
+        throw error;
+      }
+
+      // Clean up tracking data
+      playStartTimes.current.delete(songId);
+
+      console.log('Play tracking completed for song:', songId);
+      
+      // Only refresh statistics if it was a valid play
+      if (isValidPlay) {
+        await fetchStatistics();
+      }
+    } catch (err) {
+      console.error('Error ending play tracking:', err);
     }
   };
 
@@ -83,13 +133,38 @@ export const useSongStatistics = () => {
 
   useEffect(() => {
     fetchStatistics();
+
+    // Set up real-time subscription for statistics updates
+    const channel = supabase
+      .channel('song-statistics-changes')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'song_statistics'
+        },
+        (payload) => {
+          console.log('Real-time statistics update:', payload);
+          // Refresh statistics when any change occurs
+          fetchStatistics();
+        }
+      )
+      .subscribe();
+
+    return () => {
+      // Clean up any ongoing tracking
+      playStartTimes.current.clear();
+      supabase.removeChannel(channel);
+    };
   }, []);
 
   return {
     statistics,
     loading,
     error,
-    recordPlay,
+    startPlayTracking,
+    endPlayTracking,
     getPlayCount,
     getTotalPlays,
     refetch: fetchStatistics
