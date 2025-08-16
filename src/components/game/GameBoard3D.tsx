@@ -114,8 +114,7 @@ const GameBoard3D = ({
         </group>
       </Canvas>
       
-      {/* Canvas Status Indicator */}
-      <div className="absolute top-4 right-4 bg-green-500 w-3 h-3 rounded-full animate-pulse"></div>
+      {/* Canvas Status Indicator removed */}
     </div>
   );
 };
