@@ -135,21 +135,21 @@ const HeroAudioPlayer = () => {
             }`}
           >
             {/* Like Button */}
-            <div className="flex-shrink-0 w-5 sm:w-6 text-center self-start pt-1">
-              <div className="text-xs text-muted-foreground/70 font-medium flex items-center justify-center">
+            <div className="flex-shrink-0 w-8 sm:w-10 text-center self-center">
+              <div className="flex flex-col items-center justify-center gap-1">
                 <button
                   onClick={(e) => handleLikeClick(song.id, e)}
-                  className="transition-all duration-200 hover:scale-110 touch-manipulation"
+                  className="transition-all duration-200 hover:scale-110 touch-manipulation p-1"
                 >
                   <Heart 
-                    className={`w-3 h-3 ${
+                    className={`w-5 h-5 sm:w-6 sm:h-6 ${
                       isLiked(song.id) 
                         ? 'text-red-500 fill-red-500' 
                         : 'text-muted-foreground/50 hover:text-red-400'
                     }`} 
                   />
                 </button>
-                <span className="ml-1 text-xs">{getLikeCount(song.id)}</span>
+                <span className="text-xs font-medium text-muted-foreground">{getLikeCount(song.id)}</span>
               </div>
             </div>
 
