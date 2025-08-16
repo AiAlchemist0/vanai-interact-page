@@ -207,12 +207,12 @@ const Hero = () => {
           </div>
         </div>
 
-        {/* Desktop: Clean 2-column layout */}
-        <div className="hidden lg:flex flex-col justify-center min-h-screen space-y-12">
+        {/* Desktop: Clean centered layout */}
+        <div className="hidden lg:flex flex-col justify-center min-h-screen space-y-16">
           {/* Top Section: Badges and Title */}
-          <div className="text-center space-y-6">
-            <div className="flex items-center justify-center gap-4">
-              <Badge variant="secondary" className="border-gradient glow-primary">
+          <div className="text-center space-y-8 max-w-5xl mx-auto">
+            <div className="flex items-center justify-center gap-6">
+              <Badge variant="secondary" className="border-gradient glow-primary px-4 py-2">
                 <BarChart3 className="w-4 h-4 mr-2" />
                 Vancouver AI Hackathon Round 3
               </Badge>
@@ -229,28 +229,30 @@ const Hero = () => {
             </h1>
           </div>
 
-          {/* Description Section: Full-width */}
+          {/* Description Section */}
           <div className="text-center max-w-4xl mx-auto">
-            <p className="text-xl text-muted-foreground leading-relaxed">
+            <p className="text-xl xl:text-2xl text-muted-foreground leading-relaxed">
               Discover what <span className="text-primary font-semibold">1,001 British Columbians</span> think about artificial intelligence. 
               Explore comprehensive survey data covering AI experience, concerns, and future vision.
             </p>
           </div>
 
           {/* Logo + Stats Section: 4-column grid */}
-          <div className="grid grid-cols-4 gap-8 max-w-6xl mx-auto">
+          <div className="grid grid-cols-4 gap-6 max-w-5xl mx-auto">
             {/* Logo as first column */}
-            <div className="bg-card/50 backdrop-blur-sm border border-border rounded-xl px-6 py-6 text-center flex items-center justify-center">
+            <div className="bg-card/50 backdrop-blur-sm border border-border rounded-xl px-6 py-8 text-center flex items-center justify-center min-h-[140px]">
               <a 
                 href="https://vancouver.bc-ai.net/" 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="transition-transform duration-300 hover:scale-105"
               >
-                <img src="/lovable-uploads/6b65586a-63ba-48f1-9c56-1846ec800f39.png" alt="BC+AI Ecosystem Logo" className="w-32 h-auto filter drop-shadow-lg" />
+                <img src="/lovable-uploads/6b65586a-63ba-48f1-9c56-1846ec800f39.png" alt="BC+AI Ecosystem Logo" className="w-28 h-auto filter drop-shadow-lg" />
               </a>
             </div>
-            <div className="bg-card/50 backdrop-blur-sm border border-border rounded-xl px-6 py-6 text-center">
+
+            {/* Stats columns */}
+            <div className="bg-card/50 backdrop-blur-sm border border-border rounded-xl px-6 py-8 text-center min-h-[140px] flex flex-col justify-center">
               <div className="flex items-center justify-center mb-3">
                 <Users className="w-8 h-8 text-primary" />
               </div>
@@ -258,7 +260,7 @@ const Hero = () => {
               <div className="text-sm text-muted-foreground">Respondents</div>
             </div>
 
-            <div className="bg-card/50 backdrop-blur-sm border border-border rounded-xl px-6 py-6 text-center">
+            <div className="bg-card/50 backdrop-blur-sm border border-border rounded-xl px-6 py-8 text-center min-h-[140px] flex flex-col justify-center">
               <div className="flex items-center justify-center mb-3">
                 <BarChart3 className="w-8 h-8 text-ai-cyan" />
               </div>
@@ -266,7 +268,7 @@ const Hero = () => {
               <div className="text-sm text-muted-foreground">Text Responses</div>
             </div>
 
-            <div className="bg-card/50 backdrop-blur-sm border border-border rounded-xl px-6 py-6 text-center">
+            <div className="bg-card/50 backdrop-blur-sm border border-border rounded-xl px-6 py-8 text-center min-h-[140px] flex flex-col justify-center">
               <div className="flex items-center justify-center mb-3">
                 <MapPin className="w-8 h-8 text-ai-green" />
               </div>
@@ -276,20 +278,20 @@ const Hero = () => {
           </div>
 
           {/* Buttons Section: Horizontal row */}
-          <div className="flex justify-center gap-4 max-w-4xl mx-auto flex-wrap">
-            <Button size="lg" className="gradient-primary hover:glow-primary transition-smooth group" onClick={() => document.getElementById('vision')?.scrollIntoView({ behavior: 'smooth' })}>
+          <div className="flex justify-center gap-4 max-w-5xl mx-auto flex-wrap">
+            <Button size="lg" className="gradient-primary hover:glow-primary transition-smooth group px-6 py-3" onClick={() => document.getElementById('vision')?.scrollIntoView({ behavior: 'smooth' })}>
               <Lightbulb className="mr-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
               Project's Vision
             </Button>
 
-            <Button size="lg" className="gradient-secondary hover:glow-secondary transition-smooth group" onClick={() => document.getElementById('insights')?.scrollIntoView({ behavior: 'smooth' })}>
+            <Button size="lg" className="gradient-secondary hover:glow-secondary transition-smooth group px-6 py-3" onClick={() => document.getElementById('insights')?.scrollIntoView({ behavior: 'smooth' })}>
               <BarChart3 className="mr-2 w-5 h-5 group-hover:scale-110 transition-transform" />
               Survey Deep Dive
             </Button>
 
             <Dialog>
               <DialogTrigger asChild>
-                <Button size="lg" variant="outline" className="border-muted-foreground/30 hover:border-muted-foreground transition-smooth group">
+                <Button size="lg" variant="outline" className="border-muted-foreground/30 hover:border-muted-foreground transition-smooth group px-6 py-3">
                   <Shield className="mr-2 w-5 h-5 group-hover:scale-110 transition-transform" />
                   Legal Disclaimer
                 </Button>
@@ -374,14 +376,14 @@ const Hero = () => {
               </DialogContent>
             </Dialog>
 
-            <Button size="lg" className="gradient-accent hover:glow-accent transition-smooth group" onClick={() => navigate('/game')}>
-              <Gamepad2 className="mr-2 w-5 h-5 group-hover:rotate-12 transition-transform" />
+            <Button size="lg" className="gradient-accent hover:glow-accent transition-smooth group px-6 py-3" onClick={() => navigate('/game')}>
+              <Gamepad2 className="mr-2 w-5 h-5 group-hover:scale-110 transition-transform" />
               Play BC AI Game
             </Button>
           </div>
 
-          {/* Audio Player - Desktop (Full Width) */}
-          <div className="w-full">
+          {/* Audio Player - Desktop */}
+          <div className="max-w-5xl mx-auto w-full">
             <HeroAudioPlayer />
           </div>
         </div>
