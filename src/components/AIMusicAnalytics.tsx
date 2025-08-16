@@ -201,31 +201,6 @@ const AIMusicAnalytics = () => {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
-            <Card className="p-6 text-center bg-gradient-to-br from-blue-50 to-cyan-50 dark:from-blue-900/20 dark:to-cyan-900/20 border-blue-200 dark:border-blue-800">
-              <Mic className="w-12 h-12 text-blue-500 mx-auto mb-4" />
-              <h4 className="text-2xl font-bold text-blue-700 dark:text-blue-400 mb-2">1,000+</h4>
-              <p className="text-sm text-muted-foreground">Individual Voices</p>
-            </Card>
-            
-            <Card className="p-6 text-center bg-gradient-to-br from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 border-purple-200 dark:border-purple-800">
-              <Music2 className="w-12 h-12 text-purple-500 mx-auto mb-4" />
-              <h4 className="text-2xl font-bold text-purple-700 dark:text-purple-400 mb-2">500+</h4>
-              <p className="text-sm text-muted-foreground">Unique Songs Generated</p>
-            </Card>
-            
-            <Card className="p-6 text-center bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 border-green-200 dark:border-green-800">
-              <Users className="w-12 h-12 text-green-500 mx-auto mb-4" />
-              <h4 className="text-2xl font-bold text-green-700 dark:text-green-400 mb-2">50+</h4>
-              <p className="text-sm text-muted-foreground">Community Sessions</p>
-            </Card>
-            
-            <Card className="p-6 text-center bg-gradient-to-br from-orange-50 to-red-50 dark:from-orange-900/20 dark:to-red-900/20 border-orange-200 dark:border-orange-800">
-              <MessageSquare className="w-12 h-12 text-orange-500 mx-auto mb-4" />
-              <h4 className="text-2xl font-bold text-orange-700 dark:text-orange-400 mb-2">2,000+</h4>
-              <p className="text-sm text-muted-foreground">Community Interactions</p>
-            </Card>
-          </div>
 
           <Card className="p-8 bg-gradient-to-br from-primary/5 to-accent/5 border-gradient">
             <div className="text-center">
