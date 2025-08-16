@@ -238,20 +238,7 @@ export type Database = {
       }
     }
     Views: {
-      song_analytics: {
-        Row: {
-          avg_completion_rate: number | null
-          avg_duration: number | null
-          first_played_at: string | null
-          last_played_at: string | null
-          replay_count: number | null
-          skip_count: number | null
-          song_id: string | null
-          total_plays: number | null
-          valid_plays: number | null
-        }
-        Relationships: []
-      }
+      [_ in never]: never
     }
     Functions: {
       get_dashboard_stats: {
@@ -287,6 +274,20 @@ export type Database = {
           last_played_at: string
           song_id: string
           total_plays: number
+        }[]
+      }
+      get_song_analytics: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          avg_completion_rate: number
+          avg_duration: number
+          first_played_at: string
+          last_played_at: string
+          replay_count: number
+          skip_count: number
+          song_id: string
+          total_plays: number
+          valid_plays: number
         }[]
       }
       get_song_like_statistics: {
