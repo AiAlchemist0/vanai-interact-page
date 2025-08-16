@@ -6,6 +6,7 @@ import FloatingText, { FloatingTextItem } from './FloatingText';
 import StarPowerEffects from './StarPowerEffects';
 import Atmosphere from './Atmosphere';
 import { NotePattern } from '@/pages/Game';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 interface GameBoard3DProps {
   activeNotes: NotePattern[];
@@ -45,18 +46,28 @@ const GameBoard3D = ({
   starPower,
   hitFlashTimes
 }: GameBoard3DProps) => {
+  const isMobile = useIsMobile();
   return (
-    <div className="w-full h-full">
+    <div className="w-full h-full overflow-hidden">
       <Canvas
-        gl={{ antialias: true, alpha: false }}
-        dpr={[1, 2]}
+        gl={{ 
+          antialias: !isMobile, 
+          alpha: false,
+          powerPreference: isMobile ? "low-power" : "high-performance"
+        }}
+        dpr={isMobile ? [1, 1.5] : [1, 2]}
         style={{ 
           width: '100%', 
           height: '100%',
           background: starPower.isActive ? 'var(--gradient-warm)' : 'var(--gradient-secondary)'
         }}
       >
-        <PerspectiveCamera makeDefault position={[0, 18, 14]} rotation={[-0.85, 0, 0]} fov={55} />
+        <PerspectiveCamera 
+          makeDefault 
+          position={isMobile ? [0, 16, 12] : [0, 18, 14]} 
+          rotation={[-0.85, 0, 0]} 
+          fov={isMobile ? 65 : 55} 
+        />
         
         {/* Optimized Lighting Setup - reduced for performance */}
         <ambientLight intensity={starPower.isActive ? 0.5 : 0.3} />
@@ -72,8 +83,11 @@ const GameBoard3D = ({
           color={starPower.isActive ? "#ffd700" : "#00ffff"} 
         />
 
-        {/* Scene content wrapper to raise and widen the board */}
-        <group position={[0, 1.5, 0]} scale={[1.25, 1, 1]}>
+        {/* Scene content wrapper with responsive scaling */}
+        <group 
+          position={[0, 1.5, 0]} 
+          scale={isMobile ? [1, 1, 1] : [1.25, 1, 1]}
+        >
           {/* Atmosphere and Background */}
           <Atmosphere 
             intensity={Math.min(combo / 50, 1)}
