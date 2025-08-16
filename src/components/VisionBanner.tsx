@@ -49,6 +49,51 @@ const VisionBanner = () => {
           </p>
         </div>
 
+        {/* Our Innovation Section */}
+        <div className="mb-20">
+          <div className="text-center mb-12">
+            <div className="flex items-center justify-center mb-6">
+              <Lightbulb className="w-8 h-8 text-primary mr-3" />
+              <h3 className="text-4xl font-bold text-gradient">The Breakthrough: AI-Music Analytics</h3>
+            </div>
+            <p className="text-xl text-muted-foreground max-w-4xl mx-auto">
+              Our revolutionary 5-step process transforms data into musical experiences
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
+            {[
+              { title: "Collect Data", description: "Gather survey responses & statistics", icon: Database },
+              { title: "Analyze Context", description: "Understanding emotions behind numbers", icon: Heart },
+              { title: "Generate Lyrics", description: "AI transforms insights into verses", icon: Lightbulb },
+              { title: "Create Music", description: "Producing emotional soundscapes", icon: Music },
+              { title: "Build Community", description: "Connecting voices across BC", icon: Users }
+            ].map((step, index) => {
+              const Icon = step.icon;
+              return (
+                <div key={index} className="relative">
+                  <Card className="p-6 h-full hover-scale transition-all duration-300 bg-gradient-subtle border-gradient">
+                    <div className="text-center">
+                      <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center">
+                        <Icon className="w-8 h-8 text-white" />
+                      </div>
+                      <div className="w-8 h-8 mx-auto mb-3 rounded-full bg-primary text-white flex items-center justify-center text-sm font-bold">
+                        {index + 1}
+                      </div>
+                      <h4 className="text-lg font-bold mb-2 text-foreground">{step.title}</h4>
+                      <p className="text-sm text-muted-foreground">{step.description}</p>
+                    </div>
+                  </Card>
+                  
+                  {index < 4 && (
+                    <ArrowRight className="hidden md:block w-6 h-6 text-primary absolute top-1/2 -right-9 transform -translate-y-1/2" />
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
         {/* Creative Image Gallery */}
         <div className="mb-20">
           <div className="grid grid-cols-1 md:grid-cols-12 gap-6 h-auto md:h-[600px]">
@@ -107,51 +152,6 @@ const VisionBanner = () => {
                 <p className="text-base opacity-90">Bringing British Columbia together through the universal language of music</p>
               </div>
             </div>
-          </div>
-        </div>
-
-        {/* Our Innovation Section */}
-        <div className="mb-20">
-          <div className="text-center mb-12">
-            <div className="flex items-center justify-center mb-6">
-              <Lightbulb className="w-8 h-8 text-primary mr-3" />
-              <h3 className="text-4xl font-bold text-gradient">The Breakthrough: AI-Music Analytics</h3>
-            </div>
-            <p className="text-xl text-muted-foreground max-w-4xl mx-auto">
-              Our revolutionary 5-step process transforms data into musical experiences
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
-            {[
-              { title: "Collect Data", description: "Gather survey responses & statistics", icon: Database },
-              { title: "Analyze Context", description: "Understanding emotions behind numbers", icon: Heart },
-              { title: "Generate Lyrics", description: "AI transforms insights into verses", icon: Lightbulb },
-              { title: "Create Music", description: "Producing emotional soundscapes", icon: Music },
-              { title: "Build Community", description: "Connecting voices across BC", icon: Users }
-            ].map((step, index) => {
-              const Icon = step.icon;
-              return (
-                <div key={index} className="relative">
-                  <Card className="p-6 h-full hover-scale transition-all duration-300 bg-gradient-subtle border-gradient">
-                    <div className="text-center">
-                      <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center">
-                        <Icon className="w-8 h-8 text-white" />
-                      </div>
-                      <div className="w-8 h-8 mx-auto mb-3 rounded-full bg-primary text-white flex items-center justify-center text-sm font-bold">
-                        {index + 1}
-                      </div>
-                      <h4 className="text-lg font-bold mb-2 text-foreground">{step.title}</h4>
-                      <p className="text-sm text-muted-foreground">{step.description}</p>
-                    </div>
-                  </Card>
-                  
-                  {index < 4 && (
-                    <ArrowRight className="hidden md:block w-6 h-6 text-primary absolute top-1/2 -right-9 transform -translate-y-1/2" />
-                  )}
-                </div>
-              );
-            })}
           </div>
         </div>
 
