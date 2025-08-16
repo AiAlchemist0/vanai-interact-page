@@ -207,172 +207,31 @@ const Hero = () => {
           </div>
         </div>
 
-        {/* Desktop: Reorganized layout */}
-        <div className="hidden lg:flex flex-col justify-center min-h-screen space-y-8">
-          {/* Badges at the top */}
-          <div className="flex flex-col sm:flex-row sm:flex-wrap items-center justify-center gap-2 sm:gap-4 mb-6">
-            <Badge variant="secondary" className="border-gradient glow-primary text-xs sm:text-sm">
-              <BarChart3 className="w-3 sm:w-4 h-3 sm:h-4 mr-1 sm:mr-2" />
-              Vancouver AI Hackathon Round 3
-            </Badge>
-            <div className="flex items-center gap-2 text-primary">
-              <Sparkles className="w-4 sm:w-5 h-4 sm:h-5" />
-              <span className="text-xs sm:text-sm font-medium">AI-Music Powered Analytics</span>
+        {/* Desktop: Clean 2-column layout */}
+        <div className="hidden lg:flex flex-col justify-center min-h-screen space-y-12">
+          {/* Top Section: Badges and Title */}
+          <div className="text-center space-y-6">
+            <div className="flex items-center justify-center gap-4">
+              <Badge variant="secondary" className="border-gradient glow-primary">
+                <BarChart3 className="w-4 h-4 mr-2" />
+                Vancouver AI Hackathon Round 3
+              </Badge>
+              <div className="flex items-center gap-2 text-primary">
+                <Sparkles className="w-5 h-5" />
+                <span className="text-sm font-medium">AI-Music Powered Analytics</span>
+              </div>
             </div>
-          </div>
-
-          {/* Title at the top center */}
-          <div className="text-center">
-            <h1 className="text-4xl lg:text-5xl xl:text-6xl text-gradient leading-tight font-bold">
+            
+            <h1 className="text-5xl xl:text-6xl text-gradient leading-tight font-bold">
               BC + AI Survey
               <br />
               Insights
             </h1>
           </div>
 
-          {/* 3-column layout: Stats/Buttons | Logo | Empty space */}
-          <div className="grid grid-cols-3 gap-8 items-start">
-            {/* Left Column: Stats and Buttons */}
-            <div className="space-y-6">
-              {/* Key Stats */}
-              <div className="space-y-4">
-                <div className="bg-card/50 backdrop-blur-sm border border-border rounded-xl px-4 py-4 text-center">
-                  <div className="flex items-center justify-center mb-2">
-                    <Users className="w-6 h-6 text-primary" />
-                  </div>
-                  <div className="text-2xl font-bold text-foreground">1,001</div>
-                  <div className="text-sm text-muted-foreground">Respondents</div>
-                </div>
-
-                <div className="bg-card/50 backdrop-blur-sm border border-border rounded-xl px-4 py-4 text-center">
-                  <div className="flex items-center justify-center mb-2">
-                    <BarChart3 className="w-6 h-6 text-ai-cyan" />
-                  </div>
-                  <div className="text-2xl font-bold text-foreground">5,000+</div>
-                  <div className="text-sm text-muted-foreground">Text Responses</div>
-                </div>
-
-                <div className="bg-card/50 backdrop-blur-sm border border-border rounded-xl px-4 py-4 text-center">
-                  <div className="flex items-center justify-center mb-2">
-                    <MapPin className="w-6 h-6 text-ai-green" />
-                  </div>
-                  <div className="text-2xl font-bold text-foreground">17</div>
-                  <div className="text-sm text-muted-foreground">Core Questions</div>
-                </div>
-              </div>
-
-              {/* CTA Buttons */}
-              <div className="space-y-3">
-                <Button size="lg" className="gradient-primary hover:glow-primary transition-smooth group w-full px-3 py-3 min-h-[48px] text-sm font-medium" onClick={() => document.getElementById('vision')?.scrollIntoView({
-                behavior: 'smooth'
-              })}>
-                  <Lightbulb className="mr-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                  Project's Vision
-                </Button>
-
-                <Button size="lg" className="gradient-secondary hover:glow-secondary transition-smooth group w-full px-3 py-3 min-h-[48px] text-sm font-medium" onClick={() => document.getElementById('insights')?.scrollIntoView({
-                behavior: 'smooth'
-              })}>
-                  <BarChart3 className="mr-2 w-4 h-4 group-hover:scale-110 transition-transform" />
-                  Survey Deep Dive
-                </Button>
-
-                <Dialog>
-                  <DialogTrigger asChild>
-                    <Button size="lg" variant="outline" className="border-muted-foreground/30 hover:border-muted-foreground transition-smooth group w-full px-3 py-3 min-h-[48px] text-sm font-medium">
-                      <Shield className="mr-2 w-4 h-4 group-hover:scale-110 transition-transform" />
-                      Legal Disclaimer
-                    </Button>
-                  </DialogTrigger>
-                  <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto mx-4 sm:mx-auto">
-                    <DialogHeader>
-                      <DialogTitle className="flex items-center gap-2">
-                        <Shield className="w-5 h-5" />
-                        Legal Disclaimer
-                      </DialogTitle>
-                    </DialogHeader>
-                    <div className="space-y-4 text-sm text-muted-foreground">
-                      <div className="space-y-2">
-                        <h4 className="font-semibold text-foreground">Document Information</h4>
-                        <p>
-                          <strong>Date:</strong> August 15, 2025<br />
-                          <strong>For concerns, contact:</strong> <a href="mailto:Deanshev@gmail.com" className="text-primary hover:underline">Deanshev@gmail.com</a>
-                        </p>
-                      </div>
-
-                      <div className="space-y-2">
-                        <h4 className="font-semibold text-foreground">Legal Jurisdiction</h4>
-                        <p>
-                          This project and all associated materials are governed by the laws of British Columbia, Canada. Any legal disputes or matters arising from this project shall be subject to the exclusive jurisdiction of the courts of Vancouver, British Columbia, Canada.
-                        </p>
-                      </div>
-
-                      <div className="space-y-2">
-                        <h4 className="font-semibold text-foreground">Educational Purpose & Concept Rights</h4>
-                        <p>
-                          The intent of this project is within educational content only as per hackathon guidelines and falls under fair dealing provisions of the Canadian Copyright Act for educational purposes. This project introduces the concept of AI-Music Powered Analytics. The author of the project holds the right to the concept and can release the rights to BC + AI and Rival Tech for further exploration and usage. Copying the concept apart from these two parties must be contacted to the author Dean Shev directly.
-                        </p>
-                      </div>
-
-                      <div className="space-y-2">
-                        <h4 className="font-semibold text-foreground">Copyright & Intellectual Property</h4>
-                        <p>
-                          All original content, including but not limited to code, design, concepts, and methodologies, are protected under Canadian copyright law. The use of any copyrighted materials in this project falls under the fair dealing exception of the Copyright Act (R.S.C., 1985, c. C-42) for educational, research, and non-commercial purposes only.
-                        </p>
-                        <p>
-                          Any third-party content, data, or materials used are either licensed appropriately, fall under fair dealing provisions, or are used with permission. All rights to original survey data and analysis belong to the project author and designated parties as outlined above.
-                        </p>
-                      </div>
-                      
-                      <div className="space-y-2">
-                        <h4 className="font-semibold text-foreground">Song Creation Intent</h4>
-                        <p>
-                          All songs are created without an intent to offend, upset or commit any defamatory act of any sorts to the individuals in the songs. The songs are created as artistic expression and community engagement pieces.
-                        </p>
-                        <p>
-                          The intent of the songs is to connect wonderful individuals, "artists" of the BC + AI community and cherish their participation and support and not to defame or cause harm to any individual's reputation.
-                        </p>
-                      </div>
-                      
-                      <div className="space-y-2">
-                        <h4 className="font-semibold text-foreground">Post-Hackathon Usage & Distribution</h4>
-                        <p>
-                          Beyond the hackathon, all songs will not be released, distributed, or used in any capacity without first obtaining explicit written permission and consent from the person(s) featured or referenced in the content.
-                        </p>
-                        <p>
-                          This includes but is not limited to: commercial use, public performance, streaming platforms, broadcast media, or any form of monetization.
-                        </p>
-                      </div>
-                      
-                      <div className="space-y-2">
-                        <h4 className="font-semibold text-foreground">Social Media & Public Sharing</h4>
-                        <p>
-                          Songs will not be shared on social media platforms, posted publicly, or distributed through any digital channels unless explicitly approved by written consent from the associated artist or individual featured in the content.
-                        </p>
-                        <p>
-                          This policy protects individual privacy rights and ensures compliance with Canadian privacy legislation and personal information protection standards.
-                        </p>
-                      </div>
-
-                      <div className="space-y-2">
-                        <h4 className="font-semibold text-foreground">Limitation of Liability</h4>
-                        <p>
-                          This project is provided "as is" for educational and demonstration purposes. The author and associated parties disclaim any warranties and shall not be liable for any damages arising from the use of this project or its content.
-                        </p>
-                      </div>
-                    </div>
-                  </DialogContent>
-                </Dialog>
-
-                {/* Play BC AI Game Button - Prominent placement */}
-                <Button size="lg" className="gradient-accent hover:glow-accent transition-smooth group w-full px-4 py-4 min-h-[52px] text-base font-semibold" onClick={() => navigate('/game')}>
-                  <Gamepad2 className="mr-2 w-5 h-5 group-hover:scale-110 transition-transform" />
-                  PLAY BC AI GAME
-                </Button>
-              </div>
-            </div>
-
-            {/* Center Column: Logo */}
+          {/* Middle Section: Logo and Description side by side */}
+          <div className="grid grid-cols-2 gap-16 items-center">
+            {/* Left: Logo */}
             <div className="flex justify-center">
               <a 
                 href="https://vancouver.bc-ai.net/" 
@@ -380,20 +239,149 @@ const Hero = () => {
                 rel="noopener noreferrer"
                 className="transition-transform duration-300 hover:scale-105"
               >
-                <img src="/lovable-uploads/6b65586a-63ba-48f1-9c56-1846ec800f39.png" alt="BC+AI Ecosystem Logo" className="w-48 lg:w-56 xl:w-64 h-auto filter drop-shadow-lg" />
+                <img src="/lovable-uploads/6b65586a-63ba-48f1-9c56-1846ec800f39.png" alt="BC+AI Ecosystem Logo" className="w-64 xl:w-80 h-auto filter drop-shadow-lg" />
               </a>
             </div>
 
-            {/* Right Column: Empty for balance */}
-            <div></div>
+            {/* Right: Description */}
+            <div className="space-y-6">
+              <p className="text-xl text-muted-foreground leading-relaxed">
+                Discover what <span className="text-primary font-semibold">1,001 British Columbians</span> think about artificial intelligence. 
+                Explore comprehensive survey data covering AI experience, concerns, and future vision.
+              </p>
+            </div>
           </div>
 
-          {/* Description under the logo */}
-          <div className="text-center">
-            <p className="text-lg text-muted-foreground leading-relaxed lg:text-xl max-w-4xl mx-auto">
-              Discover what <span className="text-primary font-semibold">1,001 British Columbians</span> think about artificial intelligence. 
-              Explore comprehensive survey data covering AI experience, concerns, and future vision.
-            </p>
+          {/* Stats Section: Full-width horizontal grid */}
+          <div className="grid grid-cols-3 gap-8 max-w-4xl mx-auto">
+            <div className="bg-card/50 backdrop-blur-sm border border-border rounded-xl px-6 py-6 text-center">
+              <div className="flex items-center justify-center mb-3">
+                <Users className="w-8 h-8 text-primary" />
+              </div>
+              <div className="text-3xl font-bold text-foreground">1,001</div>
+              <div className="text-sm text-muted-foreground">Respondents</div>
+            </div>
+
+            <div className="bg-card/50 backdrop-blur-sm border border-border rounded-xl px-6 py-6 text-center">
+              <div className="flex items-center justify-center mb-3">
+                <BarChart3 className="w-8 h-8 text-ai-cyan" />
+              </div>
+              <div className="text-3xl font-bold text-foreground">5,000+</div>
+              <div className="text-sm text-muted-foreground">Text Responses</div>
+            </div>
+
+            <div className="bg-card/50 backdrop-blur-sm border border-border rounded-xl px-6 py-6 text-center">
+              <div className="flex items-center justify-center mb-3">
+                <MapPin className="w-8 h-8 text-ai-green" />
+              </div>
+              <div className="text-3xl font-bold text-foreground">17</div>
+              <div className="text-sm text-muted-foreground">Core Questions</div>
+            </div>
+          </div>
+
+          {/* Buttons Section: Horizontal row */}
+          <div className="flex justify-center gap-4 max-w-4xl mx-auto flex-wrap">
+            <Button size="lg" className="gradient-primary hover:glow-primary transition-smooth group" onClick={() => document.getElementById('vision')?.scrollIntoView({ behavior: 'smooth' })}>
+              <Lightbulb className="mr-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+              Project's Vision
+            </Button>
+
+            <Button size="lg" className="gradient-secondary hover:glow-secondary transition-smooth group" onClick={() => document.getElementById('insights')?.scrollIntoView({ behavior: 'smooth' })}>
+              <BarChart3 className="mr-2 w-5 h-5 group-hover:scale-110 transition-transform" />
+              Survey Deep Dive
+            </Button>
+
+            <Dialog>
+              <DialogTrigger asChild>
+                <Button size="lg" variant="outline" className="border-muted-foreground/30 hover:border-muted-foreground transition-smooth group">
+                  <Shield className="mr-2 w-5 h-5 group-hover:scale-110 transition-transform" />
+                  Legal Disclaimer
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto mx-4 sm:mx-auto">
+                <DialogHeader>
+                  <DialogTitle className="flex items-center gap-2">
+                    <Shield className="w-5 h-5" />
+                    Legal Disclaimer
+                  </DialogTitle>
+                </DialogHeader>
+                <div className="space-y-4 text-sm text-muted-foreground">
+                  <div className="space-y-2">
+                    <h4 className="font-semibold text-foreground">Document Information</h4>
+                    <p>
+                      <strong>Date:</strong> August 15, 2025<br />
+                      <strong>For concerns, contact:</strong> <a href="mailto:Deanshev@gmail.com" className="text-primary hover:underline">Deanshev@gmail.com</a>
+                    </p>
+                  </div>
+
+                  <div className="space-y-2">
+                    <h4 className="font-semibold text-foreground">Legal Jurisdiction</h4>
+                    <p>
+                      This project and all associated materials are governed by the laws of British Columbia, Canada. Any legal disputes or matters arising from this project shall be subject to the exclusive jurisdiction of the courts of Vancouver, British Columbia, Canada.
+                    </p>
+                  </div>
+
+                  <div className="space-y-2">
+                    <h4 className="font-semibold text-foreground">Educational Purpose & Concept Rights</h4>
+                    <p>
+                      The intent of this project is within educational content only as per hackathon guidelines and falls under fair dealing provisions of the Canadian Copyright Act for educational purposes. This project introduces the concept of AI-Music Powered Analytics. The author of the project holds the right to the concept and can release the rights to BC + AI and Rival Tech for further exploration and usage. Copying the concept apart from these two parties must be contacted to the author Dean Shev directly.
+                    </p>
+                  </div>
+
+                  <div className="space-y-2">
+                    <h4 className="font-semibold text-foreground">Copyright & Intellectual Property</h4>
+                    <p>
+                      All original content, including but not limited to code, design, concepts, and methodologies, are protected under Canadian copyright law. The use of any copyrighted materials in this project falls under the fair dealing exception of the Copyright Act (R.S.C., 1985, c. C-42) for educational, research, and non-commercial purposes only.
+                    </p>
+                    <p>
+                      Any third-party content, data, or materials used are either licensed appropriately, fall under fair dealing provisions, or are used with permission. All rights to original survey data and analysis belong to the project author and designated parties as outlined above.
+                    </p>
+                  </div>
+                  
+                  <div className="space-y-2">
+                    <h4 className="font-semibold text-foreground">Song Creation Intent</h4>
+                    <p>
+                      All songs are created without an intent to offend, upset or commit any defamatory act of any sorts to the individuals in the songs. The songs are created as artistic expression and community engagement pieces.
+                    </p>
+                    <p>
+                      The intent of the songs is to connect wonderful individuals, "artists" of the BC + AI community and cherish their participation and support and not to defame or cause harm to any individual's reputation.
+                    </p>
+                  </div>
+                  
+                  <div className="space-y-2">
+                    <h4 className="font-semibold text-foreground">Post-Hackathon Usage & Distribution</h4>
+                    <p>
+                      Beyond the hackathon, all songs will not be released, distributed, or used in any capacity without first obtaining explicit written permission and consent from the person(s) featured or referenced in the content.
+                    </p>
+                    <p>
+                      This includes but is not limited to: commercial use, public performance, streaming platforms, broadcast media, or any form of monetization.
+                    </p>
+                  </div>
+                  
+                  <div className="space-y-2">
+                    <h4 className="font-semibold text-foreground">Social Media & Public Sharing</h4>
+                    <p>
+                      Songs will not be shared on social media platforms, posted publicly, or distributed through any digital channels unless explicitly approved by written consent from the associated artist or individual featured in the content.
+                    </p>
+                    <p>
+                      This policy protects individual privacy rights and ensures compliance with Canadian privacy legislation and personal information protection standards.
+                    </p>
+                  </div>
+
+                  <div className="space-y-2">
+                    <h4 className="font-semibold text-foreground">Limitation of Liability</h4>
+                    <p>
+                      This project is provided "as is" for educational and demonstration purposes. The author and associated parties disclaim any warranties and shall not be liable for any damages arising from the use of this project or its content.
+                    </p>
+                  </div>
+                </div>
+              </DialogContent>
+            </Dialog>
+
+            <Button size="lg" className="gradient-accent hover:glow-accent transition-smooth group" onClick={() => navigate('/game')}>
+              <Gamepad2 className="mr-2 w-5 h-5 group-hover:rotate-12 transition-transform" />
+              Play BC AI Game
+            </Button>
           </div>
 
           {/* Audio Player - Desktop (Full Width) */}
