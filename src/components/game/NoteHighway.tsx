@@ -3,6 +3,7 @@ import { useFrame } from '@react-three/fiber';
 import { NotePattern } from '@/pages/Game';
 import Note3D from './Note3D';
 import ComboEffects from './ComboEffects';
+import ContinuousHitLine from './ContinuousHitLine';
 import { FRET_POSITIONS, FRET_COLORS, NOTE_SPEED_MULTIPLIER, HIT_LINE_Z } from '@/game/constants';
 
 interface NoteHighwayProps {
@@ -137,6 +138,12 @@ const NoteHighway = ({ activeNotes, currentTime, pressedFrets, combo = 0, noteSp
         );
       })}
 
+      {/* Continuous Hit Line */}
+      <ContinuousHitLine 
+        combo={combo} 
+        isStarPowerActive={isStarPowerActive} 
+        pressedFrets={pressedFrets}
+      />
 
       {/* Notes with improved positioning and depth cues */}
       {activeNotes.map((note, noteIndex) => 
