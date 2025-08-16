@@ -1,7 +1,7 @@
 import { Music, Radio, Mic, Heart, Users, ArrowRight, Sparkles, TrendingUp, AlertTriangle, Target, Globe, MessageSquare, BrainCircuit, Music2, BarChart3 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
-import communityMusicConnection from "@/assets/community-music-connection.jpg";
+import aiDataMusicCommunityTransformation from "@/assets/ai-data-music-community-transformation.jpg";
 import bcCollectiveVoice from "@/assets/bc-collective-voice.jpg";
 
 const AIMusicAnalytics = () => {
@@ -238,17 +238,17 @@ const AIMusicAnalytics = () => {
             </div>
           </Card>
 
-          {/* Community Impact Image */}
+          {/* AI Data to Music Transformation Image */}
           <div className="mt-12 relative group overflow-hidden rounded-2xl shadow-2xl">
             <img 
-              src={communityMusicConnection} 
-              alt="Diverse community connected through music and technology in British Columbia" 
+              src={aiDataMusicCommunityTransformation} 
+              alt="Visualization of AI data transforming into musical experiences that connect the Vancouver community - showing data streams becoming musical notes that unite diverse people through the power of music and technology" 
               className="w-full h-64 md:h-80 object-cover transition-transform duration-700 group-hover:scale-105"
             />
             <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-transparent to-transparent" />
             <div className="absolute bottom-6 left-6 text-white">
-              <h4 className="text-2xl font-bold mb-2">Community Impact</h4>
-              <p className="text-base opacity-90">Bringing British Columbia together through the universal language of music</p>
+              <h4 className="text-2xl font-bold mb-2">Data → Music → Community</h4>
+              <p className="text-base opacity-90">Transforming Vancouver's AI insights into shared musical experiences</p>
             </div>
           </div>
         </div>
