@@ -1,7 +1,7 @@
 import { Music, Radio, Mic, Heart, Users, ArrowRight, Sparkles, TrendingUp, AlertTriangle, Target, Globe, MessageSquare, BrainCircuit, Music2, BarChart3 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
-import vancouverAIMusicCommunityCircle from "@/assets/vancouver-ai-music-community-circle.jpg";
+import bcMusicalDemocracyMap from "@/assets/bc-musical-democracy-map.jpg";
 import bcCollectiveVoice from "@/assets/bc-collective-voice.jpg";
 
 const AIMusicAnalytics = () => {
@@ -238,17 +238,17 @@ const AIMusicAnalytics = () => {
             </div>
           </Card>
 
-          {/* Vancouver AI Music Community Circle Image */}
+          {/* BC Musical Democracy Map Image */}
           <div className="mt-12 relative group overflow-hidden rounded-2xl shadow-2xl">
             <img 
-              src={vancouverAIMusicCommunityCircle} 
-              alt="Vancouver community members sitting in a circle with musical instruments, as AI data streams from their devices transform into glowing musical notes and Guitar Hero-style highways connecting everyone together with BC mountains in the background" 
+              src={bcMusicalDemocracyMap} 
+              alt="Aerial view of British Columbia map with musical notes emerging from every city and town - Vancouver, Victoria, Prince George, Kamloops, Kelowna - showing how every survey response becomes a unique musical voice that connects communities across the province in a living, breathing soundtrack of BC's relationship with AI" 
               className="w-full h-64 md:h-80 object-cover transition-transform duration-700 group-hover:scale-105"
             />
             <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-transparent to-transparent" />
             <div className="absolute bottom-6 left-6 text-white">
-              <h4 className="text-2xl font-bold mb-2">Vancouver AI Music Circle</h4>
-              <p className="text-base opacity-90">Community connection through shared musical AI experiences</p>
+              <h4 className="text-2xl font-bold mb-2">BC's Musical Democracy</h4>
+              <p className="text-base opacity-90">Every voice matters, every response becomes music</p>
             </div>
           </div>
         </div>
