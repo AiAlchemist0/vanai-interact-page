@@ -237,7 +237,7 @@ const Hero = () => {
           </div>
 
           {/* Logo + Stats Section: 4-column grid */}
-          <div className="grid grid-cols-4 gap-6 max-w-5xl mx-auto">
+          <div className="grid grid-cols-5 gap-6 max-w-6xl mx-auto">
             {/* Logo as first column */}
             <div className="bg-card/50 backdrop-blur-sm border border-border rounded-xl px-6 py-8 text-center flex items-center justify-center min-h-[140px]">
               <a 
@@ -273,6 +273,18 @@ const Hero = () => {
               </div>
               <div className="text-3xl font-bold text-foreground">17</div>
               <div className="text-sm text-muted-foreground">Core Questions</div>
+            </div>
+
+            {/* RIVAL Logo */}
+            <div className="bg-card/50 backdrop-blur-sm border border-border rounded-xl px-6 py-8 text-center flex items-center justify-center min-h-[140px]">
+              <a 
+                href="https://rival.tech/" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="transition-transform duration-300 hover:scale-105"
+              >
+                <img src="/lovable-uploads/a0eac125-4e37-4de0-a7f3-8f9e43d7e65e.png" alt="RIVAL Group Company Logo" className="w-28 h-auto filter drop-shadow-lg" />
+              </a>
             </div>
           </div>
 
