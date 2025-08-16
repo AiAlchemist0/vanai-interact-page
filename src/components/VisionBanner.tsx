@@ -1,4 +1,4 @@
-import { Database, Lightbulb, Music, Heart, Users, ArrowRight, BarChart3 } from "lucide-react";
+import { Database, Lightbulb, Music, Heart, Users, ArrowRight, ArrowDown, BarChart3 } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import aiMusicDashboard from "@/assets/ai-music-dashboard.jpg";
 import soundToDataTransformation from "@/assets/sound-to-data-transformation.jpg";
@@ -86,9 +86,16 @@ const VisionBanner = () => {
                   </Card>
                   
                   {index < 4 && (
-                    <div className="hidden md:flex absolute top-1/2 -right-4 transform -translate-y-1/2 z-10">
-                      <ArrowRight className="w-8 h-8 text-primary animate-pulse" />
-                    </div>
+                    <>
+                      {/* Mobile vertical arrows */}
+                      <div className="md:hidden flex justify-center py-4">
+                        <ArrowDown className="w-8 h-8 text-primary animate-pulse" />
+                      </div>
+                      {/* Desktop horizontal arrows */}
+                      <div className="hidden md:flex absolute top-1/2 -right-4 transform -translate-y-1/2 z-10">
+                        <ArrowRight className="w-8 h-8 text-primary animate-pulse" />
+                      </div>
+                    </>
                   )}
                 </div>
               );
