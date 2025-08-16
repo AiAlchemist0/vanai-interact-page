@@ -98,6 +98,57 @@ export type Database = {
         }
         Relationships: []
       }
+      song_like_statistics: {
+        Row: {
+          created_at: string
+          id: string
+          last_liked_at: string | null
+          song_id: string
+          total_likes: number
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          last_liked_at?: string | null
+          song_id: string
+          total_likes?: number
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          last_liked_at?: string | null
+          song_id?: string
+          total_likes?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      song_likes: {
+        Row: {
+          created_at: string
+          id: string
+          liked_at: string
+          song_id: string
+          user_session_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          liked_at?: string
+          song_id: string
+          user_session_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          liked_at?: string
+          song_id?: string
+          user_session_id?: string
+        }
+        Relationships: []
+      }
       song_plays: {
         Row: {
           created_at: string
