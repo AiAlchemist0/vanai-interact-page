@@ -69,15 +69,21 @@ export const useSongLikes = () => {
   // Toggle like for a song
   const toggleLike = useCallback(async (songId: string) => {
     try {
+      setError(null); // Clear any previous errors
       const sessionId = getSessionId();
+      console.log('Toggling like for song:', songId, 'with session:', sessionId);
+      
       const { data, error: toggleError } = await supabase.rpc('toggle_song_like', {
         p_song_id: songId,
         p_user_session_id: sessionId
       });
 
       if (toggleError) {
+        console.error('RPC error:', toggleError);
         throw toggleError;
       }
+
+      console.log('Toggle like response:', data);
 
       if (data && data.length > 0) {
         const { liked, total_likes } = data[0];
@@ -105,11 +111,22 @@ export const useSongLikes = () => {
           }
         });
 
+        console.log('Like toggled successfully:', { liked, total_likes });
         return { liked, total_likes };
       }
     } catch (err) {
       console.error('Error toggling like:', err);
-      setError(err instanceof Error ? err.message : 'Failed to toggle like');
+      const errorMessage = err instanceof Error ? err.message : 'Failed to toggle like';
+      setError(errorMessage);
+      
+      // Show a toast notification for better UX
+      import('@/hooks/use-toast').then(({ toast }) => {
+        toast({
+          title: "Error",
+          description: errorMessage,
+          variant: "destructive",
+        });
+      });
     }
     
     return null;
