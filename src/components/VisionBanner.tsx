@@ -1,5 +1,9 @@
 import { Database, Lightbulb, Music, Heart, Users, ArrowRight } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
+import aiMusicDashboard from "@/assets/ai-music-dashboard.jpg";
+import soundToDataTransformation from "@/assets/sound-to-data-transformation.jpg";
+import communityMusicConnection from "@/assets/community-music-connection.jpg";
+import aiBrainMusic from "@/assets/ai-brain-music.jpg";
 
 const VisionBanner = () => {
   const visionSteps = [{
@@ -43,6 +47,67 @@ const VisionBanner = () => {
           <p className="text-lg text-muted-foreground leading-relaxed max-w-4xl mx-auto">
             We believe in a <span className="text-primary font-semibold">revolutionary concept</span>: transforming dry survey data into engaging musical experiences that bring communities together through the universal language of music.
           </p>
+        </div>
+
+        {/* Creative Image Gallery */}
+        <div className="mb-20">
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-6 h-auto md:h-[600px]">
+            {/* Large featured image */}
+            <div className="md:col-span-6 relative group overflow-hidden rounded-2xl shadow-2xl">
+              <img 
+                src={aiMusicDashboard} 
+                alt="AI-powered music analytics dashboard with colorful data visualizations" 
+                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+              <div className="absolute bottom-6 left-6 text-white">
+                <h4 className="text-xl font-bold mb-2">AI-Music Dashboard</h4>
+                <p className="text-sm opacity-90">Data visualization meets musical creativity</p>
+              </div>
+            </div>
+            
+            {/* Tall vertical image */}
+            <div className="md:col-span-3 relative group overflow-hidden rounded-2xl shadow-2xl">
+              <img 
+                src={soundToDataTransformation} 
+                alt="Abstract visualization of sound waves transforming into data points and statistics" 
+                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+              <div className="absolute bottom-6 left-4 text-white">
+                <h4 className="text-lg font-bold mb-1">Sound to Data</h4>
+                <p className="text-xs opacity-90">Transformation magic</p>
+              </div>
+            </div>
+            
+            {/* Square image */}
+            <div className="md:col-span-3 relative group overflow-hidden rounded-2xl shadow-2xl">
+              <img 
+                src={aiBrainMusic} 
+                alt="AI brain visualization with neural networks shaped like musical staff lines" 
+                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+              <div className="absolute bottom-6 left-4 text-white">
+                <h4 className="text-lg font-bold mb-1">AI Innovation</h4>
+                <p className="text-xs opacity-90">Neural music networks</p>
+              </div>
+            </div>
+            
+            {/* Wide bottom image */}
+            <div className="md:col-span-12 relative group overflow-hidden rounded-2xl shadow-2xl h-64 md:h-auto">
+              <img 
+                src={communityMusicConnection} 
+                alt="Diverse community connected through music and technology in British Columbia" 
+                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+              />
+              <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-transparent to-transparent" />
+              <div className="absolute bottom-6 left-6 text-white">
+                <h4 className="text-2xl font-bold mb-2">Community Connection</h4>
+                <p className="text-base opacity-90">Bringing British Columbia together through the universal language of music</p>
+              </div>
+            </div>
+          </div>
         </div>
 
         {/* Our Innovation Section */}
