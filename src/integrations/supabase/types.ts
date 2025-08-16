@@ -289,6 +289,14 @@ export type Database = {
           total_plays: number
         }[]
       }
+      get_song_like_statistics: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          last_liked_at: string
+          song_id: string
+          total_likes: number
+        }[]
+      }
       get_song_statistics: {
         Args: Record<PropertyKey, never>
         Returns: {
