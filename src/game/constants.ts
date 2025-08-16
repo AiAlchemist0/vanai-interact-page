@@ -13,7 +13,7 @@ export const HIT_WINDOW_SETTINGS = {
 export const NOTE_SPEED_MULTIPLIER = 9; // Consistent speed calculation
 export const NOTE_VIEW_DISTANCE = 30;   // Distance notes appear ahead
 export const HIT_LINE_Z = 5;            // Z position of hit line
-export const STRUM_COOLDOWN = 20;       // Reduced for maximum responsiveness
+export const STRUM_COOLDOWN = 50; // Increased to prevent double-strums
 
 // Visual Constants
 export const HIT_EFFECT_DURATION = 600;

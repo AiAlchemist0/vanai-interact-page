@@ -109,18 +109,23 @@ const GameBoard = ({
   const soundEffects = useSoundEffects();
   const starPower = useStarPower();
 
-  // Simplified hit detection system
+  // Simplified hit detection system with extensive debugging
   const handleStrum = () => {
-    console.log(`🎮 STRUM: Time=${currentTime.toFixed(0)}ms, Pressed=[${Array.from(pressedFrets).join(',')}]`);
+    console.log(`🎮 STRUM DETECTED! Time=${currentTime.toFixed(0)}ms, Pressed=[${Array.from(pressedFrets).join(',')}]`);
 
-    // Find notes within timing window
+    // Find notes within timing window - use very generous window for testing
     const potentialNotes = notes.filter(note => {
       const timingDiff = Math.abs(note.time - currentTime);
-      return timingDiff <= 300; // 300ms window - very forgiving
+      console.log(`📝 Note at ${note.time}ms, current=${currentTime.toFixed(0)}ms, diff=${timingDiff.toFixed(0)}ms`);
+      return timingDiff <= 500; // Even more forgiving window for testing
     });
 
+    console.log(`🔍 Found ${potentialNotes.length} potential notes in timing window`);
+
     if (potentialNotes.length === 0) {
-      console.log('❌ No notes in timing window');
+      console.log('❌ No notes in timing window - showing miss feedback');
+      // Show miss feedback even when no notes
+      setLastHitResult({ grade: 'miss', timingDiff: 0 });
       return;
     }
 

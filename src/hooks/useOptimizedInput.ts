@@ -24,10 +24,13 @@ export const useOptimizedInput = (onStrum: () => void, gameState: string) => {
 
   const handleStrum = useCallback(() => {
     const now = performance.now(); // More precise timing
-    if (now - lastStrumRef.current < STRUM_COOLDOWN) return;
+    if (now - lastStrumRef.current < STRUM_COOLDOWN) {
+      console.log(`⏱️ Strum cooldown active, blocked (${now - lastStrumRef.current}ms < ${STRUM_COOLDOWN}ms)`);
+      return;
+    }
     
     lastStrumRef.current = now;
-    console.log(`Optimized strum: method=${inputMethod}, frets=[${Array.from(pressedFrets).join(', ')}], time=${now.toFixed(1)}`);
+    console.log(`✅ STRUM TRIGGERED! method=${inputMethod}, frets=[${Array.from(pressedFrets).join(', ')}], time=${now.toFixed(1)}`);
     onStrum();
     
     // Enhanced haptic feedback for touch
@@ -43,13 +46,17 @@ export const useOptimizedInput = (onStrum: () => void, gameState: string) => {
     if (gameState !== "playing") return;
 
     const handleKeyDown = (e: KeyboardEvent) => {
+      console.log(`🎹 KEY DOWN: ${e.key} (code: ${e.code})`);
+      
       // Prevent default for game keys to avoid browser actions
       if (fretMap[e.key] !== undefined || e.code === 'Space') {
         e.preventDefault();
+        console.log(`🔒 Prevented default for game key: ${e.key}`);
       }
 
       // Switch to keyboard mode instantly
       if (inputMethod !== 'keyboard' && fretMap[e.key] !== undefined) {
+        console.log(`🎮 Switched to keyboard input mode`);
         setInputMethod('keyboard');
         setTouchPoints(new Map()); // Clear touch state
       }
@@ -57,14 +64,21 @@ export const useOptimizedInput = (onStrum: () => void, gameState: string) => {
       // Handle fret presses
       if (fretMap[e.key] !== undefined) {
         const fret = fretMap[e.key];
+        console.log(`🎸 Fret ${fret} pressed (key: ${e.key})`);
         setPressedFrets(prev => {
-          if (prev.has(fret)) return prev; // Already pressed
-          return new Set([...prev, fret]);
+          if (prev.has(fret)) {
+            console.log(`🔄 Fret ${fret} already pressed, ignoring`);
+            return prev; // Already pressed
+          }
+          const newSet = new Set([...prev, fret]);
+          console.log(`✅ Fret ${fret} added, new pressed frets: [${Array.from(newSet).join(', ')}]`);
+          return newSet;
         });
       }
 
       // Optimized strum handling
       if (e.code === 'Space') {
+        console.log(`🚀 SPACE key pressed - triggering strum!`);
         handleStrum();
       }
     };
@@ -72,9 +86,11 @@ export const useOptimizedInput = (onStrum: () => void, gameState: string) => {
     const handleKeyUp = (e: KeyboardEvent) => {
       if (fretMap[e.key] !== undefined) {
         const fret = fretMap[e.key];
+        console.log(`🎸 Fret ${fret} released (key: ${e.key})`);
         setPressedFrets(prev => {
           const newSet = new Set(prev);
           newSet.delete(fret);
+          console.log(`🔧 Fret ${fret} removed, remaining pressed frets: [${Array.from(newSet).join(', ')}]`);
           return newSet;
         });
       }
