@@ -229,31 +229,27 @@ const Hero = () => {
             </h1>
           </div>
 
-          {/* Middle Section: Logo and Description side by side */}
-          <div className="grid grid-cols-2 gap-16 items-center">
-            {/* Left: Logo */}
-            <div className="flex justify-center">
+          {/* Description Section: Full-width */}
+          <div className="text-center max-w-4xl mx-auto">
+            <p className="text-xl text-muted-foreground leading-relaxed">
+              Discover what <span className="text-primary font-semibold">1,001 British Columbians</span> think about artificial intelligence. 
+              Explore comprehensive survey data covering AI experience, concerns, and future vision.
+            </p>
+          </div>
+
+          {/* Logo + Stats Section: 4-column grid */}
+          <div className="grid grid-cols-4 gap-8 max-w-6xl mx-auto">
+            {/* Logo as first column */}
+            <div className="bg-card/50 backdrop-blur-sm border border-border rounded-xl px-6 py-6 text-center flex items-center justify-center">
               <a 
                 href="https://vancouver.bc-ai.net/" 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="transition-transform duration-300 hover:scale-105"
               >
-                <img src="/lovable-uploads/6b65586a-63ba-48f1-9c56-1846ec800f39.png" alt="BC+AI Ecosystem Logo" className="w-64 xl:w-80 h-auto filter drop-shadow-lg" />
+                <img src="/lovable-uploads/6b65586a-63ba-48f1-9c56-1846ec800f39.png" alt="BC+AI Ecosystem Logo" className="w-32 h-auto filter drop-shadow-lg" />
               </a>
             </div>
-
-            {/* Right: Description */}
-            <div className="space-y-6">
-              <p className="text-xl text-muted-foreground leading-relaxed">
-                Discover what <span className="text-primary font-semibold">1,001 British Columbians</span> think about artificial intelligence. 
-                Explore comprehensive survey data covering AI experience, concerns, and future vision.
-              </p>
-            </div>
-          </div>
-
-          {/* Stats Section: Full-width horizontal grid */}
-          <div className="grid grid-cols-3 gap-8 max-w-4xl mx-auto">
             <div className="bg-card/50 backdrop-blur-sm border border-border rounded-xl px-6 py-6 text-center">
               <div className="flex items-center justify-center mb-3">
                 <Users className="w-8 h-8 text-primary" />
