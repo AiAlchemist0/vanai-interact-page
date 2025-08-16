@@ -222,10 +222,9 @@ const Hero = () => {
               </div>
             </div>
             
-            <h1 className="text-5xl xl:text-6xl text-gradient leading-tight font-bold">
-              BC + AI Survey
-              <br />
-              Insights
+            <h1 className="text-6xl xl:text-7xl 2xl:text-8xl text-gradient font-bold leading-none">
+              <div className="mb-2">BC + AI Survey</div>
+              <div>Insights</div>
             </h1>
           </div>
 
