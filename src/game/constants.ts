@@ -2,11 +2,11 @@
 export const FRET_POSITIONS = [-5, -2.5, 0, 2.5, 5]; // 3D visual positions
 export const FRET_COLORS = ['#22c55e', '#ef4444', '#eab308', '#3b82f6', '#f97316']; // Green, Red, Yellow, Blue, Orange
 
-// Hit Detection Constants - Wider windows for better gameplay
+// Hit Detection Constants - Much more forgiving for playability
 export const HIT_WINDOW_SETTINGS = {
-  perfect: 100,   // Widened for more forgiving perfect hits
-  good: 200,      // Widened for better feel
-  okay: 300       // Widened for okay hits
+  perfect: 200,   // Very forgiving perfect hits
+  good: 350,      // Wider good window
+  okay: 500       // Very wide okay window for learning
 };
 
 // Timing Constants

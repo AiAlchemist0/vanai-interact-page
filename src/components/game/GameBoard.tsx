@@ -16,7 +16,10 @@ import { useSoundEffects, SoundEffect } from "@/hooks/useSoundEffects";
 import { useStarPower } from "@/hooks/useStarPower";
 import { GameDebugPanel } from "./GameDebugPanel";
 import CalibrationModal from "./CalibrationModal";
-import { Pause, Play, Square, Home, Settings, Zap } from "lucide-react";
+import GameInstructions from "./GameInstructions";
+import TimingFeedback from "./TimingFeedback";
+import FretVisualizer from "./FretVisualizer";
+import { Pause, Play, Square, Home, Settings, Zap, HelpCircle } from "lucide-react";
 
 interface GameBoardProps {
   song: Song;
@@ -97,6 +100,8 @@ const GameBoard = ({
   const [floatingTexts, setFloatingTexts] = useState<FloatingTextItem[]>([]);
   const [showCalibration, setShowCalibration] = useState(false);
   const [hitFlashTimes, setHitFlashTimes] = useState<Set<number>>(new Set());
+  const [showInstructions, setShowInstructions] = useState(false);
+  const [lastHitResult, setLastHitResult] = useState<{grade: 'perfect' | 'good' | 'okay' | 'miss'; timingDiff: number} | null>(null);
 
   // Improved systems
   const { processHit, processMiss, resetStats, getStats, isNoteHittable, isNoteAtHitLine, hitWindow } = useImprovedHitDetection();
@@ -158,11 +163,17 @@ const GameBoard = ({
       if (grade === 'perfect') starPower.addStarPower(5);
       else if (grade === 'good') starPower.addStarPower(2);
 
+      // Play hit sound
+      soundEffects.playSound(grade === 'perfect' ? 'hit_perfect' : grade === 'good' ? 'hit_good' : 'hit_okay');
+
       // Visual feedback
       closestNote.frets.forEach(fret => {
         addHitEffect(grade, [FRET_POSITIONS[fret], 0, 0]);
         addFloatingText(`+${Math.round(points/closestNote.frets.length)}`, grade, [FRET_POSITIONS[fret], 1, 0], Math.round(points/closestNote.frets.length));
       });
+
+      // Update timing feedback for player learning
+      setLastHitResult({ grade, timingDiff });
 
       // Remove note
       setNotes(prev => prev.filter(n => n !== closestNote));
@@ -175,6 +186,13 @@ const GameBoard = ({
         addHitEffect('miss', [FRET_POSITIONS[fret], 0, 0]);
         addFloatingText('MISS', 'miss', [FRET_POSITIONS[fret], 1, 0], 0);
       });
+      
+      // Update timing feedback for miss
+      setLastHitResult({ grade: 'miss', timingDiff });
+      
+      // Play miss sound
+      soundEffects.playSound('miss');
+      
       console.log(`❌ MISS - Wrong frets`);
     }
 
@@ -194,6 +212,9 @@ const GameBoard = ({
     const generatedNotes = generateNotePattern(song, difficulty);
     setNotes(generatedNotes);
     setTotalNotes(generatedNotes.length);
+    
+    // Show instructions on first load
+    setShowInstructions(true);
     
     console.log(`Game initialized: ${generatedNotes.length} notes generated for ${song.title}`);
     
@@ -283,7 +304,7 @@ const GameBoard = ({
         e.preventDefault();
         if (starPower.starPower.meter >= 50) {
           starPower.activateStarPower();
-          soundEffects.playSound('star_power' as any);
+          soundEffects.playSound('star_power');
         }
       }
     };
@@ -380,6 +401,16 @@ const GameBoard = ({
             Calibrate
           </Button>
 
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => setShowInstructions(true)}
+            className="flex items-center gap-2"
+          >
+            <HelpCircle className="w-4 h-4" />
+            Help
+          </Button>
+
           {/* Star Power indicator */}
           <div className="flex items-center gap-2 bg-card/30 px-3 py-1 rounded">
             <Zap className="w-4 h-4 text-yellow-400" />
@@ -435,6 +466,10 @@ const GameBoard = ({
             hitFlashTimes={hitFlashTimes}
           />
         </div>
+        
+        {/* UI Overlays */}
+        <FretVisualizer pressedFrets={pressedFrets} inputMethod={inputMethod} />
+        <TimingFeedback lastHit={lastHitResult} />
         
         {/* Debug Panel */}
         <GameDebugPanel

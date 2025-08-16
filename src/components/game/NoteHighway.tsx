@@ -3,6 +3,7 @@ import { useFrame } from '@react-three/fiber';
 import { NotePattern } from '@/pages/Game';
 import Note3D from './Note3D';
 import ComboEffects from './ComboEffects';
+import VisualHitLine from './VisualHitLine';
 import { FRET_POSITIONS, FRET_COLORS, NOTE_SPEED_MULTIPLIER, HIT_LINE_Z } from '@/game/constants';
 
 interface NoteHighwayProps {
@@ -17,9 +18,10 @@ interface NoteHighwayProps {
     okay: number;
   };
   hitFlashTimes: Set<number>;
+  isStarPowerActive: boolean;
 }
 
-const NoteHighway = ({ activeNotes, currentTime, pressedFrets, combo = 0, noteSpeed = 1.0, hitWindow, hitFlashTimes }: NoteHighwayProps) => {
+const NoteHighway = ({ activeNotes, currentTime, pressedFrets, combo = 0, noteSpeed = 1.0, hitWindow, hitFlashTimes, isStarPowerActive }: NoteHighwayProps) => {
   const highwayRef = useRef<any>();
 
   useFrame(() => {
@@ -136,25 +138,8 @@ const NoteHighway = ({ activeNotes, currentTime, pressedFrets, combo = 0, noteSp
         );
       })}
 
-      {/* Hit line - positioned at standardized HIT_LINE_Z */}
-      <mesh position={[0, -2.2, HIT_LINE_Z]}>
-        <boxGeometry args={[16, 0.12, 0.25]} />
-        <meshBasicMaterial 
-          color="#ffffff"
-          transparent
-          opacity={0.9}
-        />
-      </mesh>
-
-      {/* Hit line glow */}
-      <mesh position={[0, -2.2, HIT_LINE_Z]}>
-        <boxGeometry args={[17, 0.22, 0.35]} />
-        <meshBasicMaterial 
-          color="#ffffff"
-          transparent
-          opacity={0.3}
-        />
-      </mesh>
+      {/* Enhanced Visual Hit Line */}
+      <VisualHitLine combo={combo} isStarPowerActive={isStarPowerActive} />
 
       {/* Notes with improved positioning and depth cues */}
       {activeNotes.map((note, noteIndex) => 

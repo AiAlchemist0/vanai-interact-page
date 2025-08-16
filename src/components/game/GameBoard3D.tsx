@@ -89,6 +89,7 @@ const GameBoard3D = ({
             noteSpeed={noteSpeed}
             hitWindow={hitWindow}
             hitFlashTimes={hitFlashTimes}
+            isStarPowerActive={starPower.isActive}
           />
 
           {/* Hit Effects */}
