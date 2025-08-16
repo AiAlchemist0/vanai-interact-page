@@ -112,20 +112,6 @@ const FretBoard = ({ pressedFrets, onStrum, inputMethod }: FretBoardProps) => {
             </Button>
           </div>
 
-          {/* Instructions */}
-          <div className="text-center space-y-1">
-            <p className="text-sm text-muted-foreground font-bold">
-              {isTouch 
-                ? 'Hold fret buttons and tap strum area to play'
-                : 'Hold fret keys (A, S, D, F, G) and press SPACE to strum'
-              }
-            </p>
-            {!isTouch && (
-              <p className="text-xs text-muted-foreground/70">
-                Tip: You can hold multiple frets for chords
-              </p>
-            )}
-          </div>
         </div>
       </Card>
     </div>

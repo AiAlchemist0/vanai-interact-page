@@ -11,16 +11,13 @@ import { FloatingTextItem } from "./FloatingText";
 import { useImprovedHitDetection } from "@/hooks/useImprovedHitDetection";
 import { useOptimizedInput } from "@/hooks/useOptimizedInput";
 import { FRET_POSITIONS } from '@/game/constants';
-import { useWebGLContextRecovery } from "@/hooks/useWebGLContextRecovery";
+
 import { useSoundEffects, SoundEffect } from "@/hooks/useSoundEffects";
 import { useStarPower } from "@/hooks/useStarPower";
-import { GameDebugPanel } from "./GameDebugPanel";
 import CalibrationModal from "./CalibrationModal";
 import GameInstructions from "./GameInstructions";
 import TimingFeedback from "./TimingFeedback";
-import FretVisualizer from "./FretVisualizer";
 import StrumIndicator from "./StrumIndicator";
-import GameInstructionsPanel from "./GameInstructionsPanel";
 import { Pause, Play, Square, Home, Settings, Zap, HelpCircle } from "lucide-react";
 
 interface GameBoardProps {
@@ -107,7 +104,7 @@ const GameBoard = ({
 
   // Improved systems
   const { processHit, processMiss, resetStats, getStats, isNoteHittable, isNoteAtHitLine, hitWindow } = useImprovedHitDetection();
-  const webglRecovery = useWebGLContextRecovery();
+  
   const soundEffects = useSoundEffects();
   const starPower = useStarPower();
 
@@ -476,35 +473,9 @@ const GameBoard = ({
             />
           </div>
           
-          {/* UI Overlays */}
-          <FretVisualizer pressedFrets={pressedFrets} inputMethod={inputMethod} />
+          {/* Essential UI Overlays */}
           <TimingFeedback lastHit={lastHitResult} />
           <StrumIndicator pressedFrets={pressedFrets} lastStrum={lastStrum} />
-          
-          {/* Debug Panel */}
-          <GameDebugPanel
-            currentTime={currentTime}
-            activeNotes={activeNotes}
-            pressedFrets={pressedFrets}
-            hitStats={getStats()}
-            inputMethod={inputMethod}
-            contextLost={webglRecovery.contextLost}
-            contextRecovered={webglRecovery.contextRecovered}
-            onForceRecovery={webglRecovery.forceContextRecovery}
-          />
-
-          {/* WebGL Context Loss Warning */}
-          {webglRecovery.contextLost && (
-            <div className="absolute inset-0 bg-red-900/80 flex items-center justify-center z-40">
-              <div className="text-center text-white">
-                <h2 className="text-2xl font-bold mb-4">Graphics Error</h2>
-                <p className="mb-4">WebGL context was lost. Game performance may be affected.</p>
-                <Button onClick={webglRecovery.forceContextRecovery} variant="destructive">
-                  Try to Recover
-                </Button>
-              </div>
-            </div>
-          )}
         </div>
 
         {/* FretBoard Component - Bottom aligned with 3D scene */}
@@ -517,8 +488,6 @@ const GameBoard = ({
         </div>
       </div>
 
-      {/* Right Side Instructions Panel */}
-      <GameInstructionsPanel inputMethod={inputMethod} />
 
       {/* Pause Overlay */}
       {gameState === "paused" && (
