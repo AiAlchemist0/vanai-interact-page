@@ -65,7 +65,7 @@ const GameMenu = ({
           Select Your Track
         </h2>
         
-        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4">
           {songs.map((song) => (
             <Card
               key={song.id}
@@ -76,31 +76,33 @@ const GameMenu = ({
               }`}
               onClick={() => onSongSelect(song)}
             >
-              <CardHeader className="pb-4">
-                <div className="aspect-square bg-gradient-primary rounded-lg mb-4 overflow-hidden">
-                  <img 
-                    src={song.coverArt} 
-                    alt={`${song.title} cover art`}
-                    className="w-full h-full object-cover"
-                    onError={(e) => {
-                      // Fallback to icon if image fails to load
-                      e.currentTarget.style.display = 'none';
-                      e.currentTarget.nextElementSibling?.classList.remove('hidden');
-                    }}
-                  />
-                  <div className="hidden w-full h-full flex items-center justify-center">
-                    <Music className="w-12 h-12 text-primary-foreground" />
+              <CardHeader className="p-3 md:p-4">
+                <div className="flex items-center gap-3 md:block">
+                  <div className="w-16 h-16 md:w-full md:aspect-square bg-gradient-primary rounded-lg md:mb-4 overflow-hidden flex-shrink-0">
+                    <img 
+                      src={song.coverArt} 
+                      alt={`${song.title} cover art`}
+                      className="w-full h-full object-cover"
+                      onError={(e) => {
+                        // Fallback to icon if image fails to load
+                        e.currentTarget.style.display = 'none';
+                        e.currentTarget.nextElementSibling?.classList.remove('hidden');
+                      }}
+                    />
+                    <div className="hidden w-full h-full flex items-center justify-center">
+                      <Music className="w-6 h-6 md:w-12 md:h-12 text-primary-foreground" />
+                    </div>
+                  </div>
+                  <div className="flex-1 md:block">
+                    <CardTitle className="text-sm md:text-lg line-clamp-2 leading-tight">{song.title}</CardTitle>
+                    <p className="text-xs md:text-sm text-muted-foreground line-clamp-1">{song.artist}</p>
+                    <div className="flex justify-between items-center text-xs md:text-sm text-muted-foreground mt-1 md:mt-2">
+                      <span>{song.bpm} BPM</span>
+                      <span>{Math.floor(song.duration / 60000)}:{(Math.floor(song.duration / 1000) % 60).toString().padStart(2, '0')}</span>
+                    </div>
                   </div>
                 </div>
-                <CardTitle className="text-lg">{song.title}</CardTitle>
-                <p className="text-muted-foreground">{song.artist}</p>
               </CardHeader>
-              <CardContent>
-                <div className="flex justify-between items-center text-sm text-muted-foreground">
-                  <span>{song.bpm} BPM</span>
-                  <span>{Math.floor(song.duration / 60000)}:{(Math.floor(song.duration / 1000) % 60).toString().padStart(2, '0')}</span>
-                </div>
-              </CardContent>
             </Card>
           ))}
         </div>
