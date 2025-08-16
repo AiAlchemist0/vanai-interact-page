@@ -72,7 +72,7 @@ const VisionBanner = () => {
               const Icon = step.icon;
               return (
                 <div key={index} className="relative">
-                  <Card className="p-6 h-full hover-scale transition-all duration-300 bg-gradient-subtle border-gradient">
+                  <Card className="p-4 h-full hover-scale transition-all duration-300 bg-gradient-subtle border-gradient">
                     <div className="text-center">
                       <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center">
                         <Icon className="w-8 h-8 text-white" />
