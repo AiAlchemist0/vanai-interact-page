@@ -40,7 +40,7 @@ const Hero = () => {
 
             {/* Logo and Title Section */}
             <div className="space-y-3 sm:space-y-6">
-              <div className="flex flex-row items-center justify-start gap-4 sm:gap-8">
+              <div className="flex flex-row items-center justify-center gap-4 sm:gap-8">
                 <a href="https://vancouver.bc-ai.net/" target="_blank" rel="noopener noreferrer" className="transition-transform duration-300 hover:scale-105">
                   <img src="/lovable-uploads/6b65586a-63ba-48f1-9c56-1846ec800f39.png" alt="BC+AI Ecosystem Logo" className="w-40 sm:w-48 lg:w-56 h-auto filter drop-shadow-lg flex-shrink-0" />
                 </a>
