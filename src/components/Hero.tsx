@@ -208,7 +208,7 @@ const Hero = () => {
         </div>
 
         {/* Desktop: Clean centered layout */}
-        <div className="hidden lg:flex flex-col justify-center min-h-screen space-y-16">
+        <div className="hidden lg:flex flex-col justify-center min-h-screen space-y-10">
           {/* Top Section: Badges and Title */}
           <div className="text-center space-y-8 max-w-5xl mx-auto">
             <div className="flex items-center justify-center gap-6">
