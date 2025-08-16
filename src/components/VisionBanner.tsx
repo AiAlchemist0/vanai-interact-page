@@ -1,4 +1,4 @@
-import { Database, Lightbulb, Music, Heart, Users, ArrowRight } from "lucide-react";
+import { Database, Lightbulb, Music, Heart, Users, ArrowRight, BarChart3 } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import aiMusicDashboard from "@/assets/ai-music-dashboard.jpg";
 import soundToDataTransformation from "@/assets/sound-to-data-transformation.jpg";
@@ -140,6 +140,34 @@ const VisionBanner = () => {
               );
             })}
           </div>
+        </div>
+
+        {/* Advanced AI-Music Dashboard Button */}
+        <div className="mt-12 flex justify-center">
+          <a 
+            href="/ai-analytics"
+            className="group relative inline-flex items-center justify-center px-8 py-4 text-lg font-bold text-white transition-all duration-300 hover:scale-105 active:scale-95"
+          >
+            {/* Neon glow background layers */}
+            <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-cyan-500 via-purple-500 to-pink-500 opacity-75 blur-lg group-hover:opacity-100 group-hover:blur-xl transition-all duration-300"></div>
+            <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 opacity-50 blur-md group-hover:opacity-75 transition-all duration-300"></div>
+            
+            {/* Button content */}
+            <div className="relative z-10 flex items-center space-x-3 px-6 py-3 rounded-2xl bg-slate-900/80 backdrop-blur-sm border border-cyan-500/50 group-hover:border-cyan-400 transition-all duration-300">
+              <BarChart3 className="w-6 h-6 text-cyan-400 group-hover:text-cyan-300 transition-colors duration-300" />
+              <span className="bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent group-hover:from-cyan-300 group-hover:via-purple-300 group-hover:to-pink-300 transition-all duration-300">
+                Advanced AI-Music Dashboard
+              </span>
+              <ArrowRight className="w-5 h-5 text-purple-400 group-hover:text-purple-300 group-hover:translate-x-1 transition-all duration-300" />
+            </div>
+            
+            {/* Animated particles */}
+            <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+              <div className="absolute top-2 left-4 w-1 h-1 bg-cyan-400 rounded-full animate-ping"></div>
+              <div className="absolute top-6 right-8 w-1 h-1 bg-purple-400 rounded-full animate-ping" style={{ animationDelay: '0.5s' }}></div>
+              <div className="absolute bottom-3 left-12 w-1 h-1 bg-pink-400 rounded-full animate-ping" style={{ animationDelay: '1s' }}></div>
+            </div>
+          </a>
         </div>
 
       </div>
