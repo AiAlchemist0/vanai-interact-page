@@ -90,40 +90,6 @@ const VisionBanner = () => {
           </div>
         </div>
 
-        {/* Transformation Journey */}
-        <div className="mb-20">
-          <h3 className="text-3xl font-bold text-center mb-12 text-gradient">
-            The Journey of Transformation
-          </h3>
-          
-          <div className="flex flex-col lg:flex-row items-center justify-center gap-4 lg:gap-8">
-            {visionSteps.map((step, index) => {
-              const Icon = step.icon;
-              return (
-                <div key={index} className="flex flex-col lg:flex-row items-center">
-                  <Card className="w-48 h-48 hover-scale transition-all duration-300">
-                    <CardContent className="p-6 flex flex-col items-center justify-center h-full text-center">
-                      <div className={`w-16 h-16 mb-4 rounded-full bg-gradient-to-br ${step.color} flex items-center justify-center shadow-lg`}>
-                        <Icon className="w-8 h-8 text-white" />
-                      </div>
-                      <h4 className="text-xl font-bold mb-2 text-foreground">{step.text}</h4>
-                      <p className="text-sm text-muted-foreground">{step.description}</p>
-                    </CardContent>
-                  </Card>
-                  
-                  {index < visionSteps.length - 1 && (
-                    <>
-                      {/* Mobile: Vertical Arrow */}
-                      <ArrowRight className="w-6 h-6 text-primary mx-4 my-4 lg:hidden rotate-90" />
-                      {/* Desktop: Horizontal Arrow */}
-                      <ArrowRight className="w-6 h-6 text-primary mx-4 my-4 hidden lg:block" />
-                    </>
-                  )}
-                </div>
-              );
-            })}
-          </div>
-        </div>
       </div>
     </section>
   );
