@@ -61,47 +61,52 @@ const VisionBanner = () => {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
-            {[
-              { title: "Collect Data", description: "Gather survey responses & statistics", icon: Database },
-              { title: "Analyze Context", description: "Understanding emotions behind numbers", icon: Heart },
-              { title: "Generate Lyrics", description: "AI transforms insights into verses", icon: Lightbulb },
-              { title: "Create Music", description: "Producing emotional soundscapes", icon: Music },
-              { title: "Build Community", description: "Connecting voices across BC", icon: Users }
-            ].map((step, index) => {
-              const Icon = step.icon;
-              return (
-                <div key={index} className="relative">
-                  <Card className="p-4 h-full hover-scale transition-all duration-300 bg-gradient-subtle border-gradient">
-                    <div className="text-center">
-                      <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center">
-                        <Icon className="w-8 h-8 text-white" />
-                      </div>
-                      <div className="w-8 h-8 mx-auto mb-3 rounded-full bg-primary text-white flex items-center justify-center text-sm font-bold">
-                        {index + 1}
-                      </div>
-                      <h4 className="text-lg font-bold mb-2 text-foreground">{step.title}</h4>
-                      <p className="text-sm text-muted-foreground">{step.description}</p>
+          <div className="space-y-6 md:space-y-0">
+            <div className="md:grid md:grid-cols-5 md:gap-6">
+              {[
+                { title: "Collect Data", description: "Gather survey responses & statistics", icon: Database },
+                { title: "Analyze Context", description: "Understanding emotions behind numbers", icon: Heart },
+                { title: "Generate Lyrics", description: "AI transforms insights into verses", icon: Lightbulb },
+                { title: "Create Music", description: "Producing emotional soundscapes", icon: Music },
+                { title: "Build Community", description: "Connecting voices across BC", icon: Users }
+              ].map((step, index) => {
+                const Icon = step.icon;
+                return (
+                  <div key={index}>
+                    <div className="relative">
+                      <Card className="p-4 h-full hover-scale transition-all duration-300 bg-gradient-subtle border-gradient">
+                        <div className="text-center">
+                          <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center">
+                            <Icon className="w-8 h-8 text-white" />
+                          </div>
+                          <div className="w-8 h-8 mx-auto mb-3 rounded-full bg-primary text-white flex items-center justify-center text-sm font-bold">
+                            {index + 1}
+                          </div>
+                          <h4 className="text-lg font-bold mb-2 text-foreground">{step.title}</h4>
+                          <p className="text-sm text-muted-foreground">{step.description}</p>
+                        </div>
+                      </Card>
+                      
+                      {/* Desktop horizontal arrows */}
+                      {index < 4 && (
+                        <div className="hidden md:flex absolute top-1/2 -right-4 transform -translate-y-1/2 z-10">
+                          <ArrowRight className="w-8 h-8 text-primary animate-pulse" />
+                        </div>
+                      )}
                     </div>
-                  </Card>
-                  
-                  {index < 4 && (
-                    <>
-                      {/* Mobile vertical arrows */}
-                      <div className="md:hidden flex justify-center -mb-3 mt-6">
-                        <div className="bg-background/80 rounded-full p-2">
+                    
+                    {/* Mobile vertical arrows - outside the card container */}
+                    {index < 4 && (
+                      <div className="md:hidden flex justify-center py-4">
+                        <div className="bg-background/80 rounded-full p-2 shadow-lg border border-border/20">
                           <ArrowDown className="w-6 h-6 text-primary animate-pulse" />
                         </div>
                       </div>
-                      {/* Desktop horizontal arrows */}
-                      <div className="hidden md:flex absolute top-1/2 -right-4 transform -translate-y-1/2 z-10">
-                        <ArrowRight className="w-8 h-8 text-primary animate-pulse" />
-                      </div>
-                    </>
-                  )}
-                </div>
-              );
-            })}
+                    )}
+                  </div>
+                );
+              })}
+            </div>
           </div>
         </div>
 
