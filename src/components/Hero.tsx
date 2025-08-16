@@ -24,10 +24,9 @@ const Hero = () => {
 
       {/* Main Content Container */}
       <div className="relative z-20 container mx-auto px-4 sm:px-6 py-6 sm:py-12">
-        <div className="grid lg:grid-cols-5 gap-6 lg:gap-12 items-center min-h-screen">
-          
-          {/* Left Side - Content */}
-          <div className="lg:col-span-2 space-y-4 sm:space-y-8 lg:pr-8">
+        {/* Mobile: Stack everything vertically */}
+        <div className="lg:hidden space-y-6 flex flex-col justify-center min-h-screen">
+          <div className="space-y-4 sm:space-y-8">
             <div className="flex flex-col sm:flex-row sm:flex-wrap items-center justify-center sm:justify-start gap-2 sm:gap-4 mb-3 sm:mb-6">
               <Badge variant="secondary" className="border-gradient glow-primary text-xs sm:text-sm">
                 <BarChart3 className="w-3 sm:w-4 h-3 sm:h-4 mr-1 sm:mr-2" />
@@ -95,7 +94,7 @@ const Hero = () => {
             {/* CTA Buttons */}
             <div className="space-y-3 sm:space-y-4">
               {/* Mobile View - Square Icon Buttons */}
-              <div className="flex sm:hidden justify-center gap-3">
+              <div className="flex justify-center gap-3">
                 <Button size="icon" className="gradient-primary hover:glow-primary transition-smooth w-16 h-16" onClick={() => document.getElementById('vision')?.scrollIntoView({
                 behavior: 'smooth'
               })} aria-label="Project's Vision">
@@ -198,9 +197,87 @@ const Hero = () => {
                   <Gamepad2 className="w-6 h-6" />
                 </Button>
               </div>
+            </div>
+          </div>
+          
+          {/* Audio Player - Mobile */}
+          <div className="mt-4">
+            <HeroAudioPlayer />
+          </div>
+        </div>
 
+        {/* Desktop: New vertical layout */}
+        <div className="hidden lg:flex flex-col justify-center min-h-screen space-y-8">
+          {/* Main Content Section */}
+          <div className="space-y-6">
+            <div className="flex flex-col sm:flex-row sm:flex-wrap items-center justify-center sm:justify-start gap-2 sm:gap-4 mb-3 sm:mb-6">
+              <Badge variant="secondary" className="border-gradient glow-primary text-xs sm:text-sm">
+                <BarChart3 className="w-3 sm:w-4 h-3 sm:h-4 mr-1 sm:mr-2" />
+                Vancouver AI Hackathon Round 3
+              </Badge>
+              <div className="flex items-center gap-2 text-primary">
+                <Sparkles className="w-4 sm:w-5 h-4 sm:h-5" />
+                <span className="text-xs sm:text-sm font-medium">AI-Music Powered Analytics</span>
+              </div>
+            </div>
+
+            {/* Logo and Title Section */}
+            <div className="space-y-3 sm:space-y-6">
+              <div className="flex flex-row items-center justify-start gap-4 sm:gap-8">
+                <a 
+                  href="https://vancouver.bc-ai.net/" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="transition-transform duration-300 hover:scale-105"
+                >
+                  <img src="/lovable-uploads/6b65586a-63ba-48f1-9c56-1846ec800f39.png" alt="BC+AI Ecosystem Logo" className="w-40 sm:w-48 lg:w-56 h-auto filter drop-shadow-lg flex-shrink-0" />
+                </a>
+                <div className="flex-1 min-w-0 text-center sm:text-left">
+                  <h1 className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl text-gradient leading-tight text-left font-bold">
+                    BC + AI Survey
+                    <br />
+                    Insights
+                  </h1>
+                </div>
+              </div>
+
+              <p className="text-sm sm:text-lg text-muted-foreground leading-relaxed text-center sm:text-left lg:text-xl max-w-4xl">
+                Discover what <span className="text-primary font-semibold">1,001 British Columbians</span> think about artificial intelligence. 
+                Explore comprehensive survey data covering AI experience, concerns, and future vision.
+              </p>
+            </div>
+
+            {/* Key Stats */}
+            <div className="grid grid-cols-3 gap-3 sm:gap-4 max-w-2xl">
+              <div className="bg-card/50 backdrop-blur-sm border border-border rounded-xl px-2 sm:px-4 py-3 sm:py-4 text-center min-h-[80px] sm:min-h-[100px]">
+                <div className="flex items-center justify-center mb-1 sm:mb-2">
+                  <Users className="w-4 sm:w-6 h-4 sm:h-6 text-primary" />
+                </div>
+                <div className="text-lg sm:text-2xl font-bold text-foreground">1,001</div>
+                <div className="text-xs sm:text-sm text-muted-foreground leading-tight">Respondents</div>
+              </div>
+
+              <div className="bg-card/50 backdrop-blur-sm border border-border rounded-xl px-2 sm:px-4 py-3 sm:py-4 text-center min-h-[80px] sm:min-h-[100px]">
+                <div className="flex items-center justify-center mb-1 sm:mb-2">
+                  <BarChart3 className="w-4 sm:w-6 h-4 sm:h-6 text-ai-cyan" />
+                </div>
+                <div className="text-lg sm:text-2xl font-bold text-foreground">5,000+</div>
+                <div className="text-xs sm:text-sm text-muted-foreground leading-tight">Text Responses</div>
+              </div>
+
+              <div className="bg-card/50 backdrop-blur-sm border border-border rounded-xl px-2 sm:px-4 py-3 sm:py-4 text-center min-h-[80px] sm:min-h-[100px]">
+                <div className="flex items-center justify-center mb-1 sm:mb-2">
+                  <MapPin className="w-4 sm:w-6 h-4 sm:h-6 text-ai-green" />
+                </div>
+                <div className="text-lg sm:text-2xl font-bold text-foreground">17</div>
+                <div className="text-xs sm:text-sm text-muted-foreground leading-tight">Core Questions</div>
+              </div>
+            </div>
+
+            {/* CTA Buttons */}
+            <div className="space-y-4 max-w-3xl">
               {/* Desktop View - Text Buttons */}
-              <div className="hidden sm:flex flex-col sm:grid sm:grid-cols-3 gap-3">
+              <div className="grid sm:grid-cols-3 gap-3">
                 <Button size="lg" className="gradient-primary hover:glow-primary transition-smooth group px-4 py-4 sm:px-4 sm:py-3 min-h-[48px] text-sm sm:text-sm font-medium" onClick={() => document.getElementById('vision')?.scrollIntoView({
                 behavior: 'smooth'
               })}>
@@ -303,15 +380,16 @@ const Hero = () => {
                 </Dialog>
               </div>
 
-              <Button size="lg" className="hidden sm:flex gradient-accent hover:glow-accent transition-smooth group w-full px-4 py-4 sm:px-6 sm:py-3 min-h-[52px] text-base sm:text-base font-semibold" onClick={() => navigate('/game')}>
+              {/* Play BC AI Game Button - Prominent placement */}
+              <Button size="lg" className="gradient-accent hover:glow-accent transition-smooth group w-full max-w-lg px-4 py-4 sm:px-6 sm:py-3 min-h-[52px] text-base sm:text-base font-semibold" onClick={() => navigate('/game')}>
                 <Gamepad2 className="mr-2 w-5 h-5 group-hover:scale-110 transition-transform" />
                 PLAY BC AI GAME
               </Button>
             </div>
           </div>
 
-          {/* Right Side - Audio Player */}
-          <div className="lg:col-span-3 lg:pl-8 mt-4 lg:mt-0">
+          {/* Audio Player - Desktop (Full Width) */}
+          <div className="w-full">
             <HeroAudioPlayer />
           </div>
         </div>
