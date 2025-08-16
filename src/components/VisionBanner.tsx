@@ -94,19 +94,6 @@ const VisionBanner = () => {
               </div>
             </div>
             
-            {/* Wide bottom image */}
-            <div className="md:col-span-12 relative group overflow-hidden rounded-2xl shadow-2xl h-64 md:h-auto">
-              <img 
-                src={communityMusicConnection} 
-                alt="Diverse community connected through music and technology in British Columbia" 
-                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-              />
-              <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-transparent to-transparent" />
-              <div className="absolute bottom-6 left-6 text-white">
-                <h4 className="text-2xl font-bold mb-2">Community Connection</h4>
-                <p className="text-base opacity-90">Bringing British Columbia together through the universal language of music</p>
-              </div>
-            </div>
           </div>
         </div>
 
