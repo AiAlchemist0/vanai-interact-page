@@ -20,6 +20,7 @@ import GameInstructions from "./GameInstructions";
 import TimingFeedback from "./TimingFeedback";
 import FretVisualizer from "./FretVisualizer";
 import StrumIndicator from "./StrumIndicator";
+import GameInstructionsPanel from "./GameInstructionsPanel";
 import { Pause, Play, Square, Home, Settings, Zap, HelpCircle } from "lucide-react";
 
 interface GameBoardProps {
@@ -363,155 +364,161 @@ const GameBoard = ({
   const progress = (currentTime / song.duration) * 100;
 
   return (
-    <div className="h-full flex flex-col bg-gradient-to-b from-background via-background/95 to-background">
-      {/* Game Controls - Fixed Height */}
-      <div className="h-16 bg-card/30 backdrop-blur-sm border-b border-border/20 flex items-center justify-between px-4 shrink-0">
-        <div className="flex items-center gap-2">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={handlePauseToggle}
-            className="flex items-center gap-2"
-          >
-            {gameState === "playing" ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
-            {gameState === "playing" ? "Pause" : "Resume"}
-          </Button>
-          
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={handleStop}
-            className="flex items-center gap-2"
-          >
-            <Square className="w-4 h-4" />
-            Stop
-          </Button>
+    <div className="h-full flex bg-gradient-to-b from-background via-background/95 to-background">
+      {/* Main Game Area */}
+      <div className="flex-1 flex flex-col">
+        {/* Game Controls - Fixed Height */}
+        <div className="h-16 bg-card/30 backdrop-blur-sm border-b border-border/20 flex items-center justify-between px-4 shrink-0">
+          <div className="flex items-center gap-2">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={handlePauseToggle}
+              className="flex items-center gap-2"
+            >
+              {gameState === "playing" ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
+              {gameState === "playing" ? "Pause" : "Resume"}
+            </Button>
+            
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={handleStop}
+              className="flex items-center gap-2"
+            >
+              <Square className="w-4 h-4" />
+              Stop
+            </Button>
 
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={onReturnToMenu}
-            className="flex items-center gap-2"
-          >
-            <Home className="w-4 h-4" />
-            Menu
-          </Button>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={onReturnToMenu}
+              className="flex items-center gap-2"
+            >
+              <Home className="w-4 h-4" />
+              Menu
+            </Button>
 
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => setShowCalibration(true)}
-            className="flex items-center gap-2"
-          >
-            <Settings className="w-4 h-4" />
-            Calibrate
-          </Button>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setShowCalibration(true)}
+              className="flex items-center gap-2"
+            >
+              <Settings className="w-4 h-4" />
+              Calibrate
+            </Button>
 
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => setShowInstructions(true)}
-            className="flex items-center gap-2"
-          >
-            <HelpCircle className="w-4 h-4" />
-            Help
-          </Button>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setShowInstructions(true)}
+              className="flex items-center gap-2"
+            >
+              <HelpCircle className="w-4 h-4" />
+              Help
+            </Button>
 
-          {/* Star Power indicator */}
-          <div className="flex items-center gap-2 bg-card/30 px-3 py-1 rounded">
-            <Zap className="w-4 h-4 text-yellow-400" />
-            <div className="w-16 h-2 bg-muted rounded-full overflow-hidden">
-              <div 
-                className="h-full bg-gradient-to-r from-blue-400 to-yellow-400 transition-all duration-300"
-                style={{ width: `${starPower.starPower.meter}%` }}
-              />
+            {/* Star Power indicator */}
+            <div className="flex items-center gap-2 bg-card/30 px-3 py-1 rounded">
+              <Zap className="w-4 h-4 text-yellow-400" />
+              <div className="w-16 h-2 bg-muted rounded-full overflow-hidden">
+                <div 
+                  className="h-full bg-gradient-to-r from-blue-400 to-yellow-400 transition-all duration-300"
+                  style={{ width: `${starPower.starPower.meter}%` }}
+                />
+              </div>
+              {starPower.starPower.isActive && (
+                <span className="text-xs text-yellow-400 font-bold animate-pulse">
+                  ACTIVE!
+                </span>
+              )}
             </div>
-            {starPower.starPower.isActive && (
-              <span className="text-xs text-yellow-400 font-bold animate-pulse">
-                ACTIVE!
-              </span>
-            )}
           </div>
-        </div>
 
-        <ScoreDisplay
-          score={score}
-          combo={combo}
-          accuracy={accuracy}
-        />
-      </div>
-
-      {/* Progress Bar */}
-      <div className="px-4 py-2 shrink-0">
-        <Progress value={progress} className="h-2" />
-        <div className="text-xs text-muted-foreground mt-1 text-center">
-          {Math.floor(currentTime / 1000)}s / {Math.floor(song.duration / 1000)}s
-        </div>
-      </div>
-
-      {/* 3D Game Area - Takes remaining space */}
-      <div className="flex-1 relative min-h-0">
-        <div className="absolute inset-0">
-          <GameBoard3D 
-            activeNotes={activeNotes}
-            currentTime={currentTime}
-            pressedFrets={pressedFrets}
+          <ScoreDisplay
+            score={score}
             combo={combo}
-            hitEffects={hitEffects}
-            floatingTexts={floatingTexts}
-            onEffectComplete={handleEffectComplete}
-            onTextComplete={handleTextComplete}
-            noteSpeed={1.0}
-            hitWindow={hitWindow}
-            starPower={{
-              isActive: starPower.starPower.isActive,
-              energy: starPower.starPower.meter,
-              duration: starPower.starPower.duration,
-              maxDuration: 10000
-            }}
-            hitFlashTimes={hitFlashTimes}
+            accuracy={accuracy}
           />
         </div>
-        
-        {/* UI Overlays */}
-        <FretVisualizer pressedFrets={pressedFrets} inputMethod={inputMethod} />
-        <TimingFeedback lastHit={lastHitResult} />
-        <StrumIndicator pressedFrets={pressedFrets} lastStrum={lastStrum} />
-        
-        {/* Debug Panel */}
-        <GameDebugPanel
-          currentTime={currentTime}
-          activeNotes={activeNotes}
-          pressedFrets={pressedFrets}
-          hitStats={getStats()}
-          inputMethod={inputMethod}
-          contextLost={webglRecovery.contextLost}
-          contextRecovered={webglRecovery.contextRecovered}
-          onForceRecovery={webglRecovery.forceContextRecovery}
-        />
 
-        {/* WebGL Context Loss Warning */}
-        {webglRecovery.contextLost && (
-          <div className="absolute inset-0 bg-red-900/80 flex items-center justify-center z-40">
-            <div className="text-center text-white">
-              <h2 className="text-2xl font-bold mb-4">Graphics Error</h2>
-              <p className="mb-4">WebGL context was lost. Game performance may be affected.</p>
-              <Button onClick={webglRecovery.forceContextRecovery} variant="destructive">
-                Try to Recover
-              </Button>
-            </div>
+        {/* Progress Bar */}
+        <div className="px-4 py-2 shrink-0">
+          <Progress value={progress} className="h-2" />
+          <div className="text-xs text-muted-foreground mt-1 text-center">
+            {Math.floor(currentTime / 1000)}s / {Math.floor(song.duration / 1000)}s
           </div>
-        )}
+        </div>
+
+        {/* 3D Game Area - Takes remaining space */}
+        <div className="flex-1 relative min-h-0">
+          <div className="absolute inset-0">
+            <GameBoard3D 
+              activeNotes={activeNotes}
+              currentTime={currentTime}
+              pressedFrets={pressedFrets}
+              combo={combo}
+              hitEffects={hitEffects}
+              floatingTexts={floatingTexts}
+              onEffectComplete={handleEffectComplete}
+              onTextComplete={handleTextComplete}
+              noteSpeed={1.0}
+              hitWindow={hitWindow}
+              starPower={{
+                isActive: starPower.starPower.isActive,
+                energy: starPower.starPower.meter,
+                duration: starPower.starPower.duration,
+                maxDuration: 10000
+              }}
+              hitFlashTimes={hitFlashTimes}
+            />
+          </div>
+          
+          {/* UI Overlays */}
+          <FretVisualizer pressedFrets={pressedFrets} inputMethod={inputMethod} />
+          <TimingFeedback lastHit={lastHitResult} />
+          <StrumIndicator pressedFrets={pressedFrets} lastStrum={lastStrum} />
+          
+          {/* Debug Panel */}
+          <GameDebugPanel
+            currentTime={currentTime}
+            activeNotes={activeNotes}
+            pressedFrets={pressedFrets}
+            hitStats={getStats()}
+            inputMethod={inputMethod}
+            contextLost={webglRecovery.contextLost}
+            contextRecovered={webglRecovery.contextRecovered}
+            onForceRecovery={webglRecovery.forceContextRecovery}
+          />
+
+          {/* WebGL Context Loss Warning */}
+          {webglRecovery.contextLost && (
+            <div className="absolute inset-0 bg-red-900/80 flex items-center justify-center z-40">
+              <div className="text-center text-white">
+                <h2 className="text-2xl font-bold mb-4">Graphics Error</h2>
+                <p className="mb-4">WebGL context was lost. Game performance may be affected.</p>
+                <Button onClick={webglRecovery.forceContextRecovery} variant="destructive">
+                  Try to Recover
+                </Button>
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* FretBoard Component - Bottom aligned with 3D scene */}
+        <div className="relative">
+          <FretBoard
+            pressedFrets={pressedFrets}
+            onStrum={handleStrum}
+            inputMethod={inputMethod}
+          />
+        </div>
       </div>
 
-      {/* FretBoard Component - Bottom aligned with 3D scene */}
-      <div className="relative">
-        <FretBoard
-          pressedFrets={pressedFrets}
-          onStrum={handleStrum}
-          inputMethod={inputMethod}
-        />
-      </div>
+      {/* Right Side Instructions Panel */}
+      <GameInstructionsPanel inputMethod={inputMethod} />
 
       {/* Pause Overlay */}
       {gameState === "paused" && (
