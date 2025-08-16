@@ -14,6 +14,90 @@ export type Database = {
   }
   public: {
     Tables: {
+      geographic_data: {
+        Row: {
+          city: string | null
+          created_at: string
+          id: string
+          last_activity: string
+          listening_count: number | null
+          region: string | null
+        }
+        Insert: {
+          city?: string | null
+          created_at?: string
+          id?: string
+          last_activity?: string
+          listening_count?: number | null
+          region?: string | null
+        }
+        Update: {
+          city?: string | null
+          created_at?: string
+          id?: string
+          last_activity?: string
+          listening_count?: number | null
+          region?: string | null
+        }
+        Relationships: []
+      }
+      listening_sessions: {
+        Row: {
+          browser_type: string | null
+          created_at: string
+          device_type: string | null
+          ended_at: string | null
+          id: string
+          started_at: string
+          total_duration_seconds: number | null
+          total_songs_played: number | null
+          user_session_id: string
+        }
+        Insert: {
+          browser_type?: string | null
+          created_at?: string
+          device_type?: string | null
+          ended_at?: string | null
+          id?: string
+          started_at?: string
+          total_duration_seconds?: number | null
+          total_songs_played?: number | null
+          user_session_id: string
+        }
+        Update: {
+          browser_type?: string | null
+          created_at?: string
+          device_type?: string | null
+          ended_at?: string | null
+          id?: string
+          started_at?: string
+          total_duration_seconds?: number | null
+          total_songs_played?: number | null
+          user_session_id?: string
+        }
+        Relationships: []
+      }
+      real_time_metrics: {
+        Row: {
+          id: string
+          metric_type: string
+          metric_value: number
+          timestamp: string
+        }
+        Insert: {
+          id?: string
+          metric_type: string
+          metric_value: number
+          timestamp?: string
+        }
+        Update: {
+          id?: string
+          metric_type?: string
+          metric_value?: number
+          timestamp?: string
+        }
+        Relationships: []
+      }
       song_plays: {
         Row: {
           created_at: string
@@ -71,11 +155,81 @@ export type Database = {
         }
         Relationships: []
       }
+      user_preferences: {
+        Row: {
+          action_type: string
+          completion_percentage: number | null
+          duration_listened: number | null
+          id: string
+          song_id: string
+          timestamp: string
+          user_session_id: string
+        }
+        Insert: {
+          action_type: string
+          completion_percentage?: number | null
+          duration_listened?: number | null
+          id?: string
+          song_id: string
+          timestamp?: string
+          user_session_id: string
+        }
+        Update: {
+          action_type?: string
+          completion_percentage?: number | null
+          duration_listened?: number | null
+          id?: string
+          song_id?: string
+          timestamp?: string
+          user_session_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
-      [_ in never]: never
+      song_analytics: {
+        Row: {
+          avg_completion_rate: number | null
+          avg_duration: number | null
+          first_played_at: string | null
+          last_played_at: string | null
+          replay_count: number | null
+          skip_count: number | null
+          song_id: string | null
+          total_plays: number | null
+          valid_plays: number | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
+      get_dashboard_stats: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          active_sessions: number
+          avg_session_duration: number
+          peak_hour: number
+          top_region: string
+          total_plays: number
+          unique_songs: number
+        }[]
+      }
+      get_geographic_distribution: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          city: string
+          last_activity: string
+          listening_count: number
+          region: string
+        }[]
+      }
+      get_hourly_patterns: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          hour: number
+          play_count: number
+        }[]
+      }
       get_public_song_statistics: {
         Args: Record<PropertyKey, never>
         Returns: {
