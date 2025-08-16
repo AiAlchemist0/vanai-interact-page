@@ -27,7 +27,17 @@ const HeroAudioPlayer = () => {
     currentSongIndex
   } = useAudio();
   
-  const { getLikeCount, getTotalLikes, isLiked, toggleLike, loading: likesLoading } = useSongLikes();
+  const { 
+    getLikeCount, 
+    getTotalLikes, 
+    isLiked, 
+    toggleLike, 
+    loading: likesLoading,
+    error: likesError 
+  } = useSongLikes();
+
+  console.log('HeroAudioPlayer: likesLoading =', likesLoading);
+  console.log('HeroAudioPlayer: getTotalLikes =', getTotalLikes);
 
   const handlePlayClick = (songId: string, songIndex: number) => {
     if (songIndex === currentSongIndex && isPlaying) {
@@ -41,8 +51,18 @@ const HeroAudioPlayer = () => {
 
   const handleLikeClick = async (songId: string, e: React.MouseEvent) => {
     e.stopPropagation();
-    await toggleLike(songId);
+    console.log('Like clicked for song:', songId);
+    try {
+      await toggleLike(songId);
+    } catch (error) {
+      console.error('Error toggling like:', error);
+    }
   };
+
+  // Show error state if likes system fails
+  if (likesError) {
+    console.error('Likes system error:', likesError);
+  }
 
   return (
     <div className="bg-card/20 backdrop-blur-xl border border-border/20 rounded-3xl px-2 py-3 sm:p-4 shadow-elegant">
@@ -54,27 +74,27 @@ const HeroAudioPlayer = () => {
                {isPlaylistMode ? "♪ Playing all songs..." : isPlaying ? `♪ ${currentSong?.title || ''}` : 'BC AI Audio Experience'}
              </h3>
            </div>
-            <div className="flex items-center gap-2 flex-shrink-0">
-              <div className="flex items-center gap-1 text-muted-foreground">
-                {!likesLoading && getTotalLikes() > 0 && (
-                  <>
-                    <Heart className="w-3 h-3 sm:w-4 sm:h-4 text-red-500 fill-red-500" />
-                    <span className="text-xs font-medium">{getTotalLikes()}</span>
-                  </>
-                )}
-                {likesLoading && (
-                  <>
-                    <Heart className="w-3 h-3 sm:w-4 sm:h-4 animate-pulse" />
-                    <span className="text-xs font-medium">Loading...</span>
-                  </>
-                )}
-                {!likesLoading && getTotalLikes() === 0 && (
-                  <>
-                    <Heart className="w-3 h-3 sm:w-4 sm:h-4" />
-                    <span className="text-xs font-medium">0 likes</span>
-                  </>
-                )}
-              </div>
+           <div className="flex items-center gap-2 flex-shrink-0">
+             <div className="flex items-center gap-1 text-muted-foreground">
+               {!likesLoading && getTotalLikes() > 0 && (
+                 <>
+                   <Heart className="w-3 h-3 sm:w-4 sm:h-4 text-red-500 fill-red-500" />
+                   <span className="text-xs font-medium">{getTotalLikes()}</span>
+                 </>
+               )}
+               {likesLoading && (
+                 <>
+                   <Heart className="w-3 h-3 sm:w-4 sm:h-4 animate-pulse" />
+                   <span className="text-xs font-medium">Loading...</span>
+                 </>
+               )}
+               {!likesLoading && getTotalLikes() === 0 && (
+                 <>
+                   <Heart className="w-3 h-3 sm:w-4 sm:h-4" />
+                   <span className="text-xs font-medium">0 likes</span>
+                 </>
+               )}
+             </div>
              <Button
                onClick={isPlaylistMode ? stopPlaylistMode : startPlaylistMode}
                variant={isPlaylistMode ? "destructive" : "secondary"}
