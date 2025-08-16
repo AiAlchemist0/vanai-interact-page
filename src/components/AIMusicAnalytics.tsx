@@ -122,11 +122,11 @@ const AIMusicAnalytics = () => {
                 <BarChart3 className="w-16 h-16 text-slate-400 mx-auto mb-6" />
                 <h4 className="text-2xl font-bold mb-4 text-white">Traditional Analytics</h4>
                 <ul className="text-left space-y-3 text-gray-300">
-                  <li>• Cold numbers and statistics</li>
-                  <li>• Disconnected from human emotion</li>
-                  <li>• Hard to relate to personally</li>
-                  <li>• Limited community engagement</li>
-                  <li>• Boring presentation formats</li>
+                  <li><span className="text-red-500 mr-2">✕</span>Cold numbers and statistics</li>
+                  <li><span className="text-red-500 mr-2">✕</span>Disconnected from human emotion</li>
+                  <li><span className="text-red-500 mr-2">✕</span>Hard to relate to personally</li>
+                  <li><span className="text-red-500 mr-2">✕</span>Limited community engagement</li>
+                  <li><span className="text-red-500 mr-2">✕</span>Boring presentation formats</li>
                 </ul>
               </div>
             </Card>
