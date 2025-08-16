@@ -124,7 +124,7 @@ const HeroAudioPlayer = () => {
         </div>
 
       {/* Detailed Song List */}
-      <div className="space-y-1.5 sm:space-y-2">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-1.5 sm:gap-2">
         {songs.map((song, index) => (
           <div
             key={song.id}
