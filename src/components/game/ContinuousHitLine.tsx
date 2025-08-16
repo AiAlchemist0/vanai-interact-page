@@ -32,63 +32,59 @@ const ContinuousHitLine = ({ combo, isStarPowerActive, pressedFrets }: Continuou
   });
 
   return (
-    <group ref={hitLineRef} position={[0, 0, HIT_LINE_Z]}>
-      {/* Main continuous hit line spanning full width */}
-      <mesh position={[0, 0, 0]}>
-        <boxGeometry args={[12, 0.15, 0.8]} />
+    <group ref={hitLineRef} position={[0, -2.6, HIT_LINE_Z]}>
+      {/* Main continuous hit line spanning full width - aligned with actual hit zones */}
+      <mesh position={[0, 0, 0]} rotation={[Math.PI / 2, 0, 0]}>
+        <planeGeometry args={[12, 0.4]} />
         <meshStandardMaterial 
           color={isStarPowerActive ? "#ffd700" : "#00ffff"} 
           emissive={isStarPowerActive ? "#ffa500" : "#0088ff"}
           emissiveIntensity={0.6}
-          metalness={0.3}
-          roughness={0.1}
+          transparent
+          opacity={0.8}
+          side={2}
         />
       </mesh>
 
       {/* Subtle glow effect */}
-      <mesh ref={glowRef} position={[0, 0, 0]}>
-        <boxGeometry args={[12.5, 0.3, 1.2]} />
+      <mesh ref={glowRef} position={[0, 0.05, 0]} rotation={[Math.PI / 2, 0, 0]}>
+        <planeGeometry args={[12.5, 0.6]} />
         <meshBasicMaterial 
           color={isStarPowerActive ? "#ffd700" : "#00ffff"}
           transparent
           opacity={0.3}
+          side={2}
         />
       </mesh>
 
-      {/* Fret position markers - precisely aligned */}
-      {FRET_POSITIONS.map((x, index) => {
-        const isPressed = pressedFrets.has(index);
-        return (
-          <mesh key={index} position={[x, 0, 0.1]}>
-            <cylinderGeometry args={[0.25, 0.25, 0.2]} />
-            <meshStandardMaterial 
-              color={isPressed ? "#ffffff" : (isStarPowerActive ? "#ffd700" : "#aaaaaa")}
-              emissive={isPressed ? "#ffffff" : (isStarPowerActive ? "#ffa500" : "#000000")}
-              emissiveIntensity={isPressed ? 0.5 : 0.2}
-              transparent
-              opacity={isPressed ? 1.0 : 0.7}
-              metalness={0.4}
-              roughness={0.1}
-            />
-          </mesh>
-        );
-      })}
-
-      {/* Side caps for clean appearance */}
-      <mesh position={[-6.2, 0, 0]}>
-        <cylinderGeometry args={[0.15, 0.15, 0.8]} />
+      {/* Center line for precise alignment */}
+      <mesh position={[0, 0.1, 0]} rotation={[Math.PI / 2, 0, 0]}>
+        <planeGeometry args={[12, 0.1]} />
         <meshStandardMaterial 
-          color={isStarPowerActive ? "#ffd700" : "#00ffff"}
-          emissive={isStarPowerActive ? "#ffa500" : "#0088ff"}
-          emissiveIntensity={0.6}
+          color="#ffffff"
+          emissive="#ffffff"
+          emissiveIntensity={0.8}
+          transparent
+          opacity={0.9}
+          side={2}
         />
       </mesh>
-      <mesh position={[6.2, 0, 0]}>
-        <cylinderGeometry args={[0.15, 0.15, 0.8]} />
+
+      {/* Side markers for width reference */}
+      <mesh position={[-6, 0.1, 0]}>
+        <cylinderGeometry args={[0.1, 0.1, 0.3]} />
         <meshStandardMaterial 
           color={isStarPowerActive ? "#ffd700" : "#00ffff"}
           emissive={isStarPowerActive ? "#ffa500" : "#0088ff"}
-          emissiveIntensity={0.6}
+          emissiveIntensity={0.8}
+        />
+      </mesh>
+      <mesh position={[6, 0.1, 0]}>
+        <cylinderGeometry args={[0.1, 0.1, 0.3]} />
+        <meshStandardMaterial 
+          color={isStarPowerActive ? "#ffd700" : "#00ffff"}
+          emissive={isStarPowerActive ? "#ffa500" : "#0088ff"}
+          emissiveIntensity={0.8}
         />
       </mesh>
     </group>
