@@ -267,7 +267,7 @@ const SONGS: Song[] = [
     title: "AI struck! Data's thunder roar!",
     artist: "Darren Nicholls",
     src: getAudioUrl("Darren AI Struck.mp3"),
-    coverArt: darrenAiStruckCover,
+    coverArt: "/lovable-uploads/cf89c28f-23f5-4188-a5aa-e50f28daa5c2.png",
     lyrics: [
       { time: 0, text: "AI struck! Data's thunder roar!" },
       { time: 4, text: "Electric minds in digital war" },
