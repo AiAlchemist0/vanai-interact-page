@@ -504,12 +504,14 @@ const GameBoard = ({
         )}
       </div>
 
-      {/* FretBoard Component - Unified for all input methods */}
-      <FretBoard
-        pressedFrets={pressedFrets}
-        onStrum={handleStrum}
-        inputMethod={inputMethod}
-      />
+      {/* FretBoard Component - Bottom aligned with 3D scene */}
+      <div className="relative">
+        <FretBoard
+          pressedFrets={pressedFrets}
+          onStrum={handleStrum}
+          inputMethod={inputMethod}
+        />
+      </div>
 
       {/* Pause Overlay */}
       {gameState === "paused" && (
