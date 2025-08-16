@@ -43,8 +43,8 @@ const FretVisualizer = ({ pressedFrets, inputMethod }: FretVisualizerProps) => {
             );
           })}
         </div>
-        <div className="text-xs text-muted-foreground mt-2">
-          Press frets + SPACE to strum
+        <div className="text-xs text-muted-foreground mt-2 font-bold">
+          1. Hold frets (A/S/D/F/G) 2. Press SPACE to strum!
         </div>
       </Card>
     </div>

@@ -19,6 +19,7 @@ import CalibrationModal from "./CalibrationModal";
 import GameInstructions from "./GameInstructions";
 import TimingFeedback from "./TimingFeedback";
 import FretVisualizer from "./FretVisualizer";
+import StrumIndicator from "./StrumIndicator";
 import { Pause, Play, Square, Home, Settings, Zap, HelpCircle } from "lucide-react";
 
 interface GameBoardProps {
@@ -207,7 +208,7 @@ const GameBoard = ({
     setAccuracy(newAccuracy);
   };
 
-  const { pressedFrets, inputMethod } = useOptimizedInput(handleStrum, gameState);
+  const { pressedFrets, inputMethod, lastStrum } = useOptimizedInput(handleStrum, gameState);
 
   // Initialize game
   useEffect(() => {
@@ -475,6 +476,7 @@ const GameBoard = ({
         {/* UI Overlays */}
         <FretVisualizer pressedFrets={pressedFrets} inputMethod={inputMethod} />
         <TimingFeedback lastHit={lastHitResult} />
+        <StrumIndicator pressedFrets={pressedFrets} lastStrum={lastStrum} />
         
         {/* Debug Panel */}
         <GameDebugPanel
