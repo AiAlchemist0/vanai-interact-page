@@ -45,10 +45,12 @@ const HourlyPatterns = () => {
     return () => clearInterval(interval);
   }, []);
 
-  const maxPlays = Math.max(...hourlyData.map(d => d.play_count));
-  const peakHour = hourlyData.reduce((prev, current) => 
-    current.play_count > prev.play_count ? current : prev
-  );
+  const maxPlays = hourlyData.length > 0 ? Math.max(...hourlyData.map(d => d.play_count)) : 0;
+  const peakHour = hourlyData.length > 0 
+    ? hourlyData.reduce((prev, current) => 
+        current.play_count > prev.play_count ? current : prev
+      )
+    : { hour: 19, play_count: 0 }; // Default fallback
 
   const getBarColor = (hour: number, playCount: number) => {
     if (playCount === maxPlays && playCount > 0) return '#22d3ee'; // Peak hour - cyan
