@@ -232,8 +232,8 @@ const Hero = () => {
           {/* Description Section */}
           <div className="text-center max-w-4xl mx-auto">
             <p className="text-xl xl:text-2xl text-muted-foreground leading-relaxed">
-              Discover what <span className="text-primary font-semibold">1,001 British Columbians</span> think about artificial intelligence. 
-              Explore comprehensive survey data covering AI experience, concerns, and future vision.
+              Where numbers become melodies and <span className="text-primary font-semibold">1,001 British Columbians</span> share their AI perspectives through revolutionary music-powered analytics. 
+              Experience the breakthrough concept that transforms survey data into engaging musical stories.
             </p>
           </div>
 
