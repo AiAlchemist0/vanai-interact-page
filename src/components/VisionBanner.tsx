@@ -88,8 +88,10 @@ const VisionBanner = () => {
                   {index < 4 && (
                     <>
                       {/* Mobile vertical arrows */}
-                      <div className="md:hidden flex justify-center py-4">
-                        <ArrowDown className="w-8 h-8 text-primary animate-pulse" />
+                      <div className="md:hidden flex justify-center -mb-3 mt-6">
+                        <div className="bg-background/80 rounded-full p-2">
+                          <ArrowDown className="w-6 h-6 text-primary animate-pulse" />
+                        </div>
                       </div>
                       {/* Desktop horizontal arrows */}
                       <div className="hidden md:flex absolute top-1/2 -right-4 transform -translate-y-1/2 z-10">
