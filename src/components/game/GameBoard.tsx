@@ -18,6 +18,7 @@ import CalibrationModal from "./CalibrationModal";
 import GameInstructions from "./GameInstructions";
 import TimingFeedback from "./TimingFeedback";
 import StrumIndicator from "./StrumIndicator";
+import MobileGameControls from "./MobileGameControls";
 import { Pause, Play, Square, Home, Settings, Zap, HelpCircle } from "lucide-react";
 
 interface GameBoardProps {
@@ -364,44 +365,46 @@ const GameBoard = ({
     <div className="h-full flex bg-gradient-to-b from-background via-background/95 to-background">
       {/* Main Game Area */}
       <div className="flex-1 flex flex-col">
-        {/* Game Controls - Fixed Height */}
-        <div className="h-16 bg-card/30 backdrop-blur-sm border-b border-border/20 flex items-center justify-between px-4 shrink-0">
-          <div className="flex items-center gap-2">
+        {/* Mobile-Optimized Game Controls */}
+        <div className="h-12 md:h-16 bg-card/30 backdrop-blur-sm border-b border-border/20 flex items-center justify-between px-2 md:px-4 shrink-0">
+          {/* Primary Controls */}
+          <div className="flex items-center gap-1 md:gap-2">
             <Button
               variant="outline"
               size="sm"
               onClick={handlePauseToggle}
-              className="flex items-center gap-2"
+              className="flex items-center gap-1 px-2 md:px-3"
             >
-              {gameState === "playing" ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
-              {gameState === "playing" ? "Pause" : "Resume"}
+              {gameState === "playing" ? <Pause className="w-3 h-3 md:w-4 md:h-4" /> : <Play className="w-3 h-3 md:w-4 md:h-4" />}
+              <span className="hidden sm:inline">{gameState === "playing" ? "Pause" : "Resume"}</span>
             </Button>
             
             <Button
               variant="outline"
               size="sm"
               onClick={handleStop}
-              className="flex items-center gap-2"
+              className="flex items-center gap-1 px-2 md:px-3"
             >
-              <Square className="w-4 h-4" />
-              Stop
+              <Square className="w-3 h-3 md:w-4 md:h-4" />
+              <span className="hidden sm:inline">Stop</span>
             </Button>
 
             <Button
               variant="ghost"
               size="sm"
               onClick={onReturnToMenu}
-              className="flex items-center gap-2"
+              className="flex items-center gap-1 px-2 md:px-3"
             >
-              <Home className="w-4 h-4" />
-              Menu
+              <Home className="w-3 h-3 md:w-4 md:h-4" />
+              <span className="hidden md:inline">Menu</span>
             </Button>
 
+            {/* Hide secondary controls on mobile */}
             <Button
               variant="ghost"
               size="sm"
               onClick={() => setShowCalibration(true)}
-              className="flex items-center gap-2"
+              className="hidden md:flex items-center gap-2"
             >
               <Settings className="w-4 h-4" />
               Calibrate
@@ -411,45 +414,74 @@ const GameBoard = ({
               variant="ghost"
               size="sm"
               onClick={() => setShowInstructions(true)}
-              className="flex items-center gap-2"
+              className="hidden md:flex items-center gap-2"
             >
               <HelpCircle className="w-4 h-4" />
               Help
             </Button>
 
-            {/* Star Power indicator */}
-            <div className="flex items-center gap-2 bg-card/30 px-3 py-1 rounded">
-              <Zap className="w-4 h-4 text-yellow-400" />
-              <div className="w-16 h-2 bg-muted rounded-full overflow-hidden">
+            {/* Mobile Controls Drawer */}
+            <MobileGameControls
+              onShowCalibration={() => setShowCalibration(true)}
+              onShowInstructions={() => setShowInstructions(true)}
+              starPowerMeter={starPower.starPower.meter}
+              starPowerActive={starPower.starPower.isActive}
+              onActivateStarPower={() => {
+                if (starPower.starPower.meter >= 50) {
+                  starPower.activateStarPower();
+                  soundEffects.playSound('star_power');
+                }
+              }}
+            />
+          </div>
+
+          {/* Star Power & Score - Mobile Layout */}
+          <div className="flex items-center gap-2">
+            {/* Compact Star Power */}
+            <div className="flex items-center gap-1 bg-card/30 px-2 py-1 rounded">
+              <Zap className="w-3 h-3 md:w-4 md:h-4 text-yellow-400" />
+              <div className="w-8 md:w-16 h-1.5 md:h-2 bg-muted rounded-full overflow-hidden">
                 <div 
                   className="h-full bg-gradient-to-r from-blue-400 to-yellow-400 transition-all duration-300"
                   style={{ width: `${starPower.starPower.meter}%` }}
                 />
               </div>
               {starPower.starPower.isActive && (
-                <span className="text-xs text-yellow-400 font-bold animate-pulse">
+                <span className="text-xs text-yellow-400 font-bold animate-pulse hidden sm:inline">
                   ACTIVE!
                 </span>
               )}
             </div>
+
+            {/* Mobile Score Display */}
+            <div className="md:hidden">
+              <ScoreDisplay
+                score={score}
+                combo={combo}
+                accuracy={accuracy}
+              />
+            </div>
           </div>
 
-          <ScoreDisplay
-            score={score}
-            combo={combo}
-            accuracy={accuracy}
-          />
+          {/* Desktop Score Display */}
+          <div className="hidden md:block">
+            <ScoreDisplay
+              score={score}
+              combo={combo}
+              accuracy={accuracy}
+            />
+          </div>
         </div>
 
-        {/* Progress Bar */}
-        <div className="px-4 py-2 shrink-0">
-          <Progress value={progress} className="h-2" />
-          <div className="text-xs text-muted-foreground mt-1 text-center">
+        {/* Mobile-Optimized Progress Bar */}
+        <div className="px-2 md:px-4 py-1 md:py-2 shrink-0">
+          <Progress value={progress} className="h-1 md:h-2" />
+          <div className="text-xs text-muted-foreground mt-0.5 md:mt-1 text-center">
             {Math.floor(currentTime / 1000)}s / {Math.floor(song.duration / 1000)}s
           </div>
         </div>
 
-        {/* 3D Game Area - Takes remaining space */}
+        {/* 3D Game Area - Mobile Optimized */}
         <div className="flex-1 relative min-h-0">
           <div className="absolute inset-0">
             <GameBoard3D 
@@ -473,13 +505,17 @@ const GameBoard = ({
             />
           </div>
           
-          {/* Essential UI Overlays */}
-          <TimingFeedback lastHit={lastHitResult} />
-          <StrumIndicator pressedFrets={pressedFrets} lastStrum={lastStrum} />
+          {/* Essential UI Overlays - Mobile Positioned */}
+          <div className="absolute top-2 left-2 md:top-4 md:left-4">
+            <TimingFeedback lastHit={lastHitResult} />
+          </div>
+          <div className="absolute top-2 right-2 md:top-4 md:right-4">
+            <StrumIndicator pressedFrets={pressedFrets} lastStrum={lastStrum} />
+          </div>
         </div>
 
-        {/* FretBoard Component - Bottom aligned with 3D scene */}
-        <div className="relative">
+        {/* Mobile-Optimized FretBoard */}
+        <div className="relative bg-gradient-to-t from-card/95 to-card/80 backdrop-blur-sm">
           <FretBoard
             pressedFrets={pressedFrets}
             onStrum={handleStrum}

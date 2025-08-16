@@ -212,40 +212,45 @@ const Game = () => {
   }
 
   return (
-    <div className="fixed inset-0 bg-background overflow-hidden">
-      {/* Game Header - Fixed Height */}
-      <div className="h-16 bg-card/50 backdrop-blur-sm border-b border-border/20 flex items-center justify-between px-4 z-50 relative">
+    <div className="fixed inset-0 bg-background overflow-hidden pb-safe">
+      {/* Mobile-Optimized Game Header */}
+      <div className="h-12 md:h-16 bg-card/50 backdrop-blur-sm border-b border-border/20 flex items-center justify-between px-2 md:px-4 z-50 relative pt-safe">
         <Button
           variant="ghost"
+          size="sm"
           onClick={() => navigate("/")}
-          className="flex items-center gap-2"
+          className="flex items-center gap-1 md:gap-2 px-2 md:px-3"
         >
-          <ArrowLeft className="w-4 h-4" />
-          Back
+          <ArrowLeft className="w-3 h-3 md:w-4 md:h-4" />
+          <span className="hidden sm:inline">Back</span>
         </Button>
         
-        <div className="flex items-center gap-3">
+        {/* Compact Song Info */}
+        <div className="flex items-center gap-2 min-w-0 flex-1 justify-center">
           {selectedSong?.coverArt && (
             <img 
               src={selectedSong.coverArt} 
               alt={`${selectedSong.title} cover`}
-              className="w-10 h-10 rounded object-cover"
+              className="w-6 h-6 md:w-10 md:h-10 rounded object-cover flex-shrink-0"
             />
           )}
-          <div className="text-center">
-            <h1 className="font-bold">{selectedSong?.title}</h1>
-            <p className="text-sm text-muted-foreground">{selectedSong?.artist}</p>
+          <div className="text-center min-w-0">
+            <h1 className="font-bold text-xs md:text-base truncate">{selectedSong?.title}</h1>
+            <p className="text-xs text-muted-foreground truncate hidden md:block">{selectedSong?.artist}</p>
           </div>
         </div>
         
-        <div className="flex items-center gap-4 text-sm">
-          <span>Score: {score.toLocaleString()}</span>
-          <span>Combo: {combo}x</span>
+        {/* Mobile Score - Compact */}
+        <div className="flex items-center gap-1 md:gap-4 text-xs md:text-sm">
+          <span className="hidden sm:inline">Score: {score.toLocaleString()}</span>
+          <span className="sm:hidden">{Math.floor(score/1000)}k</span>
+          <span className="hidden sm:inline">Combo: {combo}x</span>
+          <span className="sm:hidden">{combo}x</span>
         </div>
       </div>
 
       {/* Game Board - Takes remaining space */}
-      <div className="h-[calc(100vh-4rem)]">
+      <div className="h-[calc(100vh-3rem)] md:h-[calc(100vh-4rem)]">
         {selectedSong && (
           <GameBoard
             song={selectedSong}

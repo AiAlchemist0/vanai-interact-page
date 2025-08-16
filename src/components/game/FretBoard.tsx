@@ -15,11 +15,11 @@ const FretBoard = ({ pressedFrets, onStrum, inputMethod }: FretBoardProps) => {
   const touchLabels = ['Green', 'Red', 'Yellow', 'Blue', 'Orange'];
 
   return (
-    <div className="relative bg-gradient-to-t from-card/95 to-card/80 backdrop-blur-sm border-t border-border/30">
-      <Card className="p-6 bg-transparent border-none shadow-none">
-        <div className="space-y-6">
-          {/* Fret Buttons */}
-          <div className="flex justify-center gap-4">
+    <div className="relative border-t border-border/30 pb-safe">
+      <Card className="p-3 md:p-6 bg-transparent border-none shadow-none">
+        <div className="space-y-3 md:space-y-6">
+          {/* Fret Buttons - Mobile Optimized */}
+          <div className="flex justify-center gap-2 md:gap-4">
             {fretColors.map((color, index) => {
               const isPressed = pressedFrets.has(index);
               
@@ -30,17 +30,17 @@ const FretBoard = ({ pressedFrets, onStrum, inputMethod }: FretBoardProps) => {
                   className={`fret-button fret-${index}`}
                   style={{
                     position: 'relative',
-                    width: isTouch ? '100px' : '80px',
-                    height: isTouch ? '100px' : '80px',
+                    width: isTouch ? '70px' : '60px',
+                    height: isTouch ? '70px' : '60px',
                     borderRadius: '50%',
-                    border: '4px solid rgba(255, 255, 255, 0.2)',
+                    border: '3px solid rgba(255, 255, 255, 0.2)',
                     cursor: 'pointer',
                     transition: 'all 150ms ease',
                     transform: isPressed ? 'scale(1.1)' : 'scale(1)',
                     touchAction: 'none',
                     userSelect: 'none',
                     boxShadow: isPressed 
-                      ? `0 0 20px ${color.includes('green') ? '#22c55e' : 
+                      ? `0 0 15px ${color.includes('green') ? '#22c55e' : 
                           color.includes('red') ? '#ef4444' :
                           color.includes('yellow') ? '#eab308' :
                           color.includes('blue') ? '#3b82f6' : '#f97316'}`
@@ -55,7 +55,7 @@ const FretBoard = ({ pressedFrets, onStrum, inputMethod }: FretBoardProps) => {
                   <div 
                     style={{
                       position: 'absolute',
-                      inset: '8px',
+                      inset: '6px',
                       borderRadius: '50%',
                       backgroundColor: 'rgba(255, 255, 255, 0.3)',
                       display: 'flex',
@@ -64,7 +64,7 @@ const FretBoard = ({ pressedFrets, onStrum, inputMethod }: FretBoardProps) => {
                     }}
                   >
                     <span style={{
-                      fontSize: '14px',
+                      fontSize: '12px',
                       fontWeight: 'bold',
                       color: 'white',
                       textShadow: '1px 1px 2px rgba(0,0,0,0.5)'
@@ -88,7 +88,7 @@ const FretBoard = ({ pressedFrets, onStrum, inputMethod }: FretBoardProps) => {
             })}
           </div>
 
-          {/* Strum Button */}
+          {/* Mobile-Optimized Strum Button */}
           <div className="flex justify-center">
             <Button
               data-strum="true"
@@ -96,9 +96,9 @@ const FretBoard = ({ pressedFrets, onStrum, inputMethod }: FretBoardProps) => {
               onClick={!isTouch ? onStrum : undefined}
               size="lg"
               style={{
-                width: isTouch ? '240px' : '200px',
-                height: isTouch ? '80px' : '60px',
-                fontSize: isTouch ? '20px' : '18px',
+                width: isTouch ? '200px' : '180px',
+                height: isTouch ? '60px' : '50px',
+                fontSize: isTouch ? '16px' : '14px',
                 fontWeight: 'bold',
                 background: 'linear-gradient(to bottom, #8b5cf6, #7c3aed)',
                 color: 'white',
