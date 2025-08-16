@@ -136,11 +136,11 @@ const AIMusicAnalytics = () => {
                 <Heart className="w-16 h-16 text-slate-300 mx-auto mb-6" />
                 <h4 className="text-2xl font-bold mb-4 text-white">What We Need</h4>
                 <ul className="text-left space-y-3 text-gray-300">
-                  <li>• Emotional resonance and connection</li>
-                  <li>• Personal and relatable experiences</li>
-                  <li>• Community building and sharing</li>
-                  <li>• Engaging and memorable formats</li>
-                  <li>• Universal language of expression</li>
+                  <li><span className="text-green-500 mr-2">✓</span>Emotional resonance and connection</li>
+                  <li><span className="text-green-500 mr-2">✓</span>Personal and relatable experiences</li>
+                  <li><span className="text-green-500 mr-2">✓</span>Community building and sharing</li>
+                  <li><span className="text-green-500 mr-2">✓</span>Engaging and memorable formats</li>
+                  <li><span className="text-green-500 mr-2">✓</span>Universal language of expression</li>
                 </ul>
               </div>
             </Card>
