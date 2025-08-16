@@ -35,25 +35,25 @@ const VisualHitLine = ({ combo, isStarPowerActive }: VisualHitLineProps) => {
 
   return (
     <group ref={hitLineRef} position={[0, 0, 5]}>
-      {/* Enhanced main hit line - more prominent */}
+      {/* Enhanced main hit line - longer and more prominent */}
       <mesh position={[0, 0, 0]}>
-        <boxGeometry args={[12, 0.15, 0.8]} />
+        <boxGeometry args={[16, 0.25, 1.2]} />
         <meshStandardMaterial 
           color={isStarPowerActive ? "#ffd700" : "#00ffff"} 
           emissive={isStarPowerActive ? "#ffa500" : "#0088ff"}
-          emissiveIntensity={0.5}
+          emissiveIntensity={0.8}
           metalness={0.3}
-          roughness={0.2}
+          roughness={0.1}
         />
       </mesh>
 
-      {/* Enhanced glowing effect */}
+      {/* Enhanced glowing effect - larger and brighter */}
       <mesh ref={glowRef} position={[0, 0, 0]}>
-        <boxGeometry args={[13, 0.4, 1.5]} />
+        <boxGeometry args={[17, 0.6, 2]} />
         <meshBasicMaterial 
           color={isStarPowerActive ? "#ffd700" : "#00ffff"}
           transparent
-          opacity={0.4}
+          opacity={0.6}
         />
       </mesh>
 
@@ -73,21 +73,31 @@ const VisualHitLine = ({ combo, isStarPowerActive }: VisualHitLineProps) => {
         </mesh>
       ))}
 
-      {/* Additional visual emphasis - side rails */}
-      <mesh position={[-6.5, 0, 0]}>
-        <boxGeometry args={[0.2, 0.3, 0.8]} />
+      {/* Extended side rails for longer appearance */}
+      <mesh position={[-8.5, 0, 0]}>
+        <boxGeometry args={[0.3, 0.4, 1.2]} />
         <meshStandardMaterial 
           color={isStarPowerActive ? "#ffd700" : "#00ffff"}
           emissive={isStarPowerActive ? "#ffa500" : "#0088ff"}
-          emissiveIntensity={0.4}
+          emissiveIntensity={0.6}
         />
       </mesh>
-      <mesh position={[6.5, 0, 0]}>
-        <boxGeometry args={[0.2, 0.3, 0.8]} />
+      <mesh position={[8.5, 0, 0]}>
+        <boxGeometry args={[0.3, 0.4, 1.2]} />
         <meshStandardMaterial 
           color={isStarPowerActive ? "#ffd700" : "#00ffff"}
           emissive={isStarPowerActive ? "#ffa500" : "#0088ff"}
-          emissiveIntensity={0.4}
+          emissiveIntensity={0.6}
+        />
+      </mesh>
+
+      {/* Additional outer glow for maximum visibility */}
+      <mesh position={[0, 0, 0]}>
+        <boxGeometry args={[18, 0.8, 2.5]} />
+        <meshBasicMaterial 
+          color={isStarPowerActive ? "#ffd700" : "#00ffff"}
+          transparent
+          opacity={0.2}
         />
       </mesh>
     </group>
