@@ -86,7 +86,9 @@ const VisionBanner = () => {
                   </Card>
                   
                   {index < 4 && (
-                    <ArrowRight className="hidden md:block w-6 h-6 text-primary absolute top-1/2 -right-9 transform -translate-y-1/2" />
+                    <div className="hidden md:flex absolute top-1/2 -right-4 transform -translate-y-1/2 z-10">
+                      <ArrowRight className="w-8 h-8 text-primary animate-pulse" />
+                    </div>
                   )}
                 </div>
               );
