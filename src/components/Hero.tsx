@@ -60,58 +60,58 @@ const Hero = () => {
               </div>
 
               <p className="text-sm sm:text-lg text-muted-foreground leading-relaxed text-center sm:text-left lg:text-xl">
-                Discover what <span className="text-primary font-semibold">1,001 British Columbians</span> think about artificial intelligence. 
-                Explore comprehensive survey data covering AI experience, concerns, and future vision.
+                Experience next-generation web analytics where <span className="text-primary font-semibold">1,001 British Columbians</span> reveal their AI insights through immersive browser-based music visualization. 
+                Discover modern web technologies transforming survey data into interactive musical experiences.
               </p>
             </div>
 
-            {/* Key Stats */}
-            <div className="grid grid-cols-3 gap-3 sm:gap-4">
-              <div className="bg-card/50 backdrop-blur-sm border border-border rounded-xl px-2 sm:px-4 py-3 sm:py-4 text-center min-h-[80px] sm:min-h-[100px]">
-                <div className="flex items-center justify-center mb-1 sm:mb-2">
-                  <Users className="w-4 sm:w-6 h-4 sm:h-6 text-primary" />
+            {/* Key Stats - Enhanced for tablet/mobile */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 md:gap-6">
+              <div className="bg-card/50 backdrop-blur-sm border border-border rounded-xl px-3 sm:px-4 md:px-6 py-4 sm:py-4 md:py-6 text-center min-h-[90px] sm:min-h-[100px] md:min-h-[120px] transition-all hover:bg-card/70">
+                <div className="flex items-center justify-center mb-2 md:mb-3">
+                  <Users className="w-5 sm:w-6 md:w-8 h-5 sm:h-6 md:h-8 text-primary" />
                 </div>
-                <div className="text-lg sm:text-2xl font-bold text-foreground">1,001</div>
-                <div className="text-xs sm:text-sm text-muted-foreground leading-tight">Respondents</div>
+                <div className="text-xl sm:text-2xl md:text-3xl font-bold text-foreground">1,001</div>
+                <div className="text-sm md:text-base text-muted-foreground leading-tight">BC Respondents</div>
               </div>
 
-              <div className="bg-card/50 backdrop-blur-sm border border-border rounded-xl px-2 sm:px-4 py-3 sm:py-4 text-center min-h-[80px] sm:min-h-[100px]">
-                <div className="flex items-center justify-center mb-1 sm:mb-2">
-                  <BarChart3 className="w-4 sm:w-6 h-4 sm:h-6 text-ai-cyan" />
+              <div className="bg-card/50 backdrop-blur-sm border border-border rounded-xl px-3 sm:px-4 md:px-6 py-4 sm:py-4 md:py-6 text-center min-h-[90px] sm:min-h-[100px] md:min-h-[120px] transition-all hover:bg-card/70">
+                <div className="flex items-center justify-center mb-2 md:mb-3">
+                  <BarChart3 className="w-5 sm:w-6 md:w-8 h-5 sm:h-6 md:h-8 text-ai-cyan" />
                 </div>
-                <div className="text-lg sm:text-2xl font-bold text-foreground">5,000+</div>
-                <div className="text-xs sm:text-sm text-muted-foreground leading-tight">Text Responses</div>
+                <div className="text-xl sm:text-2xl md:text-3xl font-bold text-foreground">5,000+</div>
+                <div className="text-sm md:text-base text-muted-foreground leading-tight">Web Analytics</div>
               </div>
 
-              <div className="bg-card/50 backdrop-blur-sm border border-border rounded-xl px-2 sm:px-4 py-3 sm:py-4 text-center min-h-[80px] sm:min-h-[100px]">
-                <div className="flex items-center justify-center mb-1 sm:mb-2">
-                  <MapPin className="w-4 sm:w-6 h-4 sm:h-6 text-ai-green" />
+              <div className="bg-card/50 backdrop-blur-sm border border-border rounded-xl px-3 sm:px-4 md:px-6 py-4 sm:py-4 md:py-6 text-center min-h-[90px] sm:min-h-[100px] md:min-h-[120px] transition-all hover:bg-card/70">
+                <div className="flex items-center justify-center mb-2 md:mb-3">
+                  <MapPin className="w-5 sm:w-6 md:w-8 h-5 sm:h-6 md:h-8 text-ai-green" />
                 </div>
-                <div className="text-lg sm:text-2xl font-bold text-foreground">17</div>
-                <div className="text-xs sm:text-sm text-muted-foreground leading-tight">Core Questions</div>
+                <div className="text-xl sm:text-2xl md:text-3xl font-bold text-foreground">17</div>
+                <div className="text-sm md:text-base text-muted-foreground leading-tight">AI Questions</div>
               </div>
             </div>
 
-            {/* CTA Buttons */}
+            {/* CTA Buttons - Improved for tablet/mobile */}
             <div className="space-y-3 sm:space-y-4">
-              {/* Mobile View - Square Icon Buttons */}
-              <div className="flex justify-center gap-3">
-                <Button size="icon" className="gradient-primary hover:glow-primary transition-smooth w-16 h-16" onClick={() => document.getElementById('vision')?.scrollIntoView({
+              {/* Mobile/Tablet View - Enhanced Icon Buttons */}
+              <div className="flex justify-center gap-3 sm:gap-4 md:gap-6">
+                <Button size="icon" className="gradient-primary hover:glow-primary transition-smooth w-14 h-14 sm:w-16 sm:h-16 md:w-18 md:h-18 rounded-xl" onClick={() => document.getElementById('vision')?.scrollIntoView({
                 behavior: 'smooth'
               })} aria-label="Project's Vision">
-                  <Lightbulb className="w-6 h-6" />
+                  <Lightbulb className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7" />
                 </Button>
 
-                <Button size="icon" className="gradient-secondary hover:glow-secondary transition-smooth w-16 h-16" onClick={() => document.getElementById('insights')?.scrollIntoView({
+                <Button size="icon" className="gradient-secondary hover:glow-secondary transition-smooth w-14 h-14 sm:w-16 sm:h-16 md:w-18 md:h-18 rounded-xl" onClick={() => document.getElementById('insights')?.scrollIntoView({
                 behavior: 'smooth'
               })} aria-label="Survey Deep Dive">
-                  <BarChart3 className="w-6 h-6" />
+                  <BarChart3 className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7" />
                 </Button>
 
                 <Dialog>
                   <DialogTrigger asChild>
-                    <Button size="icon" variant="outline" className="border-muted-foreground/30 hover:border-muted-foreground transition-smooth w-16 h-16" aria-label="Legal Disclaimer">
-                      <Shield className="w-6 h-6" />
+                    <Button size="icon" variant="outline" className="border-muted-foreground/30 hover:border-muted-foreground transition-smooth w-14 h-14 sm:w-16 sm:h-16 md:w-18 md:h-18 rounded-xl" aria-label="Legal Disclaimer">
+                      <Shield className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7" />
                     </Button>
                   </DialogTrigger>
                   <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto mx-4 sm:mx-auto">
@@ -194,8 +194,8 @@ const Hero = () => {
                   </DialogContent>
                 </Dialog>
 
-                <Button size="icon" className="gradient-accent hover:glow-accent transition-smooth w-16 h-16" onClick={() => navigate('/game')} aria-label="Play BC AI Game">
-                  <Gamepad2 className="w-6 h-6" />
+                <Button size="icon" className="gradient-accent hover:glow-accent transition-smooth w-14 h-14 sm:w-16 sm:h-16 md:w-18 md:h-18 rounded-xl" onClick={() => navigate('/game')} aria-label="Play BC AI Game">
+                  <Gamepad2 className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7" />
                 </Button>
               </div>
             </div>
@@ -231,8 +231,8 @@ const Hero = () => {
           {/* Description Section */}
           <div className="text-center max-w-4xl mx-auto">
             <p className="text-xl xl:text-2xl text-muted-foreground leading-relaxed">
-              Where numbers become melodies and <span className="text-primary font-semibold">1,001 British Columbians</span> share their AI perspectives through revolutionary music-powered analytics. 
-              Experience the breakthrough concept that transforms survey data into engaging musical stories.
+              Where modern web browsers meet AI insights and <span className="text-primary font-semibold">1,001 British Columbians</span> share their perspectives through cutting-edge web-powered music analytics. 
+              Experience progressive web app technology that transforms survey data into immersive audio-visual journeys.
             </p>
           </div>
 
