@@ -66,9 +66,7 @@ const SongAnalytics = () => {
     const fetchSongAnalytics = async () => {
       try {
         const { data, error } = await supabase
-          .from('song_analytics')
-          .select('*')
-          .order('total_plays', { ascending: false });
+          .rpc('get_song_analytics');
         
         if (error) throw error;
         setAnalyticsData(data || []);

@@ -129,6 +129,15 @@ const SONGS: Song[] = [
     bpm: 95,
     duration: 180000,
   },
+  {
+    id: "darren-ai-struck",
+    title: "AI struck! Data's thunder roar!",
+    artist: "Darren Nicholls",
+    audioFile: getAudioUrl("Darren AI Struck.mp3"),
+    coverArt: "/lovable-uploads/darren-ai-struck-cover.jpg",
+    bpm: 135,
+    duration: 190000,
+  },
 ];
 
 const Game = () => {

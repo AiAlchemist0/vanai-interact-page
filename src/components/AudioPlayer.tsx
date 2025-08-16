@@ -12,6 +12,7 @@ import deepfakesCover from "/lovable-uploads/2a6f9f46-8a29-4c56-aec2-3279635b85f
 import pixelWizardCover from "@/assets/pixel-wizard-cover.jpg";
 import macCover from "/lovable-uploads/cc181a8b-6dad-4af6-8731-9a8cbd3ba5d0.png";
 import bcAiHackathonCover from "/lovable-uploads/2f51d7bb-96fc-4f06-b7f6-fc9abbbceb32.png";
+import darrenAiStruckCover from "@/assets/darren-ai-struck-cover.jpg";
 import drPatrickCover from "/lovable-uploads/4d050983-b56d-4606-a958-1c7e2c7253e8.png";
 import hrMacMillanCover from "/lovable-uploads/8a59c6e4-39f4-41e2-bb0d-544e22e3030a.png";
 import lalalaAiDilemmaCover from "/lovable-uploads/7e23b796-605f-4562-927b-06daa9147648.png";
@@ -259,6 +260,29 @@ const SONGS: Song[] = [
       { time: 22, text: "Where human wisdom finds its mode" },
       { time: 26, text: "In algorithms deep and wide" },
       { time: 30, text: "Consciousness and AI collide" }
+    ] as LyricLine[]
+  },
+  {
+    id: "darren-ai-struck",
+    title: "AI struck! Data's thunder roar!",
+    artist: "Darren Nicholls",
+    src: getAudioUrl("Darren AI Struck.mp3"),
+    coverArt: darrenAiStruckCover,
+    lyrics: [
+      { time: 0, text: "AI struck! Data's thunder roar!" },
+      { time: 4, text: "Electric minds in digital war" },
+      { time: 8, text: "Silicon dreams come alive tonight" },
+      { time: 12, text: "In the realm of artificial light" },
+      { time: 16, text: "" },
+      { time: 18, text: "Darren calls from cyber space" },
+      { time: 22, text: "Where algorithms show their face" },
+      { time: 26, text: "Thunder roars through data streams" },
+      { time: 30, text: "Reality splits at digital seams" },
+      { time: 34, text: "" },
+      { time: 36, text: "AI struck! Data's thunder roar!" },
+      { time: 40, text: "Nothing's like it was before" },
+      { time: 44, text: "In this brave new world we've made" },
+      { time: 48, text: "Where human dreams and AI played" }
     ] as LyricLine[]
   }
 ];
