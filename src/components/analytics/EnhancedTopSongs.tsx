@@ -34,7 +34,7 @@ const EnhancedTopSongs = () => {
   const [songs, setSongs] = useState<CombinedSongData[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
-  const [viewMode, setViewMode] = useState<'plays' | 'likes' | 'engagement'>('plays');
+  const [viewMode, setViewMode] = useState<'plays' | 'likes' | 'engagement'>('likes');
   const { loadSpecificSong, startPlayback, currentSong, isPlaying } = useAudio();
 
   const fetchData = async () => {
