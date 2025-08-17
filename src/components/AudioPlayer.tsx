@@ -8,7 +8,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { LyricLine } from "@/components/SynchronizedLyrics";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useSongStatistics } from "@/hooks/useSongStatistics";
-import deepfakesCover from "/lovable-uploads/2a6f9f46-8a29-4c56-aec2-3279635b85f0.png";
+import krisKrugCover from "/lovable-uploads/22e18179-d389-42d3-9924-c6caf65d7d2e.png";
 import pixelWizardCover from "@/assets/pixel-wizard-cover.jpg";
 import macCover from "/lovable-uploads/cc181a8b-6dad-4af6-8731-9a8cbd3ba5d0.png";
 import bcAiHackathonCover from "/lovable-uploads/2f51d7bb-96fc-4f06-b7f6-fc9abbbceb32.png";
@@ -75,7 +75,7 @@ const SONGS: Song[] = [
     title: "Circles in the AI Glow",
     artist: "Kris Krüg",
     src: getAudioUrl("Kris Krug Circles in the AI Glow.mp3"),
-    coverArt: deepfakesCover,
+    coverArt: krisKrugCover,
     lyrics: [
       { time: 0, text: "In the AI glow we dance" },
       { time: 3.5, text: "Circles spinning through the night" },
