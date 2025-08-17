@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-import { TrendingUp, Users, Music, Clock, MapPin, Zap } from "lucide-react";
+import { TrendingUp, Users, Music, Clock, MapPin, Zap, RefreshCw, Heart } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 
 interface DashboardStatsData {
@@ -15,29 +16,50 @@ interface DashboardStatsData {
 
 const DashboardStats = () => {
   const [stats, setStats] = useState<DashboardStatsData | null>(null);
+  const [totalLikes, setTotalLikes] = useState<number>(0);
   const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
+
+  const fetchStats = async () => {
+    try {
+      setRefreshing(true);
+      
+      const [dashboardResponse, likesResponse] = await Promise.all([
+        supabase.rpc('get_dashboard_stats'),
+        supabase.rpc('get_song_like_statistics')
+      ]);
+
+      if (dashboardResponse.error) throw dashboardResponse.error;
+      if (likesResponse.error) throw likesResponse.error;
+
+      if (dashboardResponse.data && dashboardResponse.data.length > 0) {
+        setStats(dashboardResponse.data[0]);
+      }
+
+      // Calculate total likes
+      const likes = likesResponse.data || [];
+      const total = likes.reduce((sum: number, song: any) => sum + song.total_likes, 0);
+      setTotalLikes(total);
+      
+    } catch (error) {
+      console.error('Error fetching dashboard stats:', error);
+    } finally {
+      setLoading(false);
+      setRefreshing(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchStats = async () => {
-      try {
-        const { data, error } = await supabase.rpc('get_dashboard_stats');
-        if (error) throw error;
-        if (data && data.length > 0) {
-          setStats(data[0]);
-        }
-      } catch (error) {
-        console.error('Error fetching dashboard stats:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchStats();
     
     // Refresh every 30 seconds
     const interval = setInterval(fetchStats, 30000);
     return () => clearInterval(interval);
   }, []);
+
+  const handleRefresh = () => {
+    fetchStats();
+  };
 
   const statCards = [
     {
@@ -87,6 +109,14 @@ const DashboardStats = () => {
       gradient: "from-yellow-500 to-orange-500",
       change: "PST",
       description: "Highest activity"
+    },
+    {
+      title: "Total Likes",
+      value: totalLikes,
+      icon: Heart,
+      gradient: "from-pink-500 to-rose-500",
+      change: "Community",
+      description: "Song favorites"
     }
   ];
 
@@ -108,7 +138,21 @@ const DashboardStats = () => {
   }
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-6">
+    <div className="space-y-4">
+      <div className="flex items-center justify-between">
+        <h2 className="text-xl font-semibold text-white">Dashboard Overview</h2>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={handleRefresh}
+          disabled={refreshing}
+          className="border-purple-500/50 text-purple-300 hover:bg-purple-500/10"
+        >
+          <RefreshCw className={`h-3 w-3 mr-1 ${refreshing ? 'animate-spin' : ''}`} />
+          Refresh All
+        </Button>
+      </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-7 gap-6">
       {statCards.map((stat, index) => {
         const Icon = stat.icon;
         return (
@@ -141,6 +185,7 @@ const DashboardStats = () => {
           </Card>
         );
       })}
+      </div>
     </div>
   );
 };

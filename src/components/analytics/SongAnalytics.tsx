@@ -22,44 +22,54 @@ const SongAnalytics = () => {
   const [analyticsData, setAnalyticsData] = useState<SongAnalyticsData[]>([]);
   const [loading, setLoading] = useState(true);
 
-  // Song metadata mapping
-  const songMetadata: Record<string, { title: string; artist: string; genre: string; color: string }> = {
-    'bc-ai-hackathon': { 
-      title: 'BC AI Hackathon', 
-      artist: 'Rival Tech', 
-      genre: 'Tech',
-      color: 'from-blue-500 to-cyan-500'
-    },
-    'deepfakes-rain': { 
-      title: 'Deepfakes in the Rain', 
-      artist: 'KK', 
-      genre: 'Electronic',
-      color: 'from-purple-500 to-pink-500'
-    },
-    'dr-patrick': { 
-      title: 'Dr. Patrick Parra', 
-      artist: 'Pennefather', 
-      genre: 'Spoken Word',
-      color: 'from-green-500 to-teal-500'
-    },
-    'hr-macmillan': { 
-      title: 'H.R MacMillan Space Centre', 
-      artist: 'Alien Abduction', 
-      genre: 'Ambient',
-      color: 'from-orange-500 to-red-500'
-    },
-    'mac-consciousness': { 
-      title: 'Mind, AI & Consciousness', 
-      artist: 'MAC', 
-      genre: 'Philosophy',
-      color: 'from-indigo-500 to-purple-500'
-    },
-    'pixel-wizard': { 
-      title: 'Mr Pixel Wizard', 
-      artist: 'BC AI', 
-      genre: 'Digital',
-      color: 'from-yellow-500 to-orange-500'
-    }
+  // Import song metadata from utils
+  const getSongMetadataLocal = (songId: string) => {
+    // Updated mapping to match database song IDs
+    const metadataMap: Record<string, { title: string; artist: string; genre: string; color: string }> = {
+      'lionel-ringenbach': { 
+        title: 'Circles in the AI Glow', 
+        artist: 'Kris Krüg & BC + AI Crew', 
+        genre: 'Electronic',
+        color: 'from-blue-500 to-cyan-500'
+      },
+      'deepfakes': { 
+        title: 'Deepfakes in the Rain', 
+        artist: 'KK & BC AI', 
+        genre: 'Electronic',
+        color: 'from-purple-500 to-pink-500'
+      },
+      'brenda-bailey': { 
+        title: 'Innovation BC & Future Leaders', 
+        artist: 'Brenda Bailey & BC Innovation', 
+        genre: 'Leadership',
+        color: 'from-green-500 to-teal-500'
+      },
+      'mac': { 
+        title: 'Mind, AI & Consciousness', 
+        artist: 'MAC Collective', 
+        genre: 'Philosophy',
+        color: 'from-indigo-500 to-purple-500'
+      },
+      'pixel-wizard': { 
+        title: 'Mr Pixel Wizard BC AI', 
+        artist: 'Pixel Wizard', 
+        genre: 'Digital',
+        color: 'from-yellow-500 to-orange-500'
+      },
+      'lalala-ai-dilemma': { 
+        title: 'The AI Dilemma', 
+        artist: 'LaLaLa AI Collective', 
+        genre: 'Experimental',
+        color: 'from-pink-500 to-rose-500'
+      }
+    };
+    
+    return metadataMap[songId] || {
+      title: songId.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase()),
+      artist: 'Unknown Artist',
+      genre: 'Unknown',
+      color: 'from-gray-500 to-gray-600'
+    };
   };
 
   useEffect(() => {
@@ -129,12 +139,7 @@ const SongAnalytics = () => {
       <CardContent className="p-6">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {analyticsData.map((song) => {
-            const metadata = songMetadata[song.song_id] || {
-              title: song.song_id,
-              artist: 'Unknown Artist',
-              genre: 'Unknown',
-              color: 'from-gray-500 to-gray-600'
-            };
+            const metadata = getSongMetadataLocal(song.song_id);
             
             const engagementScore = getEngagementScore(song);
             const validPlayRate = (song.valid_plays / song.total_plays) * 100;
