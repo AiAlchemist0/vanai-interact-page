@@ -22,7 +22,7 @@ export const getSongMetadata = (songId: string) => {
   const getColorGradient = (title: string, artist: string) => {
     const combined = (title + artist).toLowerCase();
     if (combined.includes('ai') || combined.includes('tech')) return 'from-blue-500 to-cyan-500';
-    if (combined.includes('deepfakes') || combined.includes('rain')) return 'from-purple-500 to-pink-500';
+    if (combined.includes('circles') || combined.includes('glow')) return 'from-cyan-500 to-blue-500';
     if (combined.includes('circles') || combined.includes('glow')) return 'from-cyan-500 to-blue-500';
     if (combined.includes('space') || combined.includes('alien')) return 'from-orange-500 to-red-500';
     if (combined.includes('consciousness') || combined.includes('mind')) return 'from-indigo-500 to-purple-500';

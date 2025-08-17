@@ -33,10 +33,10 @@ const SongAnalytics = () => {
         color: 'from-blue-500 to-cyan-500'
       },
       'deepfakes': { 
-        title: 'Deepfakes in the Rain', 
+        title: 'Circles in the AI Glow', 
         artist: 'Kris Krüg & BC + AI Crew', 
         genre: 'Electronic',
-        color: 'from-purple-500 to-pink-500'
+        color: 'from-cyan-500 to-blue-500'
       },
       'kris-krug-circles': { 
         title: 'Circles in the AI Glow', 
