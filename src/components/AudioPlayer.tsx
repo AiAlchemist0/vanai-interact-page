@@ -73,7 +73,7 @@ const SONGS: Song[] = [
   {
     id: "kris-krug-circles",
     title: "Circles in the AI Glow",
-    artist: "Kris Krüg",
+    artist: "Kris Krüg & BC + AI Crew",
     src: getAudioUrl("Kris Krug Circles in the AI Glow.mp3"),
     coverArt: krisKrugCover,
     lyrics: [
