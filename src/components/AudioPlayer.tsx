@@ -75,7 +75,7 @@ const SONGS: Song[] = [
     title: "Circles in the AI Glow",
     artist: "Kris Krüg & BC + AI Crew",
     src: getAudioUrl("Kris Krug Circles in the AI Glow.mp3"),
-    coverArt: krisKrugCover,
+    coverArt: "/lovable-uploads/de844c7f-f953-4326-aba2-c4344918c873.png",
     lyrics: [
       { time: 0, text: "In the AI glow we dance" },
       { time: 3.5, text: "Circles spinning through the night" },
