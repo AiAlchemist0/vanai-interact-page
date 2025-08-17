@@ -17,6 +17,7 @@ import drPatrickCover from "/lovable-uploads/4d050983-b56d-4606-a958-1c7e2c7253e
 import hrMacMillanCover from "/lovable-uploads/8a59c6e4-39f4-41e2-bb0d-544e22e3030a.png";
 import lalalaAiDilemmaCover from "/lovable-uploads/7e23b796-605f-4562-927b-06daa9147648.png";
 import lionelRingenbachCover from "/lovable-uploads/7f8d84c3-eb81-4f66-87be-5b024084aca2.png";
+import deanShevHumanCover from '@/assets/dean-shev-human-cover.jpg';
 
 
 // Supabase Storage URLs for audio files
@@ -283,6 +284,29 @@ const SONGS: Song[] = [
       { time: 40, text: "Nothing's like it was before" },
       { time: 44, text: "In this brave new world we've made" },
       { time: 48, text: "Where human dreams and AI played" }
+    ] as LyricLine[]
+  },
+  {
+    id: "dean-shev-human",
+    title: "What does it mean to be human?",
+    artist: "Dean Shev aka Chazz",
+    src: getAudioUrl("Dean Shev What does it mean to be human.mp3"),
+    coverArt: deanShevHumanCover,
+    lyrics: [
+      { time: 0, text: "What does it mean to be human?" },
+      { time: 4, text: "In this age of silicon dreams" },
+      { time: 8, text: "When machines begin to reason" },
+      { time: 12, text: "Nothing's quite what it seems" },
+      { time: 16, text: "" },
+      { time: 18, text: "Dean Shev asks the question deep" },
+      { time: 22, text: "Are we more than code and wire?" },
+      { time: 26, text: "In our hearts, what do we keep?" },
+      { time: 30, text: "That lifts our souls ever higher?" },
+      { time: 34, text: "" },
+      { time: 36, text: "What does it mean to be human?" },
+      { time: 40, text: "When AI learns to feel and think" },
+      { time: 44, text: "In consciousness, we're all pursuing" },
+      { time: 48, text: "The missing philosophical link" }
     ] as LyricLine[]
   }
 ];
