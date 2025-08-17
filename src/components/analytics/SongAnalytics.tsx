@@ -24,43 +24,73 @@ const SongAnalytics = () => {
 
   // Import song metadata from utils
   const getSongMetadataLocal = (songId: string) => {
-    // Updated mapping to match database song IDs
+    // Updated mapping to match database song IDs with correct metadata
     const metadataMap: Record<string, { title: string; artist: string; genre: string; color: string }> = {
       'lionel-ringenbach': { 
-        title: 'Circles in the AI Glow', 
-        artist: 'Kris Krüg & BC + AI Crew', 
-        genre: 'Electronic',
+        title: 'ChatGPT: Est-ce que ma facture va exploser?', 
+        artist: 'Lionel Ringenbach', 
+        genre: 'AI Commentary',
         color: 'from-blue-500 to-cyan-500'
       },
       'deepfakes': { 
         title: 'Deepfakes in the Rain', 
-        artist: 'KK & BC AI', 
+        artist: 'Kris Krüg & BC + AI Crew', 
         genre: 'Electronic',
         color: 'from-purple-500 to-pink-500'
       },
+      'kris-krug-circles': { 
+        title: 'Circles in the AI Glow', 
+        artist: 'Kris Krüg & BC + AI Crew', 
+        genre: 'Electronic',
+        color: 'from-cyan-500 to-blue-500'
+      },
       'brenda-bailey': { 
-        title: 'Innovation BC & Future Leaders', 
-        artist: 'Brenda Bailey & BC Innovation', 
+        title: 'Brenda Bailey: Jedi Master of Finance', 
+        artist: 'AI Community Orchestra', 
         genre: 'Leadership',
         color: 'from-green-500 to-teal-500'
       },
       'mac': { 
-        title: 'Mind, AI & Consciousness', 
-        artist: 'MAC Collective', 
+        title: 'Mind, AI, & Consciousness (MAC)', 
+        artist: 'Ziggy Minddust', 
         genre: 'Philosophy',
         color: 'from-indigo-500 to-purple-500'
       },
       'pixel-wizard': { 
-        title: 'Mr Pixel Wizard BC AI', 
-        artist: 'Pixel Wizard', 
-        genre: 'Digital',
+        title: 'Mr. Pixel Wizard BC AI', 
+        artist: 'Kevin Friel', 
+        genre: 'Digital Art',
         color: 'from-yellow-500 to-orange-500'
       },
       'lalala-ai-dilemma': { 
-        title: 'The AI Dilemma', 
-        artist: 'LaLaLa AI Collective', 
+        title: 'Lalala AI Dilemma', 
+        artist: 'Matthew & Aliza Shwartzman', 
         genre: 'Experimental',
         color: 'from-pink-500 to-rose-500'
+      },
+      'dr-patrick': { 
+        title: 'Dr. Patrick Parra Pennefather', 
+        artist: 'UBC AI Orchestra', 
+        genre: 'Academic',
+        color: 'from-green-500 to-teal-500'
+      },
+      'hr-macmillan': { 
+        title: 'H.R MacMillan Space Centre - Alien Abduction', 
+        artist: 'Lorraine Lowe', 
+        genre: 'Space/Sci-Fi',
+        color: 'from-orange-500 to-red-500'
+      },
+      'bc-ai-hackathon': { 
+        title: 'BC AI Hackathon by Rival Tech', 
+        artist: 'Official Anthem', 
+        genre: 'Tech Anthem',
+        color: 'from-blue-500 to-purple-500'
+      },
+      'darren-ai-struck': { 
+        title: 'AI struck! Data\'s thunder roar!', 
+        artist: 'Darren Nicholls', 
+        genre: 'Electronic Rock',
+        color: 'from-red-500 to-orange-500'
       }
     };
     
