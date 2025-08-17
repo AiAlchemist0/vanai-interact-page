@@ -8,6 +8,7 @@ import HourlyPatterns from "@/components/analytics/HourlyPatterns";
 import GeographicMap from "@/components/analytics/GeographicMap";
 import RealTimeMetrics from "@/components/analytics/RealTimeMetrics";
 import SongAnalytics from "@/components/analytics/SongAnalytics";
+import AudioPlayerProvider from "@/components/AudioPlayerProvider";
 
 const AIAnalytics = () => {
   const [currentTime, setCurrentTime] = useState(new Date());
@@ -18,13 +19,14 @@ const AIAnalytics = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-purple-950 to-slate-900">
-      {/* Animated background particles */}
-      <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-10 -left-10 w-72 h-72 bg-purple-500/10 rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute top-1/2 -right-10 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl animate-pulse delay-700"></div>
-        <div className="absolute -bottom-10 left-1/3 w-80 h-80 bg-pink-500/10 rounded-full blur-3xl animate-pulse delay-1000"></div>
-      </div>
+    <AudioPlayerProvider>
+      <div className="min-h-screen bg-gradient-to-br from-slate-950 via-purple-950 to-slate-900">
+        {/* Animated background particles */}
+        <div className="fixed inset-0 overflow-hidden pointer-events-none">
+          <div className="absolute -top-10 -left-10 w-72 h-72 bg-purple-500/10 rounded-full blur-3xl animate-pulse"></div>
+          <div className="absolute top-1/2 -right-10 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl animate-pulse delay-700"></div>
+          <div className="absolute -bottom-10 left-1/3 w-80 h-80 bg-pink-500/10 rounded-full blur-3xl animate-pulse delay-1000"></div>
+        </div>
 
       {/* Header */}
       <div className="relative z-10 border-b border-purple-500/20 bg-slate-950/50 backdrop-blur-xl">
@@ -124,6 +126,7 @@ const AIAnalytics = () => {
         </Card>
       </div>
     </div>
+    </AudioPlayerProvider>
   );
 };
 
