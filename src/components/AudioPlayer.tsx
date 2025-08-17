@@ -264,25 +264,25 @@ const SONGS: Song[] = [
   },
   {
     id: "deepfakes",
-    title: "Circles in the AI Glow",
+    title: "Deepfakes in the Rain",
     artist: "Kris Krüg & BC + AI Crew",
     src: getAudioUrl("Deepfakes in the Rain_KK_BCAI.mp3"),
     coverArt: "/lovable-uploads/2a6f9f46-8a29-4c56-aec2-3279635b85f0.png",
     lyrics: [
-      { time: 0, text: "Circles in the AI glow" },
-      { time: 4, text: "Round and round we dance" },
-      { time: 8, text: "In the light that we all know" },
-      { time: 12, text: "Digital dreams enhance" },
+      { time: 0, text: "Deepfakes in the rain" },
+      { time: 4, text: "Digital faces fall like tears" },
+      { time: 8, text: "Synthetic dreams and phantom pain" },
+      { time: 12, text: "In the storm of our digital fears" },
       { time: 16, text: "" },
-      { time: 18, text: "Kris Krug leads the way" },
-      { time: 22, text: "Through electric streams of light" },
-      { time: 26, text: "In this glowing display" },
-      { time: 30, text: "Everything feels so bright" },
+      { time: 18, text: "Kris Krug sees through the code" },
+      { time: 22, text: "Where reality bends and breaks" },
+      { time: 26, text: "In this virtual episode" },
+      { time: 30, text: "Truth is whatever AI makes" },
       { time: 34, text: "" },
-      { time: 36, text: "Circles in the AI glow" },
-      { time: 40, text: "Spinning endlessly around" },
-      { time: 44, text: "In this cosmic light show" },
-      { time: 48, text: "We are finally found" }
+      { time: 36, text: "Deepfakes in the rain" },
+      { time: 40, text: "Washing over what is real" },
+      { time: 44, text: "In this algorithmic hurricane" },
+      { time: 48, text: "Nothing's quite what we feel" }
     ] as LyricLine[]
   },
   {
