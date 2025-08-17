@@ -27,7 +27,7 @@ const SONGS: Song[] = [
   {
     id: "bc-ai-hackathon",
     title: "BC AI Hackathon by Rival Tech",
-    artist: "Official Hackathon Anthem",
+    artist: "Official Anthem",
     src: getAudioUrl("BC AI Hackathon by Rival Tech.mp3"),
     coverArt: bcAiHackathonCover,
     lyrics: [
