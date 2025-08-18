@@ -1,0 +1,67 @@
+import { useEffect } from 'react';
+import { useSongStatistics } from './useSongStatistics';
+import { useSessionTracking } from './useSessionTracking';
+import { useGeographicTracking } from './useGeographicTracking';
+
+export const useEnhancedTracking = () => {
+  const songStats = useSongStatistics();
+  const sessionTracking = useSessionTracking();
+  const geoTracking = useGeographicTracking();
+
+  // Initialize session when component mounts
+  useEffect(() => {
+    sessionTracking.startSession();
+    
+    // Cleanup function to end session
+    return () => {
+      sessionTracking.endSession();
+    };
+  }, []);
+
+  const startPlayTracking = async (songId: string) => {
+    // Update session activity
+    sessionTracking.updateSessionActivity();
+    
+    // Record geographic activity
+    await geoTracking.recordListeningActivity();
+    
+    // Start song play tracking
+    await songStats.startPlayTracking(songId);
+  };
+
+  const endPlayTracking = async (songId: string, songDuration?: number, wasValidPlay?: boolean) => {
+    // Update session activity
+    sessionTracking.updateSessionActivity();
+    
+    // End song play tracking
+    await songStats.endPlayTracking(songId, songDuration);
+    
+    // If it was a valid play, increment session song count
+    if (wasValidPlay) {
+      await sessionTracking.incrementSongPlay();
+    }
+  };
+
+  return {
+    // Song statistics
+    ...songStats,
+    
+    // Session tracking
+    session: sessionTracking.session,
+    getSessionId: sessionTracking.getSessionId,
+    
+    // Geographic tracking
+    location: geoTracking.location,
+    locationLoading: geoTracking.loading,
+    
+    // Enhanced tracking functions
+    startPlayTracking,
+    endPlayTracking,
+    
+    // Activity updates
+    updateActivity: () => {
+      sessionTracking.updateSessionActivity();
+      geoTracking.recordListeningActivity();
+    }
+  };
+};

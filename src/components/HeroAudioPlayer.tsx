@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Play, Pause, Heart, PlayCircle, StopCircle } from "lucide-react";
 import { useAudio } from "@/contexts/AudioContext";
 import { useSongLikes } from '@/hooks/useSongLikes';
+import { useEnhancedTracking } from '@/hooks/useEnhancedTracking';
 
 const formatTime = (s: number) => {
   if (!isFinite(s)) return "0:00";
@@ -36,10 +37,13 @@ const HeroAudioPlayer = () => {
     error: likesError 
   } = useSongLikes();
 
+  const { updateActivity } = useEnhancedTracking();
+
   console.log('HeroAudioPlayer: likesLoading =', likesLoading);
   console.log('HeroAudioPlayer: getTotalLikes =', getTotalLikes);
 
   const handlePlayClick = (songId: string, songIndex: number) => {
+    updateActivity(); // Track user interaction
     if (songIndex === currentSongIndex && isPlaying) {
       togglePlay();
     } else if (songIndex === currentSongIndex && isLoadedAndReady) {
@@ -51,6 +55,7 @@ const HeroAudioPlayer = () => {
 
   const handleLikeClick = async (songId: string, e: React.MouseEvent) => {
     e.stopPropagation();
+    updateActivity(); // Track user interaction
     console.log('Like clicked for song:', songId);
     try {
       await toggleLike(songId);

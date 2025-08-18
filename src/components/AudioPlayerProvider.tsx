@@ -2,6 +2,7 @@ import React from 'react';
 import AudioPlayer, { SONGS } from '@/components/AudioPlayer';
 import { AudioProvider } from '@/contexts/AudioContext';
 import { useAudioPlayer } from '@/hooks/useAudioPlayer';
+import { useEnhancedTracking } from '@/hooks/useEnhancedTracking';
 
 interface AudioPlayerProviderProps {
   children: React.ReactNode;
@@ -9,6 +10,7 @@ interface AudioPlayerProviderProps {
 
 const AudioPlayerProvider: React.FC<AudioPlayerProviderProps> = ({ children }) => {
   const audioPlayerHook = useAudioPlayer(SONGS);
+  const { updateActivity } = useEnhancedTracking();
   const { 
     loadSpecificSong,
     startPlayback,
@@ -26,6 +28,7 @@ const AudioPlayerProvider: React.FC<AudioPlayerProviderProps> = ({ children }) =
   } = audioPlayerHook;
 
   const togglePlay = async () => {
+    updateActivity(); // Track user interaction
     const audio = audioRef.current;
     if (!audio) return;
     
@@ -41,6 +44,7 @@ const AudioPlayerProvider: React.FC<AudioPlayerProviderProps> = ({ children }) =
   };
 
   const nextSong = () => {
+    updateActivity(); // Track user interaction
     if (currentSongIndex < SONGS.length - 1) {
       setCurrentSongIndex(currentSongIndex + 1);
     } else if (isPlaylistMode) {
@@ -51,6 +55,7 @@ const AudioPlayerProvider: React.FC<AudioPlayerProviderProps> = ({ children }) =
   };
 
   const previousSong = () => {
+    updateActivity(); // Track user interaction
     if (currentSongIndex > 0) {
       setCurrentSongIndex(currentSongIndex - 1);
     } else {

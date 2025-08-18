@@ -9,7 +9,7 @@ import { LyricLine } from "@/components/SynchronizedLyrics";
 import { PlayTrackingIndicator } from "@/components/PlayTrackingIndicator";
 import { LoadingFeedback } from "@/components/LoadingFeedback";
 import { useIsMobile } from "@/hooks/use-mobile";
-import { useSongStatistics } from "@/hooks/useSongStatistics";
+import { useEnhancedTracking } from "@/hooks/useEnhancedTracking";
 import krisKrugCover from "/lovable-uploads/22e18179-d389-42d3-9924-c6caf65d7d2e.png";
 import pixelWizardCover from "@/assets/pixel-wizard-cover.jpg";
 import macCover from "/lovable-uploads/cc181a8b-6dad-4af6-8731-9a8cbd3ba5d0.png";
@@ -328,7 +328,7 @@ interface AudioPlayerProps {
 
 const AudioPlayer: React.FC<AudioPlayerProps> = ({ audioPlayerHook }) => {
   const isMobile = useIsMobile();
-  const { startPlayTracking, endPlayTracking } = useSongStatistics();
+  const { startPlayTracking, endPlayTracking, updateActivity } = useEnhancedTracking();
   
   const {
     audioRef,
