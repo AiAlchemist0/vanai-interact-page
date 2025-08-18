@@ -35,11 +35,13 @@ const AudioPlayerProvider: React.FC<AudioPlayerProviderProps> = ({ children }) =
     if (audio.paused) {
       try {
         await audio.play();
+        audioPlayerHook.setIsPlaying(true);
       } catch (e) {
         console.error('Audio play failed:', e);
       }
     } else {
       audio.pause();
+      audioPlayerHook.setIsPlaying(false);
     }
   };
 
@@ -104,7 +106,9 @@ const AudioPlayerProvider: React.FC<AudioPlayerProviderProps> = ({ children }) =
       if (audio) {
         // Reset audio to beginning if it was previously playing a different song
         audio.currentTime = 0;
-        audio.play().catch(() => console.log('Autoplay blocked'));
+        audio.play().then(() => {
+          audioPlayerHook.setIsPlaying(true);
+        }).catch(() => console.log('Autoplay blocked'));
       }
     }, 100);
   };
