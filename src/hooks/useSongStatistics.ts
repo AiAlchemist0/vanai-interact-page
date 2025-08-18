@@ -99,7 +99,7 @@ export const useSongStatistics = () => {
     }
   };
 
-  const endPlayTracking = async (songId: string) => {
+  const endPlayTracking = async (songId: string, songDuration?: number) => {
     try {
       const trackingData = playStartTimes.current.get(songId);
       if (!trackingData) {
@@ -108,16 +108,21 @@ export const useSongStatistics = () => {
       }
 
       const duration = Math.floor((Date.now() - trackingData.startTime) / 1000);
-      const isValidPlay = duration >= 15; // 15+ seconds counts as a valid play (lowered from 30)
+      const isValidPlay = duration >= 15; // 15+ seconds counts as a valid play
+      
+      // Calculate completion percentage (assuming average song length of 180 seconds)
+      const estimatedSongLength = songDuration || 180; // 3 minutes default
+      const completionPercentage = Math.min((duration / estimatedSongLength) * 100, 100);
 
-      console.log(`Ending play tracking for song: ${songId}, Duration: ${duration}s, Valid: ${isValidPlay}`);
+      console.log(`Ending play tracking for song: ${songId}, Duration: ${duration}s, Valid: ${isValidPlay}, Completion: ${completionPercentage.toFixed(1)}%`);
 
-      // Update the record with duration and validity
+      // Update the record with duration, validity, and completion percentage
       const { error } = await supabase
         .from('song_plays')
         .update({
           duration_seconds: duration,
-          is_valid_play: isValidPlay
+          is_valid_play: isValidPlay,
+          completion_percentage: completionPercentage
         })
         .eq('id', trackingData.recordId);
 

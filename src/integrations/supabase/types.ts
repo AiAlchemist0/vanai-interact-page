@@ -151,6 +151,7 @@ export type Database = {
       }
       song_plays: {
         Row: {
+          completion_percentage: number | null
           created_at: string
           duration_seconds: number | null
           id: string
@@ -160,6 +161,7 @@ export type Database = {
           user_session_id: string | null
         }
         Insert: {
+          completion_percentage?: number | null
           created_at?: string
           duration_seconds?: number | null
           id?: string
@@ -169,6 +171,7 @@ export type Database = {
           user_session_id?: string | null
         }
         Update: {
+          completion_percentage?: number | null
           created_at?: string
           duration_seconds?: number | null
           id?: string

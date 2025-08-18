@@ -485,7 +485,7 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ audioPlayerHook }) => {
       
       // End play tracking when song ends
       if (hasRecordedPlay) {
-        endPlayTracking(currentSong.id);
+        endPlayTracking(currentSong.id, duration);
         setHasRecordedPlay(false);
       }
       
@@ -556,7 +556,7 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ audioPlayerHook }) => {
   React.useEffect(() => {
     // End tracking for previous song if it was being tracked
     if (hasRecordedPlay) {
-      endPlayTracking(currentSong.id);
+      endPlayTracking(currentSong.id, duration);
     }
     setHasRecordedPlay(false);
   }, [currentSongIndex, endPlayTracking, currentSong.id, hasRecordedPlay]);
@@ -628,7 +628,7 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ audioPlayerHook }) => {
       setIsPlaying(false);
       // End play tracking when manually pausing
       if (hasRecordedPlay) {
-        endPlayTracking(currentSong.id);
+        endPlayTracking(currentSong.id, duration);
         setHasRecordedPlay(false);
       }
     }
