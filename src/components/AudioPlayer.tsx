@@ -293,7 +293,7 @@ const SONGS: Song[] = [
     title: "What does it mean to be human?",
     artist: "Dean Shev aka Chazz",
     src: getAudioUrl("Dean Shev What does it mean to be human.mp3"),
-    coverArt: deanShevHumanCover,
+    coverArt: "/lovable-uploads/2df30be2-e34e-47cd-becd-7c7eacd021f4.png",
     lyrics: [
       { time: 0, text: "What does it mean to be human?" },
       { time: 4, text: "In this age of silicon dreams" },
