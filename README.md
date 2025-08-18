@@ -15,7 +15,7 @@ An innovative platform that transforms Vancouver AI survey data into immersive m
 
 **Created by Dean Shev (aka Chazz)**  
 **Live Demo**: [https://bcai.dev/](https://bcai.dev/)
-
+**YouTube Video**: https://youtu.be/APw8HCxQuAQ?feature=shared
 ### 🚀 The 5-Step Transformation Process
 
 1. **📊 Data Collection** - Comprehensive AI sentiment surveys from Vancouver community
