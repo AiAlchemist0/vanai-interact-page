@@ -42,12 +42,17 @@ const HeroAudioPlayer = () => {
   console.log('HeroAudioPlayer: likesLoading =', likesLoading);
   console.log('HeroAudioPlayer: getTotalLikes =', getTotalLikes);
 
-  const handlePlayClick = (songId: string, songIndex: number) => {
+  const handlePlayClick = async (songId: string, songIndex: number) => {
     updateActivity(); // Track user interaction
     if (songIndex === currentSongIndex && isPlaying) {
       togglePlay();
     } else if (songIndex === currentSongIndex && isLoadedAndReady) {
-      startPlayback();
+      try {
+        await startPlayback();
+      } catch (error) {
+        console.warn('Autoplay blocked, user needs to interact first');
+        // Show visual feedback that user needs to click again
+      }
     } else {
       loadSpecificSong(songId);
     }
@@ -76,7 +81,19 @@ const HeroAudioPlayer = () => {
          <div className="flex items-center justify-between gap-2 mb-2 h-6 sm:h-7">
            <div className="flex items-center gap-2 sm:gap-3 flex-1 min-w-0 max-w-[calc(100%-120px)] sm:max-w-[calc(100%-200px)]">
              <h3 className="text-base sm:text-lg font-semibold text-foreground truncate min-w-0 flex-1 leading-tight">
-               {isPlaylistMode ? "♪ Playing all songs..." : isPlaying ? `♪ ${currentSong?.title || ''}` : 'BC AI Audio Experience'}
+               {isPlaylistMode ? (
+                 <span className="flex items-center gap-2">
+                   <span className="animate-pulse">🎵</span>
+                   Playlist mode • {currentSong?.title || 'Loading...'}
+                 </span>
+               ) : isPlaying ? (
+                 <span className="flex items-center gap-2">
+                   <span className="animate-pulse">♪</span>
+                   {currentSong?.title || ''}
+                 </span>
+               ) : (
+                 'BC AI Audio Experience'
+               )}
              </h3>
            </div>
            <div className="flex items-center gap-2 flex-shrink-0">
@@ -100,24 +117,37 @@ const HeroAudioPlayer = () => {
                  </>
                )}
              </div>
-             <Button
-               onClick={isPlaylistMode ? stopPlaylistMode : startPlaylistMode}
-               variant={isPlaylistMode ? "destructive" : "secondary"}
-               size="sm"
-               className="h-7 px-2 text-xs font-medium flex-shrink-0"
-             >
-               {isPlaylistMode ? (
-                 <>
-                   <StopCircle className="h-3 w-3 mr-1" />
-                   Stop all
-                 </>
-               ) : (
-                 <>
-                   <PlayCircle className="h-3 w-3 mr-1" />
-                   Play all
-                 </>
-               )}
-             </Button>
+              <Button
+                onClick={async () => {
+                  if (isPlaylistMode) {
+                    stopPlaylistMode();
+                  } else {
+                    try {
+                      await startPlaylistMode();
+                    } catch (error) {
+                      console.warn('Autoplay blocked for playlist mode');
+                      // Visual feedback handled by component state
+                    }
+                  }
+                }}
+                variant={isPlaylistMode ? "destructive" : "secondary"}
+                size="sm"
+                className={`h-7 px-2 text-xs font-medium flex-shrink-0 transition-all duration-200 ${
+                  isPlaylistMode ? 'animate-pulse shadow-lg' : ''
+                }`}
+              >
+                {isPlaylistMode ? (
+                  <>
+                    <StopCircle className="h-3 w-3 mr-1" />
+                    Stop playlist
+                  </>
+                ) : (
+                  <>
+                    <PlayCircle className="h-3 w-3 mr-1" />
+                    Play all songs
+                  </>
+                )}
+              </Button>
            </div>
           </div>
           <div className="w-full bg-muted/30 rounded-full h-1.5 relative overflow-hidden">
@@ -133,9 +163,9 @@ const HeroAudioPlayer = () => {
         {songs.map((song, index) => (
           <div
             key={song.id}
-            className={`flex items-center gap-2 sm:gap-3 p-2 sm:p-3 rounded-xl transition-colors duration-200 border touch-manipulation min-h-[64px] sm:min-h-[80px] ${
+            className={`flex items-center gap-2 sm:gap-3 p-2 sm:p-3 rounded-xl transition-all duration-200 border touch-manipulation min-h-[64px] sm:min-h-[80px] ${
               index === currentSongIndex 
-                ? 'bg-primary/10 border-primary/30 shadow-lg' 
+                ? `bg-primary/10 border-primary/30 shadow-lg ${isPlaylistMode ? 'ring-2 ring-primary/20' : ''}` 
                 : 'bg-muted/20 hover:bg-muted/40 border-border/20'
             }`}
           >
