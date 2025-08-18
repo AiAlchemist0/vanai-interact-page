@@ -262,7 +262,9 @@ const HeroAudioPlayer = () => {
                 {loadingSong === song.id ? (
                   <Loader2 className="h-4 w-4 sm:h-5 sm:w-5 animate-spin" />
                 ) : index === currentSongIndex && isPlaying ? (
-                  <AudioWaveform className="h-4 w-4 sm:h-5 sm:w-5 animate-pulse" />
+                  <Pause className="h-4 w-4 sm:h-5 sm:w-5" />
+                ) : index === currentSongIndex && currentSong ? (
+                  <Play className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
                 ) : (
                   <Play className="h-4 w-4 sm:h-5 sm:w-5" />
                 )}
