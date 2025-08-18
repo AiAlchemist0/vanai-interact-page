@@ -1,8 +1,9 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
-import { Play, Pause, Loader2, Music, Square } from 'lucide-react';
+import { Play, Pause, Loader2, Music, Check } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { UnifiedAudioState } from '@/hooks/useUnifiedAudioControl';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 
 interface UnifiedPlayButtonProps {
   audioState: UnifiedAudioState;
@@ -148,17 +149,20 @@ export const UnifiedPlayButton: React.FC<UnifiedPlayButtonProps> = ({
         )}
       </Button>
 
-      {/* Stop button for active songs */}
-      {onStop && (isPlaying || isPaused) && isCurrent && (
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={onStop}
-          className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-green-500 hover:bg-green-600 text-white shadow-lg"
-          aria-label="Stop playback"
-        >
-          <Square className="h-2.5 w-2.5" />
-        </Button>
+      {/* Status indicator for loaded songs */}
+      {(isPlaying || isPaused) && isCurrent && (
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <div className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-green-500 text-white shadow-lg flex items-center justify-center pointer-events-none">
+                <Check className="h-2.5 w-2.5" />
+              </div>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Ready to play</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
       )}
     </div>
   );
