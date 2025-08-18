@@ -3,7 +3,6 @@ import { Button } from "@/components/ui/button";
 import { Play, Pause, Heart, PlayCircle, StopCircle, Loader2, Square } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useAudio } from "@/contexts/AudioContext";
-import { Haptics, ImpactStyle } from '@capacitor/haptics';
 import { useSongLikes } from '@/hooks/useSongLikes';
 import { useEnhancedTracking } from '@/hooks/useEnhancedTracking';
 
@@ -45,20 +44,8 @@ const HeroAudioPlayer = () => {
   console.log('HeroAudioPlayer: likesLoading =', likesLoading);
   console.log('HeroAudioPlayer: getTotalLikes =', getTotalLikes);
 
-  const addHapticFeedback = async (type: 'light' | 'medium' | 'heavy' = 'light') => {
-    try {
-      await Haptics.impact({ 
-        style: type === 'light' ? ImpactStyle.Light : 
-               type === 'medium' ? ImpactStyle.Medium : ImpactStyle.Heavy 
-      });
-    } catch (error) {
-      // Haptics not supported on this platform
-    }
-  };
-
   const handlePlayClick = async (songId: string, songIndex: number) => {
     updateActivity(); // Track user interaction
-    await addHapticFeedback('light');
     
     // If clicking on the currently playing song, toggle play/pause
     if (songIndex === currentSongIndex && isPlaying) {
@@ -102,7 +89,6 @@ const HeroAudioPlayer = () => {
   const handleLikeClick = async (songId: string, e: React.MouseEvent) => {
     e.stopPropagation();
     updateActivity(); // Track user interaction
-    await addHapticFeedback('medium');
     console.log('Like clicked for song:', songId);
     try {
       await toggleLike(songId);
