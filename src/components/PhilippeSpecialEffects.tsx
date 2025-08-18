@@ -24,20 +24,26 @@ const PhilippeSpecialEffects: React.FC<PhilippeSpecialEffectsProps> = ({ type, c
               <div className="philippe-led-border"></div>
             </div>
             
-            {/* Glowing particle effects around player */}
+            {/* Synthwave audio visualizer bars around player */}
             <div className="absolute inset-0 pointer-events-none overflow-hidden">
-              <div className="philippe-particles">
-                {[...Array(8)].map((_, i) => (
+              <div className="philippe-visualizer-bars">
+                {[...Array(12)].map((_, i) => (
                   <div 
                     key={i} 
-                    className="philippe-particle"
+                    className="philippe-visualizer-bar"
                     style={{
-                      animationDelay: `${i * 0.2}s`,
-                      left: `${10 + (i * 12)}%`,
+                      animationDelay: `${i * 0.1}s`,
+                      left: `${5 + (i * 8)}%`,
+                      animationDuration: `${0.5 + (i * 0.1)}s`,
                     }}
                   />
                 ))}
               </div>
+            </div>
+            
+            {/* Neon scan lines */}
+            <div className="absolute inset-0 pointer-events-none">
+              <div className="philippe-scan-lines"></div>
             </div>
           </>
         )}
@@ -51,34 +57,45 @@ const PhilippeSpecialEffects: React.FC<PhilippeSpecialEffectsProps> = ({ type, c
         {children}
         {isPhilippePlayingActive && (
           <>
-            {/* Full page colorful overlay effects */}
+            {/* Synthwave retro grid background */}
             <div className="fixed inset-0 pointer-events-none z-10">
-              <div className="philippe-page-overlay"></div>
+              <div className="philippe-retro-grid"></div>
             </div>
             
-            {/* Edge glow effects */}
+            {/* Synthwave sun/horizon */}
             <div className="fixed inset-0 pointer-events-none z-10">
-              <div className="philippe-edge-glow-top"></div>
-              <div className="philippe-edge-glow-bottom"></div>
-              <div className="philippe-edge-glow-left"></div>
-              <div className="philippe-edge-glow-right"></div>
+              <div className="philippe-synthwave-sun"></div>
             </div>
             
-            {/* Floating color orbs */}
-            <div className="fixed inset-0 pointer-events-none z-10 overflow-hidden">
-              <div className="philippe-floating-orbs">
-                {[...Array(6)].map((_, i) => (
-                  <div 
-                    key={i} 
-                    className="philippe-orb"
-                    style={{
-                      animationDelay: `${i * 0.5}s`,
-                      left: `${15 + (i * 15)}%`,
-                      animationDuration: `${3 + (i * 0.5)}s`,
-                    }}
-                  />
-                ))}
-              </div>
+            {/* Enhanced chromatic aberration overlay */}
+            <div className="fixed inset-0 pointer-events-none z-10">
+              <div className="philippe-chromatic-aberration"></div>
+            </div>
+            
+            {/* Enhanced edge neon tubes */}
+            <div className="fixed inset-0 pointer-events-none z-10">
+              <div className="philippe-neon-tube-top"></div>
+              <div className="philippe-neon-tube-bottom"></div>
+              <div className="philippe-neon-tube-left"></div>
+              <div className="philippe-neon-tube-right"></div>
+            </div>
+            
+            {/* Corner geometric accents */}
+            <div className="fixed inset-0 pointer-events-none z-10">
+              <div className="philippe-corner-accent philippe-corner-tl"></div>
+              <div className="philippe-corner-accent philippe-corner-tr"></div>
+              <div className="philippe-corner-accent philippe-corner-bl"></div>
+              <div className="philippe-corner-accent philippe-corner-br"></div>
+            </div>
+            
+            {/* Full screen scan lines */}
+            <div className="fixed inset-0 pointer-events-none z-10">
+              <div className="philippe-screen-scanlines"></div>
+            </div>
+            
+            {/* Beat-sync pulsing overlay */}
+            <div className="fixed inset-0 pointer-events-none z-10">
+              <div className="philippe-beat-pulse"></div>
             </div>
           </>
         )}
