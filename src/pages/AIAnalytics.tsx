@@ -7,7 +7,7 @@ import EnhancedTopSongs from "@/components/analytics/EnhancedTopSongs";
 import HourlyPatterns from "@/components/analytics/HourlyPatterns";
 import GeographicMap from "@/components/analytics/GeographicMap";
 import RealTimeMetrics from "@/components/analytics/RealTimeMetrics";
-import { EnhancedSongAnalytics } from "@/components/analytics/EnhancedSongAnalytics";
+
 import AudioPlayerProvider from "@/components/AudioPlayerProvider";
 
 const AIAnalytics = () => {
@@ -76,8 +76,6 @@ const AIAnalytics = () => {
         {/* Geographic Distribution */}
         <GeographicMap />
 
-        {/* Enhanced Song Analytics with Valid Plays vs Attempts */}
-        <EnhancedSongAnalytics />
 
       </div>
     </div>

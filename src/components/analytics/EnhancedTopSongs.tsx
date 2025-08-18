@@ -3,15 +3,18 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Trophy, Play, Heart, Music, RefreshCw, TrendingUp, Clock } from "lucide-react";
+import { Trophy, Play, Heart, Music, RefreshCw, TrendingUp, Clock, SkipForward, Activity } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { getSongMetadata } from "@/utils/songData";
 import { useAudio } from "@/contexts/AudioContext";
 import { Progress } from "@/components/ui/progress";
 
-interface SongStats {
+interface ComprehensiveStats {
   song_id: string;
   total_plays: number;
+  total_attempts: number;
+  avg_duration: number;
+  completion_rate: number;
   last_played_at: string;
 }
 
@@ -24,13 +27,23 @@ interface SongLikeStats {
 interface CombinedSongData {
   song_id: string;
   total_plays: number;
+  total_attempts: number;
+  avg_duration: number;
+  completion_rate: number;
   total_likes: number;
   last_played_at: string;
   last_liked_at: string | null;
   engagement_score: number;
+  conversion_rate: number;
 }
 
 const EnhancedTopSongs = () => {
+  const formatDuration = (seconds: number) => {
+    if (!seconds) return '0:00';
+    const mins = Math.floor(seconds / 60);
+    const secs = Math.floor(seconds % 60);
+    return `${mins}:${secs.toString().padStart(2, '0')}`;
+  };
   const [songs, setSongs] = useState<CombinedSongData[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
@@ -41,41 +54,48 @@ const EnhancedTopSongs = () => {
     try {
       setRefreshing(true);
       
-      // Fetch both play and like statistics
-      const [playsResponse, likesResponse] = await Promise.all([
-        supabase.rpc('get_song_statistics'),
+      // Fetch comprehensive statistics and like statistics
+      const [comprehensiveResponse, likesResponse] = await Promise.all([
+        supabase.rpc('get_comprehensive_song_statistics'),
         supabase.rpc('get_song_like_statistics')
       ]);
 
-      if (playsResponse.error) throw playsResponse.error;
+      if (comprehensiveResponse.error) throw comprehensiveResponse.error;
       if (likesResponse.error) throw likesResponse.error;
 
-      const playsData: SongStats[] = playsResponse.data || [];
+      const comprehensiveData: ComprehensiveStats[] = comprehensiveResponse.data || [];
       const likesData: SongLikeStats[] = likesResponse.data || [];
 
       // Create a map of likes for easy lookup
       const likesMap = new Map(likesData.map(like => [like.song_id, like]));
 
       // Combine data and calculate engagement score
-      const combinedData: CombinedSongData[] = playsData.map(song => {
+      const combinedData: CombinedSongData[] = comprehensiveData.map(song => {
         const likeData = likesMap.get(song.song_id);
         const likes = likeData?.total_likes || 0;
         
         // Calculate engagement score (plays weight 60%, likes weight 40%)
-        const maxPlays = Math.max(...playsData.map(s => s.total_plays));
+        const maxPlays = Math.max(...comprehensiveData.map(s => s.total_plays));
         const maxLikes = Math.max(...likesData.map(l => l.total_likes), 1);
         
         const playsScore = maxPlays > 0 ? (song.total_plays / maxPlays) * 60 : 0;
         const likesScore = maxLikes > 0 ? (likes / maxLikes) * 40 : 0;
         const engagement_score = Math.round(playsScore + likesScore);
 
+        // Calculate conversion rate
+        const conversion_rate = song.total_attempts > 0 ? Math.round((song.total_plays / song.total_attempts) * 100) : 0;
+
         return {
           song_id: song.song_id,
           total_plays: song.total_plays,
+          total_attempts: song.total_attempts,
+          avg_duration: song.avg_duration || 0,
+          completion_rate: song.completion_rate || 0,
           total_likes: likes,
           last_played_at: song.last_played_at,
           last_liked_at: likeData?.last_liked_at || null,
-          engagement_score
+          engagement_score,
+          conversion_rate
         };
       });
 
@@ -88,10 +108,14 @@ const EnhancedTopSongs = () => {
           combinedData.push({
             song_id: likeData.song_id,
             total_plays: 0,
+            total_attempts: 0,
+            avg_duration: 0,
+            completion_rate: 0,
             total_likes: likeData.total_likes,
             last_played_at: '',
             last_liked_at: likeData.last_liked_at,
-            engagement_score: Math.round(likesScore)
+            engagement_score: Math.round(likesScore),
+            conversion_rate: 0
           });
         }
       });
@@ -281,8 +305,8 @@ const EnhancedTopSongs = () => {
                   </div>
                   <p className="text-xs text-slate-400 mb-2 truncate">{metadata.artist}</p>
                   
-                  {/* Stats Row */}
-                  <div className="flex items-center space-x-4 text-xs mb-2">
+                  {/* Primary Stats Row */}
+                  <div className="flex items-center space-x-3 text-xs mb-1">
                     <div className="flex items-center space-x-1">
                       <Play className="h-3 w-3 text-cyan-400" />
                       <span className="text-cyan-400">{song.total_plays}</span>
@@ -292,8 +316,24 @@ const EnhancedTopSongs = () => {
                       <span className="text-pink-400">{song.total_likes}</span>
                     </div>
                     <div className="flex items-center space-x-1">
+                      <Activity className="h-3 w-3 text-orange-400" />
+                      <span className="text-orange-400">{song.total_attempts}</span>
+                    </div>
+                  </div>
+                  
+                  {/* Secondary Stats Row */}
+                  <div className="flex items-center space-x-3 text-xs mb-2">
+                    <div className="flex items-center space-x-1">
+                      <Clock className="h-3 w-3 text-purple-400" />
+                      <span className="text-purple-400">{formatDuration(song.avg_duration)}</span>
+                    </div>
+                    <div className="flex items-center space-x-1">
+                      <SkipForward className="h-3 w-3 text-yellow-400" />
+                      <span className="text-yellow-400">{Math.round(song.completion_rate)}%</span>
+                    </div>
+                    <div className="flex items-center space-x-1">
                       <TrendingUp className="h-3 w-3 text-green-400" />
-                      <span className="text-green-400">{song.engagement_score}%</span>
+                      <span className="text-green-400">{song.conversion_rate}%</span>
                     </div>
                   </div>
                   
