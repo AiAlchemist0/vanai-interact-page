@@ -153,9 +153,16 @@ const EnhancedTopSongs = () => {
     return sorted.slice(0, 10);
   };
 
-  const handlePlaySong = (songId: string) => {
-    loadSpecificSong(songId);
-    startPlayback();
+  const handlePlaySong = async (songId: string) => {
+    try {
+      loadSpecificSong(songId);
+      // Add delay to allow song to load properly
+      setTimeout(() => {
+        startPlayback();
+      }, 200);
+    } catch (error) {
+      console.error('Failed to play song:', error);
+    }
   };
 
   const handleRefresh = () => {

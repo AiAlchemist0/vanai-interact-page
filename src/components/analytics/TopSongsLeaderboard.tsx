@@ -41,9 +41,16 @@ const TopSongsLeaderboard = () => {
 
   const maxPlays = Math.max(...songs.map(song => song.total_plays));
 
-  const handlePlaySong = (songId: string) => {
-    loadSpecificSong(songId);
-    startPlayback();
+  const handlePlaySong = async (songId: string) => {
+    try {
+      loadSpecificSong(songId);
+      // Add delay to allow song to load properly
+      setTimeout(() => {
+        startPlayback();
+      }, 200);
+    } catch (error) {
+      console.error('Failed to play song:', error);
+    }
   };
 
   if (loading) {
