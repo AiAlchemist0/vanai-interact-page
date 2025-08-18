@@ -243,28 +243,35 @@ const HeroAudioPlayer = () => {
                  </p>
                </div>
               
-               {/* Status Message - Fixed Height */}
-               <div className="h-4 mt-1">
-                 {(() => {
-                   const { audioState } = useUnifiedAudioControl(song.id, index);
-                   if (audioState.isLoading) {
-                     return (
-                       <div className="text-xs text-primary font-medium truncate flex items-center gap-1">
-                         <span className="animate-spin">♪</span>
-                         Loading...
-                       </div>
-                     );
-                   }
-                   if (audioState.isPlaying) {
-                     return (
-                       <div className="text-xs text-primary font-medium truncate">
-                         Now playing
-                       </div>
-                     );
-                   }
-                   return null;
-                 })()}
-               </div>
+                {/* Status Message - Fixed Height */}
+                <div className="h-4 mt-1">
+                  {(() => {
+                    const { audioState } = useUnifiedAudioControl(song.id, index);
+                    if (audioState.isLoading) {
+                      return (
+                        <div className="text-xs text-primary font-medium truncate flex items-center gap-1">
+                          <span className="animate-spin">♪</span>
+                          Loading...
+                        </div>
+                      );
+                    }
+                    if (audioState.isPlaying) {
+                      return (
+                        <div className="text-xs text-primary font-medium truncate">
+                          Now playing
+                        </div>
+                      );
+                    }
+                    if (audioState.isPaused && audioState.isCurrent) {
+                      return (
+                        <div className="text-xs text-green-600 font-medium truncate">
+                          Ready to play
+                        </div>
+                      );
+                    }
+                    return null;
+                  })()}
+                </div>
               
                {/* Mini Progress Bar for Current Song - Fixed Height */}
                <div className="h-1 mt-1">

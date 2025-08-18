@@ -151,18 +151,9 @@ export const UnifiedPlayButton: React.FC<UnifiedPlayButtonProps> = ({
 
       {/* Status indicator for loaded songs */}
       {(isPlaying || isPaused) && isCurrent && (
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <div className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-green-500 text-white shadow-lg flex items-center justify-center pointer-events-none">
-                <Check className="h-2.5 w-2.5" />
-              </div>
-            </TooltipTrigger>
-            <TooltipContent>
-              <p>Ready to play</p>
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
+        <div className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-green-500 text-white shadow-lg flex items-center justify-center pointer-events-none">
+          <Check className="h-2.5 w-2.5" />
+        </div>
       )}
     </div>
   );
