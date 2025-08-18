@@ -6,6 +6,8 @@ import { Slider } from "@/components/ui/slider";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { LyricLine } from "@/components/SynchronizedLyrics";
+import { PlayTrackingIndicator } from "@/components/PlayTrackingIndicator";
+import { LoadingFeedback } from "@/components/LoadingFeedback";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useSongStatistics } from "@/hooks/useSongStatistics";
 import krisKrugCover from "/lovable-uploads/22e18179-d389-42d3-9924-c6caf65d7d2e.png";
@@ -878,31 +880,31 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ audioPlayerHook }) => {
             />
           </div>
 
-          {/* Status Messages */}
-          {isLoading && (
-            <div className="text-xs text-muted-foreground text-center flex items-center justify-center gap-2 mt-2">
-              <div className="animate-spin border border-primary border-t-transparent rounded-full w-3 h-3" />
-              {retryCount > 0 ? `Retrying... (${retryCount}/3)` : 'Loading...'}
-            </div>
-          )}
-          
-          {audioError && (
-            <div className="text-xs text-destructive text-center bg-destructive/10 rounded p-2 mt-2">
-              <div className="line-clamp-2">{audioError}</div>
-              {fileAvailable === false && (
-                <button 
-                  onClick={retryFileLoad}
-                  className="bg-destructive/20 hover:bg-destructive/30 rounded px-2 py-1 text-xs mt-1 transition-colors"
-                >
-                  Retry
-                </button>
-              )}
-            </div>
-          )}
-          
-          {autoplayBlocked && !audioError && fileAvailable && (
-            <div className="text-xs text-amber-600 dark:text-amber-400 text-center bg-amber-500/10 rounded p-2 mt-2">
-              🎵 Ready! Click play to start
+          {/* Play Tracking Indicator */}
+          <div className="mt-2">
+            <PlayTrackingIndicator 
+              isTracking={hasRecordedPlay}
+              songTitle={currentSong.title}
+              currentTime={currentTime}
+              isPlaying={isPlaying}
+            />
+          </div>
+
+          {/* Loading Feedback */}
+          <div className="mt-2">
+            <LoadingFeedback
+              isLoading={isLoading}
+              fileAvailable={fileAvailable}
+              audioError={audioError}
+              songTitle={currentSong.title}
+              retryCount={retryCount}
+            />
+          </div>
+
+          {/* Status Messages - Only show if loading feedback isn't already showing */}
+          {!isLoading && !audioError && !autoplayBlocked && (
+            <div className="mt-2 space-y-1">
+              {/* Additional status messages can go here */}
             </div>
           )}
         </div>
