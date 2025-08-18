@@ -4,7 +4,6 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import DashboardStats from "@/components/analytics/DashboardStats";
 import EnhancedTopSongs from "@/components/analytics/EnhancedTopSongs";
-import LikesAnalytics from "@/components/analytics/LikesAnalytics";
 import HourlyPatterns from "@/components/analytics/HourlyPatterns";
 import GeographicMap from "@/components/analytics/GeographicMap";
 import RealTimeMetrics from "@/components/analytics/RealTimeMetrics";
@@ -71,14 +70,8 @@ const AIAnalytics = () => {
         {/* Enhanced Top Songs */}
         <EnhancedTopSongs />
 
-        {/* Main Analytics Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {/* Likes Analytics */}
-          <LikesAnalytics />
-
-          {/* Hourly Listening Patterns */}
-          <HourlyPatterns />
-        </div>
+        {/* Hourly Listening Patterns */}
+        <HourlyPatterns />
 
         {/* Geographic Distribution */}
         <GeographicMap />
