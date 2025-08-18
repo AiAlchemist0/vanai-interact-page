@@ -1,10 +1,12 @@
 import React from 'react';
 import { useAudio } from '@/contexts/AudioContext';
-import { Play, Pause, SkipBack, SkipForward, Square } from 'lucide-react';
+import { SkipBack, SkipForward, Square } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { useUnifiedAudioControl } from '@/hooks/useUnifiedAudioControl';
+import { UnifiedPlayButton } from '@/components/ui/UnifiedPlayButton';
 
 const NowPlayingBanner: React.FC = () => {
-  const { currentSong, isPlaying, togglePlay, nextSong, previousSong, stopPlayback } = useAudio();
+  const { currentSong, nextSong, previousSong, stopPlayback } = useAudio();
 
   if (!currentSong) return null;
 
@@ -38,16 +40,22 @@ const NowPlayingBanner: React.FC = () => {
             >
               <SkipBack className="h-4 w-4" />
             </Button>
-            <Button 
-              size="sm" 
-              variant="ghost" 
-              className="h-9 w-9 sm:h-8 sm:w-8 p-0 text-primary-foreground hover:bg-primary-foreground/20 touch-manipulation"
-              onClick={togglePlay}
-              aria-label={isPlaying ? "Pause" : "Play"}
-            >
-              {isPlaying ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4" />}
-            </Button>
-            <Button 
+            
+            {/* Unified Play/Pause Button */}
+            {(() => {
+              const { audioState, handlePlay } = useUnifiedAudioControl(currentSong?.id || '');
+              return (
+                <UnifiedPlayButton
+                  audioState={audioState}
+                  onPlay={handlePlay}
+                  size="sm"
+                  variant="ghost"
+                  className="h-9 w-9 sm:h-8 sm:w-8 text-primary-foreground hover:bg-primary-foreground/20"
+                />
+              );
+            })()}
+            
+            <Button
               size="sm" 
               variant="ghost" 
               className="h-9 w-9 sm:h-8 sm:w-8 p-0 text-primary-foreground hover:bg-primary-foreground/20 touch-manipulation"
@@ -67,8 +75,10 @@ const NowPlayingBanner: React.FC = () => {
             </Button>
           </div>
 
-          {isPlaying && (
-            <div className="hidden sm:flex items-center gap-1 ml-4">
+          {(() => {
+            const { audioState } = useUnifiedAudioControl(currentSong?.id || '');
+            return audioState.isPlaying && (
+              <div className="hidden sm:flex items-center gap-1 ml-4">
               <div className="flex items-center gap-1">
                 {[...Array(3)].map((_, i) => (
                   <div
@@ -82,8 +92,9 @@ const NowPlayingBanner: React.FC = () => {
                   />
                 ))}
               </div>
-            </div>
-          )}
+              </div>
+            );
+          })()}
         </div>
       </div>
     </div>

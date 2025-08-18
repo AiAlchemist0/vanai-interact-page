@@ -1,10 +1,12 @@
 import React from 'react';
 import { Button } from "@/components/ui/button";
-import { Play, Pause, Heart, PlayCircle, StopCircle, Loader2, Square, AudioWaveform } from "lucide-react";
+import { Heart, PlayCircle, StopCircle, Square } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useAudio } from "@/contexts/AudioContext";
 import { useSongLikes } from '@/hooks/useSongLikes';
 import { useEnhancedTracking } from '@/hooks/useEnhancedTracking';
+import { useUnifiedAudioControl } from '@/hooks/useUnifiedAudioControl';
+import { UnifiedPlayButton } from '@/components/ui/UnifiedPlayButton';
 import PhilippeSpecialEffects from './PhilippeSpecialEffects';
 
 const formatTime = (s: number) => {
@@ -40,52 +42,6 @@ const HeroAudioPlayer = () => {
 
   const { updateActivity } = useEnhancedTracking();
   const { toast } = useToast();
-  const [loadingSong, setLoadingSong] = React.useState<string | null>(null);
-
-  console.log('HeroAudioPlayer: likesLoading =', likesLoading);
-  console.log('HeroAudioPlayer: getTotalLikes =', getTotalLikes);
-
-  const handlePlayClick = async (songId: string, songIndex: number) => {
-    updateActivity(); // Track user interaction
-    
-    // If clicking on the currently playing song, toggle play/pause
-    if (songIndex === currentSongIndex && isPlaying) {
-      togglePlay();
-      return;
-    }
-    
-    // If clicking on the current song and it's paused, resume
-    if (songIndex === currentSongIndex && !isPlaying) {
-      try {
-        togglePlay();
-      } catch (error) {
-        toast({
-          title: "Playback blocked",
-          description: "Please interact with the page first to enable audio.",
-          variant: "destructive"
-        });
-      }
-      return;
-    }
-    
-    // If clicking on a different song, show loading and play it
-    setLoadingSong(songId);
-    try {
-      loadSpecificSong(songId);
-      // Auto-start playback after a brief delay for loading
-      setTimeout(() => {
-        togglePlay();
-        setLoadingSong(null);
-      }, 200);
-    } catch (error) {
-      setLoadingSong(null);
-      toast({
-        title: "Playback failed",
-        description: "Could not play this song. Please try again.",
-        variant: "destructive"
-      });
-    }
-  };
 
   const handleLikeClick = async (songId: string, e: React.MouseEvent) => {
     e.stopPropagation();
@@ -97,6 +53,9 @@ const HeroAudioPlayer = () => {
       console.error('Error toggling like:', error);
     }
   };
+
+  console.log('HeroAudioPlayer: likesLoading =', likesLoading);
+  console.log('HeroAudioPlayer: getTotalLikes =', getTotalLikes);
 
   // Show error state if likes system fails
   if (likesError) {
@@ -239,61 +198,22 @@ const HeroAudioPlayer = () => {
               </div>
             </div>
 
-            {/* Play Button - Left of Album Art */}
+            {/* Unified Play Button */}
             <div className="flex-shrink-0 self-start">
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={() => handlePlayClick(song.id, index)}
-                disabled={loadingSong === song.id}
-                className={`relative w-10 h-10 sm:w-12 sm:h-12 rounded-full transition-all duration-200 touch-manipulation hover-scale ${
-                  index === currentSongIndex && isPlaying
-                    ? 'bg-primary/20 hover:bg-primary/30 text-primary shadow-lg ring-2 ring-primary/30' 
-                    : index === currentSongIndex
-                    ? 'bg-primary/10 hover:bg-primary/20 text-primary border border-primary/30'
-                    : 'hover:bg-primary/20 text-muted-foreground hover:text-primary'
-                }`}
-                aria-label={
-                  loadingSong === song.id 
-                    ? 'Loading song' 
-                    : index === currentSongIndex && isPlaying 
-                    ? 'Pause song' 
-                    : 'Play song'
-                }
-              >
-                {loadingSong === song.id ? (
-                  <Loader2 className="h-4 w-4 sm:h-5 sm:w-5 animate-spin" />
-                ) : index === currentSongIndex && isPlaying ? (
-                  <Pause className="h-4 w-4 sm:h-5 sm:w-5" />
-                ) : index === currentSongIndex && currentSong ? (
-                  <Play className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
-                ) : (
-                  <Play className="h-4 w-4 sm:h-5 sm:w-5" />
-                )}
-                
-                {/* Progress Ring for Currently Playing Song */}
-                {index === currentSongIndex && isPlaying && (
-                  <div className="absolute inset-0 rounded-full">
-                    <svg className="w-full h-full transform -rotate-90" viewBox="0 0 36 36">
-                      <path
-                        d="M18,2.0845 a 15.9155,15.9155 0 0,1 0,31.831 a 15.9155,15.9155 0 0,1 0,-31.831"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeOpacity="0.3"
-                      />
-                      <path
-                        d="M18,2.0845 a 15.9155,15.9155 0 0,1 0,31.831 a 15.9155,15.9155 0 0,1 0,-31.831"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeDasharray={`${progress}, 100`}
-                        className="transition-all duration-300"
-                      />
-                    </svg>
-                  </div>
-                )}
-              </Button>
+              {(() => {
+                const { audioState, handlePlay, handleStop } = useUnifiedAudioControl(song.id, index);
+                return (
+                  <UnifiedPlayButton
+                    audioState={audioState}
+                    onPlay={handlePlay}
+                    onStop={handleStop}
+                    size="lg"
+                    variant="ghost"
+                    showProgress={true}
+                    className="sm:w-12 sm:h-12"
+                  />
+                );
+              })()}
             </div>
 
             {/* Album Art */}
@@ -325,30 +245,44 @@ const HeroAudioPlayer = () => {
               
                {/* Status Message - Fixed Height */}
                <div className="h-4 mt-1">
-                 {loadingSong === song.id && (
-                   <div className="text-xs text-primary font-medium truncate flex items-center gap-1">
-                     <Loader2 className="w-3 h-3 animate-spin" />
-                     Loading...
-                   </div>
-                 )}
-                 {index === currentSongIndex && isPlaying && (
-                   <div className="text-xs text-primary font-medium truncate">
-                     Now playing
-                   </div>
-                 )}
+                 {(() => {
+                   const { audioState } = useUnifiedAudioControl(song.id, index);
+                   if (audioState.isLoading) {
+                     return (
+                       <div className="text-xs text-primary font-medium truncate flex items-center gap-1">
+                         <span className="animate-spin">♪</span>
+                         Loading...
+                       </div>
+                     );
+                   }
+                   if (audioState.isPlaying) {
+                     return (
+                       <div className="text-xs text-primary font-medium truncate">
+                         Now playing
+                       </div>
+                     );
+                   }
+                   return null;
+                 })()}
                </div>
               
-              {/* Mini Progress Bar for Current Song - Fixed Height */}
-              <div className="h-1 mt-1">
-                {index === currentSongIndex && isPlaying && (
-                  <div className="w-full bg-muted/30 rounded-full h-1">
-                    <div 
-                      className="h-full bg-primary rounded-full transition-all duration-300 ease-out"
-                      style={{ width: `${progress}%` }}
-                    />
-                  </div>
-                )}
-              </div>
+               {/* Mini Progress Bar for Current Song - Fixed Height */}
+               <div className="h-1 mt-1">
+                 {(() => {
+                   const { audioState } = useUnifiedAudioControl(song.id, index);
+                   if (audioState.isPlaying) {
+                     return (
+                       <div className="w-full bg-muted/30 rounded-full h-1">
+                         <div 
+                           className="h-full bg-primary rounded-full transition-all duration-300 ease-out"
+                           style={{ width: `${audioState.progress}%` }}
+                         />
+                       </div>
+                     );
+                   }
+                   return null;
+                 })()}
+               </div>
             </div>
             
           </div>

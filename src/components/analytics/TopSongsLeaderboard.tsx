@@ -3,10 +3,12 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Trophy, Play, Clock, TrendingUp, Music } from "lucide-react";
+import { Trophy, Clock, TrendingUp, Music } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { getSongMetadata } from "@/utils/songData";
 import { useAudio } from "@/contexts/AudioContext";
+import { useUnifiedAudioControl } from "@/hooks/useUnifiedAudioControl";
+import { UnifiedPlayButton } from "@/components/ui/UnifiedPlayButton";
 
 interface SongStats {
   song_id: string;
@@ -17,7 +19,7 @@ interface SongStats {
 const TopSongsLeaderboard = () => {
   const [songs, setSongs] = useState<SongStats[]>([]);
   const [loading, setLoading] = useState(true);
-  const { loadSpecificSong, startPlayback, currentSong, isPlaying } = useAudio();
+  const { currentSong, isPlaying } = useAudio();
 
   useEffect(() => {
     const fetchTopSongs = async () => {
@@ -40,18 +42,6 @@ const TopSongsLeaderboard = () => {
   }, []);
 
   const maxPlays = Math.max(...songs.map(song => song.total_plays));
-
-  const handlePlaySong = async (songId: string) => {
-    try {
-      loadSpecificSong(songId);
-      // Add delay to allow song to load properly
-      setTimeout(() => {
-        startPlayback();
-      }, 200);
-    } catch (error) {
-      console.error('Failed to play song:', error);
-    }
-  };
 
   if (loading) {
     return (
@@ -103,9 +93,8 @@ const TopSongsLeaderboard = () => {
                     ? 'bg-gradient-to-r from-blue-500/20 to-purple-500/20 border border-blue-500/40 shadow-lg shadow-blue-500/20' 
                     : isTop3 
                       ? 'bg-gradient-to-r from-yellow-500/10 to-orange-500/10 border border-yellow-500/20' 
-                      : 'bg-slate-800/30 hover:bg-slate-800/50'
+                    : 'bg-slate-800/30 hover:bg-slate-800/50'
                 }`}
-                onClick={() => handlePlaySong(song.song_id)}
               >
                 {/* Rank Badge */}
                 <div className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm ${
@@ -163,25 +152,20 @@ const TopSongsLeaderboard = () => {
                   </div>
                 </div>
 
-                {/* Play Button & Stats */}
+                {/* Unified Play Button */}
                 <div className="flex flex-col items-center space-y-2">
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handlePlaySong(song.song_id);
-                    }}
-                    className={`w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 ${
-                      isCurrentlyPlaying 
-                        ? 'bg-blue-500 text-white shadow-lg shadow-blue-500/30' 
-                        : 'bg-slate-700 text-slate-300 hover:bg-slate-600 group-hover:scale-110'
-                    }`}
-                  >
-                    {isCurrentlyPlaying ? (
-                      <Music className="h-4 w-4" />
-                    ) : (
-                      <Play className="h-4 w-4 ml-0.5" />
-                    )}
-                  </button>
+                  {(() => {
+                    const { audioState, handlePlay } = useUnifiedAudioControl(song.song_id);
+                    return (
+                      <UnifiedPlayButton
+                        audioState={audioState}
+                        onPlay={handlePlay}
+                        size="md"
+                        variant="compact"
+                        className="w-10 h-10"
+                      />
+                    );
+                  })()}
                   
                   <div className="text-center space-y-0.5">
                     <div className="text-xs text-slate-500">

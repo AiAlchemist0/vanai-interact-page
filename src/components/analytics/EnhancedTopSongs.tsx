@@ -3,10 +3,12 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Trophy, Play, Heart, Music, RefreshCw, TrendingUp, Clock, SkipForward, Activity } from "lucide-react";
+import { Trophy, Heart, Music, RefreshCw, TrendingUp, Clock, SkipForward, Activity } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { getSongMetadata } from "@/utils/songData";
 import { useAudio } from "@/contexts/AudioContext";
+import { useUnifiedAudioControl } from "@/hooks/useUnifiedAudioControl";
+import { UnifiedPlayButton } from "@/components/ui/UnifiedPlayButton";
 import { Progress } from "@/components/ui/progress";
 
 interface ComprehensiveStats {
@@ -48,7 +50,7 @@ const EnhancedTopSongs = () => {
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [viewMode, setViewMode] = useState<'plays' | 'likes' | 'engagement'>('likes');
-  const { loadSpecificSong, startPlayback, currentSong, isPlaying } = useAudio();
+  const { currentSong, isPlaying } = useAudio();
 
   const fetchData = async () => {
     try {
@@ -153,18 +155,6 @@ const EnhancedTopSongs = () => {
     return sorted.slice(0, 10);
   };
 
-  const handlePlaySong = async (songId: string) => {
-    try {
-      loadSpecificSong(songId);
-      // Add delay to allow song to load properly
-      setTimeout(() => {
-        startPlayback();
-      }, 200);
-    } catch (error) {
-      console.error('Failed to play song:', error);
-    }
-  };
-
   const handleRefresh = () => {
     fetchData();
   };
@@ -230,7 +220,7 @@ const EnhancedTopSongs = () => {
         {/* View Mode Toggles */}
         <div className="flex space-x-1 mt-3">
           {[
-            { key: 'plays', label: 'Most Played', icon: Play },
+            { key: 'plays', label: 'Most Played', icon: Music },
             { key: 'likes', label: 'Most Liked', icon: Heart },
             { key: 'engagement', label: 'Top Engagement', icon: TrendingUp }
           ].map(({ key, label, icon: Icon }) => (
@@ -271,9 +261,8 @@ const EnhancedTopSongs = () => {
                     ? 'bg-gradient-to-r from-blue-500/20 to-purple-500/20 border border-blue-500/40 shadow-lg shadow-blue-500/20' 
                     : isTop3 
                       ? 'bg-gradient-to-r from-yellow-500/10 to-orange-500/10 border border-yellow-500/20' 
-                      : 'bg-slate-800/30 hover:bg-slate-800/50'
+                    : 'bg-slate-800/30 hover:bg-slate-800/50'
                 }`}
-                onClick={() => handlePlaySong(song.song_id)}
               >
                 {/* Rank Badge */}
                 <div className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm ${
@@ -313,10 +302,10 @@ const EnhancedTopSongs = () => {
                   <p className="text-xs text-slate-400 mb-2 truncate">{metadata.artist}</p>
                   
                   {/* Primary Stats Row */}
-                  <div className="flex items-center space-x-3 text-xs mb-1">
-                    <div className="flex items-center space-x-1">
-                      <Play className="h-3 w-3 text-cyan-400" />
-                      <span className="text-cyan-400">{song.total_plays}</span>
+                   <div className="flex items-center space-x-3 text-xs mb-1">
+                     <div className="flex items-center space-x-1">
+                       <Music className="h-3 w-3 text-cyan-400" />
+                       <span className="text-cyan-400">{song.total_plays}</span>
                     </div>
                     <div className="flex items-center space-x-1">
                       <Heart className="h-3 w-3 text-pink-400" />
@@ -367,25 +356,20 @@ const EnhancedTopSongs = () => {
                   </div>
                 </div>
 
-                {/* Action Button & Last Activity */}
+                {/* Unified Play Button */}
                 <div className="flex flex-col items-center space-y-2">
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handlePlaySong(song.song_id);
-                    }}
-                    className={`w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 ${
-                      isCurrentlyPlaying 
-                        ? 'bg-blue-500 text-white shadow-lg shadow-blue-500/30' 
-                        : 'bg-slate-700 text-slate-300 hover:bg-slate-600 group-hover:scale-110'
-                    }`}
-                  >
-                    {isCurrentlyPlaying ? (
-                      <Music className="h-4 w-4" />
-                    ) : (
-                      <Play className="h-4 w-4 ml-0.5" />
-                    )}
-                  </button>
+                  {(() => {
+                    const { audioState, handlePlay } = useUnifiedAudioControl(song.song_id);
+                    return (
+                      <UnifiedPlayButton
+                        audioState={audioState}
+                        onPlay={handlePlay}
+                        size="md"
+                        variant="compact"
+                        className="w-10 h-10"
+                      />
+                    );
+                  })()}
                   
                   <div className="text-center space-y-0.5">
                     <div className="text-xs text-slate-500 flex items-center">
