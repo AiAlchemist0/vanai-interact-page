@@ -4,7 +4,7 @@ import { Play, Pause, SkipBack, SkipForward } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 const NowPlayingBanner: React.FC = () => {
-  const { currentSong, isPlaying } = useAudio();
+  const { currentSong, isPlaying, togglePlay, nextSong, previousSong } = useAudio();
 
   if (!currentSong) return null;
 
@@ -29,13 +29,28 @@ const NowPlayingBanner: React.FC = () => {
           </div>
 
           <div className="flex items-center gap-0.5 sm:gap-1">
-            <Button size="sm" variant="ghost" className="h-9 w-9 sm:h-8 sm:w-8 p-0 text-primary-foreground hover:bg-primary-foreground/20 touch-manipulation">
+            <Button 
+              size="sm" 
+              variant="ghost" 
+              className="h-9 w-9 sm:h-8 sm:w-8 p-0 text-primary-foreground hover:bg-primary-foreground/20 touch-manipulation"
+              onClick={previousSong}
+            >
               <SkipBack className="h-4 w-4" />
             </Button>
-            <Button size="sm" variant="ghost" className="h-9 w-9 sm:h-8 sm:w-8 p-0 text-primary-foreground hover:bg-primary-foreground/20 touch-manipulation">
+            <Button 
+              size="sm" 
+              variant="ghost" 
+              className="h-9 w-9 sm:h-8 sm:w-8 p-0 text-primary-foreground hover:bg-primary-foreground/20 touch-manipulation"
+              onClick={togglePlay}
+            >
               {isPlaying ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4" />}
             </Button>
-            <Button size="sm" variant="ghost" className="h-9 w-9 sm:h-8 sm:w-8 p-0 text-primary-foreground hover:bg-primary-foreground/20 touch-manipulation">
+            <Button 
+              size="sm" 
+              variant="ghost" 
+              className="h-9 w-9 sm:h-8 sm:w-8 p-0 text-primary-foreground hover:bg-primary-foreground/20 touch-manipulation"
+              onClick={nextSong}
+            >
               <SkipForward className="h-4 w-4" />
             </Button>
           </div>
