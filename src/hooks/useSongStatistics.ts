@@ -90,7 +90,7 @@ export const useSongStatistics = () => {
       }
 
       const duration = Math.floor((Date.now() - trackingData.startTime) / 1000);
-      const isValidPlay = duration >= 30; // 30+ seconds counts as a valid play
+      const isValidPlay = duration >= 15; // 15+ seconds counts as a valid play (lowered from 30)
 
       console.log(`Ending play tracking for song: ${songId}, Duration: ${duration}s, Valid: ${isValidPlay}`);
 
