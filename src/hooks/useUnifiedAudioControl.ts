@@ -61,26 +61,17 @@ export const useUnifiedAudioControl = (songId: string, songIndex?: number) => {
       return;
     }
     
-    // If clicking on a different song, behave exactly like "Play all songs" button
+    // If clicking on a different song, load it and start playback immediately
     setLoadingSong(songId);
     try {
       // Load the specific song first
       loadSpecificSong(songId);
       
-      // Use the same timing and approach as startPlaylistMode (100ms delay)
-      setTimeout(async () => {
-        try {
-          await startPlaylistMode();
-          setLoadingSong(null);
-        } catch (error) {
-          setLoadingSong(null);
-          toast({
-            title: "Autoplay blocked",
-            description: "Please interact with the page first to enable playlist mode.",
-            variant: "destructive"
-          });
-        }
-      }, 100);
+      // Start playlist mode immediately with proper error handling
+      setTimeout(() => {
+        startPlaylistMode();
+        setLoadingSong(null);
+      }, 50); // Reduced delay for better UX
     } catch (error) {
       setLoadingSong(null);
       toast({

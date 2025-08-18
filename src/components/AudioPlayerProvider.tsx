@@ -98,15 +98,15 @@ const AudioPlayerProvider: React.FC<AudioPlayerProviderProps> = ({ children }) =
     updateActivity(); // Track user interaction
     setIsPlaylistMode(true);
     
-    // If not already playing, start from current song
-    if (!isPlaying) {
-      setTimeout(() => {
-        const audio = audioRef.current;
-        if (audio) {
-          audio.play().catch(() => console.log('Autoplay blocked'));
-        }
-      }, 100);
-    }
+    // Always start playback for the current song, regardless of previous state
+    setTimeout(() => {
+      const audio = audioRef.current;
+      if (audio) {
+        // Reset audio to beginning if it was previously playing a different song
+        audio.currentTime = 0;
+        audio.play().catch(() => console.log('Autoplay blocked'));
+      }
+    }, 100);
   };
 
   const stopPlaylistMode = () => {
