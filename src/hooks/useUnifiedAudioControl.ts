@@ -27,13 +27,13 @@ export const useUnifiedAudioControl = (songId: string, songIndex?: number) => {
   const { updateActivity } = useEnhancedTracking();
   const [loadingSong, setLoadingSong] = useState<string | null>(null);
 
+  // Standardized current song detection - prioritize songId match for consistency
   const isCurrent = currentSong?.id === songId;
-  const isCurrentIndex = songIndex !== undefined ? songIndex === currentSongIndex : isCurrent;
   
   const audioState: UnifiedAudioState = {
     isLoading: loadingSong === songId,
-    isPlaying: isCurrentIndex && isPlaying,
-    isPaused: isCurrentIndex && !isPlaying && currentSong !== null,
+    isPlaying: isCurrent && isPlaying,
+    isPaused: isCurrent && !isPlaying && currentSong !== null,
     isCurrent: isCurrent,
     progress: isCurrent ? progress : 0
   };
@@ -42,13 +42,13 @@ export const useUnifiedAudioControl = (songId: string, songIndex?: number) => {
     updateActivity();
     
     // If clicking on the currently playing song, toggle play/pause
-    if (isCurrentIndex && isPlaying) {
+    if (isCurrent && isPlaying) {
       togglePlay();
       return;
     }
     
     // If clicking on the current song and it's paused, resume
-    if (isCurrentIndex && !isPlaying && currentSong) {
+    if (isCurrent && !isPlaying && currentSong) {
       try {
         togglePlay();
       } catch (error) {
