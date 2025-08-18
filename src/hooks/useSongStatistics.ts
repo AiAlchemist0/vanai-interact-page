@@ -11,7 +11,7 @@ export const useSongStatistics = () => {
   const [statistics, setStatistics] = useState<SongStatistics[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const playStartTimes = useRef<Map<string, { startTime: number; recordId: string }>>(new Map());
+  const playStartTimes = useRef<Map<string, { startTime: number; recordId: string; debugInterval?: any }>>(new Map());
 
   const fetchStatistics = async () => {
     try {
@@ -72,10 +72,28 @@ export const useSongStatistics = () => {
       // Store start time and record ID for duration calculation
       playStartTimes.current.set(songId, {
         startTime: Date.now(),
-        recordId: data.id
+        recordId: data.id,
+        debugInterval: undefined
       });
 
       console.log('Play tracking started for song:', songId, 'Record ID:', data.id);
+      
+      // Debug: Log every 5 seconds to track listening progress
+      const startTime = Date.now();
+      const debugInterval = setInterval(() => {
+        const elapsed = Math.floor((Date.now() - startTime) / 1000);
+        console.log(`⏱️ Listening progress for ${songId}: ${elapsed}s`);
+        if (elapsed === 15) {
+          console.log(`✅ ${songId} reached valid play threshold (15s)! This will count as a valid play.`);
+        }
+      }, 5000);
+      
+      // Update the stored data with the debug interval
+      playStartTimes.current.set(songId, {
+        startTime: Date.now(),
+        recordId: data.id,
+        debugInterval: debugInterval as any
+      });
     } catch (err) {
       console.error('Error starting play tracking:', err);
     }
@@ -108,7 +126,10 @@ export const useSongStatistics = () => {
         throw error;
       }
 
-      // Clean up tracking data
+      // Clean up tracking data and debug interval
+      if (trackingData.debugInterval) {
+        clearInterval(trackingData.debugInterval);
+      }
       playStartTimes.current.delete(songId);
 
       console.log('Play tracking completed for song:', songId);

@@ -573,6 +573,7 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ audioPlayerHook }) => {
               setShouldAutoPlay(false);
               // Start play tracking when auto-playing
               if (!hasRecordedPlay) {
+                console.log('🎵 Auto-play: Starting play tracking for:', currentSong.title);
                 startPlayTracking(currentSong.id);
                 setHasRecordedPlay(true);
               }
@@ -611,6 +612,7 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ audioPlayerHook }) => {
         setAudioError(null);
         // Start play tracking when manually starting
         if (!hasRecordedPlay) {
+          console.log('▶️ Manual play: Starting play tracking for:', currentSong.title);
           startPlayTracking(currentSong.id);
           setHasRecordedPlay(true);
         }

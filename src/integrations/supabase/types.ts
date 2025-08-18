@@ -245,6 +245,17 @@ export type Database = {
         Args: { p_song_id: string; p_user_session_id: string }
         Returns: boolean
       }
+      get_comprehensive_song_statistics: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          avg_duration: number
+          completion_rate: number
+          last_played_at: string
+          song_id: string
+          total_attempts: number
+          total_plays: number
+        }[]
+      }
       get_dashboard_stats: {
         Args: Record<PropertyKey, never>
         Returns: {
