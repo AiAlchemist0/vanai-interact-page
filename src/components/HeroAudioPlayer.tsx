@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button } from "@/components/ui/button";
-import { Play, Pause, Heart, PlayCircle, StopCircle, Loader2, Square } from "lucide-react";
+import { Play, Pause, Heart, PlayCircle, StopCircle, Loader2, Square, AudioWaveform } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useAudio } from "@/contexts/AudioContext";
 import { useSongLikes } from '@/hooks/useSongLikes';
@@ -262,7 +262,7 @@ const HeroAudioPlayer = () => {
                 {loadingSong === song.id ? (
                   <Loader2 className="h-4 w-4 sm:h-5 sm:w-5 animate-spin" />
                 ) : index === currentSongIndex && isPlaying ? (
-                  <Pause className="h-4 w-4 sm:h-5 sm:w-5" />
+                  <AudioWaveform className="h-4 w-4 sm:h-5 sm:w-5 animate-pulse" />
                 ) : (
                   <Play className="h-4 w-4 sm:h-5 sm:w-5" />
                 )}
