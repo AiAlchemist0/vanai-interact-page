@@ -24,7 +24,6 @@ export const useAudioPlayer = (songs: Song[]) => {
   const [fileAvailable, setFileAvailable] = React.useState<boolean | null>(null);
   const [retryCount, setRetryCount] = React.useState(0);
   const [showLyricsOnly, setShowLyricsOnly] = React.useState(false);
-  const [playbackMode, setPlaybackMode] = React.useState<"off" | "next" | "repeat" | "repeat-all">("next");
   const [isLoadedAndReady, setIsLoadedAndReady] = React.useState(false);
   const [isPlaylistMode, setIsPlaylistMode] = React.useState(false);
 
@@ -86,8 +85,6 @@ export const useAudioPlayer = (songs: Song[]) => {
     setRetryCount,
     showLyricsOnly,
     setShowLyricsOnly,
-    playbackMode,
-    setPlaybackMode,
     isLoadedAndReady,
     setIsLoadedAndReady,
     isPlaylistMode,

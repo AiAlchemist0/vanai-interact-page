@@ -356,8 +356,6 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ audioPlayerHook }) => {
     setRetryCount,
     showLyricsOnly,
     setShowLyricsOnly,
-    playbackMode,
-    setPlaybackMode,
     isPlaylistMode,
     setIsPlaylistMode,
     currentSong,
@@ -489,7 +487,10 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ audioPlayerHook }) => {
         setHasRecordedPlay(false);
       }
       
-      // Handle playlist mode first (highest priority)
+      // Only auto-advance if user has interacted with the player
+      if (!hasUserInteracted) return;
+      
+      // Handle playlist mode (auto-advance through all songs)
       if (isPlaylistMode) {
         const nextIndex = currentSongIndex < SONGS.length - 1 ? currentSongIndex + 1 : 0;
         setCurrentSongIndex(nextIndex);
@@ -497,35 +498,8 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ audioPlayerHook }) => {
         return;
       }
       
-      // Only auto-advance if user has interacted with the player
-      if (!hasUserInteracted) return;
-      
-      // Handle different playback modes
-      switch (playbackMode) {
-        case "next":
-          if (currentSongIndex < SONGS.length - 1) {
-            setCurrentSongIndex(currentSongIndex + 1);
-            setShouldAutoPlay(true);
-          }
-          break;
-        case "repeat":
-          // Repeat current song
-          audio.currentTime = 0;
-          audio.play().then(() => {
-            setIsPlaying(true);
-          }).catch(() => setAutoplayBlocked(true));
-          break;
-        case "repeat-all":
-          // Go to next song, or loop back to first
-          const nextIndex = currentSongIndex < SONGS.length - 1 ? currentSongIndex + 1 : 0;
-          setCurrentSongIndex(nextIndex);
-          setShouldAutoPlay(true);
-          break;
-        case "off":
-        default:
-          // Do nothing
-          break;
-      }
+      // When not in playlist mode, don't auto-advance
+      // User can manually navigate or enable playlist mode
     };
 
     audio.addEventListener("loadedmetadata", onLoaded);
@@ -720,40 +694,13 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ audioPlayerHook }) => {
     }
   };
 
-  const togglePlaybackMode = () => {
-    const modes: Array<"off" | "next" | "repeat" | "repeat-all"> = ["off", "next", "repeat", "repeat-all"];
-    const currentIndex = modes.indexOf(playbackMode);
-    const nextIndex = (currentIndex + 1) % modes.length;
-    setPlaybackMode(modes[nextIndex]);
-  };
-
-  const getPlaybackModeIcon = () => {
-    switch (playbackMode) {
-      case "off":
-        return <StopCircle size={14} />;
-      case "next":
-        return <ArrowRight size={14} />;
-      case "repeat":
-        return <Repeat1 size={14} />;
-      case "repeat-all":
-        return <Repeat size={14} />;
-      default:
-        return <ArrowRight size={14} />;
-    }
-  };
-
-  const getPlaybackModeLabel = () => {
-    switch (playbackMode) {
-      case "off":
-        return "No auto-play";
-      case "next":
-        return "Auto-play next";
-      case "repeat":
-        return "Repeat current";
-      case "repeat-all":
-        return "Repeat all";
-      default:
-        return "Auto-play next";
+  // Simplified playback mode - just toggle playlist mode
+  const togglePlaylistMode = () => {
+    updateActivity();
+    if (isPlaylistMode) {
+      setIsPlaylistMode(false);
+    } else {
+      setIsPlaylistMode(true);
     }
   };
 
@@ -845,13 +792,13 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ audioPlayerHook }) => {
               {!isMobile && (
                 <>
                   <Button 
-                    variant="outline" 
+                    variant={isPlaylistMode ? "default" : "outline"}
                     size="sm" 
-                    onClick={togglePlaybackMode}
-                    title={getPlaybackModeLabel()}
-                    aria-label={getPlaybackModeLabel()}
+                    onClick={togglePlaylistMode}
+                    title={isPlaylistMode ? "Stop playlist mode" : "Start playlist mode"}
+                    aria-label={isPlaylistMode ? "Stop playlist mode" : "Start playlist mode"}
                   >
-                    {getPlaybackModeIcon()}
+                    <ArrowRight size={14} />
                   </Button>
 
                   <Button variant="secondary" size="sm" asChild>

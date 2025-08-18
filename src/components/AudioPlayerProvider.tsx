@@ -71,19 +71,24 @@ const AudioPlayerProvider: React.FC<AudioPlayerProviderProps> = ({ children }) =
   };
 
   const startPlaylistMode = () => {
+    updateActivity(); // Track user interaction
     setIsPlaylistMode(true);
-    setCurrentSongIndex(0); // Start from first song
-    setTimeout(() => {
-      const audio = audioRef.current;
-      if (audio) {
-        audio.play().catch(() => console.log('Autoplay blocked'));
-      }
-    }, 100);
+    
+    // If not already playing, start from current song
+    if (!isPlaying) {
+      setTimeout(() => {
+        const audio = audioRef.current;
+        if (audio) {
+          audio.play().catch(() => console.log('Autoplay blocked'));
+        }
+      }, 100);
+    }
   };
 
   const stopPlaylistMode = () => {
+    updateActivity(); // Track user interaction
     setIsPlaylistMode(false);
-    stopPlayback();
+    // Don't stop playback, just disable auto-advance
   };
 
   const contextValue = {
