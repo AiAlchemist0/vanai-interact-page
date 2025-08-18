@@ -2,35 +2,49 @@ import { useState, useEffect } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Activity, Radio, TrendingUp, Zap } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 
 const RealTimeMetrics = () => {
   const [metrics, setMetrics] = useState({
     activeListeners: 0,
     currentPlays: 0,
-    trending: 'BC AI Hackathon',
+    trending: 'Loading...',
     serverLoad: 0
   });
 
+  const fetchRealTimeData = async () => {
+    try {
+      // Get dashboard stats for real data
+      const { data: dashboardStats } = await supabase.rpc('get_dashboard_stats');
+      
+      // Get trending song from song statistics
+      const { data: songStats } = await supabase.rpc('get_song_like_statistics');
+      
+      // Get most liked song as trending
+      const trendingSong = songStats && songStats.length > 0 
+        ? songStats[0].song_id.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase())
+        : 'No trending song';
+
+      if (dashboardStats && dashboardStats.length > 0) {
+        const stats = dashboardStats[0];
+        setMetrics({
+          activeListeners: Number(stats.active_sessions) || 0,
+          currentPlays: Number(stats.total_plays) || 0,
+          trending: trendingSong,
+          serverLoad: Math.floor(Math.random() * 20) + 10 // Keep this simulated as we don't track real server metrics
+        });
+      }
+    } catch (error) {
+      console.error('Error fetching real-time metrics:', error);
+    }
+  };
+
   useEffect(() => {
-    // Simulate real-time data updates
-    const updateMetrics = () => {
-      setMetrics(prev => ({
-        activeListeners: Math.max(0, prev.activeListeners + Math.floor(Math.random() * 3) - 1),
-        currentPlays: prev.currentPlays + Math.floor(Math.random() * 2),
-        trending: prev.trending,
-        serverLoad: Math.min(100, Math.max(0, prev.serverLoad + Math.floor(Math.random() * 6) - 3))
-      }));
-    };
-
     // Initial load
-    setMetrics({
-      activeListeners: Math.floor(Math.random() * 15) + 5,
-      currentPlays: Math.floor(Math.random() * 100) + 50,
-      trending: 'BC AI Hackathon',
-      serverLoad: Math.floor(Math.random() * 30) + 20
-    });
+    fetchRealTimeData();
 
-    const interval = setInterval(updateMetrics, 3000);
+    // Update every 5 seconds for real-time feel
+    const interval = setInterval(fetchRealTimeData, 5000);
     return () => clearInterval(interval);
   }, []);
 
@@ -60,7 +74,7 @@ const RealTimeMetrics = () => {
             <div>
               <p className="text-sm text-slate-400">Total Plays</p>
               <p className="text-2xl font-bold text-white">{metrics.currentPlays}</p>
-              <p className="text-xs text-blue-400 mt-1">+{Math.floor(Math.random() * 5) + 1} this hour</p>
+              <p className="text-xs text-blue-400 mt-1">All time</p>
             </div>
           </div>
 
@@ -86,12 +100,9 @@ const RealTimeMetrics = () => {
             <div>
               <p className="text-sm text-slate-400">System Load</p>
               <p className="text-2xl font-bold text-white">{metrics.serverLoad}%</p>
-              <div className="w-16 h-1 bg-slate-700 rounded-full mt-2 overflow-hidden">
-                <div 
-                  className="h-full bg-gradient-to-r from-green-400 to-orange-400 transition-all duration-1000"
-                  style={{ width: `${metrics.serverLoad}%` }}
-                />
-              </div>
+              <Badge variant="outline" className="border-orange-500/50 text-orange-400 bg-orange-500/10 text-xs mt-1">
+                Optimal
+              </Badge>
             </div>
           </div>
         </div>

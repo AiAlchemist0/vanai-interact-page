@@ -86,48 +86,6 @@ const AIAnalytics = () => {
         {/* Detailed Song Analytics */}
         <SongAnalytics />
 
-        {/* AI Insights Panel */}
-        <Card className="bg-slate-900/50 border-purple-500/30 shadow-2xl shadow-purple-500/10 backdrop-blur-xl">
-          <CardHeader className="border-b border-purple-500/20">
-            <CardTitle className="flex items-center space-x-2 text-purple-300">
-              <Zap className="h-5 w-5 text-yellow-400" />
-              <span>AI-Powered Insights</span>
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="p-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              <div className="p-4 bg-gradient-to-br from-purple-500/10 to-pink-500/10 rounded-xl border border-purple-500/20">
-                <div className="flex items-center space-x-2 mb-2">
-                  <TrendingUp className="h-4 w-4 text-green-400" />
-                  <span className="text-sm font-medium text-green-400">Trending Prediction</span>
-                </div>
-                <p className="text-slate-300 text-sm">
-                  AI models predict alternative rock will see a 23% increase in plays this week based on current patterns.
-                </p>
-              </div>
-              
-              <div className="p-4 bg-gradient-to-br from-cyan-500/10 to-blue-500/10 rounded-xl border border-cyan-500/20">
-                <div className="flex items-center space-x-2 mb-2">
-                  <Users className="h-4 w-4 text-cyan-400" />
-                  <span className="text-sm font-medium text-cyan-400">Community Insight</span>
-                </div>
-                <p className="text-slate-300 text-sm">
-                  Vancouver listeners show 34% higher engagement with indie music compared to other BC regions.
-                </p>
-              </div>
-
-              <div className="p-4 bg-gradient-to-br from-pink-500/10 to-rose-500/10 rounded-xl border border-pink-500/20">
-                <div className="flex items-center space-x-2 mb-2">
-                  <Clock className="h-4 w-4 text-pink-400" />
-                  <span className="text-sm font-medium text-pink-400">Optimal Release Time</span>
-                </div>
-                <p className="text-slate-300 text-sm">
-                  Peak engagement occurs between 7-9 PM PST, making it the ideal window for new releases.
-                </p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
       </div>
     </div>
     </AudioPlayerProvider>
