@@ -5,6 +5,7 @@ import { useToast } from "@/hooks/use-toast";
 import { useAudio } from "@/contexts/AudioContext";
 import { useSongLikes } from '@/hooks/useSongLikes';
 import { useEnhancedTracking } from '@/hooks/useEnhancedTracking';
+import PhilippeSpecialEffects from './PhilippeSpecialEffects';
 
 const formatTime = (s: number) => {
   if (!isFinite(s)) return "0:00";
@@ -103,7 +104,8 @@ const HeroAudioPlayer = () => {
   }
 
   return (
-    <div className="bg-card/20 backdrop-blur-xl border border-border/20 rounded-3xl px-2 py-3 sm:p-4 shadow-elegant lg:max-w-none xl:max-w-7xl lg:w-full">
+    <PhilippeSpecialEffects type="player">
+      <div className="bg-card/20 backdrop-blur-xl border border-border/20 rounded-3xl px-2 py-3 sm:p-4 shadow-elegant lg:max-w-none xl:max-w-7xl lg:w-full">
       {/* Compact Header */}
        <div className="mb-3 sm:mb-4">
          <div className="flex items-center justify-between gap-2 mb-2 h-6 sm:h-7">
@@ -352,7 +354,8 @@ const HeroAudioPlayer = () => {
           </div>
         ))}
       </div>
-    </div>
+      </div>
+    </PhilippeSpecialEffects>
   );
 };
 

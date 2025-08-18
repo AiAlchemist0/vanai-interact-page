@@ -9,11 +9,13 @@ import Footer from "@/components/Footer";
 import AudioPlayerProvider from "@/components/AudioPlayerProvider";
 import NowPlayingBanner from "@/components/NowPlayingBanner";
 import EnhancedAnalytics from "@/components/EnhancedAnalytics";
+import PhilippeSpecialEffects from "@/components/PhilippeSpecialEffects";
 
 const Index = () => {
   return (
     <AudioPlayerProvider>
-      <div className="min-h-screen bg-background pt-20">
+      <PhilippeSpecialEffects type="page">
+        <div className="min-h-screen bg-background pt-20">
         <div className="pt-0">
           <Hero />
           <VisionBanner />
@@ -29,7 +31,8 @@ const Index = () => {
           <Methodology />
           <Footer />
         </div>
-      </div>
+        </div>
+      </PhilippeSpecialEffects>
     </AudioPlayerProvider>
   );
 };
