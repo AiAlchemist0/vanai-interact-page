@@ -111,10 +111,21 @@ export const useOptimizedInput = (onStrum: () => void, gameState: string) => {
     if (gameState !== "playing") return;
 
     const handleTouchStart = (e: TouchEvent) => {
-      e.preventDefault();
+      // Check if touch is on modal or UI elements - don't prevent default for these
+      const target = e.target as Element;
+      const isModalElement = target?.closest('[role="dialog"]') || 
+                            target?.closest('.modal') ||
+                            target?.closest('[data-radix-dialog-content]') ||
+                            target?.closest('button') ||
+                            target?.closest('[data-radix-dialog-overlay]');
       
-      // Switch to touch mode
-      if (inputMethod !== 'touch') {
+      // Only prevent default for game elements, not modal/UI elements
+      if (!isModalElement) {
+        e.preventDefault();
+      }
+      
+      // Switch to touch mode only for game elements
+      if (inputMethod !== 'touch' && !isModalElement) {
         setInputMethod('touch');
         setPressedFrets(new Set()); // Clear keyboard state
       }
