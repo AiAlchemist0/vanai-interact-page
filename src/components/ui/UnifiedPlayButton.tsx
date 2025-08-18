@@ -154,7 +154,7 @@ export const UnifiedPlayButton: React.FC<UnifiedPlayButtonProps> = ({
           variant="ghost"
           size="icon"
           onClick={onStop}
-          className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-destructive hover:bg-destructive/90 text-destructive-foreground"
+          className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-green-500 hover:bg-green-600 text-white shadow-lg"
           aria-label="Stop playback"
         >
           <Square className="h-2.5 w-2.5" />
