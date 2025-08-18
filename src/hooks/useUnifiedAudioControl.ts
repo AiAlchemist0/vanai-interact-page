@@ -19,7 +19,8 @@ export const useUnifiedAudioControl = (songId: string, songIndex?: number) => {
     progress,
     loadSpecificSong,
     togglePlay,
-    stopPlayback
+    stopPlayback,
+    startPlaylistMode
   } = useAudio();
   
   const { toast } = useToast();
@@ -60,15 +61,26 @@ export const useUnifiedAudioControl = (songId: string, songIndex?: number) => {
       return;
     }
     
-    // If clicking on a different song, show loading and play it
+    // If clicking on a different song, behave exactly like "Play all songs" button
     setLoadingSong(songId);
     try {
+      // Load the specific song first
       loadSpecificSong(songId);
-      // Auto-start playback after a brief delay for loading
-      setTimeout(() => {
-        togglePlay();
-        setLoadingSong(null);
-      }, 200);
+      
+      // Use the same timing and approach as startPlaylistMode (100ms delay)
+      setTimeout(async () => {
+        try {
+          await startPlaylistMode();
+          setLoadingSong(null);
+        } catch (error) {
+          setLoadingSong(null);
+          toast({
+            title: "Autoplay blocked",
+            description: "Please interact with the page first to enable playlist mode.",
+            variant: "destructive"
+          });
+        }
+      }, 100);
     } catch (error) {
       setLoadingSong(null);
       toast({
