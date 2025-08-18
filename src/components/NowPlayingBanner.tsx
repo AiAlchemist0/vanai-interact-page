@@ -1,10 +1,10 @@
 import React from 'react';
 import { useAudio } from '@/contexts/AudioContext';
-import { Play, Pause, SkipBack, SkipForward } from 'lucide-react';
+import { Play, Pause, SkipBack, SkipForward, Square } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 const NowPlayingBanner: React.FC = () => {
-  const { currentSong, isPlaying, togglePlay, nextSong, previousSong } = useAudio();
+  const { currentSong, isPlaying, togglePlay, nextSong, previousSong, stopPlayback } = useAudio();
 
   if (!currentSong) return null;
 
@@ -34,6 +34,7 @@ const NowPlayingBanner: React.FC = () => {
               variant="ghost" 
               className="h-9 w-9 sm:h-8 sm:w-8 p-0 text-primary-foreground hover:bg-primary-foreground/20 touch-manipulation"
               onClick={previousSong}
+              aria-label="Previous song"
             >
               <SkipBack className="h-4 w-4" />
             </Button>
@@ -42,6 +43,7 @@ const NowPlayingBanner: React.FC = () => {
               variant="ghost" 
               className="h-9 w-9 sm:h-8 sm:w-8 p-0 text-primary-foreground hover:bg-primary-foreground/20 touch-manipulation"
               onClick={togglePlay}
+              aria-label={isPlaying ? "Pause" : "Play"}
             >
               {isPlaying ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4" />}
             </Button>
@@ -50,8 +52,18 @@ const NowPlayingBanner: React.FC = () => {
               variant="ghost" 
               className="h-9 w-9 sm:h-8 sm:w-8 p-0 text-primary-foreground hover:bg-primary-foreground/20 touch-manipulation"
               onClick={nextSong}
+              aria-label="Next song"
             >
               <SkipForward className="h-4 w-4" />
+            </Button>
+            <Button 
+              size="sm" 
+              variant="ghost" 
+              className="h-8 w-8 p-0 text-primary-foreground hover:bg-primary-foreground/20 touch-manipulation"
+              onClick={stopPlayback}
+              aria-label="Stop playback"
+            >
+              <Square className="h-3 w-3" />
             </Button>
           </div>
 

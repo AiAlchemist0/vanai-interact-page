@@ -1,7 +1,9 @@
 import React from 'react';
 import { Button } from "@/components/ui/button";
-import { Play, Pause, Heart, PlayCircle, StopCircle } from "lucide-react";
+import { Play, Pause, Heart, PlayCircle, StopCircle, Loader2, Square } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 import { useAudio } from "@/contexts/AudioContext";
+import { Haptics, ImpactStyle } from '@capacitor/haptics';
 import { useSongLikes } from '@/hooks/useSongLikes';
 import { useEnhancedTracking } from '@/hooks/useEnhancedTracking';
 
@@ -15,15 +17,14 @@ const formatTime = (s: number) => {
 const HeroAudioPlayer = () => {
   const { 
     isPlaying, 
-    isLoadedAndReady, 
     currentSong, 
     songs, 
     progress, 
     loadSpecificSong,
-    startPlayback,
     togglePlay,
     startPlaylistMode,
     stopPlaylistMode,
+    stopPlayback,
     isPlaylistMode,
     currentSongIndex
   } = useAudio();
@@ -38,29 +39,70 @@ const HeroAudioPlayer = () => {
   } = useSongLikes();
 
   const { updateActivity } = useEnhancedTracking();
+  const { toast } = useToast();
+  const [loadingSong, setLoadingSong] = React.useState<string | null>(null);
 
   console.log('HeroAudioPlayer: likesLoading =', likesLoading);
   console.log('HeroAudioPlayer: getTotalLikes =', getTotalLikes);
 
+  const addHapticFeedback = async (type: 'light' | 'medium' | 'heavy' = 'light') => {
+    try {
+      await Haptics.impact({ 
+        style: type === 'light' ? ImpactStyle.Light : 
+               type === 'medium' ? ImpactStyle.Medium : ImpactStyle.Heavy 
+      });
+    } catch (error) {
+      // Haptics not supported on this platform
+    }
+  };
+
   const handlePlayClick = async (songId: string, songIndex: number) => {
     updateActivity(); // Track user interaction
+    await addHapticFeedback('light');
+    
+    // If clicking on the currently playing song, toggle play/pause
     if (songIndex === currentSongIndex && isPlaying) {
       togglePlay();
-    } else if (songIndex === currentSongIndex && isLoadedAndReady) {
+      return;
+    }
+    
+    // If clicking on the current song and it's paused, resume
+    if (songIndex === currentSongIndex && !isPlaying) {
       try {
-        await startPlayback();
+        togglePlay();
       } catch (error) {
-        console.warn('Autoplay blocked, user needs to interact first');
-        // Show visual feedback that user needs to click again
+        toast({
+          title: "Playback blocked",
+          description: "Please interact with the page first to enable audio.",
+          variant: "destructive"
+        });
       }
-    } else {
+      return;
+    }
+    
+    // If clicking on a different song, show loading and play it
+    setLoadingSong(songId);
+    try {
       loadSpecificSong(songId);
+      // Auto-start playback after a brief delay for loading
+      setTimeout(() => {
+        togglePlay();
+        setLoadingSong(null);
+      }, 200);
+    } catch (error) {
+      setLoadingSong(null);
+      toast({
+        title: "Playback failed",
+        description: "Could not play this song. Please try again.",
+        variant: "destructive"
+      });
     }
   };
 
   const handleLikeClick = async (songId: string, e: React.MouseEvent) => {
     e.stopPropagation();
     updateActivity(); // Track user interaction
+    await addHapticFeedback('medium');
     console.log('Like clicked for song:', songId);
     try {
       await toggleLike(songId);
@@ -117,37 +159,58 @@ const HeroAudioPlayer = () => {
                  </>
                )}
              </div>
-              <Button
-                onClick={async () => {
-                  if (isPlaylistMode) {
-                    stopPlaylistMode();
-                  } else {
-                    try {
-                      await startPlaylistMode();
-                    } catch (error) {
-                      console.warn('Autoplay blocked for playlist mode');
-                      // Visual feedback handled by component state
+              <div className="flex items-center gap-1">
+                <Button
+                  onClick={async () => {
+                    if (isPlaylistMode) {
+                      stopPlaylistMode();
+                    } else {
+                      try {
+                        await startPlaylistMode();
+                      } catch (error) {
+                        toast({
+                          title: "Autoplay blocked",
+                          description: "Please interact with the page first to enable playlist mode.",
+                          variant: "destructive"
+                        });
+                      }
                     }
-                  }
-                }}
-                variant={isPlaylistMode ? "destructive" : "secondary"}
-                size="sm"
-                className={`h-7 px-2 text-xs font-medium flex-shrink-0 transition-all duration-200 ${
-                  isPlaylistMode ? 'animate-pulse shadow-lg' : ''
-                }`}
-              >
-                {isPlaylistMode ? (
-                  <>
-                    <StopCircle className="h-3 w-3 mr-1" />
-                    Stop playlist
-                  </>
-                ) : (
-                  <>
-                    <PlayCircle className="h-3 w-3 mr-1" />
-                    Play all songs
-                  </>
+                  }}
+                  variant={isPlaylistMode ? "destructive" : "secondary"}
+                  size="sm"
+                  className={`h-7 px-2 text-xs font-medium flex-shrink-0 transition-all duration-200 ${
+                    isPlaylistMode ? 'animate-pulse shadow-lg' : ''
+                  }`}
+                >
+                  {isPlaylistMode ? (
+                    <>
+                      <StopCircle className="h-3 w-3 mr-1" />
+                      Stop playlist
+                    </>
+                  ) : (
+                    <>
+                      <PlayCircle className="h-3 w-3 mr-1" />
+                      Play all songs
+                    </>
+                  )}
+                </Button>
+                
+                {/* Stop Button */}
+                {(isPlaying || isPlaylistMode) && (
+                  <Button
+                    onClick={() => {
+                      stopPlayback();
+                      if (isPlaylistMode) stopPlaylistMode();
+                    }}
+                    variant="outline"
+                    size="sm"
+                    className="h-7 px-2 text-xs font-medium flex-shrink-0"
+                  >
+                    <Square className="h-3 w-3 mr-1" />
+                    Stop
+                  </Button>
                 )}
-              </Button>
+              </div>
            </div>
           </div>
           <div className="w-full bg-muted/30 rounded-full h-1.5 relative overflow-hidden">
@@ -194,18 +257,51 @@ const HeroAudioPlayer = () => {
                 variant="ghost"
                 size="icon"
                 onClick={() => handlePlayClick(song.id, index)}
-                className={`w-10 h-10 sm:w-12 sm:h-12 rounded-full transition-all duration-200 touch-manipulation hover-scale ${
-                  index === currentSongIndex && isLoadedAndReady
-                    ? 'bg-green-500/20 hover:bg-green-500/30 text-green-600 border border-green-500/30 shadow-lg animate-pulse' 
-                    : index === currentSongIndex && isPlaying
-                    ? 'bg-primary/20 hover:bg-primary/30 text-primary shadow-lg' 
+                disabled={loadingSong === song.id}
+                className={`relative w-10 h-10 sm:w-12 sm:h-12 rounded-full transition-all duration-200 touch-manipulation hover-scale ${
+                  index === currentSongIndex && isPlaying
+                    ? 'bg-primary/20 hover:bg-primary/30 text-primary shadow-lg ring-2 ring-primary/30' 
+                    : index === currentSongIndex
+                    ? 'bg-primary/10 hover:bg-primary/20 text-primary border border-primary/30'
                     : 'hover:bg-primary/20 text-muted-foreground hover:text-primary'
                 }`}
+                aria-label={
+                  loadingSong === song.id 
+                    ? 'Loading song' 
+                    : index === currentSongIndex && isPlaying 
+                    ? 'Pause song' 
+                    : 'Play song'
+                }
               >
-                {index === currentSongIndex && isPlaying ? (
+                {loadingSong === song.id ? (
+                  <Loader2 className="h-4 w-4 sm:h-5 sm:w-5 animate-spin" />
+                ) : index === currentSongIndex && isPlaying ? (
                   <Pause className="h-4 w-4 sm:h-5 sm:w-5" />
                 ) : (
                   <Play className="h-4 w-4 sm:h-5 sm:w-5" />
+                )}
+                
+                {/* Progress Ring for Currently Playing Song */}
+                {index === currentSongIndex && isPlaying && (
+                  <div className="absolute inset-0 rounded-full">
+                    <svg className="w-full h-full transform -rotate-90" viewBox="0 0 36 36">
+                      <path
+                        d="M18,2.0845 a 15.9155,15.9155 0 0,1 0,31.831 a 15.9155,15.9155 0 0,1 0,-31.831"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeOpacity="0.3"
+                      />
+                      <path
+                        d="M18,2.0845 a 15.9155,15.9155 0 0,1 0,31.831 a 15.9155,15.9155 0 0,1 0,-31.831"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeDasharray={`${progress}, 100`}
+                        className="transition-all duration-300"
+                      />
+                    </svg>
+                  </div>
                 )}
               </Button>
             </div>
@@ -237,14 +333,20 @@ const HeroAudioPlayer = () => {
                  </p>
                </div>
               
-              {/* Status Message for Loaded Song - Fixed Height */}
-              <div className="h-4 mt-1">
-                {index === currentSongIndex && isLoadedAndReady && (
-                  <div className="text-xs text-green-600 font-medium truncate">
-                    Ready to play!
-                  </div>
-                )}
-              </div>
+               {/* Status Message - Fixed Height */}
+               <div className="h-4 mt-1">
+                 {loadingSong === song.id && (
+                   <div className="text-xs text-primary font-medium truncate flex items-center gap-1">
+                     <Loader2 className="w-3 h-3 animate-spin" />
+                     Loading...
+                   </div>
+                 )}
+                 {index === currentSongIndex && isPlaying && (
+                   <div className="text-xs text-primary font-medium truncate">
+                     Now playing
+                   </div>
+                 )}
+               </div>
               
               {/* Mini Progress Bar for Current Song - Fixed Height */}
               <div className="h-1 mt-1">
