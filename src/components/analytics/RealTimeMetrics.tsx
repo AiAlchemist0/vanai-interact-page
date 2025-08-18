@@ -43,9 +43,45 @@ const RealTimeMetrics = () => {
     // Initial load
     fetchRealTimeData();
 
+    // Set up real-time subscriptions for immediate updates
+    const songPlaysChannel = supabase
+      .channel('song-plays-changes')
+      .on(
+        'postgres_changes',
+        {
+          event: 'INSERT',
+          schema: 'public',
+          table: 'song_plays'
+        },
+        () => {
+          fetchRealTimeData();
+        }
+      )
+      .subscribe();
+
+    const songLikesChannel = supabase
+      .channel('song-likes-changes')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'song_likes'
+        },
+        () => {
+          fetchRealTimeData();
+        }
+      )
+      .subscribe();
+
     // Update every 5 seconds for real-time feel
     const interval = setInterval(fetchRealTimeData, 5000);
-    return () => clearInterval(interval);
+    
+    return () => {
+      clearInterval(interval);
+      supabase.removeChannel(songPlaysChannel);
+      supabase.removeChannel(songLikesChannel);
+    };
   }, []);
 
   return (

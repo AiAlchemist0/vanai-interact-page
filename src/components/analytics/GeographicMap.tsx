@@ -38,14 +38,7 @@ const GeographicMap = () => {
         setGeoData(data || []);
       } catch (error) {
         console.error('Error fetching geographic data:', error);
-        // Mock data for demonstration
-        setGeoData([
-          { region: 'Vancouver', city: 'Vancouver', listening_count: 156, last_activity: new Date().toISOString() },
-          { region: 'Victoria', city: 'Victoria', listening_count: 89, last_activity: new Date().toISOString() },
-          { region: 'Surrey', city: 'Surrey', listening_count: 67, last_activity: new Date().toISOString() },
-          { region: 'Kelowna', city: 'Kelowna', listening_count: 34, last_activity: new Date().toISOString() },
-          { region: 'Burnaby', city: 'Burnaby', listening_count: 45, last_activity: new Date().toISOString() }
-        ]);
+        setGeoData([]); // Set empty array instead of mock data
       } finally {
         setLoading(false);
       }
@@ -53,9 +46,29 @@ const GeographicMap = () => {
 
     fetchGeographicData();
     
-    // Refresh every 2 minutes
-    const interval = setInterval(fetchGeographicData, 120000);
-    return () => clearInterval(interval);
+    // Set up real-time subscription for geographic data updates
+    const channel = supabase
+      .channel('geographic-data-changes')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'geographic_data'
+        },
+        () => {
+          fetchGeographicData();
+        }
+      )
+      .subscribe();
+
+    // Refresh every 30 seconds instead of 2 minutes for more real-time feel
+    const interval = setInterval(fetchGeographicData, 30000);
+    
+    return () => {
+      clearInterval(interval);
+      supabase.removeChannel(channel);
+    };
   }, []);
 
   const maxListening = Math.max(...geoData.map(d => d.listening_count));
