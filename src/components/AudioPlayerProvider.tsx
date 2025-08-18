@@ -45,6 +45,8 @@ const AudioPlayerProvider: React.FC<AudioPlayerProviderProps> = ({ children }) =
 
   const nextSong = () => {
     updateActivity(); // Track user interaction
+    const wasPlaying = isPlaying;
+    
     if (currentSongIndex < SONGS.length - 1) {
       setCurrentSongIndex(currentSongIndex + 1);
     } else if (isPlaylistMode) {
@@ -52,14 +54,36 @@ const AudioPlayerProvider: React.FC<AudioPlayerProviderProps> = ({ children }) =
     } else {
       setCurrentSongIndex(0); // Loop to first song
     }
+
+    // Auto-play if audio was playing before skip
+    if (wasPlaying) {
+      setTimeout(() => {
+        const audio = audioRef.current;
+        if (audio) {
+          audio.play().catch(() => console.log('Autoplay blocked on skip'));
+        }
+      }, 100);
+    }
   };
 
   const previousSong = () => {
     updateActivity(); // Track user interaction
+    const wasPlaying = isPlaying;
+    
     if (currentSongIndex > 0) {
       setCurrentSongIndex(currentSongIndex - 1);
     } else {
       setCurrentSongIndex(SONGS.length - 1); // Loop to last song
+    }
+
+    // Auto-play if audio was playing before skip
+    if (wasPlaying) {
+      setTimeout(() => {
+        const audio = audioRef.current;
+        if (audio) {
+          audio.play().catch(() => console.log('Autoplay blocked on skip'));
+        }
+      }, 100);
     }
   };
 
