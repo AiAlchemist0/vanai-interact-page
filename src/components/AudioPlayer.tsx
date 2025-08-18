@@ -310,6 +310,29 @@ const SONGS: Song[] = [
       { time: 44, text: "In consciousness, we're all pursuing" },
       { time: 48, text: "The missing philosophical link" }
     ] as LyricLine[]
+  },
+  {
+    id: "philippe-pasquier-art-hallucinations",
+    title: "L'Art des Hallucinations de l'IA",
+    artist: "Philippe Pasquier",
+    src: getAudioUrl("L'Art des Hallucinations de l'IA.mp3"),
+    coverArt: "/lovable-uploads/53a7e8c9-c967-4d3d-870c-68e228c2ff3f.png",
+    lyrics: [
+      { time: 0, text: "L'art des hallucinations de l'IA" },
+      { time: 4, text: "Philippe Pasquier explores the way" },
+      { time: 8, text: "Machines dream in vivid colors bright" },
+      { time: 12, text: "Creating visions in digital light" },
+      { time: 16, text: "" },
+      { time: 18, text: "Neural networks paint what cannot be" },
+      { time: 22, text: "Hallucinations set creativity free" },
+      { time: 26, text: "In the space between real and virtual" },
+      { time: 30, text: "Art emerges, beautiful and spiritual" },
+      { time: 34, text: "" },
+      { time: 36, text: "L'art des hallucinations flows" },
+      { time: 40, text: "Where imagination freely goes" },
+      { time: 44, text: "Philippe shows us how AI sees" },
+      { time: 48, text: "Beyond reality's boundaries" }
+    ] as LyricLine[]
   }
 ];
 
