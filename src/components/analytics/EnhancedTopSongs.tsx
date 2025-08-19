@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Trophy, Heart, Music, RefreshCw, TrendingUp, Clock, SkipForward, Activity } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
-import { getSongMetadata } from "@/utils/songData";
+import { getSongMetadata, SONGS } from "@/utils/songData";
 import { useAudio } from "@/contexts/AudioContext";
 import { useUnifiedAudioControl } from "@/hooks/useUnifiedAudioControl";
 import { UnifiedPlayButton } from "@/components/ui/UnifiedPlayButton";
@@ -117,6 +117,24 @@ const EnhancedTopSongs = () => {
             last_played_at: '',
             last_liked_at: likeData.last_liked_at,
             engagement_score: Math.round(likesScore),
+            conversion_rate: 0
+          });
+        }
+      });
+
+      // Ensure all songs from the app catalog are included
+      SONGS.forEach(song => {
+        if (!combinedData.find(data => data.song_id === song.id)) {
+          combinedData.push({
+            song_id: song.id,
+            total_plays: 0,
+            total_attempts: 0,
+            avg_duration: 0,
+            completion_rate: 0,
+            total_likes: 0,
+            last_played_at: '',
+            last_liked_at: null,
+            engagement_score: 0,
             conversion_rate: 0
           });
         }
