@@ -7,9 +7,6 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/comp
 import { Trophy, Heart, Music, RefreshCw, TrendingUp, Clock, SkipForward, Activity, Info } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { getSongMetadata, SONGS } from "@/utils/songData";
-import { useAudio } from "@/contexts/AudioContext";
-import { useUnifiedAudioControl } from "@/hooks/useUnifiedAudioControl";
-import { UnifiedPlayButton } from "@/components/ui/UnifiedPlayButton";
 import { Progress } from "@/components/ui/progress";
 import { useAnalyticsRefresh } from '@/contexts/AnalyticsRefreshContext';
 
@@ -52,7 +49,7 @@ const EnhancedTopSongs = () => {
   const [loading, setLoading] = useState(true);
   const [viewMode, setViewMode] = useState<'plays' | 'likes' | 'engagement'>('likes');
   const [lastRefreshed, setLastRefreshed] = useState<Date>(new Date());
-  const { currentSong, isPlaying } = useAudio();
+  
   const { registerRefresh, unregisterRefresh } = useAnalyticsRefresh();
 
   const fetchData = async () => {
@@ -291,16 +288,14 @@ const EnhancedTopSongs = () => {
                                song.engagement_score;
             const progressPercentage = (currentValue / maxValue) * 100;
             const isTop3 = index < 3;
-            const isCurrentlyPlaying = currentSong?.id === song.song_id && isPlaying;
+            
             
             return (
               <div 
                 key={song.song_id}
-                className={`group flex items-center space-x-4 p-4 rounded-xl transition-all duration-300 hover:scale-[1.02] cursor-pointer ${
-                  isCurrentlyPlaying 
-                    ? 'bg-gradient-to-r from-blue-500/20 to-purple-500/20 border border-blue-500/40 shadow-lg shadow-blue-500/20' 
-                    : isTop3 
-                      ? 'bg-gradient-to-r from-yellow-500/10 to-orange-500/10 border border-yellow-500/20' 
+                className={`group flex items-center space-x-4 p-4 rounded-xl transition-all duration-300 hover:scale-[1.02] ${
+                  isTop3 
+                    ? 'bg-gradient-to-r from-yellow-500/10 to-orange-500/10 border border-yellow-500/20' 
                     : 'bg-slate-800/30 hover:bg-slate-800/50'
                 }`}
               >
@@ -326,11 +321,6 @@ const EnhancedTopSongs = () => {
                       }}
                     />
                   </div>
-                  {isCurrentlyPlaying && (
-                    <div className="absolute inset-0 bg-blue-500/20 rounded-xl flex items-center justify-center">
-                      <div className="w-3 h-3 bg-blue-400 rounded-full animate-pulse" />
-                    </div>
-                  )}
                 </div>
 
                 {/* Song Info */}
@@ -396,30 +386,14 @@ const EnhancedTopSongs = () => {
                   </div>
                 </div>
 
-                {/* Unified Play Button */}
-                <div className="flex flex-col items-center space-y-2">
-                  <UnifiedPlayButton
-                    audioState={{ 
-                      isLoading: false, 
-                      isPlaying: isCurrentlyPlaying, 
-                      isPaused: false, 
-                      isCurrent: currentSong?.id === song.song_id, 
-                      progress: 0 
-                    }}
-                    onPlay={() => window.dispatchEvent(new CustomEvent('audio:play', { detail: { songId: song.song_id } }))}
-                    size="md"
-                    variant="compact"
-                    className="w-10 h-10"
-                  />
-                  
-                  <div className="text-center space-y-0.5">
-                    <div className="text-xs text-slate-500 flex items-center">
-                      <Clock className="h-2.5 w-2.5 mr-0.5" />
-                      {song.last_played_at ? 
-                        new Date(song.last_played_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) :
-                        'No plays'
-                      }
-                    </div>
+                {/* Last Played Date */}
+                <div className="text-center">
+                  <div className="text-xs text-slate-500 flex items-center">
+                    <Clock className="h-2.5 w-2.5 mr-0.5" />
+                    {song.last_played_at ? 
+                      new Date(song.last_played_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) :
+                      'No plays'
+                    }
                   </div>
                 </div>
               </div>
