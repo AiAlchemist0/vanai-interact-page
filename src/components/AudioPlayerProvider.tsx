@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useCallback, useMemo } from 'react';
 import AudioPlayer, { SONGS } from '@/components/AudioPlayer';
 import { AudioProvider } from '@/contexts/AudioContext';
 import { useAudioPlayer } from '@/hooks/useAudioPlayer';
 import { useEnhancedTracking } from '@/hooks/useEnhancedTracking';
+import { usePerformanceMonitor } from '@/hooks/usePerformanceMonitor';
+import ErrorBoundary from '@/components/ErrorBoundary';
 
 interface AudioPlayerProviderProps {
   children: React.ReactNode;
@@ -11,6 +13,7 @@ interface AudioPlayerProviderProps {
 const AudioPlayerProvider: React.FC<AudioPlayerProviderProps> = ({ children }) => {
   const audioPlayerHook = useAudioPlayer(SONGS);
   const { updateActivity } = useEnhancedTracking();
+  const { measureAsync, logPerformanceMetric } = usePerformanceMonitor('AudioPlayerProvider');
   const { 
     loadSpecificSong,
     startPlayback,
@@ -27,25 +30,32 @@ const AudioPlayerProvider: React.FC<AudioPlayerProviderProps> = ({ children }) =
     audioRef
   } = audioPlayerHook;
 
-  const togglePlay = async () => {
-    updateActivity(); // Track user interaction
-    const audio = audioRef.current;
-    if (!audio) return;
-    
-    if (audio.paused) {
-      try {
-        await audio.play();
-        audioPlayerHook.setIsPlaying(true);
-      } catch (e) {
-        console.error('Audio play failed:', e);
+  const togglePlay = useCallback(async () => {
+    return measureAsync(async () => {
+      updateActivity(); // Track user interaction
+      const audio = audioRef.current;
+      if (!audio) return;
+      
+      if (audio.paused) {
+        try {
+          await audio.play();
+          audioPlayerHook.setIsPlaying(true);
+        } catch (e) {
+          console.error('Audio play failed:', e);
+          logPerformanceMetric({
+            componentName: 'AudioPlayerProvider',
+            renderTime: 0,
+            memoryUsage: undefined
+          });
+        }
+      } else {
+        audio.pause();
+        audioPlayerHook.setIsPlaying(false);
       }
-    } else {
-      audio.pause();
-      audioPlayerHook.setIsPlaying(false);
-    }
-  };
+    }, 'togglePlay');
+  }, [updateActivity, audioPlayerHook, audioRef, measureAsync, logPerformanceMetric]);
 
-  const nextSong = () => {
+  const nextSong = useCallback(() => {
     updateActivity(); // Track user interaction
     const wasPlaying = isPlaying;
     
@@ -66,9 +76,9 @@ const AudioPlayerProvider: React.FC<AudioPlayerProviderProps> = ({ children }) =
         }
       }, 100);
     }
-  };
+  }, [updateActivity, isPlaying, currentSongIndex, isPlaylistMode, setCurrentSongIndex, audioRef]);
 
-  const previousSong = () => {
+  const previousSong = useCallback(() => {
     updateActivity(); // Track user interaction
     const wasPlaying = isPlaying;
     
@@ -87,7 +97,7 @@ const AudioPlayerProvider: React.FC<AudioPlayerProviderProps> = ({ children }) =
         }
       }, 100);
     }
-  };
+  }, [updateActivity, isPlaying, currentSongIndex, setCurrentSongIndex, audioRef]);
 
   const stopPlayback = () => {
     const audio = audioRef.current;
@@ -121,7 +131,7 @@ const AudioPlayerProvider: React.FC<AudioPlayerProviderProps> = ({ children }) =
 
   const { startPlayTracking, endPlayTracking } = useEnhancedTracking();
 
-  const contextValue = {
+  const contextValue = useMemo(() => ({
     loadSpecificSong,
     startPlayback,
     togglePlay,
@@ -144,13 +154,21 @@ const AudioPlayerProvider: React.FC<AudioPlayerProviderProps> = ({ children }) =
     startPlayTracking,
     endPlayTracking,
     updateActivity,
-  };
+  }), [
+    loadSpecificSong, startPlayback, togglePlay, nextSong, previousSong,
+    stopPlayback, startPlaylistMode, stopPlaylistMode, isPlaying,
+    isLoadedAndReady, isPlaylistMode, currentSongIndex, currentSong,
+    progress, currentTime, duration, setCurrentSongIndex,
+    startPlayTracking, endPlayTracking, updateActivity
+  ]);
 
   return (
-    <AudioProvider value={contextValue}>
-      {children}
-      <AudioPlayer audioPlayerHook={audioPlayerHook} />
-    </AudioProvider>
+    <ErrorBoundary>
+      <AudioProvider value={contextValue}>
+        {children}
+        <AudioPlayer audioPlayerHook={audioPlayerHook} />
+      </AudioProvider>
+    </ErrorBoundary>
   );
 };
 

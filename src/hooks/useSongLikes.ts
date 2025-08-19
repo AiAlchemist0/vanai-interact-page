@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { supabase } from '@/integrations/supabase/client';
+import { useOptimizedNetworking } from '@/hooks/useOptimizedNetworking';
 
 interface SongLikeStatistics {
   song_id: string;
@@ -16,6 +17,7 @@ export const useSongLikes = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [likedSongs, setLikedSongs] = useState<LikedSongs>({});
+  const { debouncedRequest } = useOptimizedNetworking();
 
   // Generate a unique session ID for anonymous tracking
   const getSessionId = useCallback(() => {
@@ -46,77 +48,86 @@ export const useSongLikes = () => {
     localStorage.setItem(`liked_songs_${sessionId}`, JSON.stringify(likes));
   }, [getSessionId]);
 
-  // Fetch like statistics from database
+  // Fetch like statistics from database with optimized networking
   const fetchStatistics = useCallback(async () => {
-    try {
-      setError(null);
-      const { data, error: fetchError } = await supabase.rpc('get_song_like_statistics');
-      
-      if (fetchError) {
-        throw fetchError;
-      }
-      
-      setStatistics(data || []);
-    } catch (err) {
+    return debouncedRequest(
+      'fetch_like_statistics',
+      async () => {
+        setError(null);
+        const { data, error: fetchError } = await supabase.rpc('get_song_like_statistics');
+        
+        if (fetchError) {
+          throw fetchError;
+        }
+        
+        setStatistics(data || []);
+        return data;
+      },
+      { debounceMs: 500, retryAttempts: 2 }
+    ).catch(err => {
       console.error('Error fetching like statistics:', err);
       setError(err instanceof Error ? err.message : 'Failed to fetch like statistics');
       setStatistics([]);
-    } finally {
+    }).finally(() => {
       setLoading(false);
-    }
-  }, []);
+    });
+  }, [debouncedRequest]);
 
-  // Debounced fetch to prevent excessive re-fetches
-  const debouncedFetchStatistics = useCallback(() => {
-    const timeoutId = setTimeout(fetchStatistics, 300);
-    return () => clearTimeout(timeoutId);
+  // Optimized fetch for real-time updates
+  const optimizedFetchStatistics = useCallback(() => {
+    fetchStatistics();
   }, [fetchStatistics]);
 
-  // Toggle like for a song
+  // Toggle like for a song with optimized networking
   const toggleLike = useCallback(async (songId: string) => {
-    try {
-      setError(null); // Clear any previous errors
-      const sessionId = getSessionId();
-      
-      const { data, error: toggleError } = await supabase.rpc('toggle_song_like', {
-        p_song_id: songId,
-        p_user_session_id: sessionId
-      });
-
-      if (toggleError) {
-        console.error('RPC error:', toggleError);
-        throw toggleError;
-      }
-
-      if (data && data.length > 0) {
-        const { liked, total_likes } = data[0];
+    return debouncedRequest(
+      `toggle_like_${songId}`,
+      async () => {
+        setError(null);
+        const sessionId = getSessionId();
         
-        // Update local liked state
-        const newLikedSongs = { ...likedSongs, [songId]: liked };
-        setLikedSongs(newLikedSongs);
-        saveLikedSongs(newLikedSongs);
-
-        // Update statistics
-        setStatistics(prev => {
-          const existing = prev.find(stat => stat.song_id === songId);
-          if (existing) {
-            return prev.map(stat => 
-              stat.song_id === songId 
-                ? { ...stat, total_likes, last_liked_at: liked ? new Date().toISOString() : stat.last_liked_at }
-                : stat
-            );
-          } else {
-            return [...prev, { 
-              song_id: songId, 
-              total_likes, 
-              last_liked_at: liked ? new Date().toISOString() : null 
-            }];
-          }
+        const { data, error: toggleError } = await supabase.rpc('toggle_song_like', {
+          p_song_id: songId,
+          p_user_session_id: sessionId
         });
 
-        return { liked, total_likes };
-      }
-    } catch (err) {
+        if (toggleError) {
+          console.error('RPC error:', toggleError);
+          throw toggleError;
+        }
+
+        if (data && data.length > 0) {
+          const { liked, total_likes } = data[0];
+          
+          // Update local liked state
+          const newLikedSongs = { ...likedSongs, [songId]: liked };
+          setLikedSongs(newLikedSongs);
+          saveLikedSongs(newLikedSongs);
+
+          // Update statistics
+          setStatistics(prev => {
+            const existing = prev.find(stat => stat.song_id === songId);
+            if (existing) {
+              return prev.map(stat => 
+                stat.song_id === songId 
+                  ? { ...stat, total_likes, last_liked_at: liked ? new Date().toISOString() : stat.last_liked_at }
+                  : stat
+              );
+            } else {
+              return [...prev, { 
+                song_id: songId, 
+                total_likes, 
+                last_liked_at: liked ? new Date().toISOString() : null 
+              }];
+            }
+          });
+
+          return { liked, total_likes };
+        }
+        return null;
+      },
+      { debounceMs: 100, retryAttempts: 2 }
+    ).catch(err => {
       console.error('Error toggling like:', err);
       const errorMessage = err instanceof Error ? err.message : 'Failed to toggle like';
       setError(errorMessage);
@@ -129,10 +140,9 @@ export const useSongLikes = () => {
           variant: "destructive",
         });
       });
-    }
-    
-    return null;
-  }, [getSessionId, likedSongs, saveLikedSongs]);
+      return null;
+    });
+  }, [debouncedRequest, getSessionId, likedSongs, saveLikedSongs]);
 
   // Get like count for a specific song
   const getLikeCount = useCallback((songId: string): number => {
@@ -171,7 +181,7 @@ export const useSongLikes = () => {
           table: 'song_like_statistics'
         },
         () => {
-          debouncedFetchStatistics();
+          optimizedFetchStatistics();
         }
       )
       .subscribe();
@@ -179,7 +189,7 @@ export const useSongLikes = () => {
     return () => {
       supabase.removeChannel(channel);
     };
-  }, [debouncedFetchStatistics, loadLikedSongs]);
+  }, [optimizedFetchStatistics, loadLikedSongs]);
 
   return {
     statistics,

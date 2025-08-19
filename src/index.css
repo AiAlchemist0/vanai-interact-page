@@ -261,28 +261,34 @@ All colors MUST be HSL.
     overflow: hidden;
   }
 
-  /* Philippe Pasquier Special Effects */
-  .philippe-player-effects {
-    filter: brightness(1.1) saturate(1.2);
+  /* Philippe Pasquier Special Effects - Performance Optimized */
+  @media (prefers-reduced-motion: no-preference) {
+    .philippe-player-effects {
+      filter: brightness(1.1) saturate(1.2);
+      will-change: filter;
+    }
   }
 
-  .philippe-led-border {
-    position: absolute;
-    inset: -4px;
-    border-radius: inherit;
-    background: linear-gradient(45deg, 
-      hsl(0, 100%, 60%), 
-      hsl(60, 100%, 60%), 
-      hsl(120, 100%, 60%), 
-      hsl(180, 100%, 60%), 
-      hsl(240, 100%, 60%), 
-      hsl(300, 100%, 60%), 
-      hsl(0, 100%, 60%)
-    );
-    background-size: 400% 400%;
-    animation: philippe-rainbow-border 2s linear infinite;
-    filter: blur(1px);
-    opacity: 0.8;
+  @media (prefers-reduced-motion: no-preference) {
+    .philippe-led-border {
+      position: absolute;
+      inset: -4px;
+      border-radius: inherit;
+      background: linear-gradient(45deg, 
+        hsl(0, 100%, 60%), 
+        hsl(60, 100%, 60%), 
+        hsl(120, 100%, 60%), 
+        hsl(180, 100%, 60%), 
+        hsl(240, 100%, 60%), 
+        hsl(300, 100%, 60%), 
+        hsl(0, 100%, 60%)
+      );
+      background-size: 400% 400%;
+      animation: philippe-rainbow-border 2s linear infinite;
+      filter: blur(1px);
+      opacity: 0.8;
+      will-change: background-position;
+    }
   }
 
   .philippe-led-border::before {
@@ -300,19 +306,22 @@ All colors MUST be HSL.
     inset: 0;
   }
 
-  .philippe-visualizer-bar {
-    position: absolute;
-    bottom: 0;
-    width: 4px;
-    background: linear-gradient(to top, 
-      hsl(var(--primary)), 
-      hsl(var(--ai-cyan)), 
-      hsl(60, 100%, 60%)
-    );
-    border-radius: 2px;
-    animation: philippe-visualizer-pulse 0.6s ease-in-out infinite alternate;
-    box-shadow: 0 0 15px currentColor;
-    filter: blur(0.5px);
+  @media (prefers-reduced-motion: no-preference) {
+    .philippe-visualizer-bar {
+      position: absolute;
+      bottom: 0;
+      width: 4px;
+      background: linear-gradient(to top, 
+        hsl(var(--primary)), 
+        hsl(var(--ai-cyan)), 
+        hsl(60, 100%, 60%)
+      );
+      border-radius: 2px;
+      animation: philippe-visualizer-pulse 0.6s ease-in-out infinite alternate;
+      box-shadow: 0 0 15px currentColor;
+      filter: blur(0.5px);
+      will-change: height, opacity;
+    }
   }
 
   /* Playlist Background Visualizer Bars */
@@ -322,37 +331,43 @@ All colors MUST be HSL.
     z-index: 0;
   }
 
-  .philippe-playlist-visualizer-bar {
-    position: absolute;
-    bottom: 0;
-    width: 10px;
-    background: linear-gradient(to top, 
-      hsl(330, 100%, 60%), /* bright pink/magenta */
-      hsl(15, 100%, 65%), /* vibrant orange */
-      hsl(270, 100%, 70%), /* electric purple */
-      hsl(180, 100%, 60%), /* bright cyan */
-      hsl(120, 100%, 50%), /* vivid green */
-      hsl(60, 100%, 60%) /* yellow/gold */
-    );
-    border-radius: 4px;
-    animation: philippe-playlist-visualizer-pulse 0.8s ease-in-out infinite alternate;
-    box-shadow: 0 0 12px hsl(330, 100%, 60% / 0.8), 0 0 20px hsl(180, 100%, 60% / 0.4);
-    filter: blur(0.2px);
-    opacity: 0.9;
+  @media (prefers-reduced-motion: no-preference) {
+    .philippe-playlist-visualizer-bar {
+      position: absolute;
+      bottom: 0;
+      width: 10px;
+      background: linear-gradient(to top, 
+        hsl(330, 100%, 60%), /* bright pink/magenta */
+        hsl(15, 100%, 65%), /* vibrant orange */
+        hsl(270, 100%, 70%), /* electric purple */
+        hsl(180, 100%, 60%), /* bright cyan */
+        hsl(120, 100%, 50%), /* vivid green */
+        hsl(60, 100%, 60%) /* yellow/gold */
+      );
+      border-radius: 4px;
+      animation: philippe-playlist-visualizer-pulse 0.8s ease-in-out infinite alternate;
+      box-shadow: 0 0 12px hsl(330, 100%, 60% / 0.8), 0 0 20px hsl(180, 100%, 60% / 0.4);
+      filter: blur(0.2px);
+      opacity: 0.9;
+      will-change: height, opacity;
+    }
   }
 
 
   /* Retro Grid Background */
-  .philippe-retro-grid {
-    position: absolute;
-    inset: 0;
-    background-image: 
-      linear-gradient(hsl(var(--ai-cyan) / 0.15) 1px, transparent 1px),
-      linear-gradient(90deg, hsl(var(--ai-cyan) / 0.15) 1px, transparent 1px);
-    background-size: 60px 60px;
-    animation: philippe-grid-move 12s linear infinite;
-    perspective: 1200px;
-    transform-style: preserve-3d;
+  @media (prefers-reduced-motion: no-preference) {
+    .philippe-retro-grid {
+      position: absolute;
+      inset: 0;
+      background-image: 
+        linear-gradient(hsl(var(--ai-cyan) / 0.15) 1px, transparent 1px),
+        linear-gradient(90deg, hsl(var(--ai-cyan) / 0.15) 1px, transparent 1px);
+      background-size: 60px 60px;
+      animation: philippe-grid-move 12s linear infinite;
+      perspective: 1200px;
+      transform-style: preserve-3d;
+      will-change: transform;
+    }
   }
 
 

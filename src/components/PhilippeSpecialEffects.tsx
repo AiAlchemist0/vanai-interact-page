@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { useAudio } from '@/contexts/AudioContext';
+import { useReducedMotion } from '@/hooks/useReducedMotion';
 
 interface PhilippeSpecialEffectsProps {
   type: 'player' | 'page' | 'playlist';
@@ -8,10 +9,13 @@ interface PhilippeSpecialEffectsProps {
 
 const PhilippeSpecialEffects: React.FC<PhilippeSpecialEffectsProps> = ({ type, children }) => {
   const { currentSong, isPlaying } = useAudio();
+  const prefersReducedMotion = useReducedMotion();
   
   // Check if Philippe Pasquier's song is currently playing
-  const isPhilippePlayingActive = 
-    currentSong?.id === "philippe-pasquier-art-hallucinations" && isPlaying;
+  const isPhilippePlayingActive = useMemo(() => 
+    currentSong?.id === "philippe-pasquier-art-hallucinations" && isPlaying && !prefersReducedMotion,
+    [currentSong?.id, isPlaying, prefersReducedMotion]
+  );
 
   if (type === 'player') {
     return (
@@ -51,13 +55,13 @@ const PhilippeSpecialEffects: React.FC<PhilippeSpecialEffectsProps> = ({ type, c
         {children}
         {isPhilippePlayingActive && (
           <>
-            {/* Dancing soundbars as playlist overlay */}
+            {/* Dancing soundbars as playlist overlay - optimized for performance */}
             <div className="absolute inset-0 pointer-events-none overflow-hidden z-50">
-              <div className="philippe-playlist-visualizer-bars">
-                {[...Array(24)].map((_, i) => (
+              <div className="philippe-playlist-visualizer-bars will-change-transform">
+                {Array.from({ length: 24 }, (_, i) => (
                   <div 
                     key={i} 
-                    className="philippe-playlist-visualizer-bar"
+                    className="philippe-playlist-visualizer-bar will-change-transform"
                     style={{
                       animationDelay: `${i * 0.08}s`,
                       left: `${2 + (i * 4)}%`,
