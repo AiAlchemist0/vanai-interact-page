@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogTrigger } from "@/components/ui/dialog";
-import { Lightbulb, Users, BarChart3, MapPin, Gamepad2, Sparkles, Shield, Video } from "lucide-react";
+import { Lightbulb, Users, BarChart3, MapPin, Gamepad2, Sparkles, Shield, Video, Bot } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import heroImage from "@/assets/hero-ai-survey.jpg";
@@ -287,12 +287,17 @@ const Hero = () => {
               </Button>
             </div>
 
-            <Button size="lg" className="gradient-secondary hover:glow-secondary transition-smooth group px-6 py-3" onClick={() => document.getElementById('insights')?.scrollIntoView({
-            behavior: 'smooth'
-          })}>
-              <BarChart3 className="mr-2 w-5 h-5 group-hover:scale-110 transition-transform" />
-              Survey Deep Dive
-            </Button>
+            <div className="flex items-center gap-2">
+              <Button size="lg" className="gradient-secondary hover:glow-secondary transition-smooth group px-6 py-3" onClick={() => document.getElementById('insights')?.scrollIntoView({
+              behavior: 'smooth'
+            })}>
+                <BarChart3 className="mr-2 w-5 h-5 group-hover:scale-110 transition-transform" />
+                Survey Deep Dive
+              </Button>
+              <Button size="sm" variant="outline" className="border-primary/30 hover:border-primary transition-smooth p-2" onClick={() => navigate('/ai-analytics')} aria-label="Go to AI Analytics">
+                <Bot className="w-4 h-4 text-primary" />
+              </Button>
+            </div>
 
             <Dialog>
               <DialogTrigger asChild>
