@@ -73,6 +73,12 @@ const PhilippeSpecialEffects: React.FC<PhilippeSpecialEffectsProps> = ({ type, c
             <div className="fixed inset-0 pointer-events-none z-10">
               <div className="philippe-beat-pulse"></div>
             </div>
+            
+            {/* Dancing hologram */}
+            <div className="philippe-dancing-hologram">
+              <div className="philippe-hologram-figure"></div>
+              <div className="philippe-hologram-scanlines"></div>
+            </div>
           </>
         )}
       </>

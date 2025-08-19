@@ -576,4 +576,129 @@ All colors MUST be HSL.
       opacity: 0.8;
     }
   }
+
+  /* Philippe Dancing Hologram */
+  .philippe-dancing-hologram {
+    position: fixed;
+    bottom: 15%;
+    right: 20%;
+    width: 200px;
+    height: 300px;
+    pointer-events: none;
+    z-index: 15;
+  }
+
+  .philippe-hologram-figure {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(45deg, 
+      rgba(0, 255, 255, 0.3) 0%, 
+      rgba(255, 0, 255, 0.2) 50%, 
+      rgba(0, 255, 255, 0.3) 100%);
+    border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+    position: relative;
+    filter: blur(1px) drop-shadow(0 0 20px cyan);
+    animation: 
+      philippe-dance-sway 1.2s ease-in-out infinite,
+      philippe-dance-arms 2.4s ease-in-out infinite,
+      philippe-hologram-flicker 3s ease-in-out infinite;
+  }
+
+  .philippe-hologram-figure::before {
+    content: '';
+    position: absolute;
+    top: 10%;
+    left: 50%;
+    width: 40px;
+    height: 40px;
+    background: radial-gradient(circle, rgba(0, 255, 255, 0.6) 0%, transparent 70%);
+    border-radius: 50%;
+    transform: translateX(-50%);
+    animation: philippe-dance-head 1.8s ease-in-out infinite;
+  }
+
+  .philippe-hologram-figure::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 60%;
+    height: 30%;
+    background: linear-gradient(180deg, rgba(0, 255, 255, 0.4) 0%, transparent 100%);
+    transform: translateX(-50%);
+    border-radius: 50%;
+  }
+
+  .philippe-hologram-scanlines {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent 0px,
+      transparent 3px,
+      rgba(0, 255, 255, 0.1) 3px,
+      rgba(0, 255, 255, 0.1) 4px
+    );
+    animation: philippe-hologram-scan 2s linear infinite;
+  }
+
+  @keyframes philippe-dance-sway {
+    0%, 100% { 
+      transform: translateX(0) rotate(0deg) scale(1);
+    }
+    25% { 
+      transform: translateX(-10px) rotate(-2deg) scale(1.02);
+    }
+    75% { 
+      transform: translateX(10px) rotate(2deg) scale(1.02);
+    }
+  }
+
+  @keyframes philippe-dance-arms {
+    0%, 100% { 
+      clip-path: ellipse(40% 50% at 50% 50%);
+    }
+    25% { 
+      clip-path: ellipse(45% 55% at 45% 50%);
+    }
+    50% { 
+      clip-path: ellipse(50% 60% at 50% 45%);
+    }
+    75% { 
+      clip-path: ellipse(45% 55% at 55% 50%);
+    }
+  }
+
+  @keyframes philippe-dance-head {
+    0%, 100% { 
+      transform: translateX(-50%) translateY(0);
+    }
+    50% { 
+      transform: translateX(-50%) translateY(-5px);
+    }
+  }
+
+  @keyframes philippe-hologram-flicker {
+    0%, 100% { 
+      opacity: 0.7;
+    }
+    10%, 30%, 70%, 90% { 
+      opacity: 0.9;
+    }
+    20%, 40%, 60%, 80% { 
+      opacity: 0.5;
+    }
+  }
+
+  @keyframes philippe-hologram-scan {
+    0% { 
+      transform: translateY(-100%);
+    }
+    100% { 
+      transform: translateY(100%);
+    }
+  }
 }
