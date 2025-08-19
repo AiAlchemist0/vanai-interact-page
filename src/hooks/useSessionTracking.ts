@@ -27,6 +27,31 @@ export const useSessionTracking = () => {
   const startSession = async () => {
     try {
       const sessionId = getSessionId();
+      
+      // Check if session already exists and is active
+      if (session?.isActive && session.sessionId === sessionId) {
+        console.log('Session already active:', sessionId);
+        return;
+      }
+
+      // Check if session exists in database before creating new one
+      const { data: existingSessions } = await supabase
+        .from('listening_sessions')
+        .select('user_session_id')
+        .eq('user_session_id', sessionId)
+        .is('ended_at', null);
+
+      if (existingSessions && existingSessions.length > 0) {
+        console.log('Session already exists in database:', sessionId);
+        setSession({
+          sessionId,
+          startTime: startTimeRef.current,
+          totalSongsPlayed: songsPlayedRef.current,
+          isActive: true
+        });
+        return;
+      }
+
       const startTime = Date.now();
       startTimeRef.current = startTime;
       lastActivityRef.current = startTime;
