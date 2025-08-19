@@ -2,7 +2,7 @@ import React from 'react';
 import { useAudio } from '@/contexts/AudioContext';
 
 interface PhilippeSpecialEffectsProps {
-  type: 'player' | 'page';
+  type: 'player' | 'page' | 'playlist';
   children?: React.ReactNode;
 }
 
@@ -23,24 +23,6 @@ const PhilippeSpecialEffects: React.FC<PhilippeSpecialEffectsProps> = ({ type, c
             <div className="absolute inset-0 pointer-events-none">
               <div className="philippe-led-border"></div>
             </div>
-            
-            {/* Synthwave audio visualizer bars around player */}
-            <div className="absolute inset-0 pointer-events-none overflow-hidden">
-              <div className="philippe-visualizer-bars">
-                {[...Array(12)].map((_, i) => (
-                  <div 
-                    key={i} 
-                    className="philippe-visualizer-bar"
-                    style={{
-                      animationDelay: `${i * 0.1}s`,
-                      left: `${5 + (i * 8)}%`,
-                      animationDuration: `${0.5 + (i * 0.1)}s`,
-                    }}
-                  />
-                ))}
-              </div>
-            </div>
-            
           </>
         )}
       </div>
@@ -60,6 +42,34 @@ const PhilippeSpecialEffects: React.FC<PhilippeSpecialEffectsProps> = ({ type, c
           </>
         )}
       </>
+    );
+  }
+
+  if (type === 'playlist') {
+    return (
+      <div className="relative">
+        {children}
+        {isPhilippePlayingActive && (
+          <>
+            {/* Dancing soundbars as playlist background */}
+            <div className="absolute inset-0 pointer-events-none overflow-hidden z-0">
+              <div className="philippe-playlist-visualizer-bars">
+                {[...Array(24)].map((_, i) => (
+                  <div 
+                    key={i} 
+                    className="philippe-playlist-visualizer-bar"
+                    style={{
+                      animationDelay: `${i * 0.08}s`,
+                      left: `${2 + (i * 4)}%`,
+                      animationDuration: `${0.4 + (i * 0.05)}s`,
+                    }}
+                  />
+                ))}
+              </div>
+            </div>
+          </>
+        )}
+      </div>
     );
   }
 
