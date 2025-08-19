@@ -21,6 +21,7 @@ import hrMacMillanCover from "/lovable-uploads/8a59c6e4-39f4-41e2-bb0d-544e22e30
 import lalalaAiDilemmaCover from "/lovable-uploads/7e23b796-605f-4562-927b-06daa9147648.png";
 import lionelRingenbachCover from "/lovable-uploads/7f8d84c3-eb81-4f66-87be-5b024084aca2.png";
 import deanShevHumanCover from '@/assets/dean-shev-human-cover.jpg';
+import bcCoastCatalystCover from '@/assets/bc-coast-catalyst-cover.jpg';
 
 
 // Supabase Storage URLs for audio files
@@ -542,6 +543,29 @@ const SONGS: Song[] = [
       { time: 40, text: "Where imagination freely goes" },
       { time: 44, text: "Philippe shows us how AI sees" },
       { time: 48, text: "Beyond reality's boundaries" }
+    ] as LyricLine[]
+  },
+  {
+    id: "bc-coast-catalyst",
+    title: "BC Coast Catalyst",
+    artist: "Kassandra Linklater", 
+    src: getAudioUrl("BC Coast Catalyst.mp3"),
+    coverArt: bcCoastCatalystCover,
+    lyrics: [
+      { time: 0, text: "Along the BC coastline where the mountains meet the sea" },
+      { time: 4, text: "Kassandra's voice carries stories of what we could be" },
+      { time: 8, text: "A catalyst for change in every breath and wave" },
+      { time: 12, text: "The coast speaks wisdom of the future that we crave" },
+      { time: 16, text: "" },
+      { time: 18, text: "BC Coast Catalyst, transforming all we know" },
+      { time: 22, text: "From Pacific shores, new possibilities grow" },
+      { time: 26, text: "Innovation flows like tides upon the land" },
+      { time: 30, text: "Building bridges to tomorrow with creative hands" },
+      { time: 34, text: "" },
+      { time: 36, text: "Through forests deep and ocean wide" },
+      { time: 40, text: "Technology and nature side by side" },
+      { time: 44, text: "A catalyst for dreams taking flight" },
+      { time: 48, text: "Illuminating British Columbia's light" }
     ] as LyricLine[]
   }
 ];
