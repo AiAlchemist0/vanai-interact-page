@@ -327,14 +327,15 @@ All colors MUST be HSL.
     bottom: 0;
     width: 10px;
     background: linear-gradient(to top, 
-      hsl(var(--primary) / 0.8), 
-      hsl(var(--ai-cyan) / 0.6), 
-      hsl(60, 100%, 60% / 0.4)
+      hsl(var(--primary) / 0.4), 
+      hsl(var(--ai-cyan) / 0.3), 
+      hsl(60, 100%, 60% / 0.2)
     );
     border-radius: 4px;
     animation: philippe-playlist-visualizer-pulse 0.8s ease-in-out infinite alternate;
-    filter: blur(0.5px);
-    opacity: 0.9;
+    box-shadow: 0 0 20px currentColor;
+    filter: blur(1px);
+    opacity: 0.6;
   }
 
 
