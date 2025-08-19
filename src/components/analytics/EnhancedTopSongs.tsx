@@ -11,6 +11,7 @@ import { useAudio } from "@/contexts/AudioContext";
 import { useUnifiedAudioControl } from "@/hooks/useUnifiedAudioControl";
 import { UnifiedPlayButton } from "@/components/ui/UnifiedPlayButton";
 import { Progress } from "@/components/ui/progress";
+import { useAnalyticsRefresh } from '@/contexts/AnalyticsRefreshContext';
 
 interface ComprehensiveStats {
   song_id: string;
@@ -49,7 +50,6 @@ const EnhancedTopSongs = () => {
   };
   const [songs, setSongs] = useState<CombinedSongData[]>([]);
   const [loading, setLoading] = useState(true);
-  const [refreshing, setRefreshing] = useState(false);
   const [viewMode, setViewMode] = useState<'plays' | 'likes' | 'engagement'>('likes');
   const [lastRefreshed, setLastRefreshed] = useState<Date>(new Date());
   const { currentSong, isPlaying } = useAudio();
@@ -57,7 +57,6 @@ const EnhancedTopSongs = () => {
 
   const fetchData = async () => {
     try {
-      setRefreshing(true);
       
       // Fetch comprehensive statistics and like statistics
       const [comprehensiveResponse, likesResponse] = await Promise.all([
@@ -148,7 +147,6 @@ const EnhancedTopSongs = () => {
       console.error('Error fetching song data:', error);
     } finally {
       setLoading(false);
-      setRefreshing(false);
       setLastRefreshed(new Date());
     }
   };
@@ -168,9 +166,6 @@ const EnhancedTopSongs = () => {
     };
   }, [registerRefresh, unregisterRefresh]);
 
-  const handleRefresh = () => {
-    fetchData();
-  };
 
   const getSortedSongs = () => {
     const sorted = [...songs].sort((a, b) => {
@@ -259,16 +254,6 @@ const EnhancedTopSongs = () => {
               <Badge variant="outline" className="border-green-500/50 text-green-400 bg-green-500/10">
                 Live Data
               </Badge>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={handleRefresh}
-                disabled={refreshing}
-                className="border-purple-500/50 text-purple-300 hover:bg-purple-500/10"
-              >
-                <RefreshCw className={`h-3 w-3 mr-1 ${refreshing ? 'animate-spin' : ''}`} />
-                Refresh
-              </Button>
             </div>
           </div>
         
