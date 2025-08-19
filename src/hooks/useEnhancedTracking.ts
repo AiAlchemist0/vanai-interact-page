@@ -8,7 +8,7 @@ export const useEnhancedTracking = () => {
   const sessionTracking = useSessionTracking();
   const geoTracking = useGeographicTracking();
 
-  // Initialize session when component mounts
+  // Initialize session when component mounts (only once)
   useEffect(() => {
     sessionTracking.startSession();
     
@@ -16,20 +16,20 @@ export const useEnhancedTracking = () => {
     return () => {
       sessionTracking.endSession();
     };
-  }, [sessionTracking]);
+  }, []); // Empty dependency array to run only once
 
-  const startPlayTracking = async (songId: string) => {
+  const startPlayTracking = useCallback(async (songId: string) => {
     // Update session activity
     sessionTracking.updateSessionActivity();
     
-    // Record geographic activity
+    // Record geographic activity only on song plays (not general activity)
     await geoTracking.recordListeningActivity();
     
     // Start song play tracking
     await songStats.startPlayTracking(songId);
-  };
+  }, [sessionTracking, geoTracking, songStats]);
 
-  const endPlayTracking = async (songId: string, songDuration?: number, wasValidPlay?: boolean) => {
+  const endPlayTracking = useCallback(async (songId: string, songDuration?: number, wasValidPlay?: boolean) => {
     // Update session activity
     sessionTracking.updateSessionActivity();
     
@@ -40,7 +40,7 @@ export const useEnhancedTracking = () => {
     if (wasValidPlay) {
       await sessionTracking.incrementSongPlay();
     }
-  };
+  }, [sessionTracking, songStats]);
 
   return {
     // Song statistics
@@ -58,10 +58,10 @@ export const useEnhancedTracking = () => {
     startPlayTracking,
     endPlayTracking,
     
-    // Activity updates
+    // Activity updates (no geographic tracking for general activity)
     updateActivity: useCallback(() => {
       sessionTracking.updateSessionActivity();
-      geoTracking.recordListeningActivity();
-    }, [sessionTracking, geoTracking])
+      // Only record geographic activity on meaningful interactions (song plays)
+    }, [sessionTracking])
   };
 };

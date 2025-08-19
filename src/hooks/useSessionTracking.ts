@@ -30,7 +30,6 @@ export const useSessionTracking = () => {
       
       // Check if session already exists and is active
       if (session?.isActive && session.sessionId === sessionId) {
-        console.log('Session already active:', sessionId);
         return;
       }
 
@@ -42,7 +41,6 @@ export const useSessionTracking = () => {
         .is('ended_at', null);
 
       if (existingSessions && existingSessions.length > 0) {
-        console.log('Session already exists in database:', sessionId);
         setSession({
           sessionId,
           startTime: startTimeRef.current,
@@ -84,8 +82,6 @@ export const useSessionTracking = () => {
         totalSongsPlayed: 0,
         isActive: true
       });
-
-      console.log('Session started:', sessionId);
     } catch (error) {
       console.error('Failed to start session:', error);
     }
@@ -145,7 +141,6 @@ export const useSessionTracking = () => {
       }
 
       setSession(prev => prev ? { ...prev, isActive: false } : null);
-      console.log('Session ended:', sessionId, 'Duration:', totalDuration, 'seconds');
     } catch (error) {
       console.error('Failed to end session:', error);
     }

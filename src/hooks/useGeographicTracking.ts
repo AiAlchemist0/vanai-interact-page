@@ -81,8 +81,6 @@ export const useGeographicTracking = () => {
           console.error('Error inserting geographic data:', insertError);
         }
       }
-
-      console.log('Geographic activity recorded:', locationData);
     } catch (error) {
       console.error('Failed to record geographic activity:', error);
     }

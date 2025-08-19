@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 
 interface SongLikeStatistics {
@@ -66,12 +66,17 @@ export const useSongLikes = () => {
     }
   }, []);
 
+  // Debounced fetch to prevent excessive re-fetches
+  const debouncedFetchStatistics = useCallback(() => {
+    const timeoutId = setTimeout(fetchStatistics, 300);
+    return () => clearTimeout(timeoutId);
+  }, [fetchStatistics]);
+
   // Toggle like for a song
   const toggleLike = useCallback(async (songId: string) => {
     try {
       setError(null); // Clear any previous errors
       const sessionId = getSessionId();
-      console.log('Toggling like for song:', songId, 'with session:', sessionId);
       
       const { data, error: toggleError } = await supabase.rpc('toggle_song_like', {
         p_song_id: songId,
@@ -82,8 +87,6 @@ export const useSongLikes = () => {
         console.error('RPC error:', toggleError);
         throw toggleError;
       }
-
-      console.log('Toggle like response:', data);
 
       if (data && data.length > 0) {
         const { liked, total_likes } = data[0];
@@ -111,7 +114,6 @@ export const useSongLikes = () => {
           }
         });
 
-        console.log('Like toggled successfully:', { liked, total_likes });
         return { liked, total_likes };
       }
     } catch (err) {
@@ -143,8 +145,8 @@ export const useSongLikes = () => {
     return likedSongs[songId] || false;
   }, [likedSongs]);
 
-  // Get total likes across all songs
-  const getTotalLikes = useCallback((): number => {
+  // Get total likes across all songs (memoized for performance)
+  const getTotalLikes = useMemo((): number => {
     return statistics.reduce((total, stat) => total + stat.total_likes, 0);
   }, [statistics]);
 
@@ -169,7 +171,7 @@ export const useSongLikes = () => {
           table: 'song_like_statistics'
         },
         () => {
-          fetchStatistics();
+          debouncedFetchStatistics();
         }
       )
       .subscribe();
@@ -177,7 +179,7 @@ export const useSongLikes = () => {
     return () => {
       supabase.removeChannel(channel);
     };
-  }, [fetchStatistics, loadLikedSongs]);
+  }, [debouncedFetchStatistics, loadLikedSongs]);
 
   return {
     statistics,

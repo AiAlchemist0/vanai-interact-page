@@ -45,19 +45,12 @@ const HeroAudioPlayer = () => {
   const handleLikeClick = async (songId: string, e: React.MouseEvent) => {
     e.stopPropagation();
     updateActivity(); // Track user interaction
-    console.log('Like clicked for song:', songId);
     try {
       await toggleLike(songId);
     } catch (error) {
       console.error('Error toggling like:', error);
     }
   };
-
-
-  // Show error state if likes system fails
-  if (likesError) {
-    console.error('Likes system error:', likesError);
-  }
 
   return (
     <PhilippeSpecialEffects type="player">
@@ -83,26 +76,26 @@ const HeroAudioPlayer = () => {
              </h3>
            </div>
            <div className="flex items-center gap-2 flex-shrink-0">
-             <div className="flex items-center gap-1 text-muted-foreground">
-               {!likesLoading && getTotalLikes() > 0 && (
-                 <>
-                   <Heart className="w-3 h-3 sm:w-4 sm:h-4 text-red-500 fill-red-500" />
-                   <span className="text-xs font-medium">{getTotalLikes()}</span>
-                 </>
-               )}
-               {likesLoading && (
-                 <>
-                   <Heart className="w-3 h-3 sm:w-4 sm:h-4 animate-pulse" />
-                   <span className="text-xs font-medium">Loading...</span>
-                 </>
-               )}
-               {!likesLoading && getTotalLikes() === 0 && (
-                 <>
-                   <Heart className="w-3 h-3 sm:w-4 sm:h-4" />
-                   <span className="text-xs font-medium">0 likes</span>
-                 </>
-               )}
-             </div>
+              <div className="flex items-center gap-1 text-muted-foreground">
+                {!likesLoading && getTotalLikes > 0 && (
+                  <>
+                    <Heart className="w-3 h-3 sm:w-4 sm:h-4 text-red-500 fill-red-500" />
+                    <span className="text-xs font-medium">{getTotalLikes}</span>
+                  </>
+                )}
+                {likesLoading && (
+                  <>
+                    <Heart className="w-3 h-3 sm:w-4 sm:h-4 animate-pulse" />
+                    <span className="text-xs font-medium">Loading...</span>
+                  </>
+                )}
+                {!likesLoading && getTotalLikes === 0 && (
+                  <>
+                    <Heart className="w-3 h-3 sm:w-4 sm:h-4" />
+                    <span className="text-xs font-medium">0 likes</span>
+                  </>
+                )}
+              </div>
               <div className="flex items-center gap-1">
                 <Button
                   onClick={async () => {
