@@ -1,11 +1,6 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
-
-interface GeographicData {
-  region: string;
-  city: string;
-  country: string;
-}
+import { locationManager, type GeographicData } from '@/utils/locationManager';
 
 export const useGeographicTracking = () => {
   const [location, setLocation] = useState<GeographicData | null>(null);
@@ -17,89 +12,9 @@ export const useGeographicTracking = () => {
     setLoading(true);
     
     try {
-      // Check localStorage first for cached location (valid for 24 hours)
-      const stored = localStorage.getItem('user_location');
-      const lastUpdated = localStorage.getItem('location_timestamp');
-      
-      if (stored && lastUpdated) {
-        const timeDiff = Date.now() - parseInt(lastUpdated);
-        const twentyFourHours = 24 * 60 * 60 * 1000;
-        
-        if (timeDiff < twentyFourHours) {
-          const parsedLocation = JSON.parse(stored);
-          setLocation(parsedLocation);
-          setLoading(false);
-          return parsedLocation;
-        }
-      }
-
-      // Try to get location from IP geolocation service with better error handling
-      try {
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 3000); // 3 second timeout
-        
-        const response = await fetch('https://ipapi.co/json/', {
-          signal: controller.signal,
-          headers: {
-            'Accept': 'application/json',
-            'User-Agent': 'BC-AI-App/1.0'
-          }
-        });
-        
-        clearTimeout(timeoutId);
-        
-        if (!response.ok) {
-          if (response.status === 429) {
-            console.warn('IP geolocation rate limited, using fallback');
-          } else {
-            console.warn(`IP geolocation failed: ${response.status} ${response.statusText}`);
-          }
-          throw new Error(`HTTP ${response.status}`);
-        }
-        
-        const data = await response.json();
-        
-        if (data.error) {
-          console.warn('IP geolocation API error:', data.reason);
-          throw new Error(data.reason || 'API Error');
-        }
-        
-        if (data.region && data.city) {
-          const locationData = {
-            region: data.region_code || data.region || 'BC',
-            city: data.city || 'Vancouver',
-            country: data.country_name || 'Canada'
-          };
-          
-          setLocation(locationData);
-          localStorage.setItem('user_location', JSON.stringify(locationData));
-          localStorage.setItem('location_timestamp', Date.now().toString());
-          return locationData;
-        }
-        
-      } catch (fetchError) {
-        console.warn('Location detection via IP failed:', fetchError.message);
-      }
-      
-      // Fallback to stored location if available
-      if (stored) {
-        const parsedLocation = JSON.parse(stored);
-        setLocation(parsedLocation);
-        return parsedLocation;
-      }
-      
-      // Final fallback to BC, Canada (appropriate for BC AI app)
-      const defaultLocation = {
-        region: 'BC',
-        city: 'Vancouver',
-        country: 'Canada'
-      };
-      
-      setLocation(defaultLocation);
-      localStorage.setItem('user_location', JSON.stringify(defaultLocation));
-      localStorage.setItem('location_timestamp', Date.now().toString());
-      return defaultLocation;
-      
+      const locationData = await locationManager.getLocation();
+      setLocation(locationData);
+      return locationData;
     } catch (error) {
       console.error('Error in detectLocation:', error);
       
@@ -173,10 +88,8 @@ export const useGeographicTracking = () => {
     }
   };
 
-  // Auto-detect location on hook initialization
-  useEffect(() => {
-    detectLocation();
-  }, []);
+  // No automatic location detection on mount to prevent API storms
+  // Location is detected only when needed via detectLocation() or recordListeningActivity()
 
   return {
     location,
