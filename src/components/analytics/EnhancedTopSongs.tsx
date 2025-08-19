@@ -345,30 +345,6 @@ const EnhancedTopSongs = () => {
                   </div>
                 </div>
 
-                {/* Unified Play Button */}
-                <div className="flex flex-col items-center space-y-2">
-                  <UnifiedPlayButton audioState={{
-                  isLoading: false,
-                  isPlaying: isCurrentlyPlaying,
-                  isPaused: false,
-                  isCurrent: currentSong?.id === song.song_id,
-                  progress: 0
-                }} onPlay={() => window.dispatchEvent(new CustomEvent('audio:play', {
-                  detail: {
-                    songId: song.song_id
-                  }
-                }))} size="md" variant="compact" className="w-10 h-10" />
-                  
-                  <div className="text-center space-y-0.5">
-                    <div className="text-xs text-slate-500 flex items-center">
-                      <Clock className="h-2.5 w-2.5 mr-0.5" />
-                      {song.last_played_at ? new Date(song.last_played_at).toLocaleDateString('en-US', {
-                      month: 'short',
-                      day: 'numeric'
-                    }) : 'No plays'}
-                    </div>
-                  </div>
-                </div>
               </div>;
           })}
         </div>
