@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -7,9 +7,10 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/comp
 import { Trophy, Heart, Music, RefreshCw, TrendingUp, Clock, SkipForward, Activity, Info } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { getSongMetadata, SONGS } from "@/utils/songData";
+import { useAudio } from "@/contexts/AudioContext";
+import { useUnifiedAudioControl } from "@/hooks/useUnifiedAudioControl";
+import { UnifiedPlayButton } from "@/components/ui/UnifiedPlayButton";
 import { Progress } from "@/components/ui/progress";
-import { useAnalyticsRefresh } from '@/contexts/AnalyticsRefreshContext';
-
 interface ComprehensiveStats {
   song_id: string;
   total_plays: number;
@@ -18,13 +19,11 @@ interface ComprehensiveStats {
   completion_rate: number;
   last_played_at: string;
 }
-
 interface SongLikeStats {
   song_id: string;
   total_likes: number;
   last_liked_at: string;
 }
-
 interface CombinedSongData {
   song_id: string;
   total_plays: number;
@@ -37,7 +36,6 @@ interface CombinedSongData {
   engagement_score: number;
   conversion_rate: number;
 }
-
 const EnhancedTopSongs = () => {
   const formatDuration = (seconds: number) => {
     if (!seconds) return '0:00';
@@ -47,23 +45,21 @@ const EnhancedTopSongs = () => {
   };
   const [songs, setSongs] = useState<CombinedSongData[]>([]);
   const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
   const [viewMode, setViewMode] = useState<'plays' | 'likes' | 'engagement'>('likes');
   const [lastRefreshed, setLastRefreshed] = useState<Date>(new Date());
-  
-  const { registerRefresh, unregisterRefresh } = useAnalyticsRefresh();
-
+  const {
+    currentSong,
+    isPlaying
+  } = useAudio();
   const fetchData = async () => {
     try {
-      
-      // Fetch comprehensive statistics and like statistics
-      const [comprehensiveResponse, likesResponse] = await Promise.all([
-        supabase.rpc('get_comprehensive_song_statistics'),
-        supabase.rpc('get_song_like_statistics')
-      ]);
+      setRefreshing(true);
 
+      // Fetch comprehensive statistics and like statistics
+      const [comprehensiveResponse, likesResponse] = await Promise.all([supabase.rpc('get_comprehensive_song_statistics'), supabase.rpc('get_song_like_statistics')]);
       if (comprehensiveResponse.error) throw comprehensiveResponse.error;
       if (likesResponse.error) throw likesResponse.error;
-
       const comprehensiveData: ComprehensiveStats[] = comprehensiveResponse.data || [];
       const likesData: SongLikeStats[] = likesResponse.data || [];
 
@@ -74,18 +70,16 @@ const EnhancedTopSongs = () => {
       const combinedData: CombinedSongData[] = comprehensiveData.map(song => {
         const likeData = likesMap.get(song.song_id);
         const likes = likeData?.total_likes || 0;
-        
+
         // Calculate engagement score (plays weight 60%, likes weight 40%)
         const maxPlays = Math.max(...comprehensiveData.map(s => s.total_plays));
         const maxLikes = Math.max(...likesData.map(l => l.total_likes), 1);
-        
-        const playsScore = maxPlays > 0 ? (song.total_plays / maxPlays) * 60 : 0;
-        const likesScore = maxLikes > 0 ? (likes / maxLikes) * 40 : 0;
+        const playsScore = maxPlays > 0 ? song.total_plays / maxPlays * 60 : 0;
+        const likesScore = maxLikes > 0 ? likes / maxLikes * 40 : 0;
         const engagement_score = Math.round(playsScore + likesScore);
 
         // Calculate conversion rate
-        const conversion_rate = song.total_attempts > 0 ? Math.round((song.total_plays / song.total_attempts) * 100) : 0;
-
+        const conversion_rate = song.total_attempts > 0 ? Math.round(song.total_plays / song.total_attempts * 100) : 0;
         return {
           song_id: song.song_id,
           total_plays: song.total_plays,
@@ -104,8 +98,7 @@ const EnhancedTopSongs = () => {
       likesData.forEach(likeData => {
         if (!combinedData.find(song => song.song_id === likeData.song_id)) {
           const maxLikes = Math.max(...likesData.map(l => l.total_likes), 1);
-          const likesScore = (likeData.total_likes / maxLikes) * 40;
-          
+          const likesScore = likeData.total_likes / maxLikes * 40;
           combinedData.push({
             song_id: likeData.song_id,
             total_plays: 0,
@@ -138,32 +131,22 @@ const EnhancedTopSongs = () => {
           });
         }
       });
-
       setSongs(combinedData);
     } catch (error) {
       console.error('Error fetching song data:', error);
     } finally {
       setLoading(false);
+      setRefreshing(false);
       setLastRefreshed(new Date());
     }
   };
-
   useEffect(() => {
     fetchData();
-    
-    // Register refresh function
-    registerRefresh('enhanced-top-songs', fetchData);
-    
+
     // Refresh every 30 seconds
     const interval = setInterval(fetchData, 30000);
-    
-    return () => {
-      clearInterval(interval);
-      unregisterRefresh('enhanced-top-songs');
-    };
-  }, [registerRefresh, unregisterRefresh]);
-
-
+    return () => clearInterval(interval);
+  }, []);
   const getSortedSongs = () => {
     const sorted = [...songs].sort((a, b) => {
       switch (viewMode) {
@@ -179,17 +162,18 @@ const EnhancedTopSongs = () => {
     });
     return sorted; // Return all songs, not just top 10
   };
-
-
+  const handleRefresh = () => {
+    fetchData();
+  };
   if (loading) {
-    return (
-      <Card className="bg-slate-900/50 border-purple-500/30 shadow-2xl shadow-purple-500/10 backdrop-blur-xl">
+    return <Card className="bg-slate-900/50 border-purple-500/30 shadow-2xl shadow-purple-500/10 backdrop-blur-xl">
         <CardHeader className="border-b border-purple-500/20">
           <Skeleton className="h-6 w-48" />
         </CardHeader>
         <CardContent className="p-6 space-y-4">
-          {Array.from({ length: 5 }).map((_, i) => (
-            <div key={i} className="flex items-center space-x-4">
+          {Array.from({
+          length: 5
+        }).map((_, i) => <div key={i} className="flex items-center space-x-4">
               <Skeleton className="h-16 w-16 rounded-xl" />
               <div className="flex-1 space-y-2">
                 <Skeleton className="h-4 w-32" />
@@ -197,34 +181,31 @@ const EnhancedTopSongs = () => {
                 <Skeleton className="h-2 w-full" />
               </div>
               <Skeleton className="h-10 w-10 rounded-full" />
-            </div>
-          ))}
+            </div>)}
         </CardContent>
-      </Card>
-    );
+      </Card>;
   }
-
   const sortedSongs = getSortedSongs();
   const maxValue = Math.max(...sortedSongs.map(song => {
     switch (viewMode) {
-      case 'plays': return song.total_plays;
-      case 'likes': return song.total_likes;
-      case 'engagement': return song.engagement_score;
-      default: return song.total_plays;
+      case 'plays':
+        return song.total_plays;
+      case 'likes':
+        return song.total_likes;
+      case 'engagement':
+        return song.engagement_score;
+      default:
+        return song.total_plays;
     }
   }), 1);
-
   const formatTimeAgo = (date: Date) => {
     const now = new Date();
     const diff = Math.floor((now.getTime() - date.getTime()) / 1000);
-    
     if (diff < 60) return 'Just now';
     if (diff < 3600) return `${Math.floor(diff / 60)}m ago`;
     return `${Math.floor(diff / 3600)}h ago`;
   };
-
-  return (
-    <TooltipProvider>
+  return <TooltipProvider>
       <Card className="bg-slate-900/50 border-purple-500/30 shadow-2xl shadow-purple-500/10 backdrop-blur-xl">
         <CardHeader className="border-b border-purple-500/20">
           <div className="flex items-center justify-between">
@@ -248,34 +229,36 @@ const EnhancedTopSongs = () => {
               </Tooltip>
             </div>
             <div className="flex items-center space-x-2">
-              <Badge variant="outline" className="border-green-500/50 text-green-400 bg-green-500/10">
-                Live Data
-              </Badge>
+              
+              <Button variant="outline" size="sm" onClick={handleRefresh} disabled={refreshing} className="border-purple-500/50 text-purple-300 hover:bg-purple-500/10">
+                <RefreshCw className={`h-3 w-3 mr-1 ${refreshing ? 'animate-spin' : ''}`} />
+                Refresh
+              </Button>
             </div>
           </div>
         
         {/* View Mode Toggles */}
         <div className="flex space-x-1 mt-3">
-          {[
-            { key: 'plays', label: 'Most Played', icon: Music },
-            { key: 'likes', label: 'Most Liked', icon: Heart },
-            { key: 'engagement', label: 'Top Engagement', icon: TrendingUp }
-          ].map(({ key, label, icon: Icon }) => (
-            <Button
-              key={key}
-              variant={viewMode === key ? "default" : "ghost"}
-              size="sm"
-              onClick={() => setViewMode(key as any)}
-              className={`text-xs ${
-                viewMode === key 
-                  ? 'bg-purple-500 text-white' 
-                  : 'text-slate-400 hover:text-white hover:bg-slate-800'
-              }`}
-            >
+          {[{
+            key: 'plays',
+            label: 'Most Played',
+            icon: Music
+          }, {
+            key: 'likes',
+            label: 'Most Liked',
+            icon: Heart
+          }, {
+            key: 'engagement',
+            label: 'Top Engagement',
+            icon: TrendingUp
+          }].map(({
+            key,
+            label,
+            icon: Icon
+          }) => <Button key={key} variant={viewMode === key ? "default" : "ghost"} size="sm" onClick={() => setViewMode(key as any)} className={`text-xs ${viewMode === key ? 'bg-purple-500 text-white' : 'text-slate-400 hover:text-white hover:bg-slate-800'}`}>
               <Icon className="h-3 w-3 mr-1" />
               {label}
-            </Button>
-          ))}
+            </Button>)}
         </div>
       </CardHeader>
       
@@ -283,44 +266,26 @@ const EnhancedTopSongs = () => {
         <div className="space-y-4">
           {sortedSongs.map((song, index) => {
             const metadata = getSongMetadata(song.song_id);
-            const currentValue = viewMode === 'plays' ? song.total_plays : 
-                               viewMode === 'likes' ? song.total_likes : 
-                               song.engagement_score;
-            const progressPercentage = (currentValue / maxValue) * 100;
+            const currentValue = viewMode === 'plays' ? song.total_plays : viewMode === 'likes' ? song.total_likes : song.engagement_score;
+            const progressPercentage = currentValue / maxValue * 100;
             const isTop3 = index < 3;
-            
-            
-            return (
-              <div 
-                key={song.song_id}
-                className={`group flex items-center space-x-4 p-4 rounded-xl transition-all duration-300 hover:scale-[1.02] ${
-                  isTop3 
-                    ? 'bg-gradient-to-r from-yellow-500/10 to-orange-500/10 border border-yellow-500/20' 
-                    : 'bg-slate-800/30 hover:bg-slate-800/50'
-                }`}
-              >
+            const isCurrentlyPlaying = currentSong?.id === song.song_id && isPlaying;
+            return <div key={song.song_id} className={`group flex items-center space-x-4 p-4 rounded-xl transition-all duration-300 hover:scale-[1.02] cursor-pointer ${isCurrentlyPlaying ? 'bg-gradient-to-r from-blue-500/20 to-purple-500/20 border border-blue-500/40 shadow-lg shadow-blue-500/20' : isTop3 ? 'bg-gradient-to-r from-yellow-500/10 to-orange-500/10 border border-yellow-500/20' : 'bg-slate-800/30 hover:bg-slate-800/50'}`}>
                 {/* Rank Badge */}
-                <div className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm ${
-                  index === 0 ? 'bg-gradient-to-r from-yellow-400 to-yellow-500 text-black' :
-                  index === 1 ? 'bg-gradient-to-r from-gray-300 to-gray-400 text-black' :
-                  index === 2 ? 'bg-gradient-to-r from-orange-400 to-orange-500 text-black' :
-                  'bg-slate-700 text-slate-300'
-                }`}>
+                <div className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm ${index === 0 ? 'bg-gradient-to-r from-yellow-400 to-yellow-500 text-black' : index === 1 ? 'bg-gradient-to-r from-gray-300 to-gray-400 text-black' : index === 2 ? 'bg-gradient-to-r from-orange-400 to-orange-500 text-black' : 'bg-slate-700 text-slate-300'}`}>
                   {index + 1}
                 </div>
 
                 {/* Cover Art */}
                 <div className="relative flex-shrink-0">
                   <div className="w-16 h-16 rounded-xl overflow-hidden bg-slate-700">
-                    <img 
-                      src={metadata.coverArt} 
-                      alt={`${metadata.title} cover`}
-                      className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
-                      onError={(e) => {
-                        e.currentTarget.src = '/placeholder.svg';
-                      }}
-                    />
+                    <img src={metadata.coverArt} alt={`${metadata.title} cover`} className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110" onError={e => {
+                    e.currentTarget.src = '/placeholder.svg';
+                  }} />
                   </div>
+                  {isCurrentlyPlaying && <div className="absolute inset-0 bg-blue-500/20 rounded-xl flex items-center justify-center">
+                      <div className="w-3 h-3 bg-blue-400 rounded-full animate-pulse" />
+                    </div>}
                 </div>
 
                 {/* Song Info */}
@@ -367,33 +332,48 @@ const EnhancedTopSongs = () => {
                   <div className="space-y-1">
                     <div className="flex items-center justify-between text-xs">
                       <span className="text-slate-500">
-                        {viewMode === 'plays' ? 'Plays' : 
-                         viewMode === 'likes' ? 'Likes' : 
-                         'Engagement'}
+                        {viewMode === 'plays' ? 'Plays' : viewMode === 'likes' ? 'Likes' : 'Engagement'}
                       </span>
                       <span className="text-cyan-400 font-medium">{currentValue}</span>
                     </div>
                     <div className="relative">
-                      <Progress 
-                        value={progressPercentage} 
-                        className="h-1.5 bg-slate-800"
-                      />
-                      <div 
-                        className={`absolute inset-0 h-1.5 rounded-full bg-gradient-to-r ${metadata.color} opacity-80`}
-                        style={{ width: `${progressPercentage}%` }}
-                      />
+                      <Progress value={progressPercentage} className="h-1.5 bg-slate-800" />
+                      <div className={`absolute inset-0 h-1.5 rounded-full bg-gradient-to-r ${metadata.color} opacity-80`} style={{
+                      width: `${progressPercentage}%`
+                    }} />
                     </div>
                   </div>
                 </div>
 
-              </div>
-            );
+                {/* Unified Play Button */}
+                <div className="flex flex-col items-center space-y-2">
+                  <UnifiedPlayButton audioState={{
+                  isLoading: false,
+                  isPlaying: isCurrentlyPlaying,
+                  isPaused: false,
+                  isCurrent: currentSong?.id === song.song_id,
+                  progress: 0
+                }} onPlay={() => window.dispatchEvent(new CustomEvent('audio:play', {
+                  detail: {
+                    songId: song.song_id
+                  }
+                }))} size="md" variant="compact" className="w-10 h-10" />
+                  
+                  <div className="text-center space-y-0.5">
+                    <div className="text-xs text-slate-500 flex items-center">
+                      <Clock className="h-2.5 w-2.5 mr-0.5" />
+                      {song.last_played_at ? new Date(song.last_played_at).toLocaleDateString('en-US', {
+                      month: 'short',
+                      day: 'numeric'
+                    }) : 'No plays'}
+                    </div>
+                  </div>
+                </div>
+              </div>;
           })}
         </div>
       </CardContent>
     </Card>
-    </TooltipProvider>
-  );
+    </TooltipProvider>;
 };
-
 export default EnhancedTopSongs;
