@@ -51,7 +51,18 @@ export const useSongKeywords = () => {
   }, []);
 
   const getKeywordsForSong = (songId: string) => {
-    return keywords.filter(k => k.song_id === songId);
+    const songKeywords = keywords.filter(k => k.song_id === songId);
+    
+    // Deduplicate based on song_id, keyword, and category as defensive measure
+    const uniqueKeywords = songKeywords.reduce((acc, current) => {
+      const key = `${current.song_id}-${current.keyword}-${current.category}`;
+      if (!acc.has(key)) {
+        acc.set(key, current);
+      }
+      return acc;
+    }, new Map<string, SongKeyword>());
+    
+    return Array.from(uniqueKeywords.values());
   };
 
   const getTopKeywordsForSong = (songId: string, limit = 3) => {
