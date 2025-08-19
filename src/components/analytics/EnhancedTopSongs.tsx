@@ -57,7 +57,7 @@ const EnhancedTopSongs = () => {
   
   const { getTopKeywordsForSong, analytics, loading: keywordsLoading } = useSongKeywords();
 
-  // Define category colors for consistency
+  // Define category colors for consistency - now includes all 6 categories
   const getCategoryColor = (category: string) => {
     const colors: Record<string, string> = {
       'AI Experience': 'bg-blue-500/20 text-blue-300 border-blue-500/30',
@@ -387,9 +387,9 @@ const EnhancedTopSongs = () => {
                     </div>
                   </div>
 
-                  {/* Keyword Badges */}
+                  {/* Keyword Badges - Shows top keywords for each song */}
                   {(() => {
-                    const keywords = getTopKeywordsForSong(song.song_id);
+                    const keywords = getTopKeywordsForSong(song.song_id, 5); // Show more keywords for better visibility
                     if (keywords.length > 0) {
                       return (
                         <div className="flex flex-wrap gap-1 mb-2">
@@ -397,7 +397,7 @@ const EnhancedTopSongs = () => {
                             <Badge
                               key={keyword.keyword}
                               variant="outline"
-                              className={`text-xs px-2 py-0.5 border ${getCategoryColor(keyword.category)} hover:opacity-80 transition-opacity`}
+                              className={`text-xs px-2 py-0.5 border ${getCategoryColor(keyword.category)} hover:opacity-80 transition-opacity cursor-default`}
                             >
                               {keyword.keyword}
                             </Badge>
