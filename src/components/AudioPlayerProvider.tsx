@@ -32,7 +32,7 @@ const AudioPlayerProvider: React.FC<AudioPlayerProviderProps> = ({ children }) =
 
   const togglePlay = useCallback(async () => {
     return measureAsync(async () => {
-      updateActivity(); // Track user interaction
+      // Optimized: Minimal activity tracking for toggle operations
       const audio = audioRef.current;
       if (!audio) return;
       
@@ -40,18 +40,20 @@ const AudioPlayerProvider: React.FC<AudioPlayerProviderProps> = ({ children }) =
         try {
           await audio.play();
           audioPlayerHook.setIsPlaying(true);
+          updateActivity(); // Only track meaningful playback starts
         } catch (e) {
           console.error('Audio play failed:', e);
         }
       } else {
         audio.pause();
         audioPlayerHook.setIsPlaying(false);
+        // No activity tracking for pause to reduce overhead
       }
     }, 'togglePlay');
   }, [updateActivity, audioPlayerHook, audioRef, measureAsync]);
 
   const nextSong = useCallback(() => {
-    updateActivity(); // Track user interaction
+    updateActivity(); // Track meaningful navigation
     const wasPlaying = isPlaying;
     
     if (currentSongIndex < SONGS.length - 1) {
@@ -74,7 +76,7 @@ const AudioPlayerProvider: React.FC<AudioPlayerProviderProps> = ({ children }) =
   }, [updateActivity, isPlaying, currentSongIndex, isPlaylistMode, setCurrentSongIndex, audioRef]);
 
   const previousSong = useCallback(() => {
-    updateActivity(); // Track user interaction
+    updateActivity(); // Track meaningful navigation
     const wasPlaying = isPlaying;
     
     if (currentSongIndex > 0) {
@@ -102,7 +104,7 @@ const AudioPlayerProvider: React.FC<AudioPlayerProviderProps> = ({ children }) =
   };
 
   const startPlaylistMode = () => {
-    updateActivity(); // Track user interaction
+    updateActivity(); // Track meaningful mode change
     setIsPlaylistMode(true);
     
     // Always start playback for the current song, regardless of previous state
@@ -119,7 +121,7 @@ const AudioPlayerProvider: React.FC<AudioPlayerProviderProps> = ({ children }) =
   };
 
   const stopPlaylistMode = () => {
-    updateActivity(); // Track user interaction
+    updateActivity(); // Track meaningful mode change
     setIsPlaylistMode(false);
     // Don't stop playback, just disable auto-advance
   };

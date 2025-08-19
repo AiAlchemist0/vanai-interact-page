@@ -10,7 +10,13 @@ export const useEnhancedTracking = () => {
 
   // Initialize session when component mounts (only once)
   useEffect(() => {
-    sessionTracking.startSession();
+    const initializeSession = async () => {
+      await sessionTracking.startSession();
+      // Record geographic location once per session
+      await geoTracking.recordSessionLocation();
+    };
+    
+    initializeSession();
     
     // Cleanup function to end session
     return () => {
@@ -22,12 +28,12 @@ export const useEnhancedTracking = () => {
     // Update session activity
     sessionTracking.updateSessionActivity();
     
-    // Record geographic activity only on song plays (not general activity)
-    await geoTracking.recordListeningActivity();
+    // Geographic tracking is now handled once per session, not per song
+    // This reduces API calls and database operations significantly
     
     // Start song play tracking
     await songStats.startPlayTracking(songId);
-  }, [sessionTracking, geoTracking, songStats]);
+  }, [sessionTracking, songStats]);
 
   const endPlayTracking = useCallback(async (songId: string, songDuration?: number, wasValidPlay?: boolean) => {
     // Update session activity
@@ -58,10 +64,10 @@ export const useEnhancedTracking = () => {
     startPlayTracking,
     endPlayTracking,
     
-    // Activity updates (no geographic tracking for general activity)
+    // Activity updates (optimized - no geographic tracking for general activity)
     updateActivity: useCallback(() => {
       sessionTracking.updateSessionActivity();
-      // Only record geographic activity on meaningful interactions (song plays)
+      // Geographic activity is now session-based, not per interaction
     }, [sessionTracking])
   };
 };

@@ -5,6 +5,7 @@ import { locationManager, type GeographicData } from '@/utils/locationManager';
 export const useGeographicTracking = () => {
   const [location, setLocation] = useState<GeographicData | null>(null);
   const [loading, setLoading] = useState(false);
+  const [sessionLocationRecorded, setSessionLocationRecorded] = useState(false);
 
   const detectLocation = async () => {
     if (location) return location; // Already detected
@@ -32,70 +33,13 @@ export const useGeographicTracking = () => {
     }
   };
 
-  const consolidateDuplicateRecords = async (locationData: GeographicData) => {
-    try {
-      const today = new Date().toISOString().split('T')[0];
-      
-      // Find all records for this location today
-      const { data: duplicates, error: fetchError } = await supabase
-        .from('geographic_data')
-        .select('*')
-        .eq('region', locationData.region)
-        .eq('city', locationData.city)
-        .gte('last_activity', `${today}T00:00:00.000Z`)
-        .order('last_activity', { ascending: false });
-
-      if (fetchError || !duplicates || duplicates.length <= 1) {
-        return; // No duplicates or error
-      }
-
-      console.log(`🔧 Found ${duplicates.length} duplicate records for ${locationData.city}, ${locationData.region}. Consolidating...`);
-
-      // Calculate total listening count and get most recent activity
-      const totalListeningCount = duplicates.reduce((sum, record) => sum + (record.listening_count || 1), 0);
-      const mostRecentActivity = duplicates[0].last_activity;
-      const primaryRecord = duplicates[0];
-
-      // Update the most recent record with consolidated data
-      const { error: updateError } = await supabase
-        .from('geographic_data')
-        .update({
-          listening_count: totalListeningCount,
-          last_activity: mostRecentActivity
-        })
-        .eq('id', primaryRecord.id);
-
-      if (updateError) {
-        console.error('Error updating consolidated record:', updateError);
-        return;
-      }
-
-      // Delete the duplicate records (keep only the first one)
-      if (duplicates.length > 1) {
-        const duplicateIds = duplicates.slice(1).map(record => record.id);
-        const { error: deleteError } = await supabase
-          .from('geographic_data')
-          .delete()
-          .in('id', duplicateIds);
-
-        if (deleteError) {
-          console.error('Error deleting duplicate records:', deleteError);
-        } else {
-          console.log(`✅ Successfully consolidated ${duplicates.length} records into 1 for ${locationData.city}, ${locationData.region}`);
-        }
-      }
-    } catch (error) {
-      console.error('Error consolidating duplicate records:', error);
-    }
-  };
-
-  const recordListeningActivity = async () => {
+  // Session-based geographic tracking - record only once per session
+  const recordSessionLocation = async () => {
+    if (sessionLocationRecorded) return; // Already recorded for this session
+    
     try {
       const locationData = await detectLocation();
       if (!locationData) return;
-
-      // First, try to consolidate any duplicate records
-      await consolidateDuplicateRecords(locationData);
 
       // Check if there's already a record for this location today
       const today = new Date().toISOString().split('T')[0];
@@ -125,10 +69,8 @@ export const useGeographicTracking = () => {
           })
           .eq('id', record.id);
 
-        if (updateError) {
-          console.error('❌ Error updating geographic data:', updateError);
-        } else {
-          console.log(`📍 Updated geographic data for ${locationData.city}, ${locationData.region} - Count: ${(record.listening_count || 1) + 1}`);
+        if (!updateError) {
+          setSessionLocationRecorded(true); // Mark as recorded for this session
         }
       } else {
         // Create new record
@@ -141,15 +83,18 @@ export const useGeographicTracking = () => {
             last_activity: new Date().toISOString()
           });
 
-        if (insertError) {
-          console.error('❌ Error inserting geographic data:', insertError);
-        } else {
-          console.log(`📍 Created new geographic data record for ${locationData.city}, ${locationData.region}`);
+        if (!insertError) {
+          setSessionLocationRecorded(true); // Mark as recorded for this session
         }
       }
     } catch (error) {
-      console.error('Failed to record geographic activity:', error);
+      console.error('Failed to record session location:', error);
     }
+  };
+
+  // Legacy method - now just calls recordSessionLocation for compatibility
+  const recordListeningActivity = async () => {
+    await recordSessionLocation();
   };
 
   // No automatic location detection on mount to prevent API storms
@@ -159,6 +104,7 @@ export const useGeographicTracking = () => {
     location,
     loading,
     detectLocation,
-    recordListeningActivity
+    recordListeningActivity,
+    recordSessionLocation
   };
 };

@@ -17,9 +17,14 @@ export const useSessionTracking = () => {
 
   const getSessionId = () => {
     if (!sessionRef.current) {
-      sessionRef.current = localStorage.getItem('session_id') || 
-        `session_${Date.now()}_${Math.random().toString(36).substring(2, 15)}`;
-      localStorage.setItem('session_id', sessionRef.current);
+      // Check for existing session first to avoid unnecessary regeneration
+      const existingSessionId = localStorage.getItem('session_id');
+      if (existingSessionId) {
+        sessionRef.current = existingSessionId;
+      } else {
+        sessionRef.current = `session_${Date.now()}_${Math.random().toString(36).substring(2, 15)}`;
+        localStorage.setItem('session_id', sessionRef.current);
+      }
     }
     return sessionRef.current;
   };
@@ -33,14 +38,17 @@ export const useSessionTracking = () => {
         return;
       }
 
-      // Check if session exists in database before creating new one
-      const { data: existingSessions } = await supabase
+      // Check if session exists in database before creating new one (optimized query)
+      const { data: existingSessions, error: queryError } = await supabase
         .from('listening_sessions')
-        .select('user_session_id')
+        .select('user_session_id, total_songs_played')
         .eq('user_session_id', sessionId)
-        .is('ended_at', null);
+        .is('ended_at', null)
+        .limit(1);
 
-      if (existingSessions && existingSessions.length > 0) {
+      if (!queryError && existingSessions && existingSessions.length > 0) {
+        const existingSession = existingSessions[0];
+        songsPlayedRef.current = existingSession.total_songs_played || 0;
         setSession({
           sessionId,
           startTime: startTimeRef.current,

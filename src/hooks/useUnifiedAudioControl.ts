@@ -38,11 +38,11 @@ export const useUnifiedAudioControl = (songId: string, songIndex?: number, updat
   };
 
   const handlePlay = async () => {
+    // Optimized: Only update activity for meaningful interactions
     updateActivity?.();
     
     // If clicking on the currently playing song, toggle play/pause
     if (isCurrent && isPlaying) {
-      console.log('🎵 UnifiedAudioControl: Toggling pause for current song:', songId);
       togglePlay();
       return;
     }
@@ -50,7 +50,6 @@ export const useUnifiedAudioControl = (songId: string, songIndex?: number, updat
     // If clicking on the current song and it's paused, resume
     if (isCurrent && !isPlaying && currentSong) {
       try {
-        console.log('🎵 UnifiedAudioControl: Resuming current song:', songId);
         togglePlay();
       } catch (error) {
         toast({
@@ -63,24 +62,21 @@ export const useUnifiedAudioControl = (songId: string, songIndex?: number, updat
     }
     
     // If clicking on a different song, load it and start playback immediately
-    console.log('🎵 UnifiedAudioControl: Starting new song:', songId);
     setLoadingSong(songId);
     try {
       // Load the specific song first
       loadSpecificSong(songId);
       
-      // Start play tracking for the new song
-      console.log('🎵 UnifiedAudioControl: Starting play tracking for:', songId);
+      // Start play tracking for the new song (geographic tracking is now session-based)
       await startPlayTracking(songId);
       
       // Start playlist mode immediately with proper error handling
       setTimeout(() => {
         startPlaylistMode();
         setLoadingSong(null);
-      }, 50); // Reduced delay for better UX
+      }, 50);
     } catch (error) {
       setLoadingSong(null);
-      console.error('🚨 UnifiedAudioControl: Playback failed for song:', songId, error);
       toast({
         title: "Playback failed",
         description: "Could not play this song. Please try again.",
