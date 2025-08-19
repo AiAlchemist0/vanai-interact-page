@@ -50,7 +50,7 @@ const SongItem: React.FC<SongItemProps> = ({
           {/* Like Button */}
           <button
             onClick={(e) => onLikeClick(song.id, e)}
-            className="transition-all duration-200 hover:scale-110 touch-manipulation p-1"
+            className="transition-all duration-200 hover:scale-110 touch-manipulation p-1 relative"
           >
             <Heart 
               className={`w-4 h-4 sm:w-5 sm:h-5 ${
@@ -59,6 +59,10 @@ const SongItem: React.FC<SongItemProps> = ({
                   : 'text-muted-foreground/50 hover:text-red-400'
               }`} 
             />
+            {/* Like count inside the heart */}
+            <span className="absolute inset-0 flex items-center justify-center text-[8px] sm:text-[9px] font-bold text-white drop-shadow-sm pointer-events-none">
+              {getLikeCount(song.id)}
+            </span>
           </button>
           
           {/* Info Button */}
@@ -74,7 +78,7 @@ const SongItem: React.FC<SongItemProps> = ({
             />
           </button>
           
-          <span className="text-xs font-medium text-muted-foreground">{getLikeCount(song.id)}</span>
+          
         </div>
       </div>
 
