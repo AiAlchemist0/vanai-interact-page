@@ -1,11 +1,15 @@
-import { Database, Lightbulb, Music, Heart, Users, ArrowRight, ArrowDown, BarChart3 } from "lucide-react";
+import { Database, Lightbulb, Music, Heart, Users, ArrowRight, ArrowDown, BarChart3, Video } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
+import { Dialog, DialogContent, DialogTrigger, DialogTitle } from "@/components/ui/dialog";
+import { useState } from "react";
 import aiMusicDashboard from "@/assets/ai-music-dashboard.jpg";
 import soundToDataTransformation from "@/assets/sound-to-data-transformation.jpg";
 import communityMusicConnection from "@/assets/community-music-connection.jpg";
 import aiBrainMusic from "@/assets/ai-brain-music.jpg";
 
 const VisionBanner = () => {
+  const [isVideoOpen, setIsVideoOpen] = useState(false);
+  
   const visionSteps = [{
     icon: Database,
     text: "Data",
@@ -44,9 +48,38 @@ const VisionBanner = () => {
           <p className="text-xl md:text-2xl text-muted-foreground leading-relaxed mb-4">
             Where numbers become melodies, and statistics become stories
           </p>
-          <p className="text-lg text-muted-foreground leading-relaxed max-w-4xl mx-auto">
+          <p className="text-lg text-muted-foreground leading-relaxed max-w-4xl mx-auto mb-8">
             We believe in a <span className="text-primary font-semibold">revolutionary concept</span>: transforming dry survey data into engaging musical experiences that bring communities together through the universal language of music.
           </p>
+
+          {/* Our Vision Video Button */}
+          <div className="flex justify-center">
+            <Dialog open={isVideoOpen} onOpenChange={setIsVideoOpen}>
+              <DialogTrigger asChild>
+                <button className="group relative inline-flex items-center justify-center px-8 py-4 text-lg font-bold text-white transition-all duration-300 hover:scale-105 active:scale-95">
+                  {/* Neon glow background layers with different gradient */}
+                  <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-violet-500 via-indigo-500 to-blue-500 opacity-75 blur-lg group-hover:opacity-100 group-hover:blur-xl transition-all duration-300"></div>
+                  <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-violet-400 via-indigo-400 to-blue-400 opacity-50 blur-md group-hover:opacity-75 transition-all duration-300"></div>
+                  
+                  {/* Button content */}
+                  <div className="relative z-10 flex items-center space-x-3 px-6 py-3 rounded-2xl bg-slate-900/80 backdrop-blur-sm border border-violet-500/50 group-hover:border-violet-400 transition-all duration-300">
+                    <Video className="w-6 h-6 text-violet-400 group-hover:text-violet-300 transition-colors duration-300" />
+                    <span className="bg-gradient-to-r from-violet-400 via-indigo-400 to-blue-400 bg-clip-text text-transparent group-hover:from-violet-300 group-hover:via-indigo-300 group-hover:to-blue-300 transition-all duration-300">
+                      Our Vision Video
+                    </span>
+                    <ArrowRight className="w-5 h-5 text-indigo-400 group-hover:text-indigo-300 group-hover:translate-x-1 transition-all duration-300" />
+                  </div>
+                  
+                  {/* Animated particles */}
+                  <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                    <div className="absolute top-2 left-4 w-1 h-1 bg-violet-400 rounded-full animate-ping"></div>
+                    <div className="absolute top-6 right-8 w-1 h-1 bg-indigo-400 rounded-full animate-ping" style={{ animationDelay: '0.5s' }}></div>
+                    <div className="absolute bottom-3 left-12 w-1 h-1 bg-blue-400 rounded-full animate-ping" style={{ animationDelay: '1s' }}></div>
+                  </div>
+                </button>
+              </DialogTrigger>
+            </Dialog>
+          </div>
         </div>
 
         {/* Our Innovation Section */}
@@ -186,6 +219,23 @@ const VisionBanner = () => {
             </div>
           </a>
         </div>
+
+        {/* Video Modal */}
+        <Dialog open={isVideoOpen} onOpenChange={setIsVideoOpen}>
+          <DialogContent className="max-w-4xl w-full p-0 border-0 bg-transparent">
+            <DialogTitle className="sr-only">Our Vision Video</DialogTitle>
+            <div className="relative w-full aspect-video bg-black rounded-lg overflow-hidden">
+              <iframe
+                src="https://www.youtube.com/embed/APw8HCxQuAQ?autoplay=1&rel=0&modestbranding=1"
+                title="Our Vision Video"
+                className="w-full h-full"
+                frameBorder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowFullScreen
+              />
+            </div>
+          </DialogContent>
+        </Dialog>
 
       </div>
     </section>
