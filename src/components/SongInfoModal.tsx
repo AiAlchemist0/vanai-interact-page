@@ -49,112 +49,114 @@ export const SongInfoModal: React.FC<SongInfoModalProps> = ({
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
-      <DialogContent className="max-w-2xl max-h-[80vh] flex flex-col">
-        <DialogHeader className="flex-shrink-0">
+      <DialogContent className="max-w-4xl w-[95vw] sm:w-full max-h-[90vh] flex flex-col p-0">
+        <DialogHeader className="flex-shrink-0 p-6 pb-4">
           <DialogTitle className="sr-only">Song Information</DialogTitle>
-          <div className="flex items-start gap-4 p-2">
+          <div className="flex items-start gap-4">
             {/* Song Cover */}
             <img 
               src={song.coverArt} 
               alt={`${song.title} cover`}
-              className="w-20 h-20 rounded-lg object-cover shadow-lg flex-shrink-0"
+              className="w-16 h-16 sm:w-20 sm:h-20 rounded-lg object-cover shadow-lg flex-shrink-0"
             />
             
             {/* Song Details */}
             <div className="flex-1 min-w-0">
-              <h2 className="text-xl font-bold text-foreground leading-tight mb-1">
+              <h2 className="text-lg sm:text-xl font-bold text-foreground leading-tight mb-1 truncate">
                 {song.title}
               </h2>
-              <p className="text-lg text-muted-foreground font-medium">
+              <p className="text-base sm:text-lg text-muted-foreground font-medium truncate">
                 {song.artist}
               </p>
             </div>
           </div>
         </DialogHeader>
 
-        <Tabs defaultValue="impact" className="flex-1 flex flex-col min-h-0">
-          <TabsList className="grid w-full grid-cols-2 flex-shrink-0">
-            <TabsTrigger value="impact">Impact on BC + AI Community</TabsTrigger>
-            <TabsTrigger value="lyrics">Song Lyrics</TabsTrigger>
-          </TabsList>
-          
-          <TabsContent value="impact" className="flex-1 min-h-0">
-            <ScrollArea className="h-full pr-4">
-              <div className="space-y-6">
-                {/* Description */}
-                <div className="prose prose-sm max-w-none">
-                  <p className="text-muted-foreground leading-relaxed">
-                    This song connects with the BC + AI Survey by exploring themes around artificial intelligence's 
-                    impact on creativity, community, and human experience. The artist's work speaks to the evolving 
-                    relationship between technology and artistic expression.
-                  </p>
-                </div>
-
-                {/* Keywords by Category */}
-                {keywordsLoading ? (
-                  <div className="text-center py-8">
-                    <div className="animate-spin w-6 h-6 border-2 border-primary border-t-transparent rounded-full mx-auto mb-2"></div>
-                    <p className="text-muted-foreground">Loading keywords...</p>
-                  </div>
-                ) : keywords.length > 0 ? (
-                  <div className="space-y-4">
-                    <h3 className="text-lg font-semibold text-foreground mb-4">Related Themes & Keywords</h3>
-                    {Object.entries(keywordsByCategory)
-                      .sort(([a], [b]) => a.localeCompare(b))
-                      .map(([category, categoryKeywords]) => (
-                        <div key={category} className="space-y-2">
-                          <h4 className="text-sm font-medium text-foreground/80 uppercase tracking-wide">
-                            {category}
-                          </h4>
-                          <div className="flex flex-wrap gap-2">
-                            {categoryKeywords
-                              .sort((a, b) => b.relevance_score - a.relevance_score)
-                              .map((keyword) => (
-                                <Badge
-                                  key={keyword.keyword}
-                                  variant="outline"
-                                  className={`text-xs px-3 py-1 ${getCategoryColor(keyword.category)}`}
-                                >
-                                  {keyword.keyword}
-                                </Badge>
-                              ))}
-                          </div>
-                        </div>
-                      ))}
-                  </div>
-                ) : (
-                  <div className="text-center py-8">
-                    <Info className="w-8 h-8 text-muted-foreground/50 mx-auto mb-2" />
-                    <p className="text-muted-foreground">No keywords available for this song.</p>
-                  </div>
-                )}
-              </div>
-            </ScrollArea>
-          </TabsContent>
-          
-          <TabsContent value="lyrics" className="flex-1 min-h-0">
-            <ScrollArea className="h-full pr-4">
-              <div className="space-y-4">
-                {song.lyrics && song.lyrics.length > 0 ? (
+        <div className="flex-1 flex flex-col min-h-0 px-6">
+          <Tabs defaultValue="impact" className="flex-1 flex flex-col min-h-0">
+            <TabsList className="grid w-full grid-cols-2 flex-shrink-0 mb-4">
+              <TabsTrigger value="impact" className="text-xs sm:text-sm">Impact on BC + AI Community</TabsTrigger>
+              <TabsTrigger value="lyrics" className="text-xs sm:text-sm">Song Lyrics</TabsTrigger>
+            </TabsList>
+            
+            <TabsContent value="impact" className="flex-1 min-h-0 mt-0">
+              <ScrollArea className="h-[calc(90vh-200px)] sm:h-[calc(90vh-220px)]">
+                <div className="space-y-6 pr-4 pb-6">
+                  {/* Description */}
                   <div className="prose prose-sm max-w-none">
-                    <div className="whitespace-pre-line text-foreground/90 leading-relaxed">
-                      {song.lyrics.map((lyric, index) => (
-                        <p key={index} className="mb-2">
-                          {lyric.text}
-                        </p>
-                      ))}
+                    <p className="text-muted-foreground leading-relaxed text-sm sm:text-base">
+                      This song connects with the BC + AI Survey by exploring themes around artificial intelligence's 
+                      impact on creativity, community, and human experience. The artist's work speaks to the evolving 
+                      relationship between technology and artistic expression.
+                    </p>
+                  </div>
+
+                  {/* Keywords by Category */}
+                  {keywordsLoading ? (
+                    <div className="text-center py-8">
+                      <div className="animate-spin w-6 h-6 border-2 border-primary border-t-transparent rounded-full mx-auto mb-2"></div>
+                      <p className="text-muted-foreground">Loading keywords...</p>
                     </div>
-                  </div>
-                ) : (
-                  <div className="text-center py-8">
-                    <Info className="w-8 h-8 text-muted-foreground/50 mx-auto mb-2" />
-                    <p className="text-muted-foreground">No lyrics available for this song.</p>
-                  </div>
-                )}
-              </div>
-            </ScrollArea>
-          </TabsContent>
-        </Tabs>
+                  ) : keywords.length > 0 ? (
+                    <div className="space-y-6">
+                      <h3 className="text-base sm:text-lg font-semibold text-foreground">Related Themes & Keywords</h3>
+                      {Object.entries(keywordsByCategory)
+                        .sort(([a], [b]) => a.localeCompare(b))
+                        .map(([category, categoryKeywords]) => (
+                          <div key={category} className="space-y-3">
+                            <h4 className="text-xs sm:text-sm font-medium text-foreground/80 uppercase tracking-wide">
+                              {category}
+                            </h4>
+                            <div className="flex flex-wrap gap-2 max-w-full">
+                              {categoryKeywords
+                                .sort((a, b) => b.relevance_score - a.relevance_score)
+                                .map((keyword) => (
+                                  <Badge
+                                    key={keyword.keyword}
+                                    variant="outline"
+                                    className={`text-xs px-2 py-1 break-words max-w-[calc(100%-8px)] ${getCategoryColor(keyword.category)}`}
+                                  >
+                                    <span className="truncate">{keyword.keyword}</span>
+                                  </Badge>
+                                ))}
+                            </div>
+                          </div>
+                        ))}
+                    </div>
+                  ) : (
+                    <div className="text-center py-8">
+                      <Info className="w-8 h-8 text-muted-foreground/50 mx-auto mb-2" />
+                      <p className="text-muted-foreground">No keywords available for this song.</p>
+                    </div>
+                  )}
+                </div>
+              </ScrollArea>
+            </TabsContent>
+            
+            <TabsContent value="lyrics" className="flex-1 min-h-0 mt-0">
+              <ScrollArea className="h-[calc(90vh-200px)] sm:h-[calc(90vh-220px)]">
+                <div className="space-y-4 pr-4 pb-6">
+                  {song.lyrics && song.lyrics.length > 0 ? (
+                    <div className="prose prose-sm max-w-none">
+                      <div className="whitespace-pre-line text-foreground/90 leading-relaxed text-sm sm:text-base">
+                        {song.lyrics.map((lyric, index) => (
+                          <p key={index} className="mb-3">
+                            {lyric.text}
+                          </p>
+                        ))}
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="text-center py-8">
+                      <Info className="w-8 h-8 text-muted-foreground/50 mx-auto mb-2" />
+                      <p className="text-muted-foreground">No lyrics available for this song.</p>
+                    </div>
+                  )}
+                </div>
+              </ScrollArea>
+            </TabsContent>
+          </Tabs>
+        </div>
       </DialogContent>
     </Dialog>
   );
