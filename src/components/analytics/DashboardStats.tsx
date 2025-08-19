@@ -2,7 +2,8 @@ import { useState, useEffect } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-import { TrendingUp, Users, Music, Clock, MapPin, Zap, RefreshCw, Heart } from "lucide-react";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { TrendingUp, Users, Music, Clock, MapPin, Zap, RefreshCw, Heart, Info } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 
 interface DashboardStatsData {
@@ -19,6 +20,7 @@ const DashboardStats = () => {
   const [totalLikes, setTotalLikes] = useState<number>(0);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
+  const [lastRefreshed, setLastRefreshed] = useState<Date>(new Date());
 
   const fetchStats = async () => {
     try {
@@ -46,6 +48,7 @@ const DashboardStats = () => {
     } finally {
       setLoading(false);
       setRefreshing(false);
+      setLastRefreshed(new Date());
     }
   };
 
@@ -68,7 +71,8 @@ const DashboardStats = () => {
       icon: TrendingUp,
       gradient: "from-green-500 to-emerald-500",
       change: "+12.5%",
-      description: "Valid plays (30s+)"
+      description: "Valid plays (30s+)",
+      tooltipInfo: "Real data collected from user interactions. Only counts as a valid play after 30+ seconds of listening. Updated every 30 seconds via Supabase database."
     },
     {
       title: "Active Sessions",
@@ -76,7 +80,8 @@ const DashboardStats = () => {
       icon: Users,
       gradient: "from-blue-500 to-cyan-500",
       change: "+5 live",
-      description: "Current listeners"
+      description: "Current listeners",
+      tooltipInfo: "Real data tracking active user sessions. Counts users who have interacted with the app recently. Updated every 30 seconds from session tracking database."
     },
     {
       title: "Unique Songs",
@@ -84,7 +89,8 @@ const DashboardStats = () => {
       icon: Music,
       gradient: "from-purple-500 to-pink-500",
       change: "All tracks",
-      description: "In our collection"
+      description: "In our collection",
+      tooltipInfo: "Calculated data showing total songs available in the platform. This is derived from the song metadata catalog and database records."
     },
     {
       title: "Avg Session",
@@ -92,7 +98,8 @@ const DashboardStats = () => {
       icon: Clock,
       gradient: "from-orange-500 to-red-500",
       change: "minutes",
-      description: "Per listening session"
+      description: "Per listening session",
+      tooltipInfo: "Calculated from real user session data. Averages the time users spend actively listening to music. Based on session tracking and play duration analytics."
     },
     {
       title: "Top Region",
@@ -100,7 +107,8 @@ const DashboardStats = () => {
       icon: MapPin,
       gradient: "from-teal-500 to-green-500",
       change: "Leading",
-      description: "Most active area"
+      description: "Most active area",
+      tooltipInfo: "Real data based on IP-based geographic detection. Shows the region with the highest number of listening sessions. Location data is anonymized and aggregated."
     },
     {
       title: "Peak Hour",
@@ -108,7 +116,8 @@ const DashboardStats = () => {
       icon: Zap,
       gradient: "from-yellow-500 to-orange-500",
       change: "PST",
-      description: "Highest activity"
+      description: "Highest activity",
+      tooltipInfo: "Calculated from aggregated listening patterns over the past 7 days. Shows the hour with the highest number of song plays. Time zone: Pacific Standard Time."
     },
     {
       title: "Total Likes",
@@ -116,7 +125,8 @@ const DashboardStats = () => {
       icon: Heart,
       gradient: "from-pink-500 to-rose-500",
       change: "Community",
-      description: "Song favorites"
+      description: "Song favorites",
+      tooltipInfo: "Real data from user interactions. Counts all heart/like actions on songs across the platform. Updated in real-time when users like songs."
     }
   ];
 
@@ -137,56 +147,83 @@ const DashboardStats = () => {
     );
   }
 
+  const formatTimeAgo = (date: Date) => {
+    const now = new Date();
+    const diff = Math.floor((now.getTime() - date.getTime()) / 1000);
+    
+    if (diff < 60) return 'Just now';
+    if (diff < 3600) return `${Math.floor(diff / 60)}m ago`;
+    if (diff < 86400) return `${Math.floor(diff / 3600)}h ago`;
+    return `${Math.floor(diff / 86400)}d ago`;
+  };
+
   return (
-    <div className="space-y-4">
-      <div className="flex items-center justify-between">
-        <h2 className="text-xl font-semibold text-white">Dashboard Overview</h2>
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={handleRefresh}
-          disabled={refreshing}
-          className="border-purple-500/50 text-purple-300 hover:bg-purple-500/10"
-        >
-          <RefreshCw className={`h-3 w-3 mr-1 ${refreshing ? 'animate-spin' : ''}`} />
-          Refresh All
-        </Button>
-      </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-7 gap-6">
-      {statCards.map((stat, index) => {
-        const Icon = stat.icon;
-        return (
-          <Card 
-            key={stat.title}
-            className="bg-slate-900/50 border-purple-500/30 shadow-2xl shadow-purple-500/10 backdrop-blur-xl hover:scale-105 transition-all duration-300 group"
-            style={{ animationDelay: `${index * 100}ms` }}
+    <TooltipProvider>
+      <div className="space-y-4">
+        <div className="flex items-center justify-between">
+          <h2 className="text-xl font-semibold text-white">Dashboard Overview</h2>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={handleRefresh}
+            disabled={refreshing}
+            className="border-purple-500/50 text-purple-300 hover:bg-purple-500/10"
           >
-            <CardContent className="p-6">
-              <div className="flex items-center justify-between mb-4">
-                <div className={`p-3 rounded-xl bg-gradient-to-r ${stat.gradient} shadow-lg group-hover:shadow-xl transition-shadow duration-300`}>
-                  <Icon className="h-6 w-6 text-white" />
+            <RefreshCw className={`h-3 w-3 mr-1 ${refreshing ? 'animate-spin' : ''}`} />
+            Refresh All
+          </Button>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-7 gap-6">
+        {statCards.map((stat, index) => {
+          const Icon = stat.icon;
+          return (
+            <Card 
+              key={stat.title}
+              className="bg-slate-900/50 border-purple-500/30 shadow-2xl shadow-purple-500/10 backdrop-blur-xl hover:scale-105 transition-all duration-300 group"
+              style={{ animationDelay: `${index * 100}ms` }}
+            >
+              <CardContent className="p-6">
+                <div className="flex items-center justify-between mb-4">
+                  <div className={`p-3 rounded-xl bg-gradient-to-r ${stat.gradient} shadow-lg group-hover:shadow-xl transition-shadow duration-300`}>
+                    <Icon className="h-6 w-6 text-white" />
+                  </div>
+                  <div className="text-right">
+                    <div className="text-xs text-green-400 font-medium">{stat.change}</div>
+                  </div>
                 </div>
-                <div className="text-right">
-                  <div className="text-xs text-green-400 font-medium">{stat.change}</div>
+                
+                <div className="space-y-1">
+                  <div className="flex items-center justify-between">
+                    <h3 className="text-sm font-medium text-slate-400">{stat.title}</h3>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Info className="h-3 w-3 text-slate-500 hover:text-slate-300 cursor-help" />
+                      </TooltipTrigger>
+                      <TooltipContent className="max-w-xs z-50 bg-slate-800 border-slate-700">
+                        <div className="space-y-2">
+                          <p className="text-sm">{stat.tooltipInfo}</p>
+                          <div className="text-xs text-slate-400 border-t border-slate-700 pt-2">
+                            Last updated: {formatTimeAgo(lastRefreshed)}
+                          </div>
+                        </div>
+                      </TooltipContent>
+                    </Tooltip>
+                  </div>
+                  <div className="text-2xl font-bold text-white group-hover:text-cyan-300 transition-colors duration-300">
+                    {typeof stat.value === 'number' && stat.title !== "Peak Hour" ? stat.value.toLocaleString() : stat.value}
+                  </div>
+                  <p className="text-xs text-slate-500">{stat.description}</p>
                 </div>
-              </div>
-              
-              <div className="space-y-1">
-                <h3 className="text-sm font-medium text-slate-400">{stat.title}</h3>
-                <div className="text-2xl font-bold text-white group-hover:text-cyan-300 transition-colors duration-300">
-                  {typeof stat.value === 'number' && stat.title !== "Peak Hour" ? stat.value.toLocaleString() : stat.value}
-                </div>
-                <p className="text-xs text-slate-500">{stat.description}</p>
-              </div>
-              
-              {/* Glow effect on hover */}
-              <div className={`absolute inset-0 rounded-lg bg-gradient-to-r ${stat.gradient} opacity-0 group-hover:opacity-5 transition-opacity duration-300 pointer-events-none`} />
-            </CardContent>
-          </Card>
-        );
-      })}
+                
+                {/* Glow effect on hover */}
+                <div className={`absolute inset-0 rounded-lg bg-gradient-to-r ${stat.gradient} opacity-0 group-hover:opacity-5 transition-opacity duration-300 pointer-events-none`} />
+              </CardContent>
+            </Card>
+          );
+        })}
+        </div>
       </div>
-    </div>
+    </TooltipProvider>
   );
 };
 

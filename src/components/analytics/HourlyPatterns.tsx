@@ -2,7 +2,8 @@ import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Clock, Activity } from "lucide-react";
+import { Tooltip as UITooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { Clock, Activity, Info } from "lucide-react";
 import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer, Tooltip, Cell } from 'recharts';
 import { supabase } from "@/integrations/supabase/client";
 
@@ -14,6 +15,7 @@ interface HourlyData {
 const HourlyPatterns = () => {
   const [hourlyData, setHourlyData] = useState<HourlyData[]>([]);
   const [loading, setLoading] = useState(true);
+  const [lastRefreshed, setLastRefreshed] = useState<Date>(new Date());
 
   useEffect(() => {
     const fetchHourlyPatterns = async () => {
@@ -35,6 +37,7 @@ const HourlyPatterns = () => {
         console.error('Error fetching hourly patterns:', error);
       } finally {
         setLoading(false);
+        setLastRefreshed(new Date());
       }
     };
 
@@ -81,17 +84,44 @@ const HourlyPatterns = () => {
     );
   }
 
+  const formatTimeAgo = (date: Date) => {
+    const now = new Date();
+    const diff = Math.floor((now.getTime() - date.getTime()) / 1000);
+    
+    if (diff < 60) return 'Just now';
+    if (diff < 3600) return `${Math.floor(diff / 60)}m ago`;
+    return `${Math.floor(diff / 3600)}h ago`;
+  };
+
   return (
-    <Card className="bg-slate-900/50 border-purple-500/30 shadow-2xl shadow-purple-500/10 backdrop-blur-xl">
-      <CardHeader className="border-b border-purple-500/20">
-        <CardTitle className="flex items-center space-x-2 text-purple-300">
-          <Clock className="h-5 w-5 text-cyan-400" />
-          <span>Listening Patterns by Hour</span>
-          <Badge variant="outline" className="border-cyan-500/50 text-cyan-400 bg-cyan-500/10 ml-auto">
-            Last 7 Days
-          </Badge>
-        </CardTitle>
-      </CardHeader>
+    <TooltipProvider>
+      <Card className="bg-slate-900/50 border-purple-500/30 shadow-2xl shadow-purple-500/10 backdrop-blur-xl">
+        <CardHeader className="border-b border-purple-500/20">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-2">
+              <CardTitle className="flex items-center space-x-2 text-purple-300">
+                <Clock className="h-5 w-5 text-cyan-400" />
+                <span>Listening Patterns by Hour</span>
+              </CardTitle>
+              <UITooltip>
+                <TooltipTrigger asChild>
+                  <Info className="h-4 w-4 text-slate-500 hover:text-slate-300 cursor-help" />
+                </TooltipTrigger>
+                <TooltipContent className="max-w-xs z-50 bg-slate-800 border-slate-700">
+                  <div className="space-y-2">
+                    <p className="text-sm">Real data showing listening activity patterns by hour over the last 7 days. Aggregated from song play records. Updates every 5 minutes.</p>
+                    <div className="text-xs text-slate-400 border-t border-slate-700 pt-2">
+                      Last updated: {formatTimeAgo(lastRefreshed)}
+                    </div>
+                  </div>
+                </TooltipContent>
+              </UITooltip>
+            </div>
+            <Badge variant="outline" className="border-cyan-500/50 text-cyan-400 bg-cyan-500/10">
+              Last 7 Days
+            </Badge>
+          </div>
+        </CardHeader>
       <CardContent className="p-6">
         {/* Peak Hour Stats */}
         <div className="flex items-center justify-between mb-6 p-4 bg-gradient-to-r from-cyan-500/10 to-blue-500/10 rounded-xl border border-cyan-500/20">
@@ -176,6 +206,7 @@ const HourlyPatterns = () => {
         </div>
       </CardContent>
     </Card>
+    </TooltipProvider>
   );
 };
 

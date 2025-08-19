@@ -2,7 +2,8 @@ import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
-import { MapPin, Globe, Users } from "lucide-react";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { MapPin, Globe, Users, Info } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 
 interface GeographicData {
@@ -15,6 +16,7 @@ interface GeographicData {
 const GeographicMap = () => {
   const [geoData, setGeoData] = useState<GeographicData[]>([]);
   const [loading, setLoading] = useState(true);
+  const [lastRefreshed, setLastRefreshed] = useState<Date>(new Date());
 
   // Sample BC regions with mock coordinates for visualization
   const bcRegions = [
@@ -41,6 +43,7 @@ const GeographicMap = () => {
         setGeoData([]); // Set empty array instead of mock data
       } finally {
         setLoading(false);
+        setLastRefreshed(new Date());
       }
     };
 
@@ -96,17 +99,44 @@ const GeographicMap = () => {
     );
   }
 
+  const formatTimeAgo = (date: Date) => {
+    const now = new Date();
+    const diff = Math.floor((now.getTime() - date.getTime()) / 1000);
+    
+    if (diff < 60) return 'Just now';
+    if (diff < 3600) return `${Math.floor(diff / 60)}m ago`;
+    return `${Math.floor(diff / 3600)}h ago`;
+  };
+
   return (
-    <Card className="bg-slate-900/50 border-purple-500/30 shadow-2xl shadow-purple-500/10 backdrop-blur-xl">
-      <CardHeader className="border-b border-purple-500/20">
-        <CardTitle className="flex items-center space-x-2 text-purple-300">
-          <Globe className="h-5 w-5 text-green-400" />
-          <span>British Columbia Listening Map</span>
-          <Badge variant="outline" className="border-green-500/50 text-green-400 bg-green-500/10 ml-auto">
-            {totalListeners} Total Listeners
-          </Badge>
-        </CardTitle>
-      </CardHeader>
+    <TooltipProvider>
+      <Card className="bg-slate-900/50 border-purple-500/30 shadow-2xl shadow-purple-500/10 backdrop-blur-xl">
+        <CardHeader className="border-b border-purple-500/20">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-2">
+              <CardTitle className="flex items-center space-x-2 text-purple-300">
+                <Globe className="h-5 w-5 text-green-400" />
+                <span>British Columbia Listening Map</span>
+              </CardTitle>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Info className="h-4 w-4 text-slate-500 hover:text-slate-300 cursor-help" />
+                </TooltipTrigger>
+                <TooltipContent className="max-w-xs z-50 bg-slate-800 border-slate-700">
+                  <div className="space-y-2">
+                    <p className="text-sm">Real geographic data based on IP-based location detection. Shows listening activity across British Columbia regions. Updates every 30 seconds with real-time subscriptions.</p>
+                    <div className="text-xs text-slate-400 border-t border-slate-700 pt-2">
+                      Last updated: {formatTimeAgo(lastRefreshed)}
+                    </div>
+                  </div>
+                </TooltipContent>
+              </Tooltip>
+            </div>
+            <Badge variant="outline" className="border-green-500/50 text-green-400 bg-green-500/10">
+              {totalListeners} Total Listeners
+            </Badge>
+          </div>
+        </CardHeader>
       <CardContent className="p-6">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* BC Map Visualization */}
@@ -254,6 +284,7 @@ const GeographicMap = () => {
         </div>
       </CardContent>
     </Card>
+    </TooltipProvider>
   );
 };
 

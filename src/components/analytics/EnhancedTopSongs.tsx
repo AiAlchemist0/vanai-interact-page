@@ -3,7 +3,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Trophy, Heart, Music, RefreshCw, TrendingUp, Clock, SkipForward, Activity } from "lucide-react";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { Trophy, Heart, Music, RefreshCw, TrendingUp, Clock, SkipForward, Activity, Info } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { getSongMetadata, SONGS } from "@/utils/songData";
 import { useAudio } from "@/contexts/AudioContext";
@@ -50,6 +51,7 @@ const EnhancedTopSongs = () => {
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [viewMode, setViewMode] = useState<'plays' | 'likes' | 'engagement'>('likes');
+  const [lastRefreshed, setLastRefreshed] = useState<Date>(new Date());
   const { currentSong, isPlaying } = useAudio();
 
   const fetchData = async () => {
@@ -146,6 +148,7 @@ const EnhancedTopSongs = () => {
     } finally {
       setLoading(false);
       setRefreshing(false);
+      setLastRefreshed(new Date());
     }
   };
 
@@ -210,30 +213,55 @@ const EnhancedTopSongs = () => {
     }
   }), 1);
 
+  const formatTimeAgo = (date: Date) => {
+    const now = new Date();
+    const diff = Math.floor((now.getTime() - date.getTime()) / 1000);
+    
+    if (diff < 60) return 'Just now';
+    if (diff < 3600) return `${Math.floor(diff / 60)}m ago`;
+    return `${Math.floor(diff / 3600)}h ago`;
+  };
+
   return (
-    <Card className="bg-slate-900/50 border-purple-500/30 shadow-2xl shadow-purple-500/10 backdrop-blur-xl">
-      <CardHeader className="border-b border-purple-500/20">
-        <div className="flex items-center justify-between">
-          <CardTitle className="flex items-center space-x-2 text-purple-300">
-            <Trophy className="h-5 w-5 text-yellow-400" />
-            <span>Enhanced Music Leaderboard</span>
-          </CardTitle>
-          <div className="flex items-center space-x-2">
-            <Badge variant="outline" className="border-green-500/50 text-green-400 bg-green-500/10">
-              Live Data
-            </Badge>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={handleRefresh}
-              disabled={refreshing}
-              className="border-purple-500/50 text-purple-300 hover:bg-purple-500/10"
-            >
-              <RefreshCw className={`h-3 w-3 mr-1 ${refreshing ? 'animate-spin' : ''}`} />
-              Refresh
-            </Button>
+    <TooltipProvider>
+      <Card className="bg-slate-900/50 border-purple-500/30 shadow-2xl shadow-purple-500/10 backdrop-blur-xl">
+        <CardHeader className="border-b border-purple-500/20">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-2">
+              <CardTitle className="flex items-center space-x-2 text-purple-300">
+                <Trophy className="h-5 w-5 text-yellow-400" />
+                <span>Enhanced Music Leaderboard</span>
+              </CardTitle>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Info className="h-4 w-4 text-slate-500 hover:text-slate-300 cursor-help" />
+                </TooltipTrigger>
+                <TooltipContent className="max-w-xs z-50 bg-slate-800 border-slate-700">
+                  <div className="space-y-2">
+                    <p className="text-sm">Real data from comprehensive song analytics including plays, likes, attempts, completion rates, and engagement scores. Updates every 30 seconds.</p>
+                    <div className="text-xs text-slate-400 border-t border-slate-700 pt-2">
+                      Last updated: {formatTimeAgo(lastRefreshed)}
+                    </div>
+                  </div>
+                </TooltipContent>
+              </Tooltip>
+            </div>
+            <div className="flex items-center space-x-2">
+              <Badge variant="outline" className="border-green-500/50 text-green-400 bg-green-500/10">
+                Live Data
+              </Badge>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handleRefresh}
+                disabled={refreshing}
+                className="border-purple-500/50 text-purple-300 hover:bg-purple-500/10"
+              >
+                <RefreshCw className={`h-3 w-3 mr-1 ${refreshing ? 'animate-spin' : ''}`} />
+                Refresh
+              </Button>
+            </div>
           </div>
-        </div>
         
         {/* View Mode Toggles */}
         <div className="flex space-x-1 mt-3">
@@ -406,6 +434,7 @@ const EnhancedTopSongs = () => {
         </div>
       </CardContent>
     </Card>
+    </TooltipProvider>
   );
 };
 
