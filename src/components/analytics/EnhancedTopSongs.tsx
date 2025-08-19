@@ -4,13 +4,14 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import { Trophy, Heart, Music, RefreshCw, TrendingUp, Clock, SkipForward, Activity, Info } from "lucide-react";
+import { Trophy, Heart, Music, RefreshCw, TrendingUp, Clock, SkipForward, Activity, Info, Tag, Filter } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { getSongMetadata, SONGS } from "@/utils/songData";
 import { useAudio } from "@/contexts/AudioContext";
 import { useUnifiedAudioControl } from "@/hooks/useUnifiedAudioControl";
 import { UnifiedPlayButton } from "@/components/ui/UnifiedPlayButton";
 import { Progress } from "@/components/ui/progress";
+import { useSongKeywords } from "@/hooks/useSongKeywords";
 interface ComprehensiveStats {
   song_id: string;
   total_plays: number;
@@ -47,11 +48,27 @@ const EnhancedTopSongs = () => {
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [viewMode, setViewMode] = useState<'plays' | 'likes' | 'engagement'>('likes');
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [lastRefreshed, setLastRefreshed] = useState<Date>(new Date());
   const {
     currentSong,
     isPlaying
   } = useAudio();
+  
+  const { getTopKeywordsForSong, analytics, loading: keywordsLoading } = useSongKeywords();
+
+  // Define category colors for consistency
+  const getCategoryColor = (category: string) => {
+    const colors: Record<string, string> = {
+      'AI Experience': 'bg-blue-500/20 text-blue-300 border-blue-500/30',
+      'Creative Impact': 'bg-purple-500/20 text-purple-300 border-purple-500/30', 
+      'Future Vision': 'bg-green-500/20 text-green-300 border-green-500/30',
+      'Relationships': 'bg-pink-500/20 text-pink-300 border-pink-500/30',
+      'Community': 'bg-yellow-500/20 text-yellow-300 border-yellow-500/30',
+      'Identity': 'bg-orange-500/20 text-orange-300 border-orange-500/30'
+    };
+    return colors[category] || 'bg-gray-500/20 text-gray-300 border-gray-500/30';
+  };
   const fetchData = async () => {
     try {
       setRefreshing(true);
@@ -148,7 +165,17 @@ const EnhancedTopSongs = () => {
     return () => clearInterval(interval);
   }, []);
   const getSortedSongs = () => {
-    const sorted = [...songs].sort((a, b) => {
+    let filtered = [...songs];
+    
+    // Filter by selected category if one is chosen
+    if (selectedCategory) {
+      filtered = filtered.filter(song => {
+        const keywords = getTopKeywordsForSong(song.song_id);
+        return keywords.some(keyword => keyword.category === selectedCategory);
+      });
+    }
+    
+    const sorted = filtered.sort((a, b) => {
       switch (viewMode) {
         case 'plays':
           return b.total_plays - a.total_plays;
@@ -160,7 +187,7 @@ const EnhancedTopSongs = () => {
           return b.total_plays - a.total_plays;
       }
     });
-    return sorted; // Return all songs, not just top 10
+    return sorted;
   };
   const handleRefresh = () => {
     fetchData();
@@ -260,6 +287,38 @@ const EnhancedTopSongs = () => {
               {label}
             </Button>)}
         </div>
+
+        {/* Category Filter Toggles */}
+        {analytics.length > 0 && (
+          <div className="mt-3">
+            <div className="flex items-center space-x-2 mb-2">
+              <Filter className="h-4 w-4 text-slate-400" />
+              <span className="text-xs text-slate-400">Filter by BC AI Survey Themes:</span>
+            </div>
+            <div className="flex flex-wrap gap-1">
+              <Button
+                variant={selectedCategory === null ? "secondary" : "ghost"}
+                size="sm"
+                onClick={() => setSelectedCategory(null)}
+                className="text-xs h-7"
+              >
+                All Themes
+              </Button>
+              {analytics.map(({ category }) => (
+                <Button
+                  key={category}
+                  variant={selectedCategory === category ? "secondary" : "ghost"}
+                  size="sm"
+                  onClick={() => setSelectedCategory(category)}
+                  className={`text-xs h-7 ${selectedCategory === category ? getCategoryColor(category) : 'hover:opacity-80'}`}
+                >
+                  <Tag className="h-3 w-3 mr-1" />
+                  {category}
+                </Button>
+              ))}
+            </div>
+          </div>
+        )}
       </CardHeader>
       
       <CardContent className="p-6">
@@ -327,6 +386,27 @@ const EnhancedTopSongs = () => {
                       <span className="text-green-400">{song.conversion_rate}%</span>
                     </div>
                   </div>
+
+                  {/* Keyword Badges */}
+                  {(() => {
+                    const keywords = getTopKeywordsForSong(song.song_id);
+                    if (keywords.length > 0) {
+                      return (
+                        <div className="flex flex-wrap gap-1 mb-2">
+                          {keywords.map(keyword => (
+                            <Badge
+                              key={keyword.keyword}
+                              variant="outline"
+                              className={`text-xs px-2 py-0.5 border ${getCategoryColor(keyword.category)} hover:opacity-80 transition-opacity`}
+                            >
+                              {keyword.keyword}
+                            </Badge>
+                          ))}
+                        </div>
+                      );
+                    }
+                    return null;
+                  })()}
                   
                   {/* Progress Bar */}
                   <div className="space-y-1">
