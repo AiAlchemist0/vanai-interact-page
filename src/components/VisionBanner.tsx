@@ -1,6 +1,7 @@
 import { Database, Lightbulb, Music, Heart, Users, ArrowRight, ArrowDown, BarChart3, Video } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogTrigger, DialogTitle } from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import aiMusicDashboard from "@/assets/ai-music-dashboard.jpg";
 import soundToDataTransformation from "@/assets/sound-to-data-transformation.jpg";
@@ -42,9 +43,22 @@ const VisionBanner = () => {
       <div className="container mx-auto px-6">
         {/* Enhanced Vision Overview */}
         <div className="text-center max-w-6xl mx-auto mb-16">
-          <h2 className="text-5xl md:text-6xl font-bold text-gradient mb-8">
-            Our Vision: Transforming Data Into Human Connection
-          </h2>
+          <div className="flex items-center justify-center gap-4 mb-8">
+            <h2 className="text-5xl md:text-6xl font-bold text-gradient">
+              Our Vision: Transforming Data Into Human Connection
+            </h2>
+            <DialogTrigger asChild>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-12 w-12 rounded-full bg-primary/10 hover:bg-primary/20 transition-all duration-300 hover:scale-110"
+                onClick={() => setIsVideoOpen(true)}
+              >
+                <Video className="h-6 w-6 text-primary" />
+                <span className="sr-only">Watch Our Vision Video</span>
+              </Button>
+            </DialogTrigger>
+          </div>
           <p className="text-xl md:text-2xl text-muted-foreground leading-relaxed mb-4">
             Where numbers become melodies, and statistics become stories
           </p>
