@@ -46,9 +46,9 @@ export const useGeographicTracking = () => {
         .eq('region', locationData.region)
         .eq('city', locationData.city)
         .gte('last_activity', `${today}T00:00:00.000Z`)
-        .single();
+        .maybeSingle();
 
-      if (fetchError && fetchError.code !== 'PGRST116') { // PGRST116 = no rows found
+      if (fetchError) {
         console.error('Error checking existing geographic data:', fetchError);
         return;
       }

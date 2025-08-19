@@ -47,22 +47,30 @@ export const useSongStatistics = () => {
       const sessionId = localStorage.getItem('session_id') || 
         Math.random().toString(36).substring(2, 15);
       localStorage.setItem('session_id', sessionId);
+      
+      console.log('Using session ID for tracking:', sessionId);
 
       // Insert initial record with is_valid_play = false
+      const insertData = {
+        song_id: songId,
+        user_session_id: sessionId,
+        played_at: new Date().toISOString(),
+        duration_seconds: 0,
+        is_valid_play: false,
+        completion_percentage: 0
+      };
+      
+      console.log('Inserting play record:', insertData);
+      
       const { data, error } = await supabase
         .from('song_plays')
-        .insert({
-          song_id: songId,
-          user_session_id: sessionId,
-          played_at: new Date().toISOString(),
-          duration_seconds: 0,
-          is_valid_play: false
-        })
+        .insert(insertData)
         .select('id')
         .single();
 
       if (error) {
         console.error('Error starting play tracking:', error);
+        console.error('Failed insert data:', insertData);
         throw error;
       }
 
@@ -73,7 +81,7 @@ export const useSongStatistics = () => {
         debugInterval: undefined
       });
 
-      console.log('Play tracking started for song:', songId, 'Record ID:', data.id);
+      console.log('✅ Play tracking started successfully for song:', songId, 'Record ID:', data.id);
       
       // Debug: Log every 5 seconds to track listening progress
       const startTime = Date.now();

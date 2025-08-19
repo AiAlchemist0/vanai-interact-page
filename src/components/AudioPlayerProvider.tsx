@@ -42,18 +42,13 @@ const AudioPlayerProvider: React.FC<AudioPlayerProviderProps> = ({ children }) =
           audioPlayerHook.setIsPlaying(true);
         } catch (e) {
           console.error('Audio play failed:', e);
-          logPerformanceMetric({
-            componentName: 'AudioPlayerProvider',
-            renderTime: 0,
-            memoryUsage: undefined
-          });
         }
       } else {
         audio.pause();
         audioPlayerHook.setIsPlaying(false);
       }
     }, 'togglePlay');
-  }, [updateActivity, audioPlayerHook, audioRef, measureAsync, logPerformanceMetric]);
+  }, [updateActivity, audioPlayerHook, audioRef, measureAsync]);
 
   const nextSong = useCallback(() => {
     updateActivity(); // Track user interaction
