@@ -327,9 +327,9 @@ All colors MUST be HSL.
     bottom: 0;
     width: 10px;
     background: linear-gradient(to top, 
-      hsl(var(--primary) / 0.4), 
-      hsl(var(--ai-cyan) / 0.3), 
-      hsl(60, 100%, 60% / 0.2)
+      hsl(var(--primary) / 0.8), 
+      hsl(var(--ai-cyan) / 0.6), 
+      hsl(60, 100%, 60% / 0.5)
     );
     border-radius: 4px;
     animation: philippe-playlist-visualizer-pulse 0.8s ease-in-out infinite alternate;

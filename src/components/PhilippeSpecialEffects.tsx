@@ -51,8 +51,8 @@ const PhilippeSpecialEffects: React.FC<PhilippeSpecialEffectsProps> = ({ type, c
         {children}
         {isPhilippePlayingActive && (
           <>
-            {/* Dancing soundbars as playlist background */}
-            <div className="absolute inset-0 pointer-events-none overflow-hidden z-0">
+            {/* Dancing soundbars as playlist overlay */}
+            <div className="absolute inset-0 pointer-events-none overflow-hidden z-50">
               <div className="philippe-playlist-visualizer-bars">
                 {[...Array(24)].map((_, i) => (
                   <div 
