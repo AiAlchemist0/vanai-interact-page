@@ -1,7 +1,8 @@
-import React from 'react';
-import { Heart } from "lucide-react";
+import React, { useState } from 'react';
+import { Heart, Info } from "lucide-react";
 import { useUnifiedAudioControl } from '@/hooks/useUnifiedAudioControl';
 import { UnifiedPlayButton } from '@/components/ui/UnifiedPlayButton';
+import { SongInfoModal } from '@/components/SongInfoModal';
 
 interface SongItemProps {
   song: {
@@ -33,6 +34,7 @@ const SongItem: React.FC<SongItemProps> = ({
 }) => {
   // Now hooks are called at the top level of this component
   const { audioState, handlePlay, handleStop } = useUnifiedAudioControl(song.id, index, updateActivity);
+  const [showInfoModal, setShowInfoModal] = useState(false);
 
   return (
     <div
@@ -42,21 +44,36 @@ const SongItem: React.FC<SongItemProps> = ({
           : 'bg-muted/20 hover:bg-muted/40 border-border/20'
       }`}
     >
-      {/* Like Button */}
+      {/* Action Buttons - Like and Info */}
       <div className="flex-shrink-0 w-8 sm:w-10 text-center self-center">
         <div className="flex flex-col items-center justify-center gap-1">
+          {/* Like Button */}
           <button
             onClick={(e) => onLikeClick(song.id, e)}
             className="transition-all duration-200 hover:scale-110 touch-manipulation p-1"
           >
             <Heart 
-              className={`w-5 h-5 sm:w-6 sm:h-6 ${
+              className={`w-4 h-4 sm:w-5 sm:h-5 ${
                 isLiked(song.id) 
                   ? 'text-red-500 fill-red-500' 
                   : 'text-muted-foreground/50 hover:text-red-400'
               }`} 
             />
           </button>
+          
+          {/* Info Button */}
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              setShowInfoModal(true);
+            }}
+            className="transition-all duration-200 hover:scale-110 touch-manipulation p-1"
+          >
+            <Info 
+              className="w-4 h-4 sm:w-5 sm:h-5 text-muted-foreground/50 hover:text-primary"
+            />
+          </button>
+          
           <span className="text-xs font-medium text-muted-foreground">{getLikeCount(song.id)}</span>
         </div>
       </div>
@@ -131,8 +148,15 @@ const SongItem: React.FC<SongItemProps> = ({
                />
              </div>
            )}
-         </div>
-      </div>
+          </div>
+       </div>
+       
+       {/* Song Info Modal */}
+       <SongInfoModal 
+         isOpen={showInfoModal}
+         onClose={() => setShowInfoModal(false)}
+         songId={song.id}
+       />
     </div>
   );
 };
