@@ -598,6 +598,7 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ audioPlayerHook }) => {
   
   const [shouldAutoPlay, setShouldAutoPlay] = React.useState(false);
   const [hasRecordedPlay, setHasRecordedPlay] = React.useState(false);
+  const [previousSongId, setPreviousSongId] = React.useState<string | null>(null);
   
   // Add state for animated marquee text on mobile
   const [isTextOverflowing, setIsTextOverflowing] = React.useState(false);
@@ -759,14 +760,18 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ audioPlayerHook }) => {
     };
   }, [currentSong.src, fileAvailable]); // Simplified dependencies - only recreate when song source changes
 
-  // Reset play tracking when song changes
+  // Track previous song ID and handle song change tracking
   React.useEffect(() => {
-    // End tracking for previous song if it was being tracked
-    if (hasRecordedPlay) {
-      endPlayTracking(currentSong.id, duration);
+    // End tracking for previous song if it was being tracked and a different song is now playing
+    if (hasRecordedPlay && previousSongId && previousSongId !== currentSong.id) {
+      console.log('🔄 Song changed: Ending play tracking for:', previousSongId, '(was playing for', Math.round(duration), 's)');
+      endPlayTracking(previousSongId, duration);
+      setHasRecordedPlay(false);
     }
-    setHasRecordedPlay(false);
-  }, [currentSongIndex, endPlayTracking, currentSong.id, hasRecordedPlay]);
+    
+    // Update the previous song ID
+    setPreviousSongId(currentSong.id);
+  }, [currentSongIndex, endPlayTracking, currentSong.id, hasRecordedPlay, previousSongId, duration]);
 
   // Effect to handle auto-play after song changes
   React.useEffect(() => {
