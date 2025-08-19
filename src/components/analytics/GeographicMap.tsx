@@ -13,24 +13,38 @@ interface GeographicData {
   last_activity: string;
 }
 
+interface CityCoordinates {
+  [key: string]: [number, number]; // [latitude, longitude]
+}
+
+// City coordinates for known locations
+const cityCoordinates: CityCoordinates = {
+  'Vancouver': [49.2827, -123.1207],
+  'Burnaby': [49.2488, -122.9805],
+  'Chilliwack': [49.1579, -121.9514],
+  'Surrey': [49.1913, -122.8490],
+  'Victoria': [48.4284, -123.3656],
+  'Richmond': [49.1666, -123.1336],
+  'Kelowna': [49.8880, -119.4960],
+  'Abbotsford': [49.0580, -122.3258],
+  'Kamloops': [50.6745, -120.3273],
+  'Prince George': [53.9171, -122.7497],
+  'Nanaimo': [49.1659, -123.9401],
+  'Toronto': [43.6532, -79.3832],
+  'Montreal': [45.5017, -73.5673],
+  'Calgary': [51.0447, -114.0719],
+  'Edmonton': [53.5461, -113.4938],
+  'Ottawa': [45.4215, -75.6972],
+  'Winnipeg': [49.8951, -97.1384],
+  'Quebec City': [46.8139, -71.2080],
+  'Hamilton': [43.2557, -79.8711],
+  'Kitchener': [43.4501, -80.4945],
+};
+
 const GeographicMap = () => {
   const [geoData, setGeoData] = useState<GeographicData[]>([]);
   const [loading, setLoading] = useState(true);
   const [lastRefreshed, setLastRefreshed] = useState<Date>(new Date());
-
-  // Sample BC regions with mock coordinates for visualization
-  const bcRegions = [
-    { name: 'Vancouver', x: 20, y: 70, population: 'Metro', color: 'from-cyan-500 to-blue-500' },
-    { name: 'Victoria', x: 15, y: 85, population: 'Capital', color: 'from-purple-500 to-pink-500' },
-    { name: 'Surrey', x: 22, y: 68, population: 'Metro', color: 'from-green-500 to-teal-500' },
-    { name: 'Burnaby', x: 21, y: 69, population: 'Metro', color: 'from-orange-500 to-red-500' },
-    { name: 'Richmond', x: 19, y: 71, population: 'Metro', color: 'from-indigo-500 to-purple-500' },
-    { name: 'Kelowna', x: 50, y: 45, population: 'Interior', color: 'from-yellow-500 to-orange-500' },
-    { name: 'Abbotsford', x: 25, y: 75, population: 'Fraser Valley', color: 'from-pink-500 to-rose-500' },
-    { name: 'Kamloops', x: 55, y: 35, population: 'Interior', color: 'from-teal-500 to-cyan-500' },
-    { name: 'Prince George', x: 60, y: 15, population: 'Northern', color: 'from-lime-500 to-green-500' },
-    { name: 'Nanaimo', x: 12, y: 65, population: 'Island', color: 'from-violet-500 to-purple-500' }
-  ];
 
   useEffect(() => {
     const fetchGeographicData = async () => {
@@ -40,7 +54,7 @@ const GeographicMap = () => {
         setGeoData(data || []);
       } catch (error) {
         console.error('Error fetching geographic data:', error);
-        setGeoData([]); // Set empty array instead of mock data
+        setGeoData([]);
       } finally {
         setLoading(false);
         setLastRefreshed(new Date());
@@ -65,7 +79,7 @@ const GeographicMap = () => {
       )
       .subscribe();
 
-    // Refresh every 30 seconds instead of 2 minutes for more real-time feel
+    // Refresh every 30 seconds
     const interval = setInterval(fetchGeographicData, 30000);
     
     return () => {
@@ -77,8 +91,13 @@ const GeographicMap = () => {
   const maxListening = Math.max(...geoData.map(d => d.listening_count));
   const totalListeners = geoData.reduce((sum, d) => sum + d.listening_count, 0);
 
-  const getRegionData = (regionName: string) => {
-    return geoData.find(d => d.region === regionName || d.city === regionName);
+  const formatTimeAgo = (date: Date) => {
+    const now = new Date();
+    const diff = Math.floor((now.getTime() - date.getTime()) / 1000);
+    
+    if (diff < 60) return 'Just now';
+    if (diff < 3600) return `${Math.floor(diff / 60)}m ago`;
+    return `${Math.floor(diff / 3600)}h ago`;
   };
 
   const getIntensity = (listening_count: number) => {
@@ -99,15 +118,6 @@ const GeographicMap = () => {
     );
   }
 
-  const formatTimeAgo = (date: Date) => {
-    const now = new Date();
-    const diff = Math.floor((now.getTime() - date.getTime()) / 1000);
-    
-    if (diff < 60) return 'Just now';
-    if (diff < 3600) return `${Math.floor(diff / 60)}m ago`;
-    return `${Math.floor(diff / 3600)}h ago`;
-  };
-
   return (
     <TooltipProvider>
       <Card className="bg-slate-900/50 border-purple-500/30 shadow-2xl shadow-purple-500/10 backdrop-blur-xl">
@@ -116,7 +126,7 @@ const GeographicMap = () => {
             <div className="flex items-center space-x-2">
               <CardTitle className="flex items-center space-x-2 text-purple-300">
                 <Globe className="h-5 w-5 text-green-400" />
-                <span>British Columbia Listening Map</span>
+                <span>Global Listening Map</span>
               </CardTitle>
               <Tooltip>
                 <TooltipTrigger asChild>
@@ -124,7 +134,7 @@ const GeographicMap = () => {
                 </TooltipTrigger>
                 <TooltipContent className="max-w-xs z-50 bg-slate-800 border-slate-700">
                   <div className="space-y-2">
-                    <p className="text-sm">Real geographic data based on IP-based location detection. Shows listening activity across British Columbia regions. Updates every 30 seconds with real-time subscriptions.</p>
+                    <p className="text-sm">Interactive map showing real listening activity worldwide. Marker size indicates listening intensity. Updates every 30 seconds with real-time data.</p>
                     <div className="text-xs text-slate-400 border-t border-slate-700 pt-2">
                       Last updated: {formatTimeAgo(lastRefreshed)}
                     </div>
@@ -137,153 +147,170 @@ const GeographicMap = () => {
             </Badge>
           </div>
         </CardHeader>
-      <CardContent className="p-6">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* BC Map Visualization */}
-          <div className="lg:col-span-2">
-            <div className="relative w-full h-96 bg-gradient-to-br from-slate-800 to-slate-900 rounded-xl border border-slate-700 overflow-hidden">
-              {/* BC Province Outline (simplified) */}
-              <svg 
-                viewBox="0 0 100 100" 
-                className="absolute inset-0 w-full h-full"
-                style={{ filter: 'drop-shadow(0 0 10px rgba(139, 92, 246, 0.3))' }}
-              >
-                {/* Simplified BC outline */}
-                <path
-                  d="M10,60 Q15,40 25,35 L35,30 Q45,25 55,20 L65,15 Q75,12 85,15 L90,20 Q92,30 90,40 L88,50 Q85,60 80,70 L75,80 Q70,85 60,88 L50,90 Q40,88 30,85 L20,80 Q12,70 10,60 Z"
-                  fill="rgba(30, 41, 59, 0.5)"
-                  stroke="rgba(139, 92, 246, 0.3)"
-                  strokeWidth="0.5"
-                />
-                
-                {/* Region points */}
-                {bcRegions.map((region) => {
-                  const regionData = getRegionData(region.name);
-                  const intensity = getIntensity(regionData?.listening_count || 0);
-                  const hasData = regionData && regionData.listening_count > 0;
+        <CardContent className="p-6">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            {/* Interactive World Map */}
+            <div className="lg:col-span-2">
+              <div className="relative w-full h-96 bg-gradient-to-br from-slate-800 to-slate-900 rounded-xl border border-slate-700 overflow-hidden">
+                {/* World Map SVG with real data points */}
+                <svg 
+                  viewBox="0 0 1000 500" 
+                  className="absolute inset-0 w-full h-full"
+                  style={{ filter: 'drop-shadow(0 0 10px rgba(139, 92, 246, 0.3))' }}
+                >
+                  {/* Simplified world map outline */}
+                  <g fill="rgba(30, 41, 59, 0.5)" stroke="rgba(139, 92, 246, 0.3)" strokeWidth="1">
+                    {/* North America */}
+                    <path d="M100,100 Q150,80 200,90 L280,85 Q320,80 350,85 L380,90 Q400,95 420,100 L450,110 Q480,120 500,130 L520,140 Q540,150 550,170 L560,190 Q550,210 540,230 L530,250 Q520,270 500,280 L480,290 Q460,300 440,310 L420,315 Q400,320 380,315 L360,310 Q340,305 320,300 L300,295 Q280,290 260,285 L240,280 Q220,275 200,270 L180,260 Q160,250 140,230 L120,210 Q100,190 95,170 L90,150 Q95,130 100,100 Z" />
+                    
+                    {/* Europe */}
+                    <path d="M450,120 Q470,110 490,115 L510,118 Q530,120 545,125 L560,130 Q575,135 585,140 L595,145 Q605,150 610,160 L615,170 Q610,180 605,190 L600,200 Q595,210 585,215 L575,220 Q565,225 555,220 L545,215 Q535,210 525,205 L515,200 Q505,195 495,190 L485,185 Q475,180 470,170 L465,160 Q470,150 475,140 L480,130 Q485,125 450,120 Z" />
+                    
+                    {/* Asia */}
+                    <path d="M550,80 Q600,70 650,75 L700,80 Q750,85 800,90 L850,95 Q900,100 920,110 L940,120 Q950,130 955,140 L960,150 Q955,160 950,170 L945,180 Q940,190 930,200 L920,210 Q910,220 900,225 L890,230 Q880,235 870,230 L860,225 Q850,220 840,215 L830,210 Q820,205 810,200 L800,195 Q790,190 780,185 L770,180 Q760,175 750,170 L740,165 Q730,160 720,155 L710,150 Q700,145 690,140 L680,135 Q670,130 660,125 L650,120 Q620,110 590,105 L570,100 Q560,95 550,80 Z" />
+                  </g>
                   
-                  return (
-                    <g key={region.name}>
-                      {/* Glow effect for active regions */}
-                      {hasData && (
+                  {/* Real data points */}
+                  {geoData.map((location, index) => {
+                    const coordinates = cityCoordinates[location.city];
+                    if (!coordinates) return null;
+                    
+                    // Convert lat/lng to SVG coordinates
+                    const x = ((coordinates[1] + 180) / 360) * 1000; // longitude
+                    const y = ((90 - coordinates[0]) / 180) * 500; // latitude
+                    const intensity = getIntensity(location.listening_count);
+                    const size = 8 + intensity * 12;
+                    
+                    return (
+                      <g key={`${location.city}-${location.region}-${index}`}>
+                        {/* Glow effect */}
                         <circle
-                          cx={region.x}
-                          cy={region.y}
-                          r={6 + intensity * 8}
+                          cx={x}
+                          cy={y}
+                          r={size + 4}
                           fill="url(#glow)"
-                          opacity={intensity * 0.3}
+                          opacity={intensity * 0.4}
                           className="animate-pulse"
                         />
-                      )}
-                      
-                      {/* Main point */}
-                      <circle
-                        cx={region.x}
-                        cy={region.y}
-                        r={hasData ? 3 + intensity * 4 : 2}
-                        fill={hasData ? '#22d3ee' : '#64748b'}
-                        opacity={hasData ? 0.9 : 0.4}
-                        className={hasData ? 'animate-pulse cursor-pointer' : 'cursor-pointer'}
-                        style={{ filter: hasData ? 'drop-shadow(0 0 4px #22d3ee)' : 'none' }}
-                      />
-                      
-                      {/* Label */}
-                      <text
-                        x={region.x}
-                        y={region.y - 8}
-                        textAnchor="middle"
-                        className="text-xs fill-slate-300 font-medium"
-                        style={{ fontSize: hasData ? '4px' : '3px' }}
-                      >
-                        {region.name}
-                      </text>
-                      
-                      {/* Play count */}
-                      {hasData && (
-                        <text
-                          x={region.x}
-                          y={region.y + 12}
-                          textAnchor="middle"
-                          className="text-xs fill-cyan-400 font-bold"
-                          style={{ fontSize: '3px' }}
+                        
+                        {/* Main marker */}
+                        <circle
+                          cx={x}
+                          cy={y}
+                          r={size}
+                          fill="#22d3ee"
+                          opacity={0.9}
+                          className="animate-pulse cursor-pointer"
+                          style={{ filter: 'drop-shadow(0 0 6px #22d3ee)' }}
                         >
-                          {regionData.listening_count}
+                          <title>{`${location.city}, ${location.region}: ${location.listening_count} listeners`}</title>
+                        </circle>
+                        
+                        {/* City label */}
+                        <text
+                          x={x}
+                          y={y - size - 5}
+                          textAnchor="middle"
+                          className="text-xs fill-slate-200 font-medium"
+                          style={{ fontSize: '12px' }}
+                        >
+                          {location.city}
                         </text>
-                      )}
-                    </g>
-                  );
-                })}
+                        
+                        {/* Count display */}
+                        <text
+                          x={x}
+                          y={y + 4}
+                          textAnchor="middle"
+                          className="text-xs fill-white font-bold"
+                          style={{ fontSize: '10px' }}
+                        >
+                          {location.listening_count}
+                        </text>
+                      </g>
+                    );
+                  })}
+                  
+                  {/* Gradient definitions */}
+                  <defs>
+                    <radialGradient id="glow" cx="50%" cy="50%" r="50%">
+                      <stop offset="0%" stopColor="#22d3ee" stopOpacity="0.8" />
+                      <stop offset="100%" stopColor="#22d3ee" stopOpacity="0" />
+                    </radialGradient>
+                  </defs>
+                </svg>
                 
-                {/* Gradient definitions */}
-                <defs>
-                  <radialGradient id="glow" cx="50%" cy="50%" r="50%">
-                    <stop offset="0%" stopColor="#22d3ee" stopOpacity="0.6" />
-                    <stop offset="100%" stopColor="#22d3ee" stopOpacity="0" />
-                  </radialGradient>
-                </defs>
-              </svg>
-              
-              {/* Legend */}
-              <div className="absolute bottom-4 left-4 bg-slate-800/80 backdrop-blur-sm rounded-lg p-3 space-y-2">
-                <h4 className="text-xs font-semibold text-slate-300">Activity Level</h4>
-                <div className="flex items-center space-x-2 text-xs">
-                  <div className="w-2 h-2 rounded-full bg-cyan-400"></div>
-                  <span className="text-slate-400">Active</span>
-                </div>
-                <div className="flex items-center space-x-2 text-xs">
-                  <div className="w-2 h-2 rounded-full bg-slate-500"></div>
-                  <span className="text-slate-400">No Activity</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Regional Statistics */}
-          <div className="space-y-4">
-            <div className="p-4 bg-gradient-to-br from-cyan-500/10 to-blue-500/10 rounded-xl border border-cyan-500/20">
-              <div className="flex items-center space-x-2 mb-3">
-                <Users className="h-4 w-4 text-cyan-400" />
-                <span className="text-sm font-medium text-cyan-400">Top Regions</span>
-              </div>
-              <div className="space-y-2">
-                {geoData.slice(0, 5).map((region, index) => (
-                  <div key={`${region.region}-${region.city}-${index}`} className="flex items-center justify-between">
-                    <div className="flex items-center space-x-2">
-                      <div className="w-2 h-2 rounded-full bg-cyan-400"></div>
-                      <span className="text-sm text-slate-300">{region.region}</span>
-                    </div>
-                    <span className="text-sm font-semibold text-white">{region.listening_count}</span>
+                {/* Legend */}
+                <div className="absolute bottom-4 left-4 bg-slate-800/90 backdrop-blur-sm rounded-lg p-3 space-y-2">
+                  <h4 className="text-xs font-semibold text-slate-300">Activity Level</h4>
+                  <div className="flex items-center space-x-2 text-xs">
+                    <div className="w-3 h-3 rounded-full bg-cyan-400 animate-pulse"></div>
+                    <span className="text-slate-400">Active Listeners</span>
                   </div>
-                ))}
+                  <div className="text-xs text-slate-500">
+                    Size = Listening Intensity
+                  </div>
+                </div>
+                
+                {/* Map info */}
+                <div className="absolute top-4 right-4 bg-slate-800/90 backdrop-blur-sm rounded-lg p-2">
+                  <div className="text-xs text-slate-300">Real-time Global Map</div>
+                </div>
               </div>
             </div>
 
-            <div className="p-4 bg-gradient-to-br from-purple-500/10 to-pink-500/10 rounded-xl border border-purple-500/20">
-              <div className="flex items-center space-x-2 mb-3">
-                <MapPin className="h-4 w-4 text-purple-400" />
-                <span className="text-sm font-medium text-purple-400">Coverage Stats</span>
+            {/* Regional Statistics */}
+            <div className="space-y-4">
+              <div className="p-4 bg-gradient-to-br from-cyan-500/10 to-blue-500/10 rounded-xl border border-cyan-500/20">
+                <div className="flex items-center space-x-2 mb-3">
+                  <Users className="h-4 w-4 text-cyan-400" />
+                  <span className="text-sm font-medium text-cyan-400">Top Locations</span>
+                </div>
+                <div className="space-y-2">
+                  {geoData.slice(0, 5).map((location, index) => (
+                    <div key={`${location.region}-${location.city}-${index}`} className="flex items-center justify-between">
+                      <div className="flex items-center space-x-2">
+                        <div className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></div>
+                        <span className="text-sm text-slate-300">{location.city}</span>
+                      </div>
+                      <span className="text-sm font-semibold text-white">{location.listening_count}</span>
+                    </div>
+                  ))}
+                </div>
               </div>
-              <div className="space-y-2 text-sm">
-                <div className="flex justify-between">
-                  <span className="text-slate-400">Active Regions</span>
-                  <span className="text-white font-semibold">{geoData.length}</span>
+
+              <div className="p-4 bg-gradient-to-br from-purple-500/10 to-pink-500/10 rounded-xl border border-purple-500/20">
+                <div className="flex items-center space-x-2 mb-3">
+                  <MapPin className="h-4 w-4 text-purple-400" />
+                  <span className="text-sm font-medium text-purple-400">Coverage Stats</span>
                 </div>
-                <div className="flex justify-between">
-                  <span className="text-slate-400">Total Listeners</span>
-                  <span className="text-white font-semibold">{totalListeners}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-slate-400">Top Region</span>
-                  <span className="text-white font-semibold">
-                    {geoData[0]?.region || 'N/A'}
-                  </span>
+                <div className="space-y-2 text-sm">
+                  <div className="flex justify-between">
+                    <span className="text-slate-400">Active Cities</span>
+                    <span className="text-white font-semibold">{geoData.length}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-slate-400">Total Listeners</span>
+                    <span className="text-white font-semibold">{totalListeners}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-slate-400">Top City</span>
+                    <span className="text-white font-semibold">
+                      {geoData[0]?.city || 'N/A'}
+                    </span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-slate-400">Countries</span>
+                    <span className="text-white font-semibold">
+                      {new Set(geoData.map(d => d.region)).size}
+                    </span>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-      </CardContent>
-    </Card>
+        </CardContent>
+      </Card>
     </TooltipProvider>
   );
 };
