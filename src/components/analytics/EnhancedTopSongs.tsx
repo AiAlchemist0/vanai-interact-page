@@ -358,18 +358,19 @@ const EnhancedTopSongs = () => {
 
                 {/* Unified Play Button */}
                 <div className="flex flex-col items-center space-y-2">
-                  {(() => {
-                    const { audioState, handlePlay } = useUnifiedAudioControl(song.song_id);
-                    return (
-                      <UnifiedPlayButton
-                        audioState={audioState}
-                        onPlay={handlePlay}
-                        size="md"
-                        variant="compact"
-                        className="w-10 h-10"
-                      />
-                    );
-                  })()}
+                  <UnifiedPlayButton
+                    audioState={{ 
+                      isLoading: false, 
+                      isPlaying: isCurrentlyPlaying, 
+                      isPaused: false, 
+                      isCurrent: currentSong?.id === song.song_id, 
+                      progress: 0 
+                    }}
+                    onPlay={() => window.dispatchEvent(new CustomEvent('audio:play', { detail: { songId: song.song_id } }))}
+                    size="md"
+                    variant="compact"
+                    className="w-10 h-10"
+                  />
                   
                   <div className="text-center space-y-0.5">
                     <div className="text-xs text-slate-500 flex items-center">
