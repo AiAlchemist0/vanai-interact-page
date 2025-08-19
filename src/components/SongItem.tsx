@@ -67,7 +67,7 @@ const SongItem: React.FC<SongItemProps> = ({
               e.stopPropagation();
               setShowInfoModal(true);
             }}
-            className="transition-all duration-200 hover:scale-110 touch-manipulation p-1"
+            className="transition-all duration-200 hover:scale-110 touch-manipulation p-1 shadow-[0_0_15px_rgba(59,130,246,0.5)] hover:shadow-[0_0_20px_rgba(59,130,246,0.8)] border border-blue-500/30 rounded-full bg-blue-500/10"
           >
             <Info 
               className="w-4 h-4 sm:w-5 sm:h-5 text-muted-foreground/50 hover:text-primary"
