@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogTrigger } from "@/components/ui/dialog";
-import { Lightbulb, Users, BarChart3, MapPin, Gamepad2, Sparkles, Shield } from "lucide-react";
+import { Lightbulb, Users, BarChart3, MapPin, Gamepad2, Sparkles, Shield, Video } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import heroImage from "@/assets/hero-ai-survey.jpg";
@@ -273,12 +273,19 @@ const Hero = () => {
 
           {/* Buttons Section: Horizontal row */}
           <div className="flex justify-center gap-4 max-w-5xl mx-auto flex-wrap">
-            <Button size="lg" className="gradient-primary hover:glow-primary transition-smooth group px-6 py-3" onClick={() => document.getElementById('vision')?.scrollIntoView({
-            behavior: 'smooth'
-          })}>
-              <Lightbulb className="mr-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
-              Project's Vision
-            </Button>
+            <div className="flex items-center gap-2">
+              <Button size="lg" className="gradient-primary hover:glow-primary transition-smooth group px-6 py-3" onClick={() => document.getElementById('vision')?.scrollIntoView({
+              behavior: 'smooth'
+            })}>
+                <Lightbulb className="mr-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                Project's Vision
+              </Button>
+              <Button size="sm" variant="outline" className="border-primary/30 hover:border-primary transition-smooth p-2" onClick={() => document.getElementById('vision')?.scrollIntoView({
+              behavior: 'smooth'
+            })} aria-label="Watch Vision Video">
+                <Video className="w-4 h-4 text-primary" />
+              </Button>
+            </div>
 
             <Button size="lg" className="gradient-secondary hover:glow-secondary transition-smooth group px-6 py-3" onClick={() => document.getElementById('insights')?.scrollIntoView({
             behavior: 'smooth'
