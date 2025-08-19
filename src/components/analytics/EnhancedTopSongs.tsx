@@ -386,16 +386,6 @@ const EnhancedTopSongs = () => {
                   </div>
                 </div>
 
-                {/* Last Played Date */}
-                <div className="text-center">
-                  <div className="text-xs text-slate-500 flex items-center">
-                    <Clock className="h-2.5 w-2.5 mr-0.5" />
-                    {song.last_played_at ? 
-                      new Date(song.last_played_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) :
-                      'No plays'
-                    }
-                  </div>
-                </div>
               </div>
             );
           })}
