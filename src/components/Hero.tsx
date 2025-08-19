@@ -89,17 +89,29 @@ const Hero = () => {
             <div className="space-y-3 sm:space-y-4">
               {/* Mobile View - Square Icon Buttons */}
               <div className="flex justify-center gap-3">
-                <Button size="icon" className="gradient-primary hover:glow-primary transition-smooth w-16 h-16" onClick={() => document.getElementById('vision')?.scrollIntoView({
+                <div className="flex flex-col items-center gap-1">
+                  <Button size="icon" className="gradient-primary hover:glow-primary transition-smooth w-16 h-16" onClick={() => document.getElementById('vision')?.scrollIntoView({
                 behavior: 'smooth'
               })} aria-label="Project's Vision">
-                  <Lightbulb className="w-6 h-6" />
-                </Button>
+                    <Lightbulb className="w-6 h-6" />
+                  </Button>
+                  <Button size="icon" className="gradient-primary hover:glow-primary transition-smooth w-8 h-8" onClick={() => document.getElementById('vision')?.scrollIntoView({
+                  behavior: 'smooth'
+                })} aria-label="Watch Vision Video">
+                    <Video className="w-4 h-4" />
+                  </Button>
+                </div>
 
-                <Button size="icon" className="gradient-secondary hover:glow-secondary transition-smooth w-16 h-16" onClick={() => document.getElementById('insights')?.scrollIntoView({
-                behavior: 'smooth'
-              })} aria-label="Survey Deep Dive">
-                  <BarChart3 className="w-6 h-6" />
-                </Button>
+                <div className="flex flex-col items-center gap-1">
+                  <Button size="icon" className="gradient-secondary hover:glow-secondary transition-smooth w-16 h-16" onClick={() => document.getElementById('insights')?.scrollIntoView({
+                  behavior: 'smooth'
+                })} aria-label="Survey Deep Dive">
+                    <BarChart3 className="w-6 h-6" />
+                  </Button>
+                  <Button size="icon" className="gradient-secondary hover:glow-secondary transition-smooth w-8 h-8" onClick={() => navigate('/ai-analytics')} aria-label="Go to AI Analytics">
+                    <Bot className="w-4 h-4" />
+                  </Button>
+                </div>
 
                 <Dialog>
                   <DialogTrigger asChild>
@@ -280,10 +292,10 @@ const Hero = () => {
                 <Lightbulb className="mr-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
                 Project's Vision
               </Button>
-              <Button size="sm" variant="outline" className="border-primary/30 hover:border-primary transition-smooth p-2" onClick={() => document.getElementById('vision')?.scrollIntoView({
+              <Button size="sm" className="gradient-primary hover:glow-primary transition-smooth p-2 min-w-[40px] min-h-[40px]" onClick={() => document.getElementById('vision')?.scrollIntoView({
               behavior: 'smooth'
             })} aria-label="Watch Vision Video">
-                <Video className="w-4 h-4 text-primary" />
+                <Video className="w-4 h-4" />
               </Button>
             </div>
 
@@ -294,8 +306,8 @@ const Hero = () => {
                 <BarChart3 className="mr-2 w-5 h-5 group-hover:scale-110 transition-transform" />
                 Survey Deep Dive
               </Button>
-              <Button size="sm" variant="outline" className="border-primary/30 hover:border-primary transition-smooth p-2" onClick={() => navigate('/ai-analytics')} aria-label="Go to AI Analytics">
-                <Bot className="w-4 h-4 text-primary" />
+              <Button size="sm" className="gradient-secondary hover:glow-secondary transition-smooth p-2 min-w-[40px] min-h-[40px]" onClick={() => navigate('/ai-analytics')} aria-label="Go to AI Analytics">
+                <Bot className="w-4 h-4" />
               </Button>
             </div>
 
