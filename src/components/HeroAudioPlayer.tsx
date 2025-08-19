@@ -96,41 +96,46 @@ const HeroAudioPlayer = () => {
                   </>
                 )}
               </div>
-              <div className="flex items-center gap-1">
-                <Button
-                  onClick={async () => {
-                    if (isPlaylistMode) {
-                      stopPlaylistMode();
-                    } else {
-                      try {
-                        await startPlaylistMode();
-                      } catch (error) {
-                        toast({
-                          title: "Autoplay blocked",
-                          description: "Please interact with the page first to enable playlist mode.",
-                          variant: "destructive"
-                        });
-                      }
-                    }
-                  }}
-                  variant={isPlaylistMode ? "destructive" : "secondary"}
-                  size="sm"
-                  className={`h-7 px-2 text-xs font-medium flex-shrink-0 transition-all duration-200 ${
-                    isPlaylistMode ? 'animate-pulse shadow-lg' : ''
-                  }`}
-                >
-                  {isPlaylistMode ? (
-                    <>
-                      <StopCircle className="h-3 w-3 mr-1" />
-                      Stop playlist
-                    </>
-                  ) : (
-                    <>
-                      <PlayCircle className="h-3 w-3 mr-1" />
-                      Play all songs
-                    </>
-                  )}
-                </Button>
+               <div className="flex items-center gap-1">
+                 <Button
+                   onClick={async () => {
+                     if (isPlaylistMode) {
+                       stopPlaylistMode();
+                     } else {
+                       try {
+                         await startPlaylistMode();
+                       } catch (error) {
+                         toast({
+                           title: "Autoplay blocked",
+                           description: "Please interact with the page first to enable playlist mode.",
+                           variant: "destructive"
+                         });
+                       }
+                     }
+                   }}
+                   variant={isPlaylistMode ? "default" : "secondary"}
+                   size="sm"
+                   className={`h-7 px-2 text-xs font-medium flex-shrink-0 transition-all duration-300 ${
+                     isPlaylistMode 
+                       ? 'bg-gradient-primary text-white shadow-lg transform hover:scale-105 border-0' 
+                       : 'hover:bg-primary/10'
+                   }`}
+                 >
+                   {isPlaylistMode ? (
+                     <>
+                       <PlayCircle className="h-3 w-3 mr-1 animate-spin" style={{ animationDuration: '3s' }} />
+                       <span className="relative">
+                         Playlist Active
+                         <span className="absolute -inset-1 bg-white/20 rounded animate-ping opacity-75"></span>
+                       </span>
+                     </>
+                   ) : (
+                     <>
+                       <PlayCircle className="h-3 w-3 mr-1" />
+                       Play all songs
+                     </>
+                   )}
+                 </Button>
                 
                 {/* Stop Button */}
                 {(isPlaying || isPlaylistMode) && (
