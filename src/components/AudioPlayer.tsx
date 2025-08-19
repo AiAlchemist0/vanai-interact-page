@@ -33,7 +33,7 @@ const SONGS: Song[] = [
     title: "BC AI Hackathon by Rival Tech",
     artist: "Official Anthem",
     src: getAudioUrl("BC AI Hackathon by Rival Tech.mp3"),
-    coverArt: bcAiHackathonCover,
+    coverArt: "/lovable-uploads/b56415f7-ad61-43e6-8d05-54452f44a5be.png",
     lyrics: [
       { time: 0, text: "In Vancouver's buzzing scene, where coders dream big," },
       { time: 4, text: "The BC AI Hackathon calls, time to dig." },
