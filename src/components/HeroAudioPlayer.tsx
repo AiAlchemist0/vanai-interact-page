@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import { Button } from "@/components/ui/button";
 import { Heart, PlayCircle, StopCircle, Square } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
@@ -42,15 +42,6 @@ const HeroAudioPlayer = () => {
 
   const { updateActivity } = useEnhancedTracking();
   const { toast } = useToast();
-
-  // Pre-compute all audio controls to avoid multiple hook calls in render
-  const audioControls = useMemo(() => {
-    return songs.map((song, index) => ({
-      songId: song.id,
-      index,
-      ...useUnifiedAudioControl(song.id, index)
-    }));
-  }, [songs]);
 
   const handleLikeClick = async (songId: string, e: React.MouseEvent) => {
     e.stopPropagation();
@@ -210,13 +201,12 @@ const HeroAudioPlayer = () => {
             {/* Unified Play Button */}
             <div className="flex-shrink-0 self-start">
               {(() => {
-                const control = audioControls.find(c => c.songId === song.id);
-                if (!control) return null;
+                const { audioState, handlePlay, handleStop } = useUnifiedAudioControl(song.id, index);
                 return (
                   <UnifiedPlayButton
-                    audioState={control.audioState}
-                    onPlay={control.handlePlay}
-                    onStop={control.handleStop}
+                    audioState={audioState}
+                    onPlay={handlePlay}
+                    onStop={handleStop}
                     size="lg"
                     variant="ghost"
                     showProgress={true}
@@ -256,9 +246,7 @@ const HeroAudioPlayer = () => {
                  {/* Status Message - Fixed Height */}
                  <div className="h-4 mt-1">
                    {(() => {
-                     const control = audioControls.find(c => c.songId === song.id);
-                     if (!control) return null;
-                     const { audioState } = control;
+                     const { audioState } = useUnifiedAudioControl(song.id, index);
                      if (audioState.isLoading) {
                        return (
                          <div className="text-xs text-primary font-medium truncate flex items-center gap-1">
@@ -288,9 +276,7 @@ const HeroAudioPlayer = () => {
                {/* Mini Progress Bar for Current Song - Fixed Height */}
                <div className="h-1 mt-1">
                  {(() => {
-                   const control = audioControls.find(c => c.songId === song.id);
-                   if (!control) return null;
-                   const { audioState } = control;
+                   const { audioState } = useUnifiedAudioControl(song.id, index);
                    if (audioState.isPlaying) {
                      return (
                        <div className="w-full bg-muted/30 rounded-full h-1">
