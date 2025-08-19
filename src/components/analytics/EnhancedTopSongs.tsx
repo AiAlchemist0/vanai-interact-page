@@ -4,14 +4,13 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import { Trophy, Heart, Music, RefreshCw, TrendingUp, Clock, SkipForward, Activity, Info, Tag, Filter } from "lucide-react";
+import { Trophy, Heart, Music, RefreshCw, TrendingUp, Clock, SkipForward, Activity, Info } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { getSongMetadata, SONGS } from "@/utils/songData";
 import { useAudio } from "@/contexts/AudioContext";
 import { useUnifiedAudioControl } from "@/hooks/useUnifiedAudioControl";
 import { UnifiedPlayButton } from "@/components/ui/UnifiedPlayButton";
 import { Progress } from "@/components/ui/progress";
-import { useSongKeywords } from "@/hooks/useSongKeywords";
 interface ComprehensiveStats {
   song_id: string;
   total_plays: number;
@@ -49,8 +48,6 @@ const EnhancedTopSongs = () => {
   const [refreshing, setRefreshing] = useState(false);
   const [viewMode, setViewMode] = useState<'plays' | 'likes' | 'engagement'>('likes');
   const [lastRefreshed, setLastRefreshed] = useState<Date>(new Date());
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
-  const { keywords, getSongKeywords, getCategoryColor } = useSongKeywords();
   const {
     currentSong,
     isPlaying
@@ -151,18 +148,7 @@ const EnhancedTopSongs = () => {
     return () => clearInterval(interval);
   }, []);
   const getSortedSongs = () => {
-    let sortedSongs = [...songs];
-    
-    // Filter by category if selected
-    if (selectedCategory) {
-      sortedSongs = sortedSongs.filter(song => {
-        const songKeywords = getSongKeywords(song.song_id);
-        return songKeywords.some(keyword => keyword.category === selectedCategory);
-      });
-    }
-    
-    // Sort by view mode
-    const sorted = sortedSongs.sort((a, b) => {
+    const sorted = [...songs].sort((a, b) => {
       switch (viewMode) {
         case 'plays':
           return b.total_plays - a.total_plays;
@@ -174,7 +160,7 @@ const EnhancedTopSongs = () => {
           return b.total_plays - a.total_plays;
       }
     });
-    return sorted;
+    return sorted; // Return all songs, not just top 10
   };
   const handleRefresh = () => {
     fetchData();
@@ -219,8 +205,6 @@ const EnhancedTopSongs = () => {
     if (diff < 3600) return `${Math.floor(diff / 60)}m ago`;
     return `${Math.floor(diff / 3600)}h ago`;
   };
-
-  const uniqueCategories = Array.from(new Set(keywords.map(k => k.category)));
   return <TooltipProvider>
       <Card className="bg-slate-900/50 border-purple-500/30 shadow-2xl shadow-purple-500/10 backdrop-blur-xl">
         <CardHeader className="border-b border-purple-500/20">
@@ -245,21 +229,7 @@ const EnhancedTopSongs = () => {
               </Tooltip>
             </div>
             <div className="flex items-center space-x-2">
-              <div className="flex items-center space-x-1">
-                <Filter className="h-4 w-4 text-slate-400" />
-                <select
-                  value={selectedCategory || ''}
-                  onChange={(e) => setSelectedCategory(e.target.value || null)}
-                  className="bg-slate-800/50 text-slate-300 text-xs px-2 py-1 rounded border border-slate-600 focus:border-purple-500 outline-none"
-                >
-                  <option value="">All Categories</option>
-                  {uniqueCategories.map(category => (
-                    <option key={category} value={category}>
-                      {category}
-                    </option>
-                  ))}
-                </select>
-              </div>
+              
               <Button variant="outline" size="sm" onClick={handleRefresh} disabled={refreshing} className="border-purple-500/50 text-purple-300 hover:bg-purple-500/10">
                 <RefreshCw className={`h-3 w-3 mr-1 ${refreshing ? 'animate-spin' : ''}`} />
                 Refresh
@@ -324,26 +294,7 @@ const EnhancedTopSongs = () => {
                     <h4 className="font-semibold text-white truncate text-sm">{metadata.title}</h4>
                     {isTop3 && <Trophy className="h-3 w-3 text-yellow-400 flex-shrink-0" />}
                   </div>
-                  <p className="text-xs text-slate-400 mb-1 truncate">{metadata.artist}</p>
-                  
-                  {/* Keywords display */}
-                  <div className="flex flex-wrap gap-1 mb-2">
-                    {getSongKeywords(song.song_id).slice(0, 3).map((keyword, idx) => (
-                      <Badge 
-                        key={idx} 
-                        variant="outline" 
-                        className={`text-xs px-1.5 py-0.5 bg-gradient-to-r ${getCategoryColor(keyword.category)} bg-opacity-20 border-white/20 text-white/80`}
-                      >
-                        <Tag className="h-2 w-2 mr-1" />
-                        {keyword.keyword}
-                      </Badge>
-                    ))}
-                    {getSongKeywords(song.song_id).length > 3 && (
-                      <Badge variant="outline" className="text-xs px-1.5 py-0.5 bg-white/10 border-white/20 text-white/60">
-                        +{getSongKeywords(song.song_id).length - 3}
-                      </Badge>
-                    )}
-                  </div>
+                  <p className="text-xs text-slate-400 mb-2 truncate">{metadata.artist}</p>
                   
                   {/* Primary Stats Row */}
                    <div className="flex items-center space-x-3 text-xs mb-1">
