@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -53,6 +53,7 @@ const EnhancedTopSongs = () => {
   const [viewMode, setViewMode] = useState<'plays' | 'likes' | 'engagement'>('likes');
   const [lastRefreshed, setLastRefreshed] = useState<Date>(new Date());
   const { currentSong, isPlaying } = useAudio();
+  const { registerRefresh, unregisterRefresh } = useAnalyticsRefresh();
 
   const fetchData = async () => {
     try {
@@ -155,10 +156,21 @@ const EnhancedTopSongs = () => {
   useEffect(() => {
     fetchData();
     
+    // Register refresh function
+    registerRefresh('enhanced-top-songs', fetchData);
+    
     // Refresh every 30 seconds
     const interval = setInterval(fetchData, 30000);
-    return () => clearInterval(interval);
-  }, []);
+    
+    return () => {
+      clearInterval(interval);
+      unregisterRefresh('enhanced-top-songs');
+    };
+  }, [registerRefresh, unregisterRefresh]);
+
+  const handleRefresh = () => {
+    fetchData();
+  };
 
   const getSortedSongs = () => {
     const sorted = [...songs].sort((a, b) => {
@@ -176,9 +188,6 @@ const EnhancedTopSongs = () => {
     return sorted; // Return all songs, not just top 10
   };
 
-  const handleRefresh = () => {
-    fetchData();
-  };
 
   if (loading) {
     return (

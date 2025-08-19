@@ -1,10 +1,10 @@
-import { useState, useEffect } from "react";
-import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Skeleton } from "@/components/ui/skeleton";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import { TrendingUp, Users, Music, Clock, MapPin, Zap, RefreshCw, Heart, Info } from "lucide-react";
+import { useEffect, useState } from "react";
+import { TrendingUp, Users, Clock, MapPin, Zap, Activity, Info } from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from "@/components/ui/tooltip";
 import { supabase } from "@/integrations/supabase/client";
+import { useAnalyticsRefresh } from "@/contexts/AnalyticsRefreshContext";
 
 interface DashboardStatsData {
   total_plays: number;
@@ -19,35 +19,28 @@ const DashboardStats = () => {
   const [stats, setStats] = useState<DashboardStatsData | null>(null);
   const [totalLikes, setTotalLikes] = useState<number>(0);
   const [loading, setLoading] = useState(true);
-  const [refreshing, setRefreshing] = useState(false);
   const [lastRefreshed, setLastRefreshed] = useState<Date>(new Date());
+  const { registerRefresh, unregisterRefresh } = useAnalyticsRefresh();
 
   const fetchStats = async () => {
     try {
-      setRefreshing(true);
-      
-      const [dashboardResponse, likesResponse] = await Promise.all([
+      const [statsResponse, likesResponse] = await Promise.all([
         supabase.rpc('get_dashboard_stats'),
         supabase.rpc('get_song_like_statistics')
       ]);
 
-      if (dashboardResponse.error) throw dashboardResponse.error;
-      if (likesResponse.error) throw likesResponse.error;
-
-      if (dashboardResponse.data && dashboardResponse.data.length > 0) {
-        setStats(dashboardResponse.data[0]);
+      if (statsResponse.data && statsResponse.data.length > 0) {
+        setStats(statsResponse.data[0]);
       }
 
-      // Calculate total likes
-      const likes = likesResponse.data || [];
-      const total = likes.reduce((sum: number, song: any) => sum + song.total_likes, 0);
-      setTotalLikes(total);
-      
+      if (likesResponse.data) {
+        const total = likesResponse.data.reduce((sum: number, song: any) => sum + (song.total_likes || 0), 0);
+        setTotalLikes(total);
+      }
     } catch (error) {
       console.error('Error fetching dashboard stats:', error);
     } finally {
       setLoading(false);
-      setRefreshing(false);
       setLastRefreshed(new Date());
     }
   };
@@ -55,13 +48,25 @@ const DashboardStats = () => {
   useEffect(() => {
     fetchStats();
     
+    // Register refresh function
+    registerRefresh('dashboard-stats', fetchStats);
+    
     // Refresh every 30 seconds
     const interval = setInterval(fetchStats, 30000);
-    return () => clearInterval(interval);
-  }, []);
+    
+    return () => {
+      clearInterval(interval);
+      unregisterRefresh('dashboard-stats');
+    };
+  }, [registerRefresh, unregisterRefresh]);
 
-  const handleRefresh = () => {
-    fetchStats();
+  const formatTimeAgo = (date: Date) => {
+    const now = new Date();
+    const diffInSeconds = Math.floor((now.getTime() - date.getTime()) / 1000);
+    
+    if (diffInSeconds < 60) return `${diffInSeconds}s ago`;
+    if (diffInSeconds < 3600) return `${Math.floor(diffInSeconds / 60)}m ago`;
+    return `${Math.floor(diffInSeconds / 3600)}h ago`;
   };
 
   const statCards = [
@@ -86,7 +91,7 @@ const DashboardStats = () => {
     {
       title: "Unique Songs",
       value: stats?.unique_songs || 0,
-      icon: Music,
+      icon: Clock,
       gradient: "from-purple-500 to-pink-500",
       change: "All tracks",
       description: "In our collection",
@@ -122,7 +127,7 @@ const DashboardStats = () => {
     {
       title: "Total Likes",
       value: totalLikes,
-      icon: Heart,
+      icon: Activity,
       gradient: "from-pink-500 to-rose-500",
       change: "Community",
       description: "Song favorites",
@@ -132,14 +137,16 @@ const DashboardStats = () => {
 
   if (loading) {
     return (
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-6">
-        {Array.from({ length: 6 }).map((_, i) => (
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-7 gap-6">
+        {Array.from({ length: 7 }).map((_, i) => (
           <Card key={i} className="bg-slate-900/50 border-purple-500/30">
             <CardContent className="p-6">
-              <Skeleton className="h-12 w-12 rounded-xl mb-4" />
-              <Skeleton className="h-4 w-20 mb-2" />
-              <Skeleton className="h-8 w-16 mb-2" />
-              <Skeleton className="h-3 w-24" />
+              <div className="animate-pulse space-y-4">
+                <div className="h-12 w-12 bg-slate-700 rounded-xl"></div>
+                <div className="h-4 w-20 bg-slate-700 rounded"></div>
+                <div className="h-8 w-16 bg-slate-700 rounded"></div>
+                <div className="h-3 w-24 bg-slate-700 rounded"></div>
+              </div>
             </CardContent>
           </Card>
         ))}
@@ -147,80 +154,73 @@ const DashboardStats = () => {
     );
   }
 
-  const formatTimeAgo = (date: Date) => {
-    const now = new Date();
-    const diff = Math.floor((now.getTime() - date.getTime()) / 1000);
-    
-    if (diff < 60) return 'Just now';
-    if (diff < 3600) return `${Math.floor(diff / 60)}m ago`;
-    if (diff < 86400) return `${Math.floor(diff / 3600)}h ago`;
-    return `${Math.floor(diff / 86400)}d ago`;
-  };
-
   return (
     <TooltipProvider>
       <div className="space-y-4">
-        <div className="flex items-center justify-between">
-          <h2 className="text-xl font-semibold text-white">Dashboard Overview</h2>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={handleRefresh}
-            disabled={refreshing}
-            className="border-purple-500/50 text-purple-300 hover:bg-purple-500/10"
-          >
-            <RefreshCw className={`h-3 w-3 mr-1 ${refreshing ? 'animate-spin' : ''}`} />
-            Refresh All
-          </Button>
+        <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center space-x-3">
+            <div className="p-2 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg shadow-lg shadow-blue-500/25">
+              <TrendingUp className="h-6 w-6 text-white" />
+            </div>
+            <div>
+              <h2 className="text-xl font-semibold text-white">Analytics Overview</h2>
+              <p className="text-slate-400 text-sm">Real-time performance metrics</p>
+            </div>
+          </div>
+          <Badge variant="outline" className="border-green-500/50 text-green-400 bg-green-500/10">
+            <Activity className="h-3 w-3 mr-1 animate-pulse" />
+            Live Data
+          </Badge>
         </div>
+        
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-7 gap-6">
-        {statCards.map((stat, index) => {
-          const Icon = stat.icon;
-          return (
-            <Card 
-              key={stat.title}
-              className="bg-slate-900/50 border-purple-500/30 shadow-2xl shadow-purple-500/10 backdrop-blur-xl hover:scale-105 transition-all duration-300 group"
-              style={{ animationDelay: `${index * 100}ms` }}
-            >
-              <CardContent className="p-6">
-                <div className="flex items-center justify-between mb-4">
-                  <div className={`p-3 rounded-xl bg-gradient-to-r ${stat.gradient} shadow-lg group-hover:shadow-xl transition-shadow duration-300`}>
-                    <Icon className="h-6 w-6 text-white" />
+          {statCards.map((stat, index) => {
+            const Icon = stat.icon;
+            return (
+              <Card 
+                key={stat.title}
+                className="bg-slate-900/50 border-purple-500/30 shadow-2xl shadow-purple-500/10 backdrop-blur-xl hover:scale-105 transition-all duration-300 group"
+                style={{ animationDelay: `${index * 100}ms` }}
+              >
+                <CardContent className="p-6">
+                  <div className="flex items-center justify-between mb-4">
+                    <div className={`p-3 rounded-xl bg-gradient-to-r ${stat.gradient} shadow-lg group-hover:shadow-xl transition-shadow duration-300`}>
+                      <Icon className="h-6 w-6 text-white" />
+                    </div>
+                    <div className="text-right">
+                      <div className="text-xs text-green-400 font-medium">{stat.change}</div>
+                    </div>
                   </div>
-                  <div className="text-right">
-                    <div className="text-xs text-green-400 font-medium">{stat.change}</div>
-                  </div>
-                </div>
-                
-                <div className="space-y-1">
-                  <div className="flex items-center justify-between">
-                    <h3 className="text-sm font-medium text-slate-400">{stat.title}</h3>
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <Info className="h-3 w-3 text-slate-500 hover:text-slate-300 cursor-help" />
-                      </TooltipTrigger>
-                      <TooltipContent className="max-w-xs z-50 bg-slate-800 border-slate-700">
-                        <div className="space-y-2">
-                          <p className="text-sm">{stat.tooltipInfo}</p>
-                          <div className="text-xs text-slate-400 border-t border-slate-700 pt-2">
-                            Last updated: {formatTimeAgo(lastRefreshed)}
+                  
+                  <div className="space-y-1">
+                    <div className="flex items-center justify-between">
+                      <h3 className="text-sm font-medium text-slate-400">{stat.title}</h3>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Info className="h-3 w-3 text-slate-500 hover:text-slate-300 cursor-help" />
+                        </TooltipTrigger>
+                        <TooltipContent className="max-w-xs z-50 bg-slate-800 border-slate-700">
+                          <div className="space-y-2">
+                            <p className="text-sm">{stat.tooltipInfo}</p>
+                            <div className="text-xs text-slate-400 border-t border-slate-700 pt-2">
+                              Last updated: {formatTimeAgo(lastRefreshed)}
+                            </div>
                           </div>
-                        </div>
-                      </TooltipContent>
-                    </Tooltip>
+                        </TooltipContent>
+                      </Tooltip>
+                    </div>
+                    <div className="text-2xl font-bold text-white group-hover:text-cyan-300 transition-colors duration-300">
+                      {typeof stat.value === 'number' && stat.title !== "Peak Hour" ? stat.value.toLocaleString() : stat.value}
+                    </div>
+                    <p className="text-xs text-slate-500">{stat.description}</p>
                   </div>
-                  <div className="text-2xl font-bold text-white group-hover:text-cyan-300 transition-colors duration-300">
-                    {typeof stat.value === 'number' && stat.title !== "Peak Hour" ? stat.value.toLocaleString() : stat.value}
-                  </div>
-                  <p className="text-xs text-slate-500">{stat.description}</p>
-                </div>
-                
-                {/* Glow effect on hover */}
-                <div className={`absolute inset-0 rounded-lg bg-gradient-to-r ${stat.gradient} opacity-0 group-hover:opacity-5 transition-opacity duration-300 pointer-events-none`} />
-              </CardContent>
-            </Card>
-          );
-        })}
+                  
+                  {/* Glow effect on hover */}
+                  <div className={`absolute inset-0 rounded-lg bg-gradient-to-r ${stat.gradient} opacity-0 group-hover:opacity-5 transition-opacity duration-300 pointer-events-none`} />
+                </CardContent>
+              </Card>
+            );
+          })}
         </div>
       </div>
     </TooltipProvider>

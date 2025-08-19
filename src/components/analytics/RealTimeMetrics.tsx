@@ -1,22 +1,23 @@
-import { useState, useEffect } from "react";
-import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import { Activity, Radio, TrendingUp, Zap, Info } from "lucide-react";
-import { supabase } from "@/integrations/supabase/client";
+import { useEffect, useState } from 'react';
+import { Activity, Users, TrendingUp, Server, Info } from 'lucide-react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from '@/components/ui/tooltip';
+import { supabase } from '@/integrations/supabase/client';
+import { useAnalyticsRefresh } from '@/contexts/AnalyticsRefreshContext';
 
 const RealTimeMetrics = () => {
   const [metrics, setMetrics] = useState({
     activeListeners: 0,
     currentPlays: 0,
     trending: 'Loading...',
-    serverLoad: 0
+    serverLoad: 15
   });
   const [lastRefreshed, setLastRefreshed] = useState<Date>(new Date());
+  const { registerRefresh, unregisterRefresh } = useAnalyticsRefresh();
 
   const fetchRealTimeData = async () => {
     try {
-      // Get dashboard stats for real data
       const { data: dashboardStats } = await supabase.rpc('get_dashboard_stats');
       
       // Get trending song from song statistics
@@ -47,13 +48,16 @@ const RealTimeMetrics = () => {
     // Initial load
     fetchRealTimeData();
 
+    // Register refresh function
+    registerRefresh('real-time-metrics', fetchRealTimeData);
+
     // Set up real-time subscriptions for immediate updates
     const songPlaysChannel = supabase
       .channel('song-plays-changes')
       .on(
         'postgres_changes',
         {
-          event: 'INSERT',
+          event: '*',
           schema: 'public',
           table: 'song_plays'
         },
@@ -78,15 +82,16 @@ const RealTimeMetrics = () => {
       )
       .subscribe();
 
-    // Update every 5 seconds for real-time feel
+    // Poll every 5 seconds for real-time feel
     const interval = setInterval(fetchRealTimeData, 5000);
-    
+
     return () => {
       clearInterval(interval);
+      unregisterRefresh('real-time-metrics');
       supabase.removeChannel(songPlaysChannel);
       supabase.removeChannel(songLikesChannel);
     };
-  }, []);
+  }, [registerRefresh, unregisterRefresh]);
 
   const formatTimeAgo = (date: Date) => {
     const now = new Date();
@@ -97,45 +102,30 @@ const RealTimeMetrics = () => {
     return `${Math.floor(diff / 3600)}h ago`;
   };
 
-  const metricInfo = [
-    {
-      title: "Active Now",
-      tooltip: "Real data tracking current active listeners. Updates every 5 seconds via real-time database subscriptions. Counts users currently engaged with the platform."
-    },
-    {
-      title: "Total Plays",
-      tooltip: "Real data showing all-time play count. Only valid plays (30+ seconds) are counted. Updates automatically when new plays are recorded in the database."
-    },
-    {
-      title: "Trending Now",
-      tooltip: "Real data showing the most liked song currently. Calculated from song like statistics and updates in real-time when users interact with songs."
-    },
-    {
-      title: "System Load",
-      tooltip: "Simulated data for demonstration purposes. In production, this would show actual server performance metrics and resource utilization."
-    }
-  ];
-
   return (
     <TooltipProvider>
       <Card className="bg-slate-900/50 border-purple-500/30 shadow-2xl shadow-purple-500/10 backdrop-blur-xl">
+        <CardHeader className="border-b border-purple-500/20">
+          <CardTitle className="flex items-center space-x-2 text-purple-300">
+            <Activity className="h-5 w-5 text-cyan-400" />
+            <span>Real-Time Activity Metrics</span>
+          </CardTitle>
+        </CardHeader>
         <CardContent className="p-6">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
             {/* Active Listeners */}
-            <div className="flex items-center space-x-4 p-4 bg-gradient-to-br from-green-500/10 to-emerald-500/10 rounded-xl border border-green-500/20">
-              <div className="p-3 bg-green-500/20 rounded-xl">
-                <Activity className="h-6 w-6 text-green-400 animate-pulse" />
-              </div>
-              <div className="flex-1">
-                <div className="flex items-center justify-between">
-                  <p className="text-sm text-slate-400">Active Now</p>
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-2">
+                  <Users className="h-4 w-4 text-green-400" />
+                  <span className="text-sm font-medium text-slate-300">Active Now</span>
                   <Tooltip>
                     <TooltipTrigger asChild>
                       <Info className="h-3 w-3 text-slate-500 hover:text-slate-300 cursor-help" />
                     </TooltipTrigger>
                     <TooltipContent className="max-w-xs z-50 bg-slate-800 border-slate-700">
                       <div className="space-y-2">
-                        <p className="text-sm">{metricInfo[0].tooltip}</p>
+                        <p className="text-sm">Current active listening sessions tracked in real-time</p>
                         <div className="text-xs text-slate-400 border-t border-slate-700 pt-2">
                           Last updated: {formatTimeAgo(lastRefreshed)}
                         </div>
@@ -143,28 +133,26 @@ const RealTimeMetrics = () => {
                     </TooltipContent>
                   </Tooltip>
                 </div>
-                <p className="text-2xl font-bold text-white">{metrics.activeListeners}</p>
-                <Badge variant="outline" className="border-green-500/50 text-green-400 bg-green-500/10 text-xs mt-1">
-                  Live
-                </Badge>
               </div>
+              <div className="text-2xl font-bold text-green-400">{metrics.activeListeners}</div>
+              <Badge variant="outline" className="border-green-500/50 text-green-400 bg-green-500/10 text-xs">
+                Live
+              </Badge>
             </div>
 
-            {/* Current Plays */}
-            <div className="flex items-center space-x-4 p-4 bg-gradient-to-br from-blue-500/10 to-cyan-500/10 rounded-xl border border-blue-500/20">
-              <div className="p-3 bg-blue-500/20 rounded-xl">
-                <Radio className="h-6 w-6 text-blue-400" />
-              </div>
-              <div className="flex-1">
-                <div className="flex items-center justify-between">
-                  <p className="text-sm text-slate-400">Total Plays</p>
+            {/* Total Plays */}
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-2">
+                  <TrendingUp className="h-4 w-4 text-blue-400" />
+                  <span className="text-sm font-medium text-slate-300">Total Plays</span>
                   <Tooltip>
                     <TooltipTrigger asChild>
                       <Info className="h-3 w-3 text-slate-500 hover:text-slate-300 cursor-help" />
                     </TooltipTrigger>
                     <TooltipContent className="max-w-xs z-50 bg-slate-800 border-slate-700">
                       <div className="space-y-2">
-                        <p className="text-sm">{metricInfo[1].tooltip}</p>
+                        <p className="text-sm">Total number of valid song plays (30+ seconds)</p>
                         <div className="text-xs text-slate-400 border-t border-slate-700 pt-2">
                           Last updated: {formatTimeAgo(lastRefreshed)}
                         </div>
@@ -172,26 +160,26 @@ const RealTimeMetrics = () => {
                     </TooltipContent>
                   </Tooltip>
                 </div>
-                <p className="text-2xl font-bold text-white">{metrics.currentPlays}</p>
-                <p className="text-xs text-blue-400 mt-1">All time</p>
               </div>
+              <div className="text-2xl font-bold text-blue-400">{metrics.currentPlays.toLocaleString()}</div>
+              <Badge variant="outline" className="border-blue-500/50 text-blue-400 bg-blue-500/10 text-xs">
+                All Time
+              </Badge>
             </div>
 
             {/* Trending Song */}
-            <div className="flex items-center space-x-4 p-4 bg-gradient-to-br from-purple-500/10 to-pink-500/10 rounded-xl border border-purple-500/20">
-              <div className="p-3 bg-purple-500/20 rounded-xl">
-                <TrendingUp className="h-6 w-6 text-purple-400" />
-              </div>
-              <div className="min-w-0 flex-1">
-                <div className="flex items-center justify-between">
-                  <p className="text-sm text-slate-400">Trending Now</p>
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-2">
+                  <Activity className="h-4 w-4 text-purple-400" />
+                  <span className="text-sm font-medium text-slate-300">Trending Now</span>
                   <Tooltip>
                     <TooltipTrigger asChild>
                       <Info className="h-3 w-3 text-slate-500 hover:text-slate-300 cursor-help" />
                     </TooltipTrigger>
                     <TooltipContent className="max-w-xs z-50 bg-slate-800 border-slate-700">
                       <div className="space-y-2">
-                        <p className="text-sm">{metricInfo[2].tooltip}</p>
+                        <p className="text-sm">Most liked song based on recent user interactions</p>
                         <div className="text-xs text-slate-400 border-t border-slate-700 pt-2">
                           Last updated: {formatTimeAgo(lastRefreshed)}
                         </div>
@@ -199,28 +187,26 @@ const RealTimeMetrics = () => {
                     </TooltipContent>
                   </Tooltip>
                 </div>
-                <p className="text-sm font-semibold text-white truncate">{metrics.trending}</p>
-                <Badge variant="outline" className="border-purple-500/50 text-purple-400 bg-purple-500/10 text-xs mt-1">
-                  #1 Trending
-                </Badge>
               </div>
+              <div className="text-sm font-bold text-purple-400 truncate">{metrics.trending}</div>
+              <Badge variant="outline" className="border-purple-500/50 text-purple-400 bg-purple-500/10 text-xs">
+                Hot
+              </Badge>
             </div>
 
-            {/* System Performance */}
-            <div className="flex items-center space-x-4 p-4 bg-gradient-to-br from-orange-500/10 to-red-500/10 rounded-xl border border-orange-500/20">
-              <div className="p-3 bg-orange-500/20 rounded-xl">
-                <Zap className="h-6 w-6 text-orange-400" />
-              </div>
-              <div className="flex-1">
-                <div className="flex items-center justify-between">
-                  <p className="text-sm text-slate-400">System Load</p>
+            {/* System Load (Simulated) */}
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-2">
+                  <Server className="h-4 w-4 text-orange-400" />
+                  <span className="text-sm font-medium text-slate-300">System Load</span>
                   <Tooltip>
                     <TooltipTrigger asChild>
                       <Info className="h-3 w-3 text-slate-500 hover:text-slate-300 cursor-help" />
                     </TooltipTrigger>
                     <TooltipContent className="max-w-xs z-50 bg-slate-800 border-slate-700">
                       <div className="space-y-2">
-                        <p className="text-sm">{metricInfo[3].tooltip}</p>
+                        <p className="text-sm">Simulated server load percentage for demonstration</p>
                         <div className="text-xs text-slate-400 border-t border-slate-700 pt-2">
                           Last updated: {formatTimeAgo(lastRefreshed)}
                         </div>
@@ -228,11 +214,11 @@ const RealTimeMetrics = () => {
                     </TooltipContent>
                   </Tooltip>
                 </div>
-                <p className="text-2xl font-bold text-white">{metrics.serverLoad}%</p>
-                <Badge variant="outline" className="border-orange-500/50 text-orange-400 bg-orange-500/10 text-xs mt-1">
-                  Optimal
-                </Badge>
               </div>
+              <div className="text-2xl font-bold text-orange-400">{metrics.serverLoad}%</div>
+              <Badge variant="outline" className="border-green-500/50 text-green-400 bg-green-500/10 text-xs">
+                Optimal
+              </Badge>
             </div>
           </div>
         </CardContent>

@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { TrendingUp, Users, Clock, MapPin, Zap, BarChart3, Activity, Globe, Home } from "lucide-react";
+import { TrendingUp, Users, Clock, MapPin, Zap, BarChart3, Activity, Globe, Home, RefreshCw } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
 import DashboardStats from "@/components/analytics/DashboardStats";
 import EnhancedTopSongs from "@/components/analytics/EnhancedTopSongs";
 import HourlyPatterns from "@/components/analytics/HourlyPatterns";
@@ -11,10 +12,22 @@ import GeographicMap from "@/components/analytics/GeographicMap";
 import RealTimeMetrics from "@/components/analytics/RealTimeMetrics";
 import AudioPlayerProvider from "@/components/AudioPlayerProvider";
 import NowPlayingBanner from "@/components/NowPlayingBanner";
+import { AnalyticsRefreshProvider, useAnalyticsRefresh } from "@/contexts/AnalyticsRefreshContext";
 
-const AIAnalytics = () => {
+const AIAnalyticsContent = () => {
   const [currentTime, setCurrentTime] = useState(new Date());
   const navigate = useNavigate();
+  const { refreshAll, isRefreshing } = useAnalyticsRefresh();
+
+  const handleRefreshAll = async () => {
+    try {
+      await refreshAll();
+      toast.success("All analytics data refreshed successfully");
+    } catch (error) {
+      toast.error("Failed to refresh analytics data");
+      console.error('Error refreshing all analytics:', error);
+    }
+  };
 
   useEffect(() => {
     const timer = setInterval(() => setCurrentTime(new Date()), 1000);
@@ -57,6 +70,16 @@ const AIAnalytics = () => {
                 <Home className="h-4 w-4 mr-2" />
                 Home
               </Button>
+              <Button
+                onClick={handleRefreshAll}
+                disabled={isRefreshing}
+                variant="outline"
+                size="sm"
+                className="border-purple-500/50 text-purple-400 bg-purple-500/10 hover:bg-purple-500/20 hover:text-purple-300"
+              >
+                <RefreshCw className={`h-4 w-4 mr-2 ${isRefreshing ? 'animate-spin' : ''}`} />
+                Refresh All
+              </Button>
               <Badge variant="outline" className="border-green-500/50 text-green-400 bg-green-500/10">
                 <Activity className="h-3 w-3 mr-1 animate-pulse" />
                 Live
@@ -94,6 +117,14 @@ const AIAnalytics = () => {
       </div>
     </div>
     </AudioPlayerProvider>
+  );
+};
+
+const AIAnalytics = () => {
+  return (
+    <AnalyticsRefreshProvider>
+      <AIAnalyticsContent />
+    </AnalyticsRefreshProvider>
   );
 };
 
