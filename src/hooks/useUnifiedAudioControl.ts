@@ -19,7 +19,8 @@ export const useUnifiedAudioControl = (songId: string, songIndex?: number, updat
     loadSpecificSong,
     togglePlay,
     stopPlayback,
-    startPlaylistMode
+    startPlaylistMode,
+    startPlayTracking
   } = useAudio();
   
   const { toast } = useToast();
@@ -41,6 +42,7 @@ export const useUnifiedAudioControl = (songId: string, songIndex?: number, updat
     
     // If clicking on the currently playing song, toggle play/pause
     if (isCurrent && isPlaying) {
+      console.log('🎵 UnifiedAudioControl: Toggling pause for current song:', songId);
       togglePlay();
       return;
     }
@@ -48,6 +50,7 @@ export const useUnifiedAudioControl = (songId: string, songIndex?: number, updat
     // If clicking on the current song and it's paused, resume
     if (isCurrent && !isPlaying && currentSong) {
       try {
+        console.log('🎵 UnifiedAudioControl: Resuming current song:', songId);
         togglePlay();
       } catch (error) {
         toast({
@@ -60,10 +63,15 @@ export const useUnifiedAudioControl = (songId: string, songIndex?: number, updat
     }
     
     // If clicking on a different song, load it and start playback immediately
+    console.log('🎵 UnifiedAudioControl: Starting new song:', songId);
     setLoadingSong(songId);
     try {
       // Load the specific song first
       loadSpecificSong(songId);
+      
+      // Start play tracking for the new song
+      console.log('🎵 UnifiedAudioControl: Starting play tracking for:', songId);
+      await startPlayTracking(songId);
       
       // Start playlist mode immediately with proper error handling
       setTimeout(() => {
@@ -72,6 +80,7 @@ export const useUnifiedAudioControl = (songId: string, songIndex?: number, updat
       }, 50); // Reduced delay for better UX
     } catch (error) {
       setLoadingSong(null);
+      console.error('🚨 UnifiedAudioControl: Playback failed for song:', songId, error);
       toast({
         title: "Playback failed",
         description: "Could not play this song. Please try again.",
