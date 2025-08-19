@@ -88,35 +88,35 @@ const Hero = () => {
             {/* CTA Buttons */}
             <div className="space-y-3 sm:space-y-4">
               {/* Mobile View - Square Icon Buttons */}
-              <div className="flex justify-center gap-3">
-                <div className="flex flex-col items-center gap-1">
-                  <Button size="icon" className="gradient-primary hover:glow-primary transition-smooth w-16 h-16" onClick={() => document.getElementById('vision')?.scrollIntoView({
-                behavior: 'smooth'
-              })} aria-label="Project's Vision">
-                    <Lightbulb className="w-6 h-6" />
+              <div className="flex justify-center gap-2 flex-wrap">
+                <div className="flex items-center gap-1">
+                  <Button size="icon" className="gradient-primary hover:glow-primary transition-smooth w-12 h-12 sm:w-14 sm:h-14" onClick={() => document.getElementById('vision')?.scrollIntoView({
+                  behavior: 'smooth'
+                })} aria-label="Project's Vision">
+                    <Lightbulb className="w-5 h-5 sm:w-6 sm:h-6" />
                   </Button>
-                  <Button size="icon" className="gradient-primary hover:glow-primary transition-smooth w-8 h-8" onClick={() => document.getElementById('vision')?.scrollIntoView({
+                  <Button size="icon" className="gradient-primary hover:glow-primary transition-smooth w-8 h-8 sm:w-10 sm:h-10" onClick={() => document.getElementById('vision')?.scrollIntoView({
                   behavior: 'smooth'
                 })} aria-label="Watch Vision Video">
-                    <Video className="w-4 h-4" />
+                    <Video className="w-3 h-3 sm:w-4 sm:h-4" />
                   </Button>
                 </div>
 
-                <div className="flex flex-col items-center gap-1">
-                  <Button size="icon" className="gradient-secondary hover:glow-secondary transition-smooth w-16 h-16" onClick={() => document.getElementById('insights')?.scrollIntoView({
+                <div className="flex items-center gap-1">
+                  <Button size="icon" className="gradient-secondary hover:glow-secondary transition-smooth w-12 h-12 sm:w-14 sm:h-14" onClick={() => document.getElementById('insights')?.scrollIntoView({
                   behavior: 'smooth'
                 })} aria-label="Survey Deep Dive">
-                    <BarChart3 className="w-6 h-6" />
+                    <BarChart3 className="w-5 h-5 sm:w-6 sm:h-6" />
                   </Button>
-                  <Button size="icon" className="gradient-secondary hover:glow-secondary transition-smooth w-8 h-8" onClick={() => navigate('/ai-analytics')} aria-label="Go to AI Analytics">
-                    <Bot className="w-4 h-4" />
+                  <Button size="icon" className="gradient-secondary hover:glow-secondary transition-smooth w-8 h-8 sm:w-10 sm:h-10" onClick={() => navigate('/ai-analytics')} aria-label="Go to AI Analytics">
+                    <Bot className="w-3 h-3 sm:w-4 sm:h-4" />
                   </Button>
                 </div>
 
                 <Dialog>
                   <DialogTrigger asChild>
-                    <Button size="icon" variant="outline" className="border-muted-foreground/30 hover:border-muted-foreground transition-smooth w-16 h-16" aria-label="Legal Disclaimer">
-                      <Shield className="w-6 h-6" />
+                    <Button size="icon" variant="outline" className="border-muted-foreground/30 hover:border-muted-foreground transition-smooth w-12 h-12 sm:w-14 sm:h-14" aria-label="Legal Disclaimer">
+                      <Shield className="w-5 h-5 sm:w-6 sm:h-6" />
                     </Button>
                   </DialogTrigger>
                   <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto mx-4 sm:mx-auto">
@@ -199,8 +199,8 @@ const Hero = () => {
                   </DialogContent>
                 </Dialog>
 
-                <Button size="icon" className="gradient-accent hover:glow-accent transition-smooth w-16 h-16" onClick={() => navigate('/game')} aria-label="Play BC AI Game">
-                  <Gamepad2 className="w-6 h-6" />
+                <Button size="icon" className="gradient-accent hover:glow-accent transition-smooth w-12 h-12 sm:w-14 sm:h-14" onClick={() => navigate('/game')} aria-label="Play BC AI Game">
+                  <Gamepad2 className="w-5 h-5 sm:w-6 sm:h-6" />
                 </Button>
               </div>
             </div>
