@@ -20,6 +20,10 @@ interface AudioContextType {
   currentTime: number;
   duration: number;
   setCurrentSongIndex: (index: number) => void;
+  // Enhanced tracking functions
+  startPlayTracking: (songId: string) => Promise<void>;
+  endPlayTracking: (songId: string, songDuration?: number, wasValidPlay?: boolean) => Promise<void>;
+  updateActivity: () => void;
 }
 
 const AudioContext = createContext<AudioContextType | undefined>(undefined);

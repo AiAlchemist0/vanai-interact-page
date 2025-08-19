@@ -119,6 +119,8 @@ const AudioPlayerProvider: React.FC<AudioPlayerProviderProps> = ({ children }) =
     // Don't stop playback, just disable auto-advance
   };
 
+  const { startPlayTracking, endPlayTracking } = useEnhancedTracking();
+
   const contextValue = {
     loadSpecificSong,
     startPlayback,
@@ -138,6 +140,10 @@ const AudioPlayerProvider: React.FC<AudioPlayerProviderProps> = ({ children }) =
     currentTime,
     duration,
     setCurrentSongIndex,
+    // Enhanced tracking functions
+    startPlayTracking,
+    endPlayTracking,
+    updateActivity,
   };
 
   return (

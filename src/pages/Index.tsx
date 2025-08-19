@@ -8,7 +8,7 @@ import Methodology from "@/components/Methodology";
 import Footer from "@/components/Footer";
 import AudioPlayerProvider from "@/components/AudioPlayerProvider";
 import NowPlayingBanner from "@/components/NowPlayingBanner";
-import EnhancedAnalytics from "@/components/EnhancedAnalytics";
+
 import PhilippeSpecialEffects from "@/components/PhilippeSpecialEffects";
 
 const Index = () => {

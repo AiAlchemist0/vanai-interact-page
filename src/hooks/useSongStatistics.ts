@@ -15,7 +15,6 @@ export const useSongStatistics = () => {
 
   const fetchStatistics = async () => {
     try {
-      console.log('Fetching song statistics...');
       setLoading(true);
       
       // Use the secure statistics function that provides aggregated data only
@@ -25,8 +24,6 @@ export const useSongStatistics = () => {
         console.error('Supabase error:', error);
         throw error;
       }
-      
-      console.log('Statistics data received:', data);
       // Transform the data to match our interface
       const transformedData = (data || []).map(item => ({
         song_id: item.song_id,

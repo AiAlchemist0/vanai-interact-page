@@ -4,7 +4,7 @@ import { Heart, PlayCircle, StopCircle, Square } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useAudio } from "@/contexts/AudioContext";
 import { useSongLikes } from '@/hooks/useSongLikes';
-import { useEnhancedTracking } from '@/hooks/useEnhancedTracking';
+
 import PhilippeSpecialEffects from './PhilippeSpecialEffects';
 import MemoizedSongItem from './MemoizedSongItem';
 
@@ -27,7 +27,8 @@ const HeroAudioPlayer = () => {
     stopPlaylistMode,
     stopPlayback,
     isPlaylistMode,
-    currentSongIndex
+    currentSongIndex,
+    updateActivity
   } = useAudio();
   
   const { 
@@ -39,7 +40,6 @@ const HeroAudioPlayer = () => {
     error: likesError 
   } = useSongLikes();
 
-  const { updateActivity } = useEnhancedTracking();
   const { toast } = useToast();
 
   const handleLikeClick = async (songId: string, e: React.MouseEvent) => {
