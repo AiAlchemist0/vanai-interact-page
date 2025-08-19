@@ -9,7 +9,7 @@ import DashboardStats from "@/components/analytics/DashboardStats";
 import EnhancedTopSongs from "@/components/analytics/EnhancedTopSongs";
 import HourlyPatterns from "@/components/analytics/HourlyPatterns";
 import GeographicMap from "@/components/analytics/GeographicMap";
-import RealTimeMetrics from "@/components/analytics/RealTimeMetrics";
+
 import AudioPlayerProvider from "@/components/AudioPlayerProvider";
 import NowPlayingBanner from "@/components/NowPlayingBanner";
 import { AnalyticsRefreshProvider, useAnalyticsRefresh } from "@/contexts/AnalyticsRefreshContext";
@@ -99,10 +99,6 @@ const AIAnalyticsContent = () => {
       <div className="relative z-10 container mx-auto px-4 py-8 space-y-8">
         {/* Dashboard Overview Stats */}
         <DashboardStats />
-
-        {/* Real-time Metrics */}
-        <RealTimeMetrics />
-
 
         {/* Enhanced Top Songs */}
         <EnhancedTopSongs />
