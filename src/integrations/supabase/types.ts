@@ -98,6 +98,33 @@ export type Database = {
         }
         Relationships: []
       }
+      song_keywords: {
+        Row: {
+          category: string
+          created_at: string
+          id: string
+          keyword: string
+          relevance_score: number | null
+          song_id: string
+        }
+        Insert: {
+          category: string
+          created_at?: string
+          id?: string
+          keyword: string
+          relevance_score?: number | null
+          song_id: string
+        }
+        Update: {
+          category?: string
+          created_at?: string
+          id?: string
+          keyword?: string
+          relevance_score?: number | null
+          song_id?: string
+        }
+        Relationships: []
+      }
       song_like_statistics: {
         Row: {
           created_at: string
@@ -286,6 +313,15 @@ export type Database = {
           play_count: number
         }[]
       }
+      get_keyword_analytics: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          avg_relevance: number
+          category: string
+          keyword_count: number
+          total_relevance: number
+        }[]
+      }
       get_public_song_statistics: {
         Args: Record<PropertyKey, never>
         Returns: {
@@ -306,6 +342,15 @@ export type Database = {
           song_id: string
           total_plays: number
           valid_plays: number
+        }[]
+      }
+      get_song_keywords: {
+        Args: { p_song_id?: string }
+        Returns: {
+          category: string
+          keyword: string
+          relevance_score: number
+          song_id: string
         }[]
       }
       get_song_like_statistics: {
