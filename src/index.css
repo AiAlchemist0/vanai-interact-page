@@ -416,19 +416,6 @@ All colors MUST be HSL.
     filter: blur(0.5px);
   }
 
-  /* Scan Lines */
-  .philippe-scan-lines {
-    position: absolute;
-    inset: 0;
-    background: repeating-linear-gradient(
-      0deg,
-      transparent,
-      transparent 3px,
-      hsl(var(--ai-cyan) / 0.2) 3px,
-      hsl(var(--ai-cyan) / 0.2) 5px
-    );
-    animation: philippe-scan-move 2s linear infinite;
-  }
 
   /* Retro Grid Background */
   .philippe-retro-grid {
@@ -475,68 +462,6 @@ All colors MUST be HSL.
     );
   }
 
-  /* Chromatic Aberration */
-  .philippe-chromatic-aberration {
-    position: absolute;
-    inset: 0;
-    background: transparent;
-    animation: philippe-chromatic-shift 3s ease-in-out infinite;
-    mix-blend-mode: screen;
-  }
-
-  /* Enhanced Neon Tubes */
-  .philippe-neon-tube-top, .philippe-neon-tube-bottom {
-    position: absolute;
-    left: 0;
-    right: 0;
-    height: 8px;
-    background: linear-gradient(90deg, 
-      transparent 0%, 
-      hsl(var(--primary)) 20%, 
-      hsl(var(--ai-cyan)) 50%, 
-      hsl(60, 100%, 60%) 80%, 
-      transparent 100%);
-    animation: philippe-neon-pulse 2s ease-in-out infinite;
-    box-shadow: 0 0 25px currentColor;
-    filter: blur(1px);
-  }
-
-  .philippe-neon-tube-top { top: 0; }
-  .philippe-neon-tube-bottom { bottom: 0; }
-
-  .philippe-neon-tube-left, .philippe-neon-tube-right {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    width: 8px;
-    background: linear-gradient(180deg, 
-      transparent 0%, 
-      hsl(var(--primary)) 20%, 
-      hsl(var(--ai-cyan)) 50%, 
-      hsl(60, 100%, 60%) 80%, 
-      transparent 100%);
-    animation: philippe-neon-pulse 2s ease-in-out infinite;
-    box-shadow: 0 0 25px currentColor;
-    filter: blur(1px);
-  }
-
-  .philippe-neon-tube-left { left: 0; }
-  .philippe-neon-tube-right { right: 0; }
-
-  /* Corner Accents */
-  .philippe-corner-accent {
-    position: absolute;
-    width: 80px;
-    height: 80px;
-    border: 3px solid hsl(var(--ai-cyan));
-    box-shadow: 0 0 20px hsl(var(--ai-cyan));
-    animation: philippe-corner-glow 3s ease-in-out infinite;
-  }
-
-  .philippe-corner-tl { top: 30px; left: 30px; border-right: none; border-bottom: none; }
-  .philippe-corner-tr { top: 30px; right: 30px; border-left: none; border-bottom: none; }
-  .philippe-corner-bl { bottom: 30px; left: 30px; border-right: none; border-top: none; }
-  .philippe-corner-br { bottom: 30px; right: 30px; border-left: none; border-top: none; }
 
   /* Screen Scan Lines */
   .philippe-screen-scanlines {
@@ -574,10 +499,6 @@ All colors MUST be HSL.
     100% { height: 50px; opacity: 1; }
   }
 
-  @keyframes philippe-scan-move {
-    0% { transform: translateY(-100%); }
-    100% { transform: translateY(100%); }
-  }
 
   @keyframes philippe-grid-move {
     0% { transform: perspective(1200px) rotateX(65deg) translateZ(0px); }
@@ -589,32 +510,12 @@ All colors MUST be HSL.
     50% { opacity: 1; transform: translateX(-50%) scale(1.15); }
   }
 
-  @keyframes philippe-chromatic-shift {
-    0%, 100% { 
-      filter: drop-shadow(3px 0 0 hsl(var(--primary) / 0.4)) 
-               drop-shadow(-3px 0 0 hsl(var(--ai-cyan) / 0.4)); 
-    }
-    50% { 
-      filter: drop-shadow(6px 0 0 hsl(var(--primary) / 0.6)) 
-               drop-shadow(-6px 0 0 hsl(var(--ai-cyan) / 0.6)); 
-    }
-  }
 
   @keyframes philippe-neon-pulse {
     0%, 100% { opacity: 0.8; filter: brightness(1); }
     50% { opacity: 1; filter: brightness(1.6); }
   }
 
-  @keyframes philippe-corner-glow {
-    0%, 100% { 
-      opacity: 0.7; 
-      box-shadow: 0 0 20px hsl(var(--ai-cyan)); 
-    }
-    50% { 
-      opacity: 1; 
-      box-shadow: 0 0 40px hsl(var(--ai-cyan)), 0 0 60px hsl(var(--primary)); 
-    }
-  }
 
   @keyframes philippe-screen-scan {
     0% { transform: translateY(-100%); opacity: 0; }

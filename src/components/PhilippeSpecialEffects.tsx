@@ -41,10 +41,6 @@ const PhilippeSpecialEffects: React.FC<PhilippeSpecialEffectsProps> = ({ type, c
               </div>
             </div>
             
-            {/* Neon scan lines */}
-            <div className="absolute inset-0 pointer-events-none">
-              <div className="philippe-scan-lines"></div>
-            </div>
           </>
         )}
       </div>
@@ -67,26 +63,6 @@ const PhilippeSpecialEffects: React.FC<PhilippeSpecialEffectsProps> = ({ type, c
               <div className="philippe-synthwave-sun"></div>
             </div>
             
-            {/* Enhanced chromatic aberration overlay */}
-            <div className="fixed inset-0 pointer-events-none z-10">
-              <div className="philippe-chromatic-aberration"></div>
-            </div>
-            
-            {/* Enhanced edge neon tubes */}
-            <div className="fixed inset-0 pointer-events-none z-10">
-              <div className="philippe-neon-tube-top"></div>
-              <div className="philippe-neon-tube-bottom"></div>
-              <div className="philippe-neon-tube-left"></div>
-              <div className="philippe-neon-tube-right"></div>
-            </div>
-            
-            {/* Corner geometric accents */}
-            <div className="fixed inset-0 pointer-events-none z-10">
-              <div className="philippe-corner-accent philippe-corner-tl"></div>
-              <div className="philippe-corner-accent philippe-corner-tr"></div>
-              <div className="philippe-corner-accent philippe-corner-bl"></div>
-              <div className="philippe-corner-accent philippe-corner-br"></div>
-            </div>
             
             {/* Full screen scan lines */}
             <div className="fixed inset-0 pointer-events-none z-10">
