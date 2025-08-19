@@ -333,7 +333,6 @@ All colors MUST be HSL.
     );
     border-radius: 4px;
     animation: philippe-playlist-visualizer-pulse 0.8s ease-in-out infinite alternate;
-    box-shadow: 0 0 20px currentColor;
     filter: blur(1px);
     opacity: 0.6;
   }
