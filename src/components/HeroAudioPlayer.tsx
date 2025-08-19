@@ -6,7 +6,7 @@ import { useAudio } from "@/contexts/AudioContext";
 import { useSongLikes } from '@/hooks/useSongLikes';
 import { useEnhancedTracking } from '@/hooks/useEnhancedTracking';
 import PhilippeSpecialEffects from './PhilippeSpecialEffects';
-import SongItem from './SongItem';
+import MemoizedSongItem from './MemoizedSongItem';
 
 const formatTime = (s: number) => {
   if (!isFinite(s)) return "0:00";
@@ -53,8 +53,6 @@ const HeroAudioPlayer = () => {
     }
   };
 
-  console.log('HeroAudioPlayer: likesLoading =', likesLoading);
-  console.log('HeroAudioPlayer: getTotalLikes =', getTotalLikes);
 
   // Show error state if likes system fails
   if (likesError) {
@@ -170,7 +168,7 @@ const HeroAudioPlayer = () => {
       {/* Detailed Song List */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-1.5 sm:gap-2">
         {songs.map((song, index) => (
-          <SongItem
+          <MemoizedSongItem
             key={song.id}
             song={song}
             index={index}
@@ -180,6 +178,7 @@ const HeroAudioPlayer = () => {
             onLikeClick={handleLikeClick}
             getLikeCount={getLikeCount}
             isLiked={isLiked}
+            updateActivity={updateActivity}
           />
         ))}
       </div>

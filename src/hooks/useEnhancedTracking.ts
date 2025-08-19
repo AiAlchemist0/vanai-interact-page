@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useCallback } from 'react';
 import { useSongStatistics } from './useSongStatistics';
 import { useSessionTracking } from './useSessionTracking';
 import { useGeographicTracking } from './useGeographicTracking';
@@ -16,7 +16,7 @@ export const useEnhancedTracking = () => {
     return () => {
       sessionTracking.endSession();
     };
-  }, []);
+  }, [sessionTracking]);
 
   const startPlayTracking = async (songId: string) => {
     // Update session activity
@@ -59,9 +59,9 @@ export const useEnhancedTracking = () => {
     endPlayTracking,
     
     // Activity updates
-    updateActivity: () => {
+    updateActivity: useCallback(() => {
       sessionTracking.updateSessionActivity();
       geoTracking.recordListeningActivity();
-    }
+    }, [sessionTracking, geoTracking])
   };
 };

@@ -17,6 +17,7 @@ interface SongItemProps {
   onLikeClick: (songId: string, e: React.MouseEvent) => void;
   getLikeCount: (songId: string) => number;
   isLiked: (songId: string) => boolean;
+  updateActivity?: () => void;
 }
 
 const SongItem: React.FC<SongItemProps> = ({
@@ -27,10 +28,11 @@ const SongItem: React.FC<SongItemProps> = ({
   isPlaylistMode,
   onLikeClick,
   getLikeCount,
-  isLiked
+  isLiked,
+  updateActivity
 }) => {
   // Now hooks are called at the top level of this component
-  const { audioState, handlePlay, handleStop } = useUnifiedAudioControl(song.id, index);
+  const { audioState, handlePlay, handleStop } = useUnifiedAudioControl(song.id, index, updateActivity);
 
   return (
     <div

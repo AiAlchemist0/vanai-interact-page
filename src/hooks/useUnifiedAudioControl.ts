@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { useAudio } from '@/contexts/AudioContext';
 import { useToast } from '@/hooks/use-toast';
-import { useEnhancedTracking } from '@/hooks/useEnhancedTracking';
 
 export interface UnifiedAudioState {
   isLoading: boolean;
@@ -11,7 +10,7 @@ export interface UnifiedAudioState {
   progress: number;
 }
 
-export const useUnifiedAudioControl = (songId: string, songIndex?: number) => {
+export const useUnifiedAudioControl = (songId: string, songIndex?: number, updateActivity?: () => void) => {
   const { 
     currentSong, 
     isPlaying, 
@@ -24,7 +23,6 @@ export const useUnifiedAudioControl = (songId: string, songIndex?: number) => {
   } = useAudio();
   
   const { toast } = useToast();
-  const { updateActivity } = useEnhancedTracking();
   const [loadingSong, setLoadingSong] = useState<string | null>(null);
 
   // Standardized current song detection - prioritize songId match for consistency
@@ -39,7 +37,7 @@ export const useUnifiedAudioControl = (songId: string, songIndex?: number) => {
   };
 
   const handlePlay = async () => {
-    updateActivity();
+    updateActivity?.();
     
     // If clicking on the currently playing song, toggle play/pause
     if (isCurrent && isPlaying) {
@@ -83,7 +81,7 @@ export const useUnifiedAudioControl = (songId: string, songIndex?: number) => {
   };
 
   const handleStop = () => {
-    updateActivity();
+    updateActivity?.();
     stopPlayback();
     setLoadingSong(null);
   };
