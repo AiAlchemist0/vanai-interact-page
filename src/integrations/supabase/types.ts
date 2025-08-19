@@ -330,6 +330,14 @@ export type Database = {
           total_plays: number
         }[]
       }
+      get_regional_summary: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          active_cities: number
+          region: string
+          total_listening_count: number
+        }[]
+      }
       get_song_analytics: {
         Args: Record<PropertyKey, never>
         Returns: {
