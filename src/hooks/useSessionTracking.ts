@@ -105,7 +105,7 @@ export const useSessionTracking = () => {
           total_duration_seconds: Math.floor((Date.now() - startTimeRef.current) / 1000)
         })
         .eq('user_session_id', sessionId)
-        .eq('ended_at', null);
+        .is('ended_at', null);
 
       if (error) {
         console.error('Error updating session:', error);
@@ -133,7 +133,7 @@ export const useSessionTracking = () => {
           total_songs_played: songsPlayedRef.current
         })
         .eq('user_session_id', sessionId)
-        .eq('ended_at', null);
+        .is('ended_at', null);
 
       if (error) {
         console.error('Error ending session:', error);
