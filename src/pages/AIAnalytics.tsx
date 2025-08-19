@@ -1,18 +1,20 @@
 import { useEffect, useState } from "react";
-import { TrendingUp, Users, Clock, MapPin, Zap, BarChart3, Activity, Globe } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { TrendingUp, Users, Clock, MapPin, Zap, BarChart3, Activity, Globe, Home } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import DashboardStats from "@/components/analytics/DashboardStats";
 import EnhancedTopSongs from "@/components/analytics/EnhancedTopSongs";
 import HourlyPatterns from "@/components/analytics/HourlyPatterns";
 import GeographicMap from "@/components/analytics/GeographicMap";
 import RealTimeMetrics from "@/components/analytics/RealTimeMetrics";
-
-
 import AudioPlayerProvider from "@/components/AudioPlayerProvider";
+import NowPlayingBanner from "@/components/NowPlayingBanner";
 
 const AIAnalytics = () => {
   const [currentTime, setCurrentTime] = useState(new Date());
+  const navigate = useNavigate();
 
   useEffect(() => {
     const timer = setInterval(() => setCurrentTime(new Date()), 1000);
@@ -21,7 +23,8 @@ const AIAnalytics = () => {
 
   return (
     <AudioPlayerProvider>
-      <div className="min-h-screen bg-gradient-to-br from-slate-950 via-purple-950 to-slate-900">
+      <NowPlayingBanner />
+      <div className="min-h-screen bg-gradient-to-br from-slate-950 via-purple-950 to-slate-900 pt-20">
         {/* Animated background particles */}
         <div className="fixed inset-0 overflow-hidden pointer-events-none">
           <div className="absolute -top-10 -left-10 w-72 h-72 bg-purple-500/10 rounded-full blur-3xl animate-pulse"></div>
@@ -45,6 +48,15 @@ const AIAnalytics = () => {
               </div>
             </div>
             <div className="flex items-center space-x-4">
+              <Button
+                onClick={() => navigate("/")}
+                variant="outline"
+                size="sm"
+                className="border-purple-500/50 text-purple-400 bg-purple-500/10 hover:bg-purple-500/20 hover:text-purple-300"
+              >
+                <Home className="h-4 w-4 mr-2" />
+                Home
+              </Button>
               <Badge variant="outline" className="border-green-500/50 text-green-400 bg-green-500/10">
                 <Activity className="h-3 w-3 mr-1 animate-pulse" />
                 Live
