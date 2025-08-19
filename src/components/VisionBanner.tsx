@@ -78,6 +78,21 @@ const VisionBanner = () => {
                   </div>
                 </button>
               </DialogTrigger>
+              
+              {/* Video Modal */}
+              <DialogContent className="max-w-4xl w-full p-0 border-0 bg-transparent">
+                <DialogTitle className="sr-only">Our Vision Video</DialogTitle>
+                <div className="relative w-full aspect-video bg-black rounded-lg overflow-hidden">
+                  <iframe
+                    src="https://www.youtube.com/embed/APw8HCxQuAQ?autoplay=1&rel=0&modestbranding=1"
+                    title="Our Vision Video"
+                    className="w-full h-full"
+                    frameBorder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    allowFullScreen
+                  />
+                </div>
+              </DialogContent>
             </Dialog>
           </div>
         </div>
@@ -220,22 +235,6 @@ const VisionBanner = () => {
           </a>
         </div>
 
-        {/* Video Modal */}
-        <Dialog open={isVideoOpen} onOpenChange={setIsVideoOpen}>
-          <DialogContent className="max-w-4xl w-full p-0 border-0 bg-transparent">
-            <DialogTitle className="sr-only">Our Vision Video</DialogTitle>
-            <div className="relative w-full aspect-video bg-black rounded-lg overflow-hidden">
-              <iframe
-                src="https://www.youtube.com/embed/APw8HCxQuAQ?autoplay=1&rel=0&modestbranding=1"
-                title="Our Vision Video"
-                className="w-full h-full"
-                frameBorder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                allowFullScreen
-              />
-            </div>
-          </DialogContent>
-        </Dialog>
 
       </div>
     </section>
