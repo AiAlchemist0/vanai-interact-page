@@ -170,7 +170,7 @@ const EnhancedTopSongs = () => {
           return b.total_plays - a.total_plays;
       }
     });
-    return sorted.slice(0, 10);
+    return sorted; // Return all songs, not just top 10
   };
 
   const handleRefresh = () => {
