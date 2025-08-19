@@ -7,7 +7,7 @@ import EnhancedTopSongs from "@/components/analytics/EnhancedTopSongs";
 import HourlyPatterns from "@/components/analytics/HourlyPatterns";
 import GeographicMap from "@/components/analytics/GeographicMap";
 import RealTimeMetrics from "@/components/analytics/RealTimeMetrics";
-import { DemoDataPopulator } from "@/components/analytics/DemoDataPopulator";
+import { RealDataRefresh } from "@/components/analytics/RealDataRefresh";
 
 import AudioPlayerProvider from "@/components/AudioPlayerProvider";
 
@@ -68,8 +68,8 @@ const AIAnalytics = () => {
         {/* Real-time Metrics */}
         <RealTimeMetrics />
 
-        {/* Demo Data Populator */}
-        <DemoDataPopulator />
+        {/* Real Data Refresh */}
+        <RealDataRefresh />
 
         {/* Enhanced Top Songs */}
         <EnhancedTopSongs />
