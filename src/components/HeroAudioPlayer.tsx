@@ -115,19 +115,19 @@ const HeroAudioPlayer = () => {
                    }}
                    variant={isPlaylistMode ? "secondary" : "secondary"}
                    size="sm"
-                   className={`h-7 px-2 text-xs font-medium flex-shrink-0 transition-all duration-300 ${
-                     isPlaylistMode 
-                       ? 'bg-ai-blue/20 text-ai-blue border border-ai-blue/30 backdrop-blur-sm glow-primary philippe-neon-pulse philippe-beat-sync' 
-                       : 'hover:bg-primary/10'
-                   }`}
+                    className={`h-7 px-2 text-xs font-medium flex-shrink-0 transition-all duration-300 ${
+                      isPlaylistMode 
+                        ? 'bg-ai-blue/20 text-ai-blue border border-ai-blue/30 backdrop-blur-sm glow-primary' 
+                        : 'hover:bg-primary/10'
+                    }`}
                  >
                    {isPlaylistMode ? (
-                     <>
-                       <PlayCircle className="h-3 w-3 mr-1 philippe-neon-pulse" />
-                       <span className="relative text-ai-blue font-semibold">
-                         Playlist Active
-                       </span>
-                     </>
+                      <>
+                        <PlayCircle className="h-3 w-3 mr-1" />
+                        <span className="relative text-ai-blue font-semibold">
+                          Playlist Active
+                        </span>
+                      </>
                    ) : (
                      <>
                        <PlayCircle className="h-3 w-3 mr-1" />

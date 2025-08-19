@@ -53,25 +53,9 @@ const PhilippeSpecialEffects: React.FC<PhilippeSpecialEffectsProps> = ({ type, c
         {children}
         {isPhilippePlayingActive && (
           <>
-            {/* Synthwave retro grid background */}
-            <div className="fixed inset-0 pointer-events-none z-10">
+            {/* Synthwave retro grid background - desktop only */}
+            <div className="fixed inset-0 pointer-events-none z-10 hidden md:block">
               <div className="philippe-retro-grid"></div>
-            </div>
-            
-            {/* Synthwave sun/horizon */}
-            <div className="fixed inset-0 pointer-events-none z-10">
-              <div className="philippe-synthwave-sun"></div>
-            </div>
-            
-            
-            {/* Full screen scan lines */}
-            <div className="fixed inset-0 pointer-events-none z-10">
-              <div className="philippe-screen-scanlines"></div>
-            </div>
-            
-            {/* Beat-sync pulsing overlay */}
-            <div className="fixed inset-0 pointer-events-none z-10">
-              <div className="philippe-beat-pulse"></div>
             </div>
           </>
         )}
