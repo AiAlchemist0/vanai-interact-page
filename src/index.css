@@ -327,15 +327,18 @@ All colors MUST be HSL.
     bottom: 0;
     width: 10px;
     background: linear-gradient(to top, 
-      hsl(var(--primary) / 0.8), 
-      hsl(var(--ai-cyan) / 0.6), 
-      hsl(60, 100%, 60% / 0.5)
+      hsl(330, 100%, 60%), /* bright pink/magenta */
+      hsl(15, 100%, 65%), /* vibrant orange */
+      hsl(270, 100%, 70%), /* electric purple */
+      hsl(180, 100%, 60%), /* bright cyan */
+      hsl(120, 100%, 50%), /* vivid green */
+      hsl(60, 100%, 60%) /* yellow/gold */
     );
     border-radius: 4px;
     animation: philippe-playlist-visualizer-pulse 0.8s ease-in-out infinite alternate;
-    box-shadow: 0 0 20px currentColor;
-    filter: blur(1px);
-    opacity: 0.6;
+    box-shadow: 0 0 12px hsl(330, 100%, 60% / 0.8), 0 0 20px hsl(180, 100%, 60% / 0.4);
+    filter: blur(0.2px);
+    opacity: 0.9;
   }
 
 
