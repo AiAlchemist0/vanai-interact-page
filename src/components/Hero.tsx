@@ -237,9 +237,9 @@ const Hero = () => {
               </div>
             </div>
             
-            <h1 className="text-6xl xl:text-7xl 2xl:text-8xl text-gradient font-bold leading-none">
-              <div className="mb-2">BC + AI Survey</div>
-              <div>Insights</div>
+            <h1 className="text-5xl sm:text-6xl xl:text-7xl 2xl:text-8xl text-gradient font-bold leading-tight sm:leading-none overflow-visible">
+              <div className="mb-2 break-words">BC + AI Survey</div>
+              <div className="break-words">Insights</div>
             </h1>
           </div>
 
