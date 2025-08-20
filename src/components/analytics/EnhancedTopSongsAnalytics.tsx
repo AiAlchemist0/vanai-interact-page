@@ -41,13 +41,6 @@ interface CombinedSongData {
 }
 
 const EnhancedTopSongsAnalytics = () => {
-  const formatDuration = (seconds: number) => {
-    if (!seconds) return '0:00';
-    const mins = Math.floor(seconds / 60);
-    const secs = Math.floor(seconds % 60);
-    return `${mins}:${secs.toString().padStart(2, '0')}`;
-  };
-
   const [songs, setSongs] = useState<CombinedSongData[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
@@ -64,33 +57,48 @@ const EnhancedTopSongsAnalytics = () => {
     loading: keywordsLoading
   } = useSongKeywords();
 
+  const formatDuration = (seconds: number) => {
+    if (!seconds) return '0:00';
+    const mins = Math.floor(seconds / 60);
+    const secs = Math.floor(seconds % 60);
+    return `${mins}:${secs.toString().padStart(2, '0')}`;
+  };
+
+  const getPerformanceLevel = (value: number, maxValue: number) => {
+    const percentage = maxValue > 0 ? (value / maxValue) * 100 : 0;
+    if (percentage >= 80) return { level: 'excellent', color: 'bg-ai-green', textColor: 'text-ai-green' };
+    if (percentage >= 60) return { level: 'good', color: 'bg-ai-blue', textColor: 'text-ai-blue' };
+    if (percentage >= 40) return { level: 'average', color: 'bg-ai-orange', textColor: 'text-ai-orange' };
+    return { level: 'low', color: 'bg-muted', textColor: 'text-muted-foreground' };
+  };
+
+  const getStatusBadge = (song: CombinedSongData, index: number) => {
+    if (index === 0 && song.total_plays > 0) return { text: 'Top Performer', color: 'bg-ai-green text-background' };
+    if (song.total_likes > song.total_plays * 0.3) return { text: 'Rising', color: 'bg-ai-blue text-background' };
+    if (song.total_plays === 0 && song.total_likes === 0) return { text: 'New', color: 'bg-muted text-muted-foreground' };
+    return null;
+  };
+
   // Define category colors for consistency using semantic tokens from design system
   const getCategoryColor = (category: string) => {
     const colors: Record<string, string> = {
-      // Primary BC AI Survey Themes
-      'AI Experience': 'bg-[hsl(var(--survey-ai-experience)/0.2)] text-[hsl(var(--survey-ai-experience))] border-[hsl(var(--survey-ai-experience)/0.3)]',
-      'Creative Impact': 'bg-[hsl(var(--survey-creative-impact)/0.2)] text-[hsl(var(--survey-creative-impact))] border-[hsl(var(--survey-creative-impact)/0.3)]',
-      'Future Vision': 'bg-[hsl(var(--survey-future-vision)/0.2)] text-[hsl(var(--survey-future-vision))] border-[hsl(var(--survey-future-vision)/0.3)]',
-      'Relationships': 'bg-[hsl(var(--survey-relationships)/0.2)] text-[hsl(var(--survey-relationships))] border-[hsl(var(--survey-relationships)/0.3)]',
-      'Community': 'bg-[hsl(var(--survey-community)/0.2)] text-[hsl(var(--survey-community))] border-[hsl(var(--survey-community)/0.3)]',
-      'Identity': 'bg-[hsl(var(--survey-identity)/0.2)] text-[hsl(var(--survey-identity))] border-[hsl(var(--survey-identity)/0.3)]',
-      // Lionel Ringenbach specific categories mapped to BC AI Survey themes
-      'Economic Impact': 'bg-[hsl(var(--survey-future-vision)/0.2)] text-[hsl(var(--survey-future-vision))] border-[hsl(var(--survey-future-vision)/0.3)]',
-      'Environmental Impact': 'bg-[hsl(var(--survey-future-vision)/0.2)] text-[hsl(var(--survey-future-vision))] border-[hsl(var(--survey-future-vision)/0.3)]',
-      'Innovation': 'bg-[hsl(var(--survey-creative-impact)/0.2)] text-[hsl(var(--survey-creative-impact))] border-[hsl(var(--survey-creative-impact)/0.3)]',
-      'Technology Analysis': 'bg-[hsl(var(--survey-ai-experience)/0.2)] text-[hsl(var(--survey-ai-experience))] border-[hsl(var(--survey-ai-experience)/0.3)]',
-      // Additional keyword category mappings
-      'technology': 'bg-[hsl(var(--survey-ai-experience)/0.2)] text-[hsl(var(--survey-ai-experience))] border-[hsl(var(--survey-ai-experience)/0.3)]',
-      'concept': 'bg-[hsl(var(--survey-creative-impact)/0.2)] text-[hsl(var(--survey-creative-impact))] border-[hsl(var(--survey-creative-impact)/0.3)]',
-      'location': 'bg-[hsl(var(--survey-community)/0.2)] text-[hsl(var(--survey-community))] border-[hsl(var(--survey-community)/0.3)]',
-      'nature': 'bg-[hsl(var(--survey-future-vision)/0.2)] text-[hsl(var(--survey-future-vision))] border-[hsl(var(--survey-future-vision)/0.3)]',
-      'organization': 'bg-[hsl(var(--survey-community)/0.2)] text-[hsl(var(--survey-community))] border-[hsl(var(--survey-community)/0.3)]',
-      'event': 'bg-[hsl(var(--survey-community)/0.2)] text-[hsl(var(--survey-community))] border-[hsl(var(--survey-community)/0.3)]',
-      'person': 'bg-[hsl(var(--survey-identity)/0.2)] text-[hsl(var(--survey-identity))] border-[hsl(var(--survey-identity)/0.3)]',
-      'artist': 'bg-[hsl(var(--survey-creative-impact)/0.2)] text-[hsl(var(--survey-creative-impact))] border-[hsl(var(--survey-creative-impact)/0.3)]',
-      'theme': 'bg-[hsl(var(--survey-creative-impact)/0.2)] text-[hsl(var(--survey-creative-impact))] border-[hsl(var(--survey-creative-impact)/0.3)]'
+      'AI Experience': 'bg-ai-blue/20 text-ai-blue border-ai-blue/30',
+      'Creative Impact': 'bg-ai-purple/20 text-ai-purple border-ai-purple/30',
+      'Future Vision': 'bg-ai-green/20 text-ai-green border-ai-green/30',
+      'Relationships': 'bg-accent/20 text-accent border-accent/30',
+      'Community': 'bg-ai-orange/20 text-ai-orange border-ai-orange/30',
+      'Identity': 'bg-ai-cyan/20 text-ai-cyan border-ai-cyan/30',
+      'technology': 'bg-ai-blue/20 text-ai-blue border-ai-blue/30',
+      'concept': 'bg-ai-purple/20 text-ai-purple border-ai-purple/30',
+      'location': 'bg-ai-orange/20 text-ai-orange border-ai-orange/30',
+      'nature': 'bg-ai-green/20 text-ai-green border-ai-green/30',
+      'organization': 'bg-ai-orange/20 text-ai-orange border-ai-orange/30',
+      'event': 'bg-ai-orange/20 text-ai-orange border-ai-orange/30',
+      'person': 'bg-ai-cyan/20 text-ai-cyan border-ai-cyan/30',
+      'artist': 'bg-ai-purple/20 text-ai-purple border-ai-purple/30',
+      'theme': 'bg-ai-purple/20 text-ai-purple border-ai-purple/30'
     };
-    return colors[category] || 'bg-[hsl(var(--muted)/0.2)] text-[hsl(var(--muted-foreground))] border-[hsl(var(--muted)/0.3)]';
+    return colors[category] || 'bg-muted/20 text-muted-foreground border-muted/30';
   };
 
   const fetchData = async () => {
@@ -243,22 +251,26 @@ const EnhancedTopSongsAnalytics = () => {
 
   if (loading) {
     return (
-      <Card className="bg-slate-900/50 border-purple-500/30 shadow-2xl shadow-purple-500/10 backdrop-blur-xl">
-        <CardHeader className="border-b border-purple-500/20">
+      <Card className="bg-card/50 backdrop-blur-xl border-border/50">
+        <CardHeader className="border-b border-border/50">
           <Skeleton className="h-6 w-48" />
         </CardHeader>
-        <CardContent className="p-6 space-y-4">
-          {Array.from({ length: 5 }).map((_, i) => (
-            <div key={i} className="flex items-center space-x-4">
-              <Skeleton className="h-16 w-16 rounded-xl" />
-              <div className="flex-1 space-y-2">
-                <Skeleton className="h-4 w-32" />
-                <Skeleton className="h-3 w-24" />
+        <CardContent className="p-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {Array.from({ length: 6 }).map((_, i) => (
+              <div key={i} className="p-6 bg-card rounded-xl border border-border">
+                <div className="flex items-center space-x-4 mb-4">
+                  <Skeleton className="h-16 w-16 rounded-xl" />
+                  <div className="flex-1 space-y-2">
+                    <Skeleton className="h-4 w-32" />
+                    <Skeleton className="h-3 w-24" />
+                  </div>
+                </div>
+                <Skeleton className="h-8 w-16 mb-2" />
                 <Skeleton className="h-2 w-full" />
               </div>
-              <Skeleton className="h-10 w-10 rounded-full" />
-            </div>
-          ))}
+            ))}
+          </div>
         </CardContent>
       </Card>
     );
@@ -288,77 +300,85 @@ const EnhancedTopSongsAnalytics = () => {
 
   return (
     <TooltipProvider>
-      <Card className="bg-slate-900/50 border-purple-500/30 shadow-2xl shadow-purple-500/10 backdrop-blur-xl">
-        <CardHeader className="border-b border-purple-500/20">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-2">
-              <CardTitle className="flex items-center space-x-2 text-purple-300">
-                <Trophy className="h-5 w-5 text-yellow-400" />
-                <span>Enhanced Music Leaderboard</span>
-              </CardTitle>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Info className="h-4 w-4 text-slate-500 hover:text-slate-300 cursor-help" />
-                </TooltipTrigger>
-                <TooltipContent className="max-w-xs z-50 bg-slate-800 border-slate-700">
-                  <div className="space-y-2">
-                    <p className="text-sm">Comprehensive song analytics including plays, likes, attempts, completion rates, and engagement scores.</p>
-                    <div className="text-xs text-slate-400 border-t border-slate-700 pt-2">
-                      Last updated: {formatTimeAgo(lastRefreshed)}
-                    </div>
-                  </div>
-                </TooltipContent>
-              </Tooltip>
+      <Card className="bg-card/50 backdrop-blur-xl border-border/50 shadow-elegant">
+        <CardHeader className="border-b border-border/50">
+          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+            <div className="flex items-center space-x-3">
+              <div className="p-2 rounded-lg bg-gradient-primary">
+                <Trophy className="h-6 w-6 text-background" />
+              </div>
+              <div>
+                <CardTitle className="text-foreground text-xl">
+                  Enhanced Music Leaderboard
+                </CardTitle>
+                <p className="text-sm text-muted-foreground mt-1">
+                  Comprehensive analytics with real-time insights
+                </p>
+              </div>
             </div>
+            
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Info className="h-5 w-5 text-muted-foreground hover:text-foreground cursor-help transition-colors" />
+              </TooltipTrigger>
+              <TooltipContent className="max-w-xs bg-popover border-border">
+                <div className="space-y-2">
+                  <p className="text-sm">Performance metrics and engagement analysis</p>
+                  <div className="text-xs text-muted-foreground border-t border-border pt-2">
+                    Updated: {new Date(lastRefreshed).toLocaleTimeString()}
+                  </div>
+                </div>
+              </TooltipContent>
+            </Tooltip>
           </div>
         
           {/* View Mode Toggles */}
-          <div className="flex space-x-1 mt-3">
+          <div className="flex flex-wrap gap-2 mt-6">
             {[
-              { key: 'plays', label: 'Most Played', icon: Music },
-              { key: 'likes', label: 'Most Liked', icon: Heart },
-              { key: 'engagement', label: 'Top Engagement', icon: TrendingUp }
-            ].map(({ key, label, icon: Icon }) => (
+              { key: 'plays', label: 'Most Played', icon: Music, color: 'ai-blue' },
+              { key: 'likes', label: 'Most Liked', icon: Heart, color: 'accent' },
+              { key: 'engagement', label: 'Top Engagement', icon: TrendingUp, color: 'ai-green' }
+            ].map(({ key, label, icon: Icon, color }) => (
               <Button
                 key={key}
-                variant={viewMode === key ? "default" : "ghost"}
+                variant={viewMode === key ? "default" : "outline"}
                 size="sm"
                 onClick={() => setViewMode(key as any)}
-                className={`text-xs ${
+                className={`transition-all ${
                   viewMode === key 
-                    ? 'bg-purple-500 text-white' 
-                    : 'text-slate-400 hover:text-white hover:bg-slate-800'
+                    ? 'bg-primary text-primary-foreground shadow-lg' 
+                    : 'hover:bg-muted border-border'
                 }`}
               >
-                <Icon className="h-3 w-3 mr-1" />
+                <Icon className="h-4 w-4 mr-2" />
                 {label}
               </Button>
             ))}
           </div>
 
-          {/* Category Filter Dropdown */}
+          {/* Category Filter */}
           {analytics.length > 0 && (
-            <div className="mt-3">
-              <div className="flex items-center space-x-2 mb-2">
-                <Filter className="h-4 w-4 text-slate-400" />
-                <span className="text-xs text-slate-400">Filter by BC AI Survey Themes:</span>
+            <div className="mt-4">
+              <div className="flex items-center space-x-2 mb-3">
+                <Filter className="h-4 w-4 text-muted-foreground" />
+                <span className="text-sm text-muted-foreground">Filter by themes:</span>
               </div>
               <Select 
                 value={selectedCategory || "all"} 
                 onValueChange={value => setSelectedCategory(value === "all" ? null : value)}
               >
-                <SelectTrigger className="w-[280px] bg-slate-800/50 border-slate-600 text-slate-300">
-                  <SelectValue placeholder="Select a theme..." />
+                <SelectTrigger className="w-full max-w-sm bg-background border-border">
+                  <SelectValue placeholder="All themes" />
                 </SelectTrigger>
-                <SelectContent className="bg-slate-800 border-slate-600 z-50">
-                  <SelectItem value="all" className="text-slate-300 hover:bg-slate-700">
+                <SelectContent className="bg-popover border-border z-50">
+                  <SelectItem value="all">
                     <div className="flex items-center">
                       <Tag className="h-3 w-3 mr-2" />
                       All Themes
                     </div>
                   </SelectItem>
                   {analytics.map(({ category }) => (
-                    <SelectItem key={category} value={category} className="text-slate-300 hover:bg-slate-700">
+                    <SelectItem key={category} value={category}>
                       <div className="flex items-center">
                         <Tag className="h-3 w-3 mr-2" />
                         {category}
@@ -373,122 +393,180 @@ const EnhancedTopSongsAnalytics = () => {
         
         <CardContent className="p-6">
           {error && (
-            <div className="mb-4 p-3 rounded-lg bg-red-500/10 border border-red-500/20 text-red-400 text-sm">
+            <div className="mb-6 p-4 rounded-xl bg-destructive/10 border border-destructive/20 text-destructive">
               {error}
             </div>
           )}
-          <div className="space-y-4">
-            {sortedSongs.length === 0 ? (
-              <div className="text-center py-8 text-slate-400">
-                <Music className="h-12 w-12 mx-auto mb-4 opacity-50" />
-                <p>No songs available to display</p>
-              </div>
-            ) : (
-              sortedSongs.map((song, index) => {
+          
+          {sortedSongs.length === 0 ? (
+            <div className="text-center py-12">
+              <Music className="h-16 w-16 mx-auto mb-4 text-muted-foreground opacity-50" />
+              <p className="text-muted-foreground">No songs available to display</p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {sortedSongs.map((song, index) => {
                 const metadata = getSongMetadata(song.song_id);
                 const currentValue = viewMode === 'plays' ? song.total_plays : 
                                    viewMode === 'likes' ? song.total_likes : 
                                    song.engagement_score;
-                const progressPercentage = currentValue / maxValue * 100;
+                const progressPercentage = Math.min((currentValue / maxValue) * 100, 100);
+                const performance = getPerformanceLevel(currentValue, maxValue);
+                const status = getStatusBadge(song, index);
                 const isTop3 = index < 3;
 
                 return (
                   <div 
                     key={song.song_id}
-                    className={`group flex items-center space-x-4 p-4 rounded-xl transition-all duration-300 ${
+                    className={`group relative p-6 rounded-xl border transition-all duration-300 hover:shadow-lg ${
                       isTop3 
-                        ? 'bg-gradient-to-r from-yellow-500/10 to-orange-500/10 border border-yellow-500/20' 
-                        : 'bg-slate-800/30'
+                        ? 'bg-gradient-to-br from-primary/5 to-accent/5 border-primary/20 shadow-glow-primary' 
+                        : 'bg-card border-border hover:border-primary/50'
                     }`}
                   >
                     {/* Rank Badge */}
-                    <div className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm ${
-                      index === 0 ? 'bg-gradient-to-r from-yellow-400 to-yellow-500 text-black' :
-                      index === 1 ? 'bg-gradient-to-r from-gray-300 to-gray-400 text-black' :
-                      index === 2 ? 'bg-gradient-to-r from-orange-400 to-orange-500 text-black' :
-                      'bg-slate-700 text-slate-300'
+                    <div className={`absolute -top-3 -left-3 w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm border-2 border-background ${
+                      index === 0 ? 'bg-gradient-primary text-background' :
+                      index === 1 ? 'bg-gradient-secondary text-background' :
+                      index === 2 ? 'bg-gradient-accent text-background' :
+                      'bg-muted text-muted-foreground'
                     }`}>
-                      {index + 1}
+                      #{index + 1}
                     </div>
 
-                    {/* Cover Art */}
-                    <div className="relative flex-shrink-0">
-                      <div className="w-16 h-16 rounded-xl overflow-hidden bg-slate-700">
-                        <img 
-                          src={metadata.coverArt} 
-                          alt={`${metadata.title} cover`}
-                          className="w-full h-full object-cover"
-                          onError={(e) => {
-                            e.currentTarget.src = '/placeholder.svg';
-                          }}
-                        />
-                      </div>
-                    </div>
+                    {/* Status Badge */}
+                    {status && (
+                      <Badge className={`absolute -top-2 -right-2 ${status.color} text-xs px-2 py-1`}>
+                        {status.text}
+                      </Badge>
+                    )}
 
                     {/* Song Info */}
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center space-x-2 mb-1">
-                        <h4 className="font-semibold text-white truncate text-sm">{metadata.title}</h4>
-                        {isTop3 && <Trophy className="h-3 w-3 text-yellow-400 flex-shrink-0" />}
+                    <div className="flex items-center space-x-4 mb-4">
+                      <div className="relative">
+                        <img
+                          src={metadata?.coverArt || "/placeholder.svg"}
+                          alt={metadata?.title || song.song_id}
+                          className="w-16 h-16 rounded-xl object-cover shadow-md"
+                          onError={(e) => {
+                            e.currentTarget.src = "/placeholder.svg";
+                          }}
+                        />
+                        {isTop3 && (
+                          <div className="absolute -top-1 -right-1 w-4 h-4 bg-gradient-primary rounded-full flex items-center justify-center">
+                            <Trophy className="w-2.5 h-2.5 text-background" />
+                          </div>
+                        )}
                       </div>
-                      <p className="text-xs text-slate-400 mb-2 truncate">{metadata.artist}</p>
-                      
-                      {/* Progress Bar */}
-                      <div className="space-y-1">
-                        <div className="flex items-center justify-between text-xs">
-                          <span className="text-slate-500">
-                            {viewMode === 'plays' ? 'Plays' : 
-                             viewMode === 'likes' ? 'Likes' : 
-                             'Engagement'}
-                          </span>
-                          <span className="text-cyan-400 font-medium">{currentValue}</span>
-                        </div>
-                        <div className="relative">
-                          <Progress 
-                            value={progressPercentage} 
-                            className="h-1.5 bg-slate-800"
-                          />
-                          <div 
-                            className={`absolute inset-0 h-1.5 rounded-full bg-gradient-to-r ${metadata.color} opacity-80`}
-                            style={{ width: `${progressPercentage}%` }}
-                          />
-                        </div>
-                      </div>
-
-                      {/* Keywords */}
-                      <div className="flex flex-wrap gap-1 mt-2">
-                        {getTopKeywordsForSong(song.song_id).slice(0, 3).map((keyword, keywordIndex) => (
-                          <Badge 
-                            key={keywordIndex}
-                            variant="outline" 
-                            className={`text-xs py-0 px-1.5 ${getCategoryColor(keyword.category)}`}
-                          >
-                            {keyword.keyword}
-                          </Badge>
-                        ))}
+                      <div className="flex-1 min-w-0">
+                        <h3 className="font-semibold text-foreground text-sm truncate">
+                          {metadata?.title || song.song_id.replace(/-/g, ' ')}
+                        </h3>
+                        <p className="text-xs text-muted-foreground truncate">
+                          {metadata?.artist || 'Unknown Artist'}
+                        </p>
                       </div>
                     </div>
 
-                    {/* Statistics Display */}
-                    <div className="flex flex-col items-end space-y-1 text-xs">
-                      <div className="text-center space-y-0.5">
-                        <div className="text-slate-500">Attempts</div>
-                        <div className="text-orange-400 font-medium">{song.total_attempts}</div>
+                    {/* Primary Metric */}
+                    <div className="mb-4">
+                      <div className="flex items-center justify-between mb-2">
+                        <span className="text-xs text-muted-foreground">
+                          {viewMode === 'plays' ? 'Total Plays' : 
+                           viewMode === 'likes' ? 'Total Likes' : 
+                           'Engagement Score'}
+                        </span>
+                        <span className={`text-2xl font-bold ${performance.textColor}`}>
+                          {currentValue.toLocaleString()}
+                        </span>
                       </div>
-                      <div className="text-center space-y-0.5">
-                        <div className="text-slate-500">Success</div>
-                        <div className="text-green-400 font-medium">{song.conversion_rate}%</div>
+                      <div className="w-full bg-muted rounded-full h-2">
+                        <div 
+                          className={`h-2 rounded-full transition-all duration-500 ${performance.color}`}
+                          style={{ width: `${progressPercentage}%` }}
+                        />
                       </div>
-                      <div className="text-center space-y-0.5">
-                        <div className="text-slate-500">Avg Duration</div>
-                        <div className="text-blue-400 font-medium">{formatDuration(song.avg_duration)}</div>
+                      <div className="flex justify-between mt-1">
+                        <span className="text-xs text-muted-foreground">
+                          {progressPercentage.toFixed(0)}%
+                        </span>
+                        <span className="text-xs text-muted-foreground">
+                          {performance.level}
+                        </span>
                       </div>
                     </div>
+
+                    {/* Secondary Metrics */}
+                    <div className="grid grid-cols-2 gap-3 mb-4">
+                      <div className="bg-muted/30 rounded-lg p-3">
+                        <div className="flex items-center space-x-2">
+                          <Music className="w-3 h-3 text-muted-foreground" />
+                          <span className="text-xs text-muted-foreground">Plays</span>
+                        </div>
+                        <p className="text-sm font-semibold text-foreground">
+                          {song.total_plays}
+                        </p>
+                      </div>
+                      <div className="bg-muted/30 rounded-lg p-3">
+                        <div className="flex items-center space-x-2">
+                          <Heart className="w-3 h-3 text-muted-foreground" />
+                          <span className="text-xs text-muted-foreground">Likes</span>
+                        </div>
+                        <p className="text-sm font-semibold text-foreground">
+                          {song.total_likes}
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* Additional Metrics */}
+                    {(song.completion_rate > 0 || song.avg_duration > 0) && (
+                      <div className="grid grid-cols-2 gap-3 mb-4">
+                        {song.completion_rate > 0 && (
+                          <div className="bg-muted/30 rounded-lg p-3">
+                            <div className="flex items-center space-x-2">
+                              <Activity className="w-3 h-3 text-muted-foreground" />
+                              <span className="text-xs text-muted-foreground">Completion</span>
+                            </div>
+                            <p className="text-sm font-semibold text-foreground">
+                              {Math.round(song.completion_rate)}%
+                            </p>
+                          </div>
+                        )}
+                        {song.avg_duration > 0 && (
+                          <div className="bg-muted/30 rounded-lg p-3">
+                            <div className="flex items-center space-x-2">
+                              <Clock className="w-3 h-3 text-muted-foreground" />
+                              <span className="text-xs text-muted-foreground">Avg Time</span>
+                            </div>
+                            <p className="text-sm font-semibold text-foreground">
+                              {formatDuration(song.avg_duration)}
+                            </p>
+                          </div>
+                        )}
+                      </div>
+                    )}
+
+                    {/* Keywords */}
+                    {getTopKeywordsForSong(song.song_id).length > 0 && (
+                      <div className="mt-4">
+                        <div className="flex flex-wrap gap-1">
+                          {getTopKeywordsForSong(song.song_id).slice(0, 3).map((keyword, i) => (
+                            <Badge
+                              key={i}
+                              variant="outline"
+                              className={`text-xs px-2 py-1 ${getCategoryColor(keyword.category)}`}
+                            >
+                              {keyword.keyword}
+                            </Badge>
+                          ))}
+                        </div>
+                      </div>
+                    )}
                   </div>
                 );
-              })
-            )}
-          </div>
+              })}
+            </div>
+          )}
         </CardContent>
       </Card>
     </TooltipProvider>
