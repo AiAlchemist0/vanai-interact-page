@@ -141,7 +141,7 @@ const Hero = () => {
               <div className="flex items-center justify-center mb-2 sm:mb-3">
                 <Sparkles className="w-6 sm:w-7 lg:w-8 h-6 sm:h-7 lg:h-8 text-ai-purple" />
               </div>
-              <div className="text-2xl sm:text-3xl font-bold text-foreground">12</div>
+              <div className="text-2xl sm:text-3xl font-bold text-foreground">16</div>
               <div className="text-sm text-muted-foreground">AI Songs</div>
             </div>
           </div>
