@@ -305,7 +305,7 @@ const EnhancedTopSongsAnalytics = () => {
           <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
             <div className="flex items-center space-x-3">
               <div className="p-2 rounded-lg bg-gradient-primary">
-                <Trophy className="h-6 w-6 text-background" />
+                <Trophy className="h-6 w-6 text-yellow-400" />
               </div>
               <div>
                 <CardTitle className="text-foreground text-xl">
