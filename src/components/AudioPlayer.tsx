@@ -21,7 +21,7 @@ import hrMacMillanCover from "/lovable-uploads/8a59c6e4-39f4-41e2-bb0d-544e22e30
 import lalalaAiDilemmaCover from "/lovable-uploads/7e23b796-605f-4562-927b-06daa9147648.png";
 import lionelRingenbachCover from "/lovable-uploads/7f8d84c3-eb81-4f66-87be-5b024084aca2.png";
 import deanShevHumanCover from '@/assets/dean-shev-human-cover.jpg';
-import bcCoastCatalystCover from '/lovable-uploads/53f7116c-14b8-4b69-b8ed-f52ca1b55346.png';
+import bcCoastCatalystCover from '/lovable-uploads/429a3cb8-3ffb-40db-874a-5829a6a083bd.png';
 
 
 // Supabase Storage URLs for audio files
