@@ -60,24 +60,24 @@ const SongItem: React.FC<SongItemProps> = ({
           <div className={`absolute ${isMobile ? '-top-1 -right-1 w-3 h-3' : '-top-1 -right-1 w-3 h-3 sm:w-4 sm:h-4'} bg-primary rounded-full animate-pulse shadow-lg border-2 border-background`} />
         )}
 
-        {/* Large Play Button Overlay - Shows on hover (Desktop only) */}
-        {!isMobile && (
-          <div className={`absolute inset-0 flex items-center justify-center transition-all duration-200 ${
-            audioState.isPlaying ? 'opacity-0 hover:opacity-100' : 'opacity-0 hover:opacity-100'
-          }`}>
-            <div className="bg-black/60 backdrop-blur-sm rounded-full p-3 transform transition-all duration-200 hover:scale-110 shadow-lg">
-              <UnifiedPlayButton
-                audioState={audioState}
-                onPlay={() => handlePlay()}
-                onStop={() => handleStop()}
-                size="lg"
-                variant="ghost"
-                showProgress={false}
-                className="w-8 h-8 text-white hover:text-primary"
-              />
-            </div>
+        {/* Play Button Overlay - Desktop: on hover, Mobile: always visible */}
+        <div className={`absolute inset-0 flex items-center justify-center transition-all duration-200 ${
+          isMobile 
+            ? 'opacity-100' 
+            : (audioState.isPlaying ? 'opacity-0 hover:opacity-100' : 'opacity-0 hover:opacity-100')
+        }`}>
+          <div className={`bg-black/60 backdrop-blur-sm rounded-full p-3 transform transition-all duration-200 ${isMobile ? '' : 'hover:scale-110'} shadow-lg ${isMobile ? 'min-w-[44px] min-h-[44px]' : ''}`}>
+            {audioState.isLoading ? (
+              <div className="w-6 h-6 flex items-center justify-center">
+                <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+              </div>
+            ) : audioState.isPlaying ? (
+              <Pause className="w-6 h-6 text-white" />
+            ) : (
+              <Play className="w-6 h-6 text-white ml-0.5" />
+            )}
           </div>
-        )}
+        </div>
       </div>
 
       {/* Main Content Area - Responsive */}
@@ -196,26 +196,6 @@ const SongItem: React.FC<SongItemProps> = ({
         )}
       </div>
 
-      {/* Mobile Play Button - Positioned as visual feedback only, card is clickable */}
-      {isMobile && (
-        <div className="absolute bottom-3 right-3 pointer-events-none">
-          <div className={`p-2 rounded-full transition-all duration-300 ${
-            audioState.isPlaying 
-              ? 'bg-primary/20 border border-primary/40' 
-              : 'bg-muted/20 border border-border/30'
-          }`}>
-            {audioState.isLoading ? (
-              <div className="w-5 h-5 flex items-center justify-center">
-                <div className="w-3 h-3 border-2 border-primary border-t-transparent rounded-full animate-spin" />
-              </div>
-            ) : audioState.isPlaying ? (
-              <Pause className="w-5 h-5 text-primary" />
-            ) : (
-              <Play className="w-5 h-5 text-muted-foreground ml-0.5" />
-            )}
-          </div>
-        </div>
-      )}
        
        {/* Song Info Modal */}
        <SongInfoModal 
