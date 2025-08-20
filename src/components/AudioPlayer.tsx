@@ -550,7 +550,7 @@ const SONGS: Song[] = [
     title: "BC Coast Catalyst",
     artist: "Kassandra Linklater", 
     src: getAudioUrl("BC Coast Catalyst.mp3"),
-    coverArt: bcCoastCatalystCover,
+    coverArt: "/lovable-uploads/65a91080-e861-4e4a-87d4-099d1cc015b0.png",
     lyrics: [
       // Intro
       { time: 0, text: "In the BC mist, where rain weaves dreams..." },
