@@ -124,7 +124,7 @@ const SongItem: React.FC<SongItemProps> = ({
 
         {/* Action Buttons - Mobile: positioned absolutely, Desktop: centered */}
         {isMobile ? (
-          <div className="absolute top-3 right-3 flex gap-2">
+          <div className="absolute bottom-3 right-3 flex gap-2">
             {/* Like Button */}
             <button
               onClick={(e) => {
