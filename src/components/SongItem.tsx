@@ -38,7 +38,7 @@ const SongItem: React.FC<SongItemProps> = ({
 
   return (
     <div
-      className={`flex items-center gap-2 sm:gap-3 p-2 sm:p-3 rounded-xl transition-all duration-200 border touch-manipulation min-h-[64px] sm:min-h-[80px] ${
+      className={`flex items-center gap-2 sm:gap-3 p-2 sm:p-3 rounded-xl transition-all duration-200 border touch-manipulation min-h-[64px] sm:min-h-[80px] lg:min-h-[96px] ${
         index === currentSongIndex 
           ? `bg-primary/10 border-primary/30 shadow-lg ${isPlaylistMode ? 'ring-2 ring-primary/20' : ''}` 
           : 'bg-muted/20 hover:bg-muted/40 border-border/20'
@@ -100,7 +100,7 @@ const SongItem: React.FC<SongItemProps> = ({
         <img 
           src={song.coverArt} 
           alt={`${song.title} cover`} 
-          className="w-12 h-12 sm:w-16 sm:h-16 rounded-lg object-cover shadow-md transition-all duration-200"
+          className="w-12 h-12 sm:w-16 sm:h-16 lg:w-20 lg:h-20 rounded-lg object-cover shadow-md transition-all duration-200"
         />
         
         {/* Playing Animation Indicator */}
