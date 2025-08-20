@@ -426,9 +426,9 @@ const EnhancedTopSongsAnalytics = () => {
                   >
                     {/* Rank Badge */}
                     <div className={`absolute -top-3 -left-3 w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm border-2 border-background ${
-                      index === 0 ? 'bg-gradient-primary text-background' :
-                      index === 1 ? 'bg-gradient-secondary text-background' :
-                      index === 2 ? 'bg-gradient-accent text-background' :
+                      index === 0 ? 'bg-gradient-to-br from-yellow-400 to-yellow-600 text-yellow-900' :
+                      index === 1 ? 'bg-gradient-to-br from-gray-300 to-gray-500 text-gray-900' :
+                      index === 2 ? 'bg-gradient-to-br from-amber-600 to-amber-800 text-amber-100' :
                       'bg-slate-200 text-slate-900 border border-slate-300'
                     }`}>
                       #{index + 1}
