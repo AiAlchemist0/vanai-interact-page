@@ -6,6 +6,7 @@ import { Slider } from "@/components/ui/slider";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { LyricLine } from "@/components/SynchronizedLyrics";
+// PlayTrackingIndicator removed - tracking continues in background
 
 import { LoadingFeedback } from "@/components/LoadingFeedback";
 import { useIsMobile } from "@/hooks/use-mobile";
