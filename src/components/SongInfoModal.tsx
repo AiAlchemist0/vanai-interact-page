@@ -34,17 +34,27 @@ export const SongInfoModal: React.FC<SongInfoModalProps> = ({
     return acc;
   }, {} as Record<string, typeof keywords>);
 
-  // Define category colors for consistency with EnhancedTopSongs
+  // Define category colors using BC AI Survey semantic tokens from design system
   const getCategoryColor = (category: string) => {
     const colors: Record<string, string> = {
-      'AI Experience': 'bg-blue-500/20 text-blue-300 border-blue-500/30',
-      'Creative Impact': 'bg-purple-500/20 text-purple-300 border-purple-500/30',
-      'Future Vision': 'bg-cyan-500/20 text-cyan-300 border-cyan-500/30',
-      'Relationships': 'bg-pink-500/20 text-pink-300 border-pink-500/30',
-      'Community': 'bg-green-500/20 text-green-300 border-green-500/30',
-      'Identity': 'bg-orange-500/20 text-orange-300 border-orange-500/30'
+      'AI Experience': 'bg-[hsl(var(--survey-ai-experience)/0.2)] text-[hsl(var(--survey-ai-experience))] border-[hsl(var(--survey-ai-experience)/0.3)]',
+      'Creative Impact': 'bg-[hsl(var(--survey-creative-impact)/0.2)] text-[hsl(var(--survey-creative-impact))] border-[hsl(var(--survey-creative-impact)/0.3)]', 
+      'Future Vision': 'bg-[hsl(var(--survey-future-vision)/0.2)] text-[hsl(var(--survey-future-vision))] border-[hsl(var(--survey-future-vision)/0.3)]',
+      'Relationships': 'bg-[hsl(var(--survey-relationships)/0.2)] text-[hsl(var(--survey-relationships))] border-[hsl(var(--survey-relationships)/0.3)]',
+      'Community': 'bg-[hsl(var(--survey-community)/0.2)] text-[hsl(var(--survey-community))] border-[hsl(var(--survey-community)/0.3)]',
+      'Identity': 'bg-[hsl(var(--survey-identity)/0.2)] text-[hsl(var(--survey-identity))] border-[hsl(var(--survey-identity)/0.3)]',
+      // Handle additional categories that might exist
+      'technology': 'bg-[hsl(var(--survey-ai-experience)/0.2)] text-[hsl(var(--survey-ai-experience))] border-[hsl(var(--survey-ai-experience)/0.3)]',
+      'concept': 'bg-[hsl(var(--survey-creative-impact)/0.2)] text-[hsl(var(--survey-creative-impact))] border-[hsl(var(--survey-creative-impact)/0.3)]',
+      'location': 'bg-[hsl(var(--survey-community)/0.2)] text-[hsl(var(--survey-community))] border-[hsl(var(--survey-community)/0.3)]',
+      'nature': 'bg-[hsl(var(--survey-future-vision)/0.2)] text-[hsl(var(--survey-future-vision))] border-[hsl(var(--survey-future-vision)/0.3)]',
+      'organization': 'bg-[hsl(var(--survey-community)/0.2)] text-[hsl(var(--survey-community))] border-[hsl(var(--survey-community)/0.3)]',
+      'event': 'bg-[hsl(var(--survey-community)/0.2)] text-[hsl(var(--survey-community))] border-[hsl(var(--survey-community)/0.3)]',
+      'person': 'bg-[hsl(var(--survey-identity)/0.2)] text-[hsl(var(--survey-identity))] border-[hsl(var(--survey-identity)/0.3)]',
+      'artist': 'bg-[hsl(var(--survey-creative-impact)/0.2)] text-[hsl(var(--survey-creative-impact))] border-[hsl(var(--survey-creative-impact)/0.3)]',
+      'theme': 'bg-[hsl(var(--survey-creative-impact)/0.2)] text-[hsl(var(--survey-creative-impact))] border-[hsl(var(--survey-creative-impact)/0.3)]'
     };
-    return colors[category] || 'bg-gray-500/20 text-gray-300 border-gray-500/30';
+    return colors[category] || 'bg-[hsl(var(--muted)/0.2)] text-[hsl(var(--muted-foreground))] border-[hsl(var(--muted)/0.3)]';
   };
 
   return (
