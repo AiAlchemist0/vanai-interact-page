@@ -301,34 +301,28 @@ const Hero = () => {
           <div className="flex justify-center">
             <button 
               onClick={() => handleSmoothScroll('audio-experience')}
-              className="group relative inline-flex items-center justify-center px-6 sm:px-8 py-4 sm:py-6 text-base sm:text-lg lg:text-xl font-bold text-white transition-all duration-300 hover:scale-105 active:scale-95 focus:scale-105 min-h-[56px] sm:min-h-[64px] rounded-full focus:outline-2 focus:outline-offset-2 focus:outline-ai-purple"
+              className="group relative inline-flex items-center justify-center px-6 sm:px-8 py-4 sm:py-6 text-base sm:text-lg lg:text-xl font-bold transition-all duration-300 hover:scale-105 active:scale-95 focus:scale-105 min-h-[56px] sm:min-h-[64px] rounded-full focus:outline-2 focus:outline-offset-2 focus:outline-ai-purple"
               aria-label="Explore BC AI Album - Navigate to audio experience section"
             >
-              {/* Multi-layer neon glow background with music-themed gradients */}
-              <div className="absolute inset-0 rounded-full bg-gradient-to-r from-ai-purple via-ai-cyan to-ai-green opacity-75 blur-lg group-hover:opacity-100 group-hover:blur-xl transition-all duration-300"></div>
-              <div className="absolute inset-0 rounded-full bg-gradient-to-r from-ai-purple/80 via-ai-cyan/80 to-ai-green/80 opacity-50 blur-md group-hover:opacity-75 transition-all duration-300"></div>
-              <div className="absolute inset-0 rounded-full bg-gradient-to-r from-ai-purple/60 via-ai-cyan/60 to-ai-green/60 opacity-30 blur-sm group-hover:opacity-50 transition-all duration-300"></div>
+              {/* Subtle multi-layer glow background */}
+              <div className="absolute inset-0 rounded-full bg-gradient-to-r from-ai-purple via-ai-cyan to-ai-green opacity-40 blur-md group-hover:opacity-60 group-hover:blur-lg transition-all duration-300"></div>
+              <div className="absolute inset-0 rounded-full bg-gradient-to-r from-ai-purple/60 via-ai-cyan/60 to-ai-green/60 opacity-25 blur-sm group-hover:opacity-40 transition-all duration-300"></div>
               
-              {/* Button content with backdrop blur */}
-              <div className="relative z-10 flex items-center gap-2 sm:gap-3 px-4 sm:px-6 py-3 sm:py-4 rounded-full bg-background/20 backdrop-blur-sm border border-ai-purple/50 group-hover:border-ai-purple/70 group-hover:bg-background/30 transition-all duration-300">
+              {/* Button content with better readability */}
+              <div className="relative z-10 flex items-center gap-2 sm:gap-3 px-4 sm:px-6 py-3 sm:py-4 rounded-full bg-background/90 backdrop-blur-sm border border-ai-purple/30 group-hover:border-ai-purple/50 group-hover:bg-background/95 transition-all duration-300">
                 <span className="text-2xl group-hover:animate-pulse" aria-hidden="true">🎵</span>
-                <span className="bg-gradient-to-r from-ai-purple via-ai-cyan to-ai-green bg-clip-text text-transparent group-hover:from-ai-purple/90 group-hover:via-ai-cyan/90 group-hover:to-ai-green/90 transition-all duration-300 font-semibold">
+                <span className="text-foreground group-hover:text-ai-purple transition-colors duration-300 font-semibold">
                   Explore BC AI Album Now
                 </span>
-                <span className="group-hover:translate-x-1 transition-transform duration-300 text-ai-cyan group-hover:text-ai-cyan/80" aria-hidden="true">→</span>
+                <span className="group-hover:translate-x-1 transition-transform duration-300 text-ai-cyan" aria-hidden="true">→</span>
               </div>
               
-              {/* Animated musical particles */}
-              <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                <div className="absolute top-3 left-6 w-1 h-1 bg-ai-purple rounded-full animate-ping"></div>
-                <div className="absolute top-8 right-12 w-1 h-1 bg-ai-cyan rounded-full animate-ping" style={{ animationDelay: '0.3s' }}></div>
-                <div className="absolute bottom-4 left-16 w-1 h-1 bg-ai-green rounded-full animate-ping" style={{ animationDelay: '0.6s' }}></div>
-                <div className="absolute bottom-6 right-8 w-1 h-1 bg-ai-purple rounded-full animate-ping" style={{ animationDelay: '0.9s' }}></div>
-                <div className="absolute top-6 left-1/2 w-1 h-1 bg-ai-cyan rounded-full animate-ping" style={{ animationDelay: '1.2s' }}></div>
+              {/* Subtle animated particles */}
+              <div className="absolute inset-0 opacity-0 group-hover:opacity-60 transition-opacity duration-500">
+                <div className="absolute top-4 left-8 w-1 h-1 bg-ai-purple rounded-full animate-ping"></div>
+                <div className="absolute bottom-4 right-8 w-1 h-1 bg-ai-cyan rounded-full animate-ping" style={{ animationDelay: '0.5s' }}></div>
+                <div className="absolute top-6 right-12 w-1 h-1 bg-ai-green rounded-full animate-ping" style={{ animationDelay: '1s' }}></div>
               </div>
-              
-              {/* Pulsing glow animation */}
-              <div className="absolute inset-0 rounded-full bg-gradient-to-r from-ai-purple/20 via-ai-cyan/20 to-ai-green/20 animate-pulse group-hover:animate-none"></div>
             </button>
           </div>
 
