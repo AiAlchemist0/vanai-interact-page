@@ -552,20 +552,74 @@ const SONGS: Song[] = [
     src: getAudioUrl("BC Coast Catalyst.mp3"),
     coverArt: bcCoastCatalystCover,
     lyrics: [
-      { time: 0, text: "Along the BC coastline where the mountains meet the sea" },
-      { time: 4, text: "Kassandra's voice carries stories of what we could be" },
-      { time: 8, text: "A catalyst for change in every breath and wave" },
-      { time: 12, text: "The coast speaks wisdom of the future that we crave" },
-      { time: 16, text: "" },
-      { time: 18, text: "BC Coast Catalyst, transforming all we know" },
-      { time: 22, text: "From Pacific shores, new possibilities grow" },
-      { time: 26, text: "Innovation flows like tides upon the land" },
-      { time: 30, text: "Building bridges to tomorrow with creative hands" },
-      { time: 34, text: "" },
-      { time: 36, text: "Through forests deep and ocean wide" },
-      { time: 40, text: "Technology and nature side by side" },
-      { time: 44, text: "A catalyst for dreams taking flight" },
-      { time: 48, text: "Illuminating British Columbia's light" }
+      // Intro
+      { time: 0, text: "In the BC mist, where rain weaves dreams..." },
+      { time: 4, text: "They got a fire, if you're not shapin', you're not gleamin'..." },
+      { time: 8, text: "She's the spark, threading futures through her veins, don't you?" },
+      { time: 12, text: "" },
+      
+      // Verse 1
+      { time: 16, text: "On the BC Coast, they hum a prophecy," },
+      { time: 20, text: "\"Vancouver's risin', code's the new alchemy.\"" },
+      { time: 24, text: "She's got starlight circuits, AI in her soul, yeah you." },
+      { time: 28, text: "In the cedar haze, I catch this vision clear," },
+      { time: 32, text: "Worlds could collide here, she's the pioneer." },
+      { time: 36, text: "Frontier Collective, conjurin' dreams, Kassandra, yeah you." },
+      { time: 40, text: "" },
+      
+      // Pre-Chorus
+      { time: 44, text: "She pitched the summit, pulled the stars to shore," },
+      { time: 48, text: "Web lights blazin', billion-dollar lore." },
+      { time: 52, text: "From youth envoy to global tides," },
+      { time: 56, text: "She's the weaver, spinnin' code to skies." },
+      { time: 60, text: "" },
+      
+      // Chorus
+      { time: 64, text: "She's craftin' futures, ecosystems dance, wired to the core," },
+      { time: 68, text: "You call her name, she whispers back, \"I need this spark to soar.\"" },
+      { time: 72, text: "Somethin' keeps her electric, she's alive, she's a storm," },
+      { time: 76, text: "Her hub, her hub, Vancouver's hub," },
+      { time: 80, text: "(I see my city glowin' from the mist to the AI dawn.)" },
+      { time: 84, text: "Her hub, her hub, her flame." },
+      { time: 88, text: "" },
+      
+      // Verse 2
+      { time: 92, text: "On the BC Coast, frontiers bloom like tides," },
+      { time: 96, text: "AI and biotech, chasin' fears aside." },
+      { time: 100, text: "She's the bridge, Tenacious Ventures singin', don't you?" },
+      { time: 104, text: "In the neon rain, the summit carves its arc," },
+      { time: 108, text: "From G20 echoes to Vancouver's spark." },
+      { time: 112, text: "Civic dreamer, investin' in the night, Star Blue, yeah you." },
+      { time: 116, text: "" },
+      
+      // Pre-Chorus 2
+      { time: 120, text: "Legacy carved, from Rotary to Trade," },
+      { time: 124, text: "University Confidential, futures she's laid." },
+      { time: 128, text: "Top 25 fire, Justice Hack's glow," },
+      { time: 132, text: "She's the current, pullin' tides to flow." },
+      { time: 136, text: "" },
+      
+      // Chorus 2
+      { time: 140, text: "She's craftin' futures, ecosystems dance, wired to the core," },
+      { time: 144, text: "You call her name, she whispers back, \"I need this spark to soar.\"" },
+      { time: 148, text: "Somethin' keeps her electric, she's alive, she's a storm," },
+      { time: 152, text: "Her hub, her hub, Vancouver's hub," },
+      { time: 156, text: "(I see my city glowin' from the mist to the AI dawn.)" },
+      { time: 160, text: "Her hub, her hub, her flame." },
+      { time: 164, text: "" },
+      
+      // Bridge
+      { time: 168, text: "Ooh darlin', ooh darlin', I'm lost... in the pulse," },
+      { time: 172, text: "Ooh darlin', ooh darlin', futures call..." },
+      { time: 176, text: "Glidin' through YVR's glow, quantum dreams in her car," },
+      { time: 180, text: "Hummin' her name... Kassandra..." },
+      { time: 184, text: "" },
+      
+      // Outro
+      { time: 188, text: "On the BC Coast, they crown their seers," },
+      { time: 192, text: "But she's the one, yeah, she's the one..." },
+      { time: 196, text: "Her hub, her hub, her flame..." },
+      { time: 200, text: "(Vancouver's risin', AI eternal, don't you?)" }
     ] as LyricLine[]
   }
 ];
