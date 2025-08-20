@@ -2,6 +2,7 @@ import { useState, useEffect, useMemo } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { Trophy, Heart, Music, RefreshCw, TrendingUp, Clock, SkipForward, Activity, Info, Tag, Filter } from "lucide-react";
@@ -362,35 +363,37 @@ const EnhancedTopSongs = () => {
             </Button>)}
         </div>
 
-        {/* Category Filter Toggles */}
+        {/* Category Filter Dropdown */}
         {analytics.length > 0 && (
           <div className="mt-3">
             <div className="flex items-center space-x-2 mb-2">
               <Filter className="h-4 w-4 text-slate-400" />
               <span className="text-xs text-slate-400">Filter by BC AI Survey Themes:</span>
             </div>
-            <div className="flex flex-wrap gap-1">
-              <Button
-                variant={selectedCategory === null ? "secondary" : "ghost"}
-                size="sm"
-                onClick={() => setSelectedCategory(null)}
-                className="text-xs h-7"
-              >
-                All Themes
-              </Button>
-              {analytics.map(({ category }) => (
-                <Button
-                  key={category}
-                  variant={selectedCategory === category ? "secondary" : "ghost"}
-                  size="sm"
-                  onClick={() => setSelectedCategory(category)}
-                  className={`text-xs h-7 ${selectedCategory === category ? getCategoryColor(category) : 'hover:opacity-80'}`}
-                >
-                  <Tag className="h-3 w-3 mr-1" />
-                  {category}
-                </Button>
-              ))}
-            </div>
+            <Select
+              value={selectedCategory || "all"}
+              onValueChange={(value) => setSelectedCategory(value === "all" ? null : value)}
+            >
+              <SelectTrigger className="w-[280px] bg-slate-800/50 border-slate-600 text-slate-300">
+                <SelectValue placeholder="Select a theme..." />
+              </SelectTrigger>
+              <SelectContent className="bg-slate-800 border-slate-600 z-50">
+                <SelectItem value="all" className="text-slate-300 hover:bg-slate-700">
+                  <div className="flex items-center">
+                    <Tag className="h-3 w-3 mr-2" />
+                    All Themes
+                  </div>
+                </SelectItem>
+                {analytics.map(({ category }) => (
+                  <SelectItem key={category} value={category} className="text-slate-300 hover:bg-slate-700">
+                    <div className="flex items-center">
+                      <Tag className="h-3 w-3 mr-2" />
+                      {category}
+                    </div>
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
         )}
       </CardHeader>
