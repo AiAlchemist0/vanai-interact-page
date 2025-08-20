@@ -40,7 +40,7 @@ const SongItem: React.FC<SongItemProps> = ({
 
   return (
     <div
-      className={`relative group ${isMobile ? 'flex flex-row items-center p-3 gap-3 rounded-lg min-h-[88px]' : 'flex flex-col items-center p-3 sm:p-4 lg:p-3 aspect-square rounded-xl'} transition-all duration-300 border touch-manipulation cursor-pointer ${isMobile ? 'hover:shadow-md active:scale-[0.98]' : 'hover:scale-[1.02]'} ${
+      className={`relative group ${isMobile ? 'flex flex-row items-center p-4 gap-4 rounded-xl min-h-[100px]' : 'flex flex-col items-center p-4 sm:p-5 lg:p-4 rounded-xl min-h-[280px] sm:min-h-[320px]'} transition-all duration-300 border touch-manipulation cursor-pointer ${isMobile ? 'hover:shadow-lg active:scale-[0.98]' : 'hover:scale-[1.02] hover:shadow-xl'} ${
         index === currentSongIndex 
           ? `bg-primary/10 border-primary/30 shadow-lg ${isPlaylistMode ? 'ring-2 ring-primary/20' : ''}` 
           : 'bg-card/60 hover:bg-card/80 border-border/30 hover:border-border/50'
@@ -48,16 +48,16 @@ const SongItem: React.FC<SongItemProps> = ({
       onClick={isMobile ? (audioState.isPlaying ? handleStop : handlePlay) : handlePlay}
     >
       {/* Album Art - Responsive layout */}
-      <div className={`relative ${isMobile ? 'flex-shrink-0' : 'mb-2 sm:mb-3 flex-1'} flex items-center justify-center`}>
+      <div className={`relative ${isMobile ? 'flex-shrink-0' : 'mb-4 sm:mb-5 flex-1'} flex items-center justify-center`}>
         <img 
           src={song.coverArt} 
           alt={`${song.title} cover`} 
-          className={`${isMobile ? 'w-16 h-16' : 'w-28 h-28 sm:w-36 sm:h-36 lg:w-32 lg:h-32'} rounded-lg object-cover shadow-sm transition-all duration-300`}
+          className={`${isMobile ? 'w-20 h-20' : 'w-full max-w-[200px] aspect-square'} rounded-lg object-cover shadow-md transition-all duration-300`}
         />
         
         {/* Playing Animation Indicator */}
         {index === currentSongIndex && isPlaying && (
-          <div className={`absolute ${isMobile ? '-top-1 -right-1 w-3 h-3' : '-top-1 -right-1 w-3 h-3 sm:w-4 sm:h-4'} bg-primary rounded-full animate-pulse shadow-lg border-2 border-background`} />
+          <div className={`absolute ${isMobile ? '-top-1 -right-1 w-4 h-4' : '-top-2 -right-2 w-5 h-5'} bg-primary rounded-full animate-pulse shadow-lg border-2 border-background`} />
         )}
 
         {/* Play Button Overlay - Desktop: on hover, Mobile: always visible */}
@@ -66,15 +66,15 @@ const SongItem: React.FC<SongItemProps> = ({
             ? 'opacity-100' 
             : (audioState.isPlaying ? 'opacity-0 hover:opacity-100' : 'opacity-0 hover:opacity-100')
         }`}>
-          <div className={`bg-black/60 backdrop-blur-sm rounded-full p-3 transform transition-all duration-200 ${isMobile ? '' : 'hover:scale-110'} shadow-lg ${isMobile ? 'min-w-[44px] min-h-[44px]' : ''}`}>
+          <div className={`bg-black/70 backdrop-blur-sm rounded-full p-4 transform transition-all duration-200 ${isMobile ? '' : 'hover:scale-110'} shadow-xl ${isMobile ? 'min-w-[48px] min-h-[48px]' : 'min-w-[56px] min-h-[56px]'}`}>
             {audioState.isLoading ? (
-              <div className="w-6 h-6 flex items-center justify-center">
-                <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+              <div className="w-7 h-7 flex items-center justify-center">
+                <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
               </div>
             ) : audioState.isPlaying ? (
-              <Pause className="w-6 h-6 text-white" />
+              <Pause className="w-7 h-7 text-white" />
             ) : (
-              <Play className="w-6 h-6 text-white ml-0.5" />
+              <Play className="w-7 h-7 text-white ml-0.5" />
             )}
           </div>
         </div>
@@ -84,12 +84,22 @@ const SongItem: React.FC<SongItemProps> = ({
       <div className={`${isMobile ? 'flex-1 flex flex-col justify-center min-w-0' : 'w-full text-center'}`}>
         {/* Song Details */}
         <div className={`${isMobile ? 'space-y-1' : 'px-1'}`}>
-          <h4 className={`${isMobile ? 'text-lg leading-tight' : 'text-xs sm:text-sm'} font-bold truncate ${
+          <h4 className={`${isMobile ? 'text-lg leading-tight' : 'text-sm sm:text-base'} font-bold leading-tight ${
             index === currentSongIndex ? 'text-primary' : 'text-foreground'
-          }`}>
+          }`} style={{ 
+            display: '-webkit-box',
+            WebkitLineClamp: isMobile ? 2 : 3,
+            WebkitBoxOrient: 'vertical',
+            overflow: 'hidden'
+          }}>
             {song.title}
           </h4>
-          <p className={`${isMobile ? 'text-sm' : 'text-xs'} text-muted-foreground font-medium truncate`}>
+          <p className={`${isMobile ? 'text-sm' : 'text-sm'} text-muted-foreground font-medium leading-tight`} style={{ 
+            display: '-webkit-box',
+            WebkitLineClamp: isMobile ? 1 : 2,
+            WebkitBoxOrient: 'vertical',
+            overflow: 'hidden'
+          }}>
             {song.artist}
           </p>
           
@@ -124,24 +134,24 @@ const SongItem: React.FC<SongItemProps> = ({
 
         {/* Action Buttons - Mobile: positioned absolutely, Desktop: centered */}
         {isMobile ? (
-          <div className="absolute bottom-3 right-3 flex gap-2">
+          <div className="absolute bottom-4 right-4 flex gap-3">
             {/* Like Button */}
             <button
               onClick={(e) => {
                 e.stopPropagation();
                 onLikeClick(song.id, e);
               }}
-              className="group relative transition-all duration-300 hover:scale-105 active:scale-95 touch-manipulation p-2 bg-background/95 backdrop-blur-sm rounded-full border border-border/30 hover:border-border/60 shadow-sm hover:shadow-md"
+              className="group relative transition-all duration-300 hover:scale-105 active:scale-95 touch-manipulation p-3 bg-background/95 backdrop-blur-sm rounded-full border border-border/30 hover:border-border/60 shadow-md hover:shadow-lg min-w-[48px] min-h-[48px]"
             >
               <Heart 
-                className="w-4 h-4 transition-colors duration-200"
+                className="w-5 h-5 transition-colors duration-200"
                 style={{ 
                   color: isLiked(song.id) ? '#ef4444' : undefined,
                   fill: isLiked(song.id) ? '#ef4444' : 'transparent'
                 }}
               />
               {getLikeCount(song.id) > 0 && (
-                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-[9px] font-bold rounded-full min-w-[16px] h-4 px-1 flex items-center justify-center shadow-sm">
+                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold rounded-full min-w-[18px] h-5 px-1 flex items-center justify-center shadow-md">
                   {getLikeCount(song.id)}
                 </span>
               )}
@@ -153,30 +163,30 @@ const SongItem: React.FC<SongItemProps> = ({
                 e.stopPropagation();
                 setShowInfoModal(true);
               }}
-              className="group transition-all duration-300 hover:scale-105 active:scale-95 touch-manipulation p-2 bg-background/95 backdrop-blur-sm rounded-full border border-border/30 hover:border-border/60 shadow-sm hover:shadow-md"
+              className="group transition-all duration-300 hover:scale-105 active:scale-95 touch-manipulation p-3 bg-background/95 backdrop-blur-sm rounded-full border border-border/30 hover:border-border/60 shadow-md hover:shadow-lg min-w-[48px] min-h-[48px]"
             >
-              <Info className="w-4 h-4 text-muted-foreground group-hover:text-primary transition-colors duration-200" />
+              <Info className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors duration-200" />
             </button>
           </div>
         ) : (
-          <div className="flex justify-center gap-3 mb-2">
+          <div className="flex justify-center gap-4 mt-auto">
             {/* Like Button */}
             <button
               onClick={(e) => {
                 e.stopPropagation();
                 onLikeClick(song.id, e);
               }}
-              className="group relative transition-all duration-300 hover:scale-110 touch-manipulation p-2 bg-background/90 backdrop-blur-md rounded-full border border-border/50 hover:border-border shadow-lg hover:shadow-xl"
+              className="group relative transition-all duration-300 hover:scale-110 touch-manipulation p-3 bg-background/90 backdrop-blur-md rounded-full border border-border/50 hover:border-border shadow-lg hover:shadow-xl min-w-[48px] min-h-[48px]"
             >
               <Heart 
-                className="w-4 h-4 transition-colors duration-200"
+                className="w-5 h-5 transition-colors duration-200"
                 style={{ 
                   color: isLiked(song.id) ? '#ef4444' : undefined,
                   fill: isLiked(song.id) ? '#ef4444' : 'transparent'
                 }}
               />
               {getLikeCount(song.id) > 0 && (
-                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-[9px] font-bold rounded-full min-w-[16px] h-4 px-1 flex items-center justify-center shadow-md">
+                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold rounded-full min-w-[18px] h-5 px-1 flex items-center justify-center shadow-md">
                   {getLikeCount(song.id)}
                 </span>
               )}
@@ -188,9 +198,9 @@ const SongItem: React.FC<SongItemProps> = ({
                 e.stopPropagation();
                 setShowInfoModal(true);
               }}
-              className="group transition-all duration-300 hover:scale-110 touch-manipulation p-2 bg-background/90 backdrop-blur-md rounded-full border border-border/50 hover:border-border shadow-lg hover:shadow-xl"
+              className="group transition-all duration-300 hover:scale-110 touch-manipulation p-3 bg-background/90 backdrop-blur-md rounded-full border border-border/50 hover:border-border shadow-lg hover:shadow-xl min-w-[48px] min-h-[48px]"
             >
-              <Info className="w-4 h-4 text-muted-foreground group-hover:text-primary transition-colors duration-200" />
+              <Info className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors duration-200" />
             </button>
           </div>
         )}
