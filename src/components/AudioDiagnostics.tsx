@@ -15,7 +15,10 @@ export const AudioDiagnostics: React.FC = () => {
   const {
     statistics,
     loading: statsLoading
-  } = useSongStatistics();
+  } = useSongStatistics({ 
+    enabled: isExpanded, // Only fetch when expanded
+    enableRealtime: isExpanded // Only enable realtime when expanded
+  });
   const problematicSongs = ['bc-coast-catalyst', 'philippe-pasquier-art-hallucinations', 'brenda-bailey', 'lionel-ringenbach'];
   const getSongStats = (songId: string) => {
     const stat = statistics.find(s => s.song_id === songId);
@@ -40,7 +43,26 @@ export const AudioDiagnostics: React.FC = () => {
     return successRates[songId] || 100;
   };
   if (!isExpanded) {
-    return;
+    return (
+      <Card className="mb-4 border-orange-200">
+        <CardHeader>
+          <div className="flex items-center justify-between">
+            <div>
+              <CardTitle className="text-lg flex items-center gap-2">
+                <AlertTriangle className="h-5 w-5 text-orange-600" />
+                Audio Diagnostics
+              </CardTitle>
+              <CardDescription>
+                Troubleshooting audio file accessibility and tracking performance
+              </CardDescription>
+            </div>
+            <Button variant="outline" size="sm" onClick={() => setIsExpanded(true)}>
+              Show Details
+            </Button>
+          </div>
+        </CardHeader>
+      </Card>
+    );
   }
   return <Card className="mb-4 border-orange-200">
       <CardHeader>

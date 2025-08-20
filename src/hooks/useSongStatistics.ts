@@ -7,7 +7,13 @@ export interface SongStatistics {
   last_played_at: string | null;
 }
 
-export const useSongStatistics = () => {
+interface UseSongStatisticsOptions {
+  enabled?: boolean;
+  enableRealtime?: boolean;
+}
+
+export const useSongStatistics = (options: UseSongStatisticsOptions = {}) => {
+  const { enabled = true, enableRealtime = true } = options;
   const [statistics, setStatistics] = useState<SongStatistics[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -157,9 +163,16 @@ export const useSongStatistics = () => {
   };
 
   useEffect(() => {
-    fetchStatistics();
+    // Only fetch if enabled
+    if (enabled) {
+      fetchStatistics();
+    }
 
-    // Set up real-time subscription for statistics updates
+    // Only set up real-time subscription if enabled
+    if (!enableRealtime || !enabled) {
+      return;
+    }
+
     const channel = supabase
       .channel('song-statistics-changes')
       .on(
@@ -182,7 +195,7 @@ export const useSongStatistics = () => {
       playStartTimes.current.clear();
       supabase.removeChannel(channel);
     };
-  }, []);
+  }, [enabled, enableRealtime]);
 
   return {
     statistics,

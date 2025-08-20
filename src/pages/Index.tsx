@@ -7,7 +7,7 @@ import QuestionCategories from "@/components/QuestionCategories";
 import DataVisualization from "@/components/DataVisualization";
 import Methodology from "@/components/Methodology";
 import Footer from "@/components/Footer";
-import AudioPlayerProvider from "@/components/AudioPlayerProvider";
+import OptimizedAudioPlayerProvider from "@/components/OptimizedAudioPlayerProvider";
 import NowPlayingBanner from "@/components/NowPlayingBanner";
 
 import PhilippeSpecialEffects from "@/components/PhilippeSpecialEffects";
@@ -15,7 +15,7 @@ import { AudioDiagnostics } from "@/components/AudioDiagnostics";
 
 const Index = () => {
   return (
-    <AudioPlayerProvider>
+    <OptimizedAudioPlayerProvider>
       <PhilippeSpecialEffects type="page">
         <div className="min-h-screen bg-background pt-20">
         <div className="pt-0">
@@ -32,7 +32,7 @@ const Index = () => {
         </div>
         </div>
       </PhilippeSpecialEffects>
-    </AudioPlayerProvider>
+    </OptimizedAudioPlayerProvider>
   );
 };
 

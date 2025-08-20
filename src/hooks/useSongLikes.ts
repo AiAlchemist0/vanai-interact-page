@@ -12,7 +12,13 @@ interface LikedSongs {
   [songId: string]: boolean;
 }
 
-export const useSongLikes = () => {
+interface UseSongLikesOptions {
+  fetchOnMount?: boolean;
+  enableRealtime?: boolean;
+}
+
+export const useSongLikes = (options: UseSongLikesOptions = {}) => {
+  const { fetchOnMount = true, enableRealtime = true } = options;
   const [statistics, setStatistics] = useState<SongLikeStatistics[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -168,9 +174,17 @@ export const useSongLikes = () => {
 
   useEffect(() => {
     loadLikedSongs();
-    fetchStatistics();
+    
+    // Only fetch on mount if specified
+    if (fetchOnMount) {
+      fetchStatistics();
+    }
 
-    // Set up real-time subscription for like statistics
+    // Only set up real-time subscription if enabled
+    if (!enableRealtime) {
+      return;
+    }
+
     const channel = supabase
       .channel('song_like_statistics_changes')
       .on(
@@ -189,7 +203,7 @@ export const useSongLikes = () => {
     return () => {
       supabase.removeChannel(channel);
     };
-  }, [optimizedFetchStatistics, loadLikedSongs]);
+  }, [fetchOnMount, enableRealtime, optimizedFetchStatistics, loadLikedSongs]);
 
   return {
     statistics,
