@@ -24,26 +24,27 @@ export const useEnhancedTracking = () => {
     };
   }, []); // Empty dependency array to run only once
 
-  const startPlayTracking = useCallback(async (songId: string) => {
+  const startPlayTracking = useCallback(async (songId: string, audioLoadSuccess: boolean = true) => {
     // Update session activity
     sessionTracking.updateSessionActivity();
     
     // Geographic tracking is now handled once per session, not per song
     // This reduces API calls and database operations significantly
     
-    // Start song play tracking
-    await songStats.startPlayTracking(songId);
+    // Start song play tracking with audio load status
+    await songStats.startPlayTracking(songId, audioLoadSuccess);
   }, [sessionTracking, songStats]);
 
-  const endPlayTracking = useCallback(async (songId: string, songDuration?: number, wasValidPlay?: boolean) => {
+  const endPlayTracking = useCallback(async (songId: string, songDuration?: number, failureReason?: string) => {
     // Update session activity
     sessionTracking.updateSessionActivity();
     
-    // End song play tracking
-    await songStats.endPlayTracking(songId, songDuration);
+    // End song play tracking with failure reason
+    await songStats.endPlayTracking(songId, songDuration, failureReason);
     
-    // If it was a valid play, increment session song count
-    if (wasValidPlay) {
+    // If it was a valid play (no failure reason and duration check happens in songStats), increment session song count
+    // We'll determine this after the fact by checking if the play was marked valid
+    if (!failureReason && songDuration && songDuration >= 15) {
       await sessionTracking.incrementSongPlay();
     }
   }, [sessionTracking, songStats]);

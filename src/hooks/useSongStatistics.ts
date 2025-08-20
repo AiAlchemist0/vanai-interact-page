@@ -11,7 +11,7 @@ export const useSongStatistics = () => {
   const [statistics, setStatistics] = useState<SongStatistics[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const playStartTimes = useRef<Map<string, { startTime: number; recordId: string }>>(new Map());
+  const playStartTimes = useRef<Map<string, { startTime: number; recordId: string; audioLoadSuccess?: boolean }>>(new Map());
 
   const fetchStatistics = async () => {
     try {
@@ -39,9 +39,9 @@ export const useSongStatistics = () => {
     }
   };
 
-  const startPlayTracking = async (songId: string) => {
+  const startPlayTracking = async (songId: string, audioLoadSuccess: boolean = true) => {
     try {
-      console.log('Starting play tracking for song:', songId);
+      console.log('Starting play tracking for song:', songId, 'Audio loaded:', audioLoadSuccess);
       
       // Generate a simple session ID for anonymous tracking
       const sessionId = localStorage.getItem('session_id') || 
@@ -51,6 +51,7 @@ export const useSongStatistics = () => {
       console.log('Using session ID for tracking:', sessionId);
 
       // Insert initial record with is_valid_play = false
+      // Track audio loading status for debugging
       const insertData = {
         song_id: songId,
         user_session_id: sessionId,
@@ -59,6 +60,11 @@ export const useSongStatistics = () => {
         is_valid_play: false,
         completion_percentage: 0
       };
+      
+      // Log additional context for problematic songs
+      if (['bc-coast-catalyst', 'philippe-pasquier-art-hallucinations', 'brenda-bailey', 'lionel-ringenbach'].includes(songId)) {
+        console.warn(`⚠️ Tracking problematic song: ${songId}, Audio loaded: ${audioLoadSuccess}`);
+      }
       
       console.log('Inserting play record:', insertData);
       
@@ -77,14 +83,15 @@ export const useSongStatistics = () => {
       // Store start time and record ID for duration calculation
       playStartTimes.current.set(songId, {
         startTime: Date.now(),
-        recordId: data.id
+        recordId: data.id,
+        audioLoadSuccess
       });
     } catch (err) {
       console.error('Error starting play tracking:', err);
     }
   };
 
-  const endPlayTracking = async (songId: string, songDuration?: number) => {
+  const endPlayTracking = async (songId: string, songDuration?: number, failureReason?: string) => {
     try {
       const trackingData = playStartTimes.current.get(songId);
       if (!trackingData) {
@@ -93,13 +100,23 @@ export const useSongStatistics = () => {
       }
 
       const duration = Math.floor((Date.now() - trackingData.startTime) / 1000);
-      const isValidPlay = duration >= 15; // 15+ seconds counts as a valid play
+      const isValidPlay = duration >= 15 && !failureReason; // Valid play requires 15+ seconds AND no failure
       
       // Calculate completion percentage (assuming average song length of 180 seconds)
       const estimatedSongLength = songDuration || 180; // 3 minutes default
       const completionPercentage = Math.min((duration / estimatedSongLength) * 100, 100);
 
-      console.log(`Ending play tracking for song: ${songId}, Duration: ${duration}s, Valid: ${isValidPlay}, Completion: ${completionPercentage.toFixed(1)}%`);
+      // Enhanced logging for problematic songs
+      const logLevel = ['bc-coast-catalyst', 'philippe-pasquier-art-hallucinations'].includes(songId) ? 'warn' : 'log';
+      const logMessage = `Ending play tracking for song: ${songId}, Duration: ${duration}s, Valid: ${isValidPlay}, Completion: ${completionPercentage.toFixed(1)}%`;
+      
+      if (failureReason) {
+        console.error(`❌ ${logMessage}, Failure: ${failureReason}, Audio loaded: ${trackingData.audioLoadSuccess}`);
+      } else if (logLevel === 'warn') {
+        console.warn(`⚠️ ${logMessage}, Audio loaded: ${trackingData.audioLoadSuccess}`);
+      } else {
+        console.log(logMessage);
+      }
 
       // Update the record with duration, validity, and completion percentage
       const { error } = await supabase

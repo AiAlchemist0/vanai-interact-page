@@ -10,6 +10,7 @@ import AudioPlayerProvider from "@/components/AudioPlayerProvider";
 import NowPlayingBanner from "@/components/NowPlayingBanner";
 
 import PhilippeSpecialEffects from "@/components/PhilippeSpecialEffects";
+import { AudioDiagnostics } from "@/components/AudioDiagnostics";
 
 const Index = () => {
   return (
@@ -19,6 +20,7 @@ const Index = () => {
         <div className="pt-0">
           <Hero />
           <VisionBanner />
+          <AudioDiagnostics />
           <AIMusicAnalytics />
           <KeyInsights />
           <QuestionCategories />

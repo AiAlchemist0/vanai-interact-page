@@ -20,9 +20,9 @@ interface AudioContextType {
   currentTime: number;
   duration: number;
   setCurrentSongIndex: (index: number) => void;
-  // Enhanced tracking functions
-  startPlayTracking: (songId: string) => Promise<void>;
-  endPlayTracking: (songId: string, songDuration?: number, wasValidPlay?: boolean) => Promise<void>;
+  // Enhanced tracking functions with audio failure support
+  startPlayTracking: (songId: string, audioLoadSuccess?: boolean) => Promise<void>;
+  endPlayTracking: (songId: string, songDuration?: number, failureReason?: string) => Promise<void>;
   updateActivity: () => void;
 }
 
