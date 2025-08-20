@@ -73,9 +73,9 @@ const Hero = () => {
           </div>
 
           {/* Logo and Stats Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 sm:gap-6 max-w-6xl mx-auto">
-            {/* Logo Section */}
-            <div className="sm:col-span-2 lg:col-span-1 bg-card/50 backdrop-blur-sm border border-border rounded-xl p-6 lg:p-8 text-center flex items-center justify-center min-h-[120px] sm:min-h-[140px]">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-4 sm:gap-6 max-w-6xl mx-auto">
+            {/* BC+AI Logo Section */}
+            <div className="bg-card/50 backdrop-blur-sm border border-border rounded-xl p-6 lg:p-8 text-center flex items-center justify-center min-h-[120px] sm:min-h-[140px]">
               <a 
                 href="https://vancouver.bc-ai.net/" 
                 target="_blank" 
@@ -86,6 +86,25 @@ const Hero = () => {
                 <img 
                   src="/lovable-uploads/6b65586a-63ba-48f1-9c56-1846ec800f39.png" 
                   alt="BC+AI Ecosystem Logo" 
+                  className="w-20 sm:w-24 lg:w-28 h-auto filter drop-shadow-lg" 
+                  loading="lazy"
+                  decoding="async"
+                />
+              </a>
+            </div>
+
+            {/* Rival Technologies Logo Section */}
+            <div className="bg-card/50 backdrop-blur-sm border border-border rounded-xl p-6 lg:p-8 text-center flex items-center justify-center min-h-[120px] sm:min-h-[140px]">
+              <a 
+                href="https://rival.tech" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="transition-transform duration-300 hover:scale-105 focus:scale-105 focus:outline-2 focus:outline-primary rounded-lg"
+                aria-label="Visit Rival Technologies website"
+              >
+                <img 
+                  src="/lovable-uploads/c69d28bd-ec46-4488-95b0-bb57fd96b104.png" 
+                  alt="Rival Technologies Logo" 
                   className="w-20 sm:w-24 lg:w-28 h-auto filter drop-shadow-lg" 
                   loading="lazy"
                   decoding="async"
