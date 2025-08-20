@@ -6,7 +6,7 @@ import { Slider } from "@/components/ui/slider";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { LyricLine } from "@/components/SynchronizedLyrics";
-import { PlayTrackingIndicator } from "@/components/PlayTrackingIndicator";
+
 import { LoadingFeedback } from "@/components/LoadingFeedback";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useAudio } from "@/contexts/AudioContext";
@@ -1188,15 +1188,6 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ audioPlayerHook }) => {
             />
           </div>
 
-          {/* Play Tracking Indicator */}
-          <div className="mt-2">
-            <PlayTrackingIndicator 
-              isTracking={hasRecordedPlay}
-              songTitle={currentSong.title}
-              currentTime={currentTime}
-              isPlaying={isPlaying}
-            />
-          </div>
 
           {/* Loading Feedback */}
           <div className="mt-2">
