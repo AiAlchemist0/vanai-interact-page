@@ -47,7 +47,8 @@ const EnhancedTopSongs = () => {
   const [songs, setSongs] = useState<CombinedSongData[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
-  const [viewMode, setViewMode] = useState<'plays' | 'likes' | 'engagement'>('likes');
+  const [error, setError] = useState<string | null>(null);
+  const [viewMode, setViewMode] = useState<'plays' | 'likes' | 'engagement'>('plays');
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [lastRefreshed, setLastRefreshed] = useState<Date>(new Date());
   const {
@@ -90,13 +91,28 @@ const EnhancedTopSongs = () => {
   const fetchData = async () => {
     try {
       setRefreshing(true);
+      console.log('🎵 Fetching Enhanced Top Songs data...');
 
       // Fetch comprehensive statistics and like statistics
-      const [comprehensiveResponse, likesResponse] = await Promise.all([supabase.rpc('get_comprehensive_song_statistics'), supabase.rpc('get_song_like_statistics')]);
-      if (comprehensiveResponse.error) throw comprehensiveResponse.error;
-      if (likesResponse.error) throw likesResponse.error;
+      const [comprehensiveResponse, likesResponse] = await Promise.all([
+        supabase.rpc('get_comprehensive_song_statistics'), 
+        supabase.rpc('get_song_like_statistics')
+      ]);
+      
+      if (comprehensiveResponse.error) {
+        console.error('❌ Error fetching comprehensive stats:', comprehensiveResponse.error);
+        throw comprehensiveResponse.error;
+      }
+      if (likesResponse.error) {
+        console.error('❌ Error fetching likes stats:', likesResponse.error);
+        throw likesResponse.error;
+      }
+      
       const comprehensiveData: ComprehensiveStats[] = comprehensiveResponse.data || [];
       const likesData: SongLikeStats[] = likesResponse.data || [];
+      
+      console.log('📊 Raw comprehensive data:', comprehensiveData);
+      console.log('❤️ Raw likes data:', likesData);
 
       // Create a map of likes for easy lookup
       const likesMap = new Map(likesData.map(like => [like.song_id, like]));
@@ -166,9 +182,16 @@ const EnhancedTopSongs = () => {
           });
         }
       });
+      
+      console.log('🎯 Final combined data:', combinedData);
+      console.log('📈 Total songs with data:', combinedData.length);
+      console.log('🎵 Songs with plays > 0:', combinedData.filter(s => s.total_plays > 0).length);
+      console.log('❤️ Songs with likes > 0:', combinedData.filter(s => s.total_likes > 0).length);
+      
       setSongs(combinedData);
     } catch (error) {
-      console.error('Error fetching song data:', error);
+      console.error('❌ Error fetching song data:', error);
+      setError('Failed to fetch song data. Please try refreshing.');
     } finally {
       setLoading(false);
       setRefreshing(false);
@@ -176,14 +199,30 @@ const EnhancedTopSongs = () => {
     }
   };
   useEffect(() => {
+    console.log('🚀 EnhancedTopSongs component mounted, fetching initial data...');
     fetchData();
 
-    // Refresh every 30 seconds
-    const interval = setInterval(fetchData, 30000);
-    return () => clearInterval(interval);
+    // Refresh every 60 seconds (reduced frequency for better performance)
+    const interval = setInterval(() => {
+      console.log('⏱️ Auto-refreshing Enhanced Top Songs data...');
+      fetchData();
+    }, 60000);
+    
+    return () => {
+      console.log('🧹 Cleaning up Enhanced Top Songs intervals...');
+      clearInterval(interval);
+    };
   }, []);
   const getSortedSongs = () => {
     let filtered = [...songs];
+    
+    console.log('🔍 Filtering and sorting songs:', {
+      totalSongs: songs.length,
+      selectedCategory,
+      viewMode,
+      songsWithPlays: songs.filter(s => s.total_plays > 0).length,
+      songsWithLikes: songs.filter(s => s.total_likes > 0).length
+    });
     
     // Filter by selected category if one is chosen
     if (selectedCategory) {
@@ -191,6 +230,7 @@ const EnhancedTopSongs = () => {
         const keywords = getTopKeywordsForSong(song.song_id);
         return keywords.some(keyword => keyword.category === selectedCategory);
       });
+      console.log('📂 After category filter:', filtered.length, 'songs');
     }
     
     const sorted = filtered.sort((a, b) => {
@@ -205,9 +245,19 @@ const EnhancedTopSongs = () => {
           return b.total_plays - a.total_plays;
       }
     });
+    
+    console.log('🏆 Top 5 sorted songs:', sorted.slice(0, 5).map(s => ({
+      id: s.song_id,
+      plays: s.total_plays,
+      likes: s.total_likes,
+      engagement: s.engagement_score
+    })));
+    
     return sorted;
   };
   const handleRefresh = () => {
+    console.log('🔄 Manual refresh triggered by user');
+    setError(null);
     fetchData();
   };
   if (loading) {
@@ -340,8 +390,28 @@ const EnhancedTopSongs = () => {
       </CardHeader>
       
       <CardContent className="p-6">
+        {error && (
+          <div className="mb-4 p-3 rounded-lg bg-red-500/10 border border-red-500/20 text-red-400 text-sm">
+            {error}
+          </div>
+        )}
         <div className="space-y-4">
-          {sortedSongs.map((song, index) => {
+          {sortedSongs.length === 0 ? (
+            <div className="text-center py-8 text-slate-400">
+              <Music className="h-12 w-12 mx-auto mb-4 opacity-50" />
+              <p>No songs available to display</p>
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                onClick={handleRefresh}
+                className="mt-2 text-purple-400 hover:text-purple-300"
+              >
+                <RefreshCw className="h-4 w-4 mr-2" />
+                Try Again
+              </Button>
+            </div>
+          ) : (
+            sortedSongs.map((song, index) => {
             const metadata = getSongMetadata(song.song_id);
             const currentValue = viewMode === 'plays' ? song.total_plays : viewMode === 'likes' ? song.total_likes : song.engagement_score;
             const progressPercentage = currentValue / maxValue * 100;
@@ -443,8 +513,9 @@ const EnhancedTopSongs = () => {
                   </div>
                 </div>
 
-              </div>;
-          })}
+              </div>
+            })
+          )}
         </div>
       </CardContent>
     </Card>
