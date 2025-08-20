@@ -56,26 +56,32 @@ const EnhancedTopSongs = () => {
     currentSong,
     isPlaying
   } = useAudio();
-  
-  const { getTopKeywordsForSong, analytics, loading: keywordsLoading } = useSongKeywords();
+  const {
+    getTopKeywordsForSong,
+    analytics,
+    loading: keywordsLoading
+  } = useSongKeywords();
 
   // Define category colors for consistency using semantic tokens from design system
   const getCategoryColor = (category: string) => {
     const colors: Record<string, string> = {
       // Primary BC AI Survey Themes
       'AI Experience': 'bg-[hsl(var(--survey-ai-experience)/0.2)] text-[hsl(var(--survey-ai-experience))] border-[hsl(var(--survey-ai-experience)/0.3)]',
-      'Creative Impact': 'bg-[hsl(var(--survey-creative-impact)/0.2)] text-[hsl(var(--survey-creative-impact))] border-[hsl(var(--survey-creative-impact)/0.3)]', 
+      'Creative Impact': 'bg-[hsl(var(--survey-creative-impact)/0.2)] text-[hsl(var(--survey-creative-impact))] border-[hsl(var(--survey-creative-impact)/0.3)]',
       'Future Vision': 'bg-[hsl(var(--survey-future-vision)/0.2)] text-[hsl(var(--survey-future-vision))] border-[hsl(var(--survey-future-vision)/0.3)]',
       'Relationships': 'bg-[hsl(var(--survey-relationships)/0.2)] text-[hsl(var(--survey-relationships))] border-[hsl(var(--survey-relationships)/0.3)]',
       'Community': 'bg-[hsl(var(--survey-community)/0.2)] text-[hsl(var(--survey-community))] border-[hsl(var(--survey-community)/0.3)]',
       'Identity': 'bg-[hsl(var(--survey-identity)/0.2)] text-[hsl(var(--survey-identity))] border-[hsl(var(--survey-identity)/0.3)]',
-      
       // Lionel Ringenbach specific categories mapped to BC AI Survey themes
-      'Economic Impact': 'bg-[hsl(var(--survey-future-vision)/0.2)] text-[hsl(var(--survey-future-vision))] border-[hsl(var(--survey-future-vision)/0.3)]', // Future Vision - economic implications
-      'Environmental Impact': 'bg-[hsl(var(--survey-future-vision)/0.2)] text-[hsl(var(--survey-future-vision))] border-[hsl(var(--survey-future-vision)/0.3)]', // Future Vision - sustainability
-      'Innovation': 'bg-[hsl(var(--survey-creative-impact)/0.2)] text-[hsl(var(--survey-creative-impact))] border-[hsl(var(--survey-creative-impact)/0.3)]', // Creative Impact - innovation
-      'Technology Analysis': 'bg-[hsl(var(--survey-ai-experience)/0.2)] text-[hsl(var(--survey-ai-experience))] border-[hsl(var(--survey-ai-experience)/0.3)]', // AI Experience - tech analysis
-      
+      'Economic Impact': 'bg-[hsl(var(--survey-future-vision)/0.2)] text-[hsl(var(--survey-future-vision))] border-[hsl(var(--survey-future-vision)/0.3)]',
+      // Future Vision - economic implications
+      'Environmental Impact': 'bg-[hsl(var(--survey-future-vision)/0.2)] text-[hsl(var(--survey-future-vision))] border-[hsl(var(--survey-future-vision)/0.3)]',
+      // Future Vision - sustainability
+      'Innovation': 'bg-[hsl(var(--survey-creative-impact)/0.2)] text-[hsl(var(--survey-creative-impact))] border-[hsl(var(--survey-creative-impact)/0.3)]',
+      // Creative Impact - innovation
+      'Technology Analysis': 'bg-[hsl(var(--survey-ai-experience)/0.2)] text-[hsl(var(--survey-ai-experience))] border-[hsl(var(--survey-ai-experience)/0.3)]',
+      // AI Experience - tech analysis
+
       // Additional keyword category mappings
       'technology': 'bg-[hsl(var(--survey-ai-experience)/0.2)] text-[hsl(var(--survey-ai-experience))] border-[hsl(var(--survey-ai-experience)/0.3)]',
       'concept': 'bg-[hsl(var(--survey-creative-impact)/0.2)] text-[hsl(var(--survey-creative-impact))] border-[hsl(var(--survey-creative-impact)/0.3)]',
@@ -95,11 +101,7 @@ const EnhancedTopSongs = () => {
       console.log('🎵 Fetching Enhanced Top Songs data...');
 
       // Fetch comprehensive statistics and like statistics
-      const [comprehensiveResponse, likesResponse] = await Promise.all([
-        supabase.rpc('get_comprehensive_song_statistics'), 
-        supabase.rpc('get_song_like_statistics')
-      ]);
-      
+      const [comprehensiveResponse, likesResponse] = await Promise.all([supabase.rpc('get_comprehensive_song_statistics'), supabase.rpc('get_song_like_statistics')]);
       if (comprehensiveResponse.error) {
         console.error('❌ Error fetching comprehensive stats:', comprehensiveResponse.error);
         throw comprehensiveResponse.error;
@@ -108,10 +110,8 @@ const EnhancedTopSongs = () => {
         console.error('❌ Error fetching likes stats:', likesResponse.error);
         throw likesResponse.error;
       }
-      
       const comprehensiveData: ComprehensiveStats[] = comprehensiveResponse.data || [];
       const likesData: SongLikeStats[] = likesResponse.data || [];
-      
       console.log('📊 Raw comprehensive data:', comprehensiveData);
       console.log('❤️ Raw likes data:', likesData);
 
@@ -183,14 +183,13 @@ const EnhancedTopSongs = () => {
           });
         }
       });
-      
+
       // Reduced logging - only log data summary on successful fetch
       console.log('📊 Enhanced Top Songs data updated:', {
         totalSongs: combinedData.length,
         songsWithPlays: combinedData.filter(s => s.total_plays > 0).length,
         songsWithLikes: combinedData.filter(s => s.total_likes > 0).length
       });
-      
       setSongs(combinedData);
     } catch (error) {
       console.error('❌ Error fetching song data:', error);
@@ -206,13 +205,12 @@ const EnhancedTopSongs = () => {
 
     // Refresh every 60 seconds
     const interval = setInterval(fetchData, 60000);
-    
     return () => clearInterval(interval);
   }, []);
   // Memoize the sorting logic to prevent infinite loops
   const getSortedSongs = useMemo(() => {
     let filtered = [...songs];
-    
+
     // Filter by selected category if one is chosen
     if (selectedCategory) {
       filtered = filtered.filter(song => {
@@ -220,7 +218,6 @@ const EnhancedTopSongs = () => {
         return keywords.some(keyword => keyword.category === selectedCategory);
       });
     }
-    
     const sorted = filtered.sort((a, b) => {
       switch (viewMode) {
         case 'plays':
@@ -233,7 +230,6 @@ const EnhancedTopSongs = () => {
           return b.total_plays - a.total_plays;
       }
     });
-    
     return sorted;
   }, [songs, viewMode, selectedCategory, getTopKeywordsForSong]);
   const handleRefresh = () => {
@@ -303,13 +299,7 @@ const EnhancedTopSongs = () => {
                 </TooltipContent>
               </Tooltip>
             </div>
-            <div className="flex items-center space-x-2">
-              
-              <Button variant="outline" size="sm" onClick={handleRefresh} disabled={refreshing} className="border-purple-500/50 text-purple-300 hover:bg-purple-500/10">
-                <RefreshCw className={`h-3 w-3 mr-1 ${refreshing ? 'animate-spin' : ''}`} />
-                Refresh
-              </Button>
-            </div>
+            
           </div>
         
         {/* View Mode Toggles */}
@@ -337,16 +327,12 @@ const EnhancedTopSongs = () => {
         </div>
 
         {/* Category Filter Dropdown */}
-        {analytics.length > 0 && (
-          <div className="mt-3">
+        {analytics.length > 0 && <div className="mt-3">
             <div className="flex items-center space-x-2 mb-2">
               <Filter className="h-4 w-4 text-slate-400" />
               <span className="text-xs text-slate-400">Filter by BC AI Survey Themes:</span>
             </div>
-            <Select
-              value={selectedCategory || "all"}
-              onValueChange={(value) => setSelectedCategory(value === "all" ? null : value)}
-            >
+            <Select value={selectedCategory || "all"} onValueChange={value => setSelectedCategory(value === "all" ? null : value)}>
               <SelectTrigger className="w-[280px] bg-slate-800/50 border-slate-600 text-slate-300">
                 <SelectValue placeholder="Select a theme..." />
               </SelectTrigger>
@@ -357,43 +343,32 @@ const EnhancedTopSongs = () => {
                     All Themes
                   </div>
                 </SelectItem>
-                {analytics.map(({ category }) => (
-                  <SelectItem key={category} value={category} className="text-slate-300 hover:bg-slate-700">
+                {analytics.map(({
+                category
+              }) => <SelectItem key={category} value={category} className="text-slate-300 hover:bg-slate-700">
                     <div className="flex items-center">
                       <Tag className="h-3 w-3 mr-2" />
                       {category}
                     </div>
-                  </SelectItem>
-                ))}
+                  </SelectItem>)}
               </SelectContent>
             </Select>
-          </div>
-        )}
+          </div>}
       </CardHeader>
       
       <CardContent className="p-6">
-        {error && (
-          <div className="mb-4 p-3 rounded-lg bg-red-500/10 border border-red-500/20 text-red-400 text-sm">
+        {error && <div className="mb-4 p-3 rounded-lg bg-red-500/10 border border-red-500/20 text-red-400 text-sm">
             {error}
-          </div>
-        )}
+          </div>}
         <div className="space-y-4">
-          {sortedSongs.length === 0 ? (
-            <div className="text-center py-8 text-slate-400">
+          {sortedSongs.length === 0 ? <div className="text-center py-8 text-slate-400">
               <Music className="h-12 w-12 mx-auto mb-4 opacity-50" />
               <p>No songs available to display</p>
-              <Button 
-                variant="ghost" 
-                size="sm" 
-                onClick={handleRefresh}
-                className="mt-2 text-purple-400 hover:text-purple-300"
-              >
+              <Button variant="ghost" size="sm" onClick={handleRefresh} className="mt-2 text-purple-400 hover:text-purple-300">
                 <RefreshCw className="h-4 w-4 mr-2" />
                 Try Again
               </Button>
-            </div>
-          ) : (
-            sortedSongs.map((song, index) => {
+            </div> : sortedSongs.map((song, index) => {
             const metadata = getSongMetadata(song.song_id);
             const currentValue = viewMode === 'plays' ? song.total_plays : viewMode === 'likes' ? song.total_likes : song.engagement_score;
             const progressPercentage = currentValue / maxValue * 100;
@@ -459,24 +434,16 @@ const EnhancedTopSongs = () => {
 
                   {/* Keyword Badges - Shows top keywords for each song */}
                   {(() => {
-                    const keywords = getTopKeywordsForSong(song.song_id, 5); // Show more keywords for better visibility
-                    if (keywords.length > 0) {
-                      return (
-                        <div className="flex flex-wrap gap-1 mb-2">
-                          {keywords.map(keyword => (
-                            <Badge
-                              key={keyword.keyword}
-                              variant="outline"
-                              className={`text-xs px-2 py-0.5 border ${getCategoryColor(keyword.category)} hover:opacity-80 transition-opacity cursor-default`}
-                            >
+                  const keywords = getTopKeywordsForSong(song.song_id, 5); // Show more keywords for better visibility
+                  if (keywords.length > 0) {
+                    return <div className="flex flex-wrap gap-1 mb-2">
+                          {keywords.map(keyword => <Badge key={keyword.keyword} variant="outline" className={`text-xs px-2 py-0.5 border ${getCategoryColor(keyword.category)} hover:opacity-80 transition-opacity cursor-default`}>
                               {keyword.keyword}
-                            </Badge>
-                          ))}
-                        </div>
-                      );
-                    }
-                    return null;
-                  })()}
+                            </Badge>)}
+                        </div>;
+                  }
+                  return null;
+                })()}
                   
                   {/* Progress Bar */}
                   <div className="space-y-1">
@@ -495,9 +462,8 @@ const EnhancedTopSongs = () => {
                   </div>
                 </div>
 
-              </div>
-            })
-          )}
+              </div>;
+          })}
         </div>
       </CardContent>
     </Card>
