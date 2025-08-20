@@ -1,5 +1,6 @@
 import Hero from "@/components/Hero";
 import VisionBanner from "@/components/VisionBanner";
+import AudioExperienceSection from "@/components/AudioExperienceSection";
 import AIMusicAnalytics from "@/components/AIMusicAnalytics";
 import KeyInsights from "@/components/KeyInsights";
 import QuestionCategories from "@/components/QuestionCategories";
@@ -19,6 +20,7 @@ const Index = () => {
         <div className="min-h-screen bg-background pt-20">
         <div className="pt-0">
           <Hero />
+          <AudioExperienceSection />
           <VisionBanner />
           <AudioDiagnostics />
           <AIMusicAnalytics />

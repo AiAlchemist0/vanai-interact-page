@@ -5,7 +5,7 @@ import { Lightbulb, Users, BarChart3, MapPin, Gamepad2, Sparkles, Shield, Video,
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import heroImage from "@/assets/hero-ai-survey.jpg";
-import HeroAudioPlayer from "./HeroAudioPlayer";
+
 const Hero = () => {
   const navigate = useNavigate();
   return <section className="relative min-h-screen overflow-hidden">
@@ -206,10 +206,6 @@ const Hero = () => {
             </div>
           </div>
           
-          {/* Audio Player - Mobile */}
-          <div className="mt-4">
-            <HeroAudioPlayer />
-          </div>
         </div>
 
         {/* Desktop: Clean centered layout */}
@@ -404,10 +400,6 @@ const Hero = () => {
             </Button>
           </div>
 
-          {/* Audio Player - Desktop */}
-          <div className="max-w-5xl mx-auto w-full">
-            <HeroAudioPlayer />
-          </div>
         </div>
       </div>
 
