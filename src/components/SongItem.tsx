@@ -38,11 +38,12 @@ const SongItem: React.FC<SongItemProps> = ({
 
   return (
     <div
-      className={`flex flex-col items-center p-3 sm:p-4 rounded-xl transition-all duration-200 border touch-manipulation ${
+      className={`flex flex-col items-center p-3 sm:p-4 rounded-xl transition-all duration-200 border touch-manipulation cursor-pointer hover:scale-[1.02] ${
         index === currentSongIndex 
           ? `bg-primary/10 border-primary/30 shadow-lg ${isPlaylistMode ? 'ring-2 ring-primary/20' : ''}` 
           : 'bg-muted/20 hover:bg-muted/40 border-border/20'
       }`}
+      onClick={handlePlay}
     >
       {/* Album Art - Large and Centered */}
       <div className="relative mb-3 sm:mb-4">
