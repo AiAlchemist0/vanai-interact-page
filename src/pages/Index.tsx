@@ -11,7 +11,7 @@ import OptimizedAudioPlayerProvider from "@/components/OptimizedAudioPlayerProvi
 import NowPlayingBanner from "@/components/NowPlayingBanner";
 
 import PhilippeSpecialEffects from "@/components/PhilippeSpecialEffects";
-import { AudioDiagnostics } from "@/components/AudioDiagnostics";
+
 
 const Index = () => {
   return (
@@ -22,7 +22,7 @@ const Index = () => {
           <Hero />
           <AudioExperienceSection />
           <VisionBanner />
-          <AudioDiagnostics />
+          
           <AIMusicAnalytics />
           <KeyInsights />
           <QuestionCategories />
