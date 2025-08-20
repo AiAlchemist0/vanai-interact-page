@@ -68,7 +68,7 @@ const Hero = () => {
               Where numbers become melodies and{" "}
               <span className="text-primary font-semibold">1,001 British Columbians</span>{" "}
               share their AI perspectives through revolutionary music-powered analytics. 
-              Experience the breakthrough concept that transforms survey data into engaging musical stories.
+              Experience the breakthrough concept that transforms survey data into engaging music performed by Vancouver AI community leaders.
             </p>
           </div>
 
