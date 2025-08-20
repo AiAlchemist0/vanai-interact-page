@@ -38,94 +38,41 @@ const SongItem: React.FC<SongItemProps> = ({
 
   return (
     <div
-      className={`flex items-center gap-2 sm:gap-3 p-2 sm:p-3 rounded-xl transition-all duration-200 border touch-manipulation min-h-[64px] sm:min-h-[80px] lg:min-h-[96px] ${
+      className={`flex flex-col items-center p-3 sm:p-4 rounded-xl transition-all duration-200 border touch-manipulation ${
         index === currentSongIndex 
           ? `bg-primary/10 border-primary/30 shadow-lg ${isPlaylistMode ? 'ring-2 ring-primary/20' : ''}` 
           : 'bg-muted/20 hover:bg-muted/40 border-border/20'
       }`}
     >
-      {/* Action Buttons - Like and Info */}
-      <div className="flex-shrink-0 w-8 sm:w-10 text-center self-center">
-        <div className="flex flex-col items-center justify-center gap-1">
-          {/* Like Button */}
-          <button
-            onClick={(e) => onLikeClick(song.id, e)}
-            className="transition-all duration-200 hover:scale-110 touch-manipulation p-1 relative"
-          >
-            <Heart 
-              className={`w-4 h-4 sm:w-5 sm:h-5 ${
-                isLiked(song.id) 
-                  ? 'text-red-500 fill-red-500' 
-                  : 'text-muted-foreground/50 hover:text-red-400'
-              }`} 
-            />
-            {/* Like count inside the heart */}
-            <span className="absolute inset-0 flex items-center justify-center text-[8px] sm:text-[9px] font-bold text-white drop-shadow-sm pointer-events-none">
-              {getLikeCount(song.id)}
-            </span>
-          </button>
-          
-          {/* Info Button */}
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              setShowInfoModal(true);
-            }}
-            className="transition-all duration-200 hover:scale-110 touch-manipulation p-1 shadow-[0_0_15px_rgba(0,123,255,0.6)] hover:shadow-[0_0_25px_rgba(0,123,255,0.9)] border border-blue-400 rounded-full bg-blue-500/20 text-blue-400 hover:text-blue-300"
-          >
-            <Info 
-              className="w-4 h-4 sm:w-5 sm:h-5 text-muted-foreground/50 hover:text-primary"
-            />
-          </button>
-          
-          
-        </div>
-      </div>
-
-      {/* Unified Play Button */}
-      <div className="flex-shrink-0 self-start">
-        <UnifiedPlayButton
-          audioState={audioState}
-          onPlay={handlePlay}
-          onStop={handleStop}
-          size="lg"
-          variant="ghost"
-          showProgress={true}
-          className="sm:w-12 sm:h-12"
-        />
-      </div>
-
-      {/* Album Art */}
-      <div className="relative flex-shrink-0 self-start">
+      {/* Album Art - Large and Centered */}
+      <div className="relative mb-3 sm:mb-4">
         <img 
           src={song.coverArt} 
           alt={`${song.title} cover`} 
-          className="w-12 h-12 sm:w-16 sm:h-16 lg:w-20 lg:h-20 rounded-lg object-cover shadow-md transition-all duration-200"
+          className="w-36 h-36 sm:w-48 sm:h-48 lg:w-60 lg:h-60 rounded-lg object-cover shadow-md transition-all duration-200"
         />
         
         {/* Playing Animation Indicator */}
         {index === currentSongIndex && isPlaying && (
-          <div className="absolute -top-1 -right-1 w-3 h-3 sm:w-4 sm:h-4 bg-primary rounded-full animate-pulse shadow-lg" />
+          <div className="absolute -top-2 -right-2 w-4 h-4 sm:w-5 sm:h-5 bg-primary rounded-full animate-pulse shadow-lg" />
         )}
       </div>
       
-      {/* Song Details */}
-      <div className="flex-1 min-w-0 overflow-hidden">
-         <h4 className={`text-xs sm:text-sm font-semibold truncate leading-tight ${
+      {/* Song Details - Centered Under Image */}
+      <div className="text-center mb-3 sm:mb-4 w-full">
+         <h4 className={`text-sm sm:text-base font-semibold truncate leading-tight ${
            index === currentSongIndex ? 'text-primary' : 'text-foreground'
          }`}>
            {song.title}
          </h4>
-         <div className="mt-0.5">
-           <p className="text-xs sm:text-sm text-muted-foreground font-medium truncate">
-             {song.artist}
-           </p>
-         </div>
+         <p className="text-xs sm:text-sm text-muted-foreground font-medium truncate mt-1">
+           {song.artist}
+         </p>
         
           {/* Status Message - Fixed Height */}
-          <div className="h-4 mt-1">
+          <div className="h-4 mt-2">
             {audioState.isLoading && (
-              <div className="text-xs text-primary font-medium truncate flex items-center gap-1">
+              <div className="text-xs text-primary font-medium truncate flex items-center justify-center gap-1">
                 <span className="animate-spin">♪</span>
                 Loading...
               </div>
@@ -143,7 +90,7 @@ const SongItem: React.FC<SongItemProps> = ({
           </div>
         
          {/* Mini Progress Bar for Current Song - Fixed Height */}
-         <div className="h-1 mt-1">
+         <div className="h-1 mt-2 w-full">
            {audioState.isPlaying && (
              <div className="w-full bg-muted/30 rounded-full h-1">
                <div 
@@ -154,6 +101,54 @@ const SongItem: React.FC<SongItemProps> = ({
            )}
           </div>
        </div>
+
+      {/* Controls - Play Button and Action Buttons */}
+      <div className="flex items-center justify-center gap-3 sm:gap-4 w-full">
+        {/* Unified Play Button */}
+        <UnifiedPlayButton
+          audioState={audioState}
+          onPlay={handlePlay}
+          onStop={handleStop}
+          size="lg"
+          variant="ghost"
+          showProgress={true}
+          className="sm:w-14 sm:h-14"
+        />
+
+        {/* Action Buttons - Like and Info */}
+        <div className="flex items-center gap-2">
+          {/* Like Button */}
+          <button
+            onClick={(e) => onLikeClick(song.id, e)}
+            className="transition-all duration-200 hover:scale-110 touch-manipulation p-2 relative"
+          >
+            <Heart 
+              className={`w-5 h-5 sm:w-6 sm:h-6 ${
+                isLiked(song.id) 
+                  ? 'text-red-500 fill-red-500' 
+                  : 'text-muted-foreground/50 hover:text-red-400'
+              }`} 
+            />
+            {/* Like count inside the heart */}
+            <span className="absolute inset-0 flex items-center justify-center text-[9px] sm:text-[10px] font-bold text-white drop-shadow-sm pointer-events-none">
+              {getLikeCount(song.id)}
+            </span>
+          </button>
+          
+          {/* Info Button */}
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              setShowInfoModal(true);
+            }}
+            className="transition-all duration-200 hover:scale-110 touch-manipulation p-2 shadow-[0_0_15px_rgba(0,123,255,0.6)] hover:shadow-[0_0_25px_rgba(0,123,255,0.9)] border border-blue-400 rounded-full bg-blue-500/20 text-blue-400 hover:text-blue-300"
+          >
+            <Info 
+              className="w-5 h-5 sm:w-6 sm:h-6 text-muted-foreground/50 hover:text-primary"
+            />
+          </button>
+        </div>
+      </div>
        
        {/* Song Info Modal */}
        <SongInfoModal 
