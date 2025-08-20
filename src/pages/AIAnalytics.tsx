@@ -6,12 +6,10 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import DashboardStats from "@/components/analytics/DashboardStats";
-import EnhancedTopSongs from "@/components/analytics/EnhancedTopSongs";
+import EnhancedTopSongsAnalytics from "@/components/analytics/EnhancedTopSongsAnalytics";
 import HourlyPatterns from "@/components/analytics/HourlyPatterns";
 import GeographicMap from "@/components/analytics/GeographicMap";
 
-import AudioPlayerProvider from "@/components/AudioPlayerProvider";
-import NowPlayingBanner from "@/components/NowPlayingBanner";
 import { AnalyticsRefreshProvider, useAnalyticsRefresh } from "@/contexts/AnalyticsRefreshContext";
 
 const AIAnalyticsContent = () => {
@@ -35,9 +33,7 @@ const AIAnalyticsContent = () => {
   }, []);
 
   return (
-    <AudioPlayerProvider>
-      <NowPlayingBanner />
-      <div className="min-h-screen bg-gradient-to-br from-slate-950 via-purple-950 to-slate-900 pt-20">
+    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-purple-950 to-slate-900 pt-8">
         {/* Animated background particles */}
         <div className="fixed inset-0 overflow-hidden pointer-events-none">
           <div className="absolute -top-10 -left-10 w-72 h-72 bg-purple-500/10 rounded-full blur-3xl animate-pulse"></div>
@@ -101,7 +97,7 @@ const AIAnalyticsContent = () => {
         <DashboardStats />
 
         {/* Enhanced Top Songs */}
-        <EnhancedTopSongs />
+        <EnhancedTopSongsAnalytics />
 
         {/* Hourly Listening Patterns */}
         <HourlyPatterns />
@@ -112,7 +108,6 @@ const AIAnalyticsContent = () => {
 
       </div>
     </div>
-    </AudioPlayerProvider>
   );
 };
 
