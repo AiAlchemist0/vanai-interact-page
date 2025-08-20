@@ -47,44 +47,6 @@ const SongItem: React.FC<SongItemProps> = ({
     >
       {/* Album Art - Centered and taking most space */}
       <div className="relative mb-2 sm:mb-3 flex-1 flex items-center justify-center">
-        {/* Action Buttons - Positioned over the image */}
-        <div className="absolute top-2 right-2 z-20 flex flex-col gap-2">
-          {/* Like Button */}
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              onLikeClick(song.id, e);
-            }}
-            className="group relative transition-all duration-300 hover:scale-110 touch-manipulation p-2 bg-background/90 backdrop-blur-md rounded-full border border-border/50 hover:border-border shadow-lg hover:shadow-xl"
-          >
-            <Heart 
-              className={`w-4 h-4 transition-colors duration-200 ${
-                isLiked(song.id) 
-                  ? 'text-red-500 fill-red-500' 
-                  : 'text-muted-foreground group-hover:text-red-400'
-              }`} 
-            />
-            {/* Like count badge */}
-            {getLikeCount(song.id) > 0 && (
-              <span className="absolute -top-1 -right-1 bg-red-500 text-white text-[9px] font-bold rounded-full min-w-[16px] h-4 px-1 flex items-center justify-center shadow-md">
-                {getLikeCount(song.id)}
-              </span>
-            )}
-          </button>
-          
-          {/* Info Button */}
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              setShowInfoModal(true);
-            }}
-            className="group transition-all duration-300 hover:scale-110 touch-manipulation p-2 bg-background/90 backdrop-blur-md rounded-full border border-border/50 hover:border-border shadow-lg hover:shadow-xl"
-          >
-            <Info 
-              className="w-4 h-4 text-muted-foreground group-hover:text-primary transition-colors duration-200"
-            />
-          </button>
-        </div>
         <img 
           src={song.coverArt} 
           alt={`${song.title} cover`} 
@@ -112,6 +74,45 @@ const SongItem: React.FC<SongItemProps> = ({
             />
           </div>
         </div>
+      </div>
+
+      {/* Action Buttons - Positioned under the album art */}
+      <div className="flex justify-center gap-3 mb-2">
+        {/* Like Button */}
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            onLikeClick(song.id, e);
+          }}
+          className="group relative transition-all duration-300 hover:scale-110 touch-manipulation p-2 bg-background/90 backdrop-blur-md rounded-full border border-border/50 hover:border-border shadow-lg hover:shadow-xl"
+        >
+          <Heart 
+            className={`w-4 h-4 transition-colors duration-200 ${
+              isLiked(song.id) 
+                ? 'text-red-500 fill-red-500' 
+                : 'text-muted-foreground group-hover:text-red-400'
+            }`} 
+          />
+          {/* Like count badge */}
+          {getLikeCount(song.id) > 0 && (
+            <span className="absolute -top-1 -right-1 bg-red-500 text-white text-[9px] font-bold rounded-full min-w-[16px] h-4 px-1 flex items-center justify-center shadow-md">
+              {getLikeCount(song.id)}
+            </span>
+          )}
+        </button>
+        
+        {/* Info Button */}
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            setShowInfoModal(true);
+          }}
+          className="group transition-all duration-300 hover:scale-110 touch-manipulation p-2 bg-background/90 backdrop-blur-md rounded-full border border-border/50 hover:border-border shadow-lg hover:shadow-xl"
+        >
+          <Info 
+            className="w-4 h-4 text-muted-foreground group-hover:text-primary transition-colors duration-200"
+          />
+        </button>
       </div>
       
       {/* Song Details - Compact at bottom */}
