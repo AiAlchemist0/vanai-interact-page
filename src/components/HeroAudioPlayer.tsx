@@ -164,7 +164,7 @@ const HeroAudioPlayer = () => {
 
       {/* Detailed Song List */}
       <PhilippeSpecialEffects type="playlist">
-        <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-2 sm:gap-3 md:gap-2 lg:gap-2 relative z-10">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4 md:gap-3 lg:gap-2 relative z-10">
         {songs.map((song, index) => (
           <MemoizedSongItem
             key={song.id}
