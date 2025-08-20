@@ -7,7 +7,7 @@ import { ArrowLeft } from "lucide-react";
 
 // Helper function to get audio URL from Supabase Storage
 const getAudioUrl = (filename: string) => {
-  return `https://oojckbecymzrrdtvcmqi.supabase.co/storage/v1/object/public/audio-files/${filename}`;
+  return `https://oojckbecymzrrdtvcmqi.supabase.co/storage/v1/object/public/audio-files/${encodeURIComponent(filename)}`;
 };
 
 export type GameState = "menu" | "playing" | "paused" | "gameOver";

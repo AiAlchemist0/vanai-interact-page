@@ -26,7 +26,7 @@ import bcCoastCatalystCover from '/lovable-uploads/429a3cb8-3ffb-40db-874a-5829a
 
 // Supabase Storage URLs for audio files
 const SUPABASE_URL = "https://oojckbecymzrrdtvcmqi.supabase.co";
-const getAudioUrl = (filename: string) => `${SUPABASE_URL}/storage/v1/object/public/audio-files/${filename}`;
+const getAudioUrl = (filename: string) => `${SUPABASE_URL}/storage/v1/object/public/audio-files/${encodeURIComponent(filename)}`;
 
 const SONGS: Song[] = [
   {
