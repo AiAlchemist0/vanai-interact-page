@@ -54,7 +54,7 @@ const HeroAudioPlayer = () => {
 
   return (
     <PhilippeSpecialEffects type="player">
-      <div className="bg-card/20 backdrop-blur-xl border border-border/20 rounded-3xl px-2 py-3 sm:p-4 shadow-elegant lg:max-w-none xl:max-w-7xl lg:w-full">
+      <div className="bg-card/20 backdrop-blur-xl border border-border/20 rounded-3xl px-2 py-3 sm:p-4 shadow-elegant w-full max-w-none">
       {/* Compact Header */}
        <div className="mb-3 sm:mb-4">
          <div className="flex items-center justify-between gap-2 mb-2 h-6 sm:h-7">
