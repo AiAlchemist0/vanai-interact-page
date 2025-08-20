@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { Info, X } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { useSongKeywords } from '@/hooks/useSongKeywords';
+import { useModalAudioProtection } from '@/hooks/useModalAudioProtection';
 import { getSongById } from '@/utils/songData';
 
 interface SongInfoModalProps {
@@ -20,6 +21,14 @@ export const SongInfoModal: React.FC<SongInfoModalProps> = ({
 }) => {
   const { getKeywordsForSong, loading: keywordsLoading } = useSongKeywords();
   const song = getSongById(songId);
+  
+  // Protect audio playback during modal interactions
+  const { handleModalClose, handleTabClick, isAudioProtected } = useModalAudioProtection({
+    isModalOpen: isOpen,
+    onModalStateChange: (modalOpen) => {
+      if (!modalOpen) onClose();
+    }
+  });
   
   if (!song) return null;
 
@@ -66,7 +75,7 @@ export const SongInfoModal: React.FC<SongInfoModalProps> = ({
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
+    <Dialog open={isOpen} onOpenChange={(open) => !open && handleModalClose()}>
       <DialogContent className="max-w-4xl w-[95vw] sm:w-full max-h-[90vh] flex flex-col p-0">
         <DialogHeader className="flex-shrink-0 p-6 pb-4">
           <DialogTitle className="sr-only">Song Information</DialogTitle>
@@ -93,8 +102,20 @@ export const SongInfoModal: React.FC<SongInfoModalProps> = ({
         <div className="flex-1 flex flex-col min-h-0 px-6">
           <Tabs defaultValue="impact" className="flex-1 flex flex-col min-h-0">
             <TabsList className="grid w-full grid-cols-2 flex-shrink-0 mb-4">
-              <TabsTrigger value="impact" className="text-xs sm:text-sm">Impact on BC + AI Community</TabsTrigger>
-              <TabsTrigger value="lyrics" className="text-xs sm:text-sm">Song Lyrics</TabsTrigger>
+              <TabsTrigger 
+                value="impact" 
+                className="text-xs sm:text-sm"
+                onClick={handleTabClick}
+              >
+                Impact on BC + AI Community
+              </TabsTrigger>
+              <TabsTrigger 
+                value="lyrics" 
+                className="text-xs sm:text-sm"
+                onClick={handleTabClick}
+              >
+                Song Lyrics
+              </TabsTrigger>
             </TabsList>
             
             <TabsContent value="impact" className="flex-1 min-h-0 mt-0">
