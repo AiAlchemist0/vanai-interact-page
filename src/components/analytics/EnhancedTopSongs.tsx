@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -213,16 +213,20 @@ const EnhancedTopSongs = () => {
       clearInterval(interval);
     };
   }, []);
-  const getSortedSongs = () => {
+  // Memoize the sorting logic to prevent infinite loops
+  const getSortedSongs = useMemo(() => {
     let filtered = [...songs];
     
-    console.log('🔍 Filtering and sorting songs:', {
-      totalSongs: songs.length,
-      selectedCategory,
-      viewMode,
-      songsWithPlays: songs.filter(s => s.total_plays > 0).length,
-      songsWithLikes: songs.filter(s => s.total_likes > 0).length
-    });
+    // Only log when data actually changes (not on every render)
+    if (songs.length > 0) {
+      console.log('🔍 Filtering and sorting songs:', {
+        totalSongs: songs.length,
+        selectedCategory,
+        viewMode,
+        songsWithPlays: songs.filter(s => s.total_plays > 0).length,
+        songsWithLikes: songs.filter(s => s.total_likes > 0).length
+      });
+    }
     
     // Filter by selected category if one is chosen
     if (selectedCategory) {
@@ -230,7 +234,6 @@ const EnhancedTopSongs = () => {
         const keywords = getTopKeywordsForSong(song.song_id);
         return keywords.some(keyword => keyword.category === selectedCategory);
       });
-      console.log('📂 After category filter:', filtered.length, 'songs');
     }
     
     const sorted = filtered.sort((a, b) => {
@@ -246,15 +249,18 @@ const EnhancedTopSongs = () => {
       }
     });
     
-    console.log('🏆 Top 5 sorted songs:', sorted.slice(0, 5).map(s => ({
-      id: s.song_id,
-      plays: s.total_plays,
-      likes: s.total_likes,
-      engagement: s.engagement_score
-    })));
+    // Only log top songs when data changes
+    if (sorted.length > 0) {
+      console.log('🏆 Top 5 sorted songs:', sorted.slice(0, 5).map(s => ({
+        id: s.song_id,
+        plays: s.total_plays,
+        likes: s.total_likes,
+        engagement: s.engagement_score
+      })));
+    }
     
     return sorted;
-  };
+  }, [songs, viewMode, selectedCategory, getTopKeywordsForSong]);
   const handleRefresh = () => {
     console.log('🔄 Manual refresh triggered by user');
     setError(null);
@@ -280,7 +286,7 @@ const EnhancedTopSongs = () => {
         </CardContent>
       </Card>;
   }
-  const sortedSongs = getSortedSongs();
+  const sortedSongs = getSortedSongs;
   const maxValue = Math.max(...sortedSongs.map(song => {
     switch (viewMode) {
       case 'plays':
