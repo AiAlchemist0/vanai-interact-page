@@ -429,7 +429,7 @@ const EnhancedTopSongsAnalytics = () => {
                       index === 0 ? 'bg-gradient-primary text-background' :
                       index === 1 ? 'bg-gradient-secondary text-background' :
                       index === 2 ? 'bg-gradient-accent text-background' :
-                      'bg-muted text-muted-foreground'
+                      'bg-secondary text-secondary-foreground'
                     }`}>
                       #{index + 1}
                     </div>
