@@ -143,18 +143,20 @@ const SongItem: React.FC<SongItemProps> = ({
               }}
               className="group relative transition-all duration-300 hover:scale-105 active:scale-95 touch-manipulation p-3 bg-background/95 backdrop-blur-sm rounded-full border border-border/30 hover:border-border/60 shadow-md hover:shadow-lg min-w-[48px] min-h-[48px]"
             >
-              <Heart 
-                className="w-5 h-5 transition-colors duration-200"
-                style={{ 
-                  color: isLiked(song.id) ? '#ef4444' : undefined,
-                  fill: isLiked(song.id) ? '#ef4444' : 'transparent'
-                }}
-              />
-              {getLikeCount(song.id) > 0 && (
-                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold rounded-full min-w-[18px] h-5 px-1 flex items-center justify-center shadow-md">
-                  {getLikeCount(song.id)}
-                </span>
-              )}
+              <div className="relative flex items-center justify-center w-6 h-6">
+                <Heart 
+                  className="w-6 h-6 transition-colors duration-200"
+                  style={{ 
+                    color: isLiked(song.id) ? '#ef4444' : '#6b7280',
+                    fill: isLiked(song.id) ? '#ef4444' : 'transparent'
+                  }}
+                />
+                {getLikeCount(song.id) > 0 && (
+                  <span className="absolute inset-0 flex items-center justify-center text-[10px] font-bold text-white mix-blend-difference">
+                    {getLikeCount(song.id)}
+                  </span>
+                )}
+              </div>
             </button>
             
             {/* Info Button */}
@@ -178,18 +180,20 @@ const SongItem: React.FC<SongItemProps> = ({
               }}
               className="group relative transition-all duration-300 hover:scale-110 touch-manipulation p-3 bg-background/90 backdrop-blur-md rounded-full border border-border/50 hover:border-border shadow-lg hover:shadow-xl min-w-[48px] min-h-[48px]"
             >
-              <Heart 
-                className="w-5 h-5 transition-colors duration-200"
-                style={{ 
-                  color: isLiked(song.id) ? '#ef4444' : undefined,
-                  fill: isLiked(song.id) ? '#ef4444' : 'transparent'
-                }}
-              />
-              {getLikeCount(song.id) > 0 && (
-                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold rounded-full min-w-[18px] h-5 px-1 flex items-center justify-center shadow-md">
-                  {getLikeCount(song.id)}
-                </span>
-              )}
+              <div className="relative flex items-center justify-center w-6 h-6">
+                <Heart 
+                  className="w-6 h-6 transition-colors duration-200"
+                  style={{ 
+                    color: isLiked(song.id) ? '#ef4444' : '#6b7280',
+                    fill: isLiked(song.id) ? '#ef4444' : 'transparent'
+                  }}
+                />
+                {getLikeCount(song.id) > 0 && (
+                  <span className="absolute inset-0 flex items-center justify-center text-[10px] font-bold text-white mix-blend-difference">
+                    {getLikeCount(song.id)}
+                  </span>
+                )}
+              </div>
             </button>
             
             {/* Info Button */}
