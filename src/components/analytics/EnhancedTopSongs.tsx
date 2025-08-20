@@ -184,10 +184,12 @@ const EnhancedTopSongs = () => {
         }
       });
       
-      console.log('🎯 Final combined data:', combinedData);
-      console.log('📈 Total songs with data:', combinedData.length);
-      console.log('🎵 Songs with plays > 0:', combinedData.filter(s => s.total_plays > 0).length);
-      console.log('❤️ Songs with likes > 0:', combinedData.filter(s => s.total_likes > 0).length);
+      // Reduced logging - only log data summary on successful fetch
+      console.log('📊 Enhanced Top Songs data updated:', {
+        totalSongs: combinedData.length,
+        songsWithPlays: combinedData.filter(s => s.total_plays > 0).length,
+        songsWithLikes: combinedData.filter(s => s.total_likes > 0).length
+      });
       
       setSongs(combinedData);
     } catch (error) {
@@ -200,34 +202,16 @@ const EnhancedTopSongs = () => {
     }
   };
   useEffect(() => {
-    console.log('🚀 EnhancedTopSongs component mounted, fetching initial data...');
     fetchData();
 
-    // Refresh every 60 seconds (reduced frequency for better performance)
-    const interval = setInterval(() => {
-      console.log('⏱️ Auto-refreshing Enhanced Top Songs data...');
-      fetchData();
-    }, 60000);
+    // Refresh every 60 seconds
+    const interval = setInterval(fetchData, 60000);
     
-    return () => {
-      console.log('🧹 Cleaning up Enhanced Top Songs intervals...');
-      clearInterval(interval);
-    };
+    return () => clearInterval(interval);
   }, []);
   // Memoize the sorting logic to prevent infinite loops
   const getSortedSongs = useMemo(() => {
     let filtered = [...songs];
-    
-    // Only log when data actually changes (not on every render)
-    if (songs.length > 0) {
-      console.log('🔍 Filtering and sorting songs:', {
-        totalSongs: songs.length,
-        selectedCategory,
-        viewMode,
-        songsWithPlays: songs.filter(s => s.total_plays > 0).length,
-        songsWithLikes: songs.filter(s => s.total_likes > 0).length
-      });
-    }
     
     // Filter by selected category if one is chosen
     if (selectedCategory) {
@@ -250,20 +234,9 @@ const EnhancedTopSongs = () => {
       }
     });
     
-    // Only log top songs when data changes
-    if (sorted.length > 0) {
-      console.log('🏆 Top 5 sorted songs:', sorted.slice(0, 5).map(s => ({
-        id: s.song_id,
-        plays: s.total_plays,
-        likes: s.total_likes,
-        engagement: s.engagement_score
-      })));
-    }
-    
     return sorted;
   }, [songs, viewMode, selectedCategory, getTopKeywordsForSong]);
   const handleRefresh = () => {
-    console.log('🔄 Manual refresh triggered by user');
     setError(null);
     fetchData();
   };

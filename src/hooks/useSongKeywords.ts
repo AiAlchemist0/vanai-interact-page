@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 
 export interface SongKeyword {
@@ -50,7 +50,7 @@ export const useSongKeywords = () => {
     fetchData();
   }, []);
 
-  const getKeywordsForSong = (songId: string) => {
+  const getKeywordsForSong = useCallback((songId: string) => {
     const songKeywords = keywords.filter(k => k.song_id === songId);
     
     // Deduplicate based on song_id, keyword, and category as defensive measure
@@ -63,21 +63,24 @@ export const useSongKeywords = () => {
     }, new Map<string, SongKeyword>());
     
     return Array.from(uniqueKeywords.values());
-  };
+  }, [keywords]);
 
-  const getTopKeywordsForSong = (songId: string, limit = 3) => {
+  const getTopKeywordsForSong = useCallback((songId: string, limit = 3) => {
     return getKeywordsForSong(songId)
       .sort((a, b) => b.relevance_score - a.relevance_score)
       .slice(0, limit);
-  };
+  }, [getKeywordsForSong]);
 
-  const getKeywordsByCategory = (category: string) => {
+  const getKeywordsByCategory = useCallback((category: string) => {
     return keywords.filter(k => k.category === category);
-  };
+  }, [keywords]);
+
+  // Memoize analytics array to prevent unnecessary re-renders
+  const stableAnalytics = useMemo(() => analytics, [analytics]);
 
   return {
     keywords,
-    analytics,
+    analytics: stableAnalytics,
     loading,
     getKeywordsForSong,
     getTopKeywordsForSong,
