@@ -47,6 +47,7 @@ const EnhancedTopSongs = () => {
   const [songs, setSongs] = useState<CombinedSongData[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const [viewMode, setViewMode] = useState<'plays' | 'likes' | 'engagement'>('likes');
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [lastRefreshed, setLastRefreshed] = useState<Date>(new Date());
@@ -90,13 +91,30 @@ const EnhancedTopSongs = () => {
   const fetchData = async () => {
     try {
       setRefreshing(true);
+      console.log('[EnhancedTopSongs] Starting data fetch...');
 
       // Fetch comprehensive statistics and like statistics
-      const [comprehensiveResponse, likesResponse] = await Promise.all([supabase.rpc('get_comprehensive_song_statistics'), supabase.rpc('get_song_like_statistics')]);
-      if (comprehensiveResponse.error) throw comprehensiveResponse.error;
-      if (likesResponse.error) throw likesResponse.error;
+      const [comprehensiveResponse, likesResponse] = await Promise.all([
+        supabase.rpc('get_comprehensive_song_statistics'), 
+        supabase.rpc('get_song_like_statistics')
+      ]);
+
+      console.log('[EnhancedTopSongs] Comprehensive response:', comprehensiveResponse);
+      console.log('[EnhancedTopSongs] Likes response:', likesResponse);
+
+      if (comprehensiveResponse.error) {
+        console.error('[EnhancedTopSongs] Comprehensive stats error:', comprehensiveResponse.error);
+        throw comprehensiveResponse.error;
+      }
+      if (likesResponse.error) {
+        console.error('[EnhancedTopSongs] Likes stats error:', likesResponse.error);
+        throw likesResponse.error;
+      }
+
       const comprehensiveData: ComprehensiveStats[] = comprehensiveResponse.data || [];
       const likesData: SongLikeStats[] = likesResponse.data || [];
+
+      console.log('[EnhancedTopSongs] Processed data - comprehensive:', comprehensiveData.length, 'likes:', likesData.length);
 
       // Create a map of likes for easy lookup
       const likesMap = new Map(likesData.map(like => [like.song_id, like]));
@@ -166,9 +184,11 @@ const EnhancedTopSongs = () => {
           });
         }
       });
+      console.log('[EnhancedTopSongs] Final combined data:', combinedData.length, 'songs');
       setSongs(combinedData);
     } catch (error) {
-      console.error('Error fetching song data:', error);
+      console.error('[EnhancedTopSongs] Error fetching song data:', error);
+      setError('Failed to fetch song statistics');
     } finally {
       setLoading(false);
       setRefreshing(false);
@@ -229,6 +249,23 @@ const EnhancedTopSongs = () => {
             </div>)}
         </CardContent>
       </Card>;
+  }
+
+  if (error) {
+    return (
+      <Card className="bg-slate-900/50 border-red-500/30 shadow-2xl shadow-purple-500/10 backdrop-blur-xl">
+        <CardHeader className="border-b border-red-500/20">
+          <CardTitle className="text-red-400">Error Loading Songs</CardTitle>
+        </CardHeader>
+        <CardContent className="p-6 text-center">
+          <div className="text-red-400 mb-2">Failed to load song statistics</div>
+          <div className="text-slate-400 text-sm mb-4">{error}</div>
+          <Button onClick={handleRefresh} size="sm" className="bg-red-500 hover:bg-red-600">
+            Retry
+          </Button>
+        </CardContent>
+      </Card>
+    );
   }
   const sortedSongs = getSortedSongs();
   const maxValue = Math.max(...sortedSongs.map(song => {

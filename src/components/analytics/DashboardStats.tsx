@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { TrendingUp, Users, Clock, MapPin, Zap, Activity, Info } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from "@/components/ui/tooltip";
 import { supabase } from "@/integrations/supabase/client";
 import { useAnalyticsRefresh } from "@/contexts/AnalyticsRefreshContext";
@@ -19,26 +20,49 @@ const DashboardStats = () => {
   const [stats, setStats] = useState<DashboardStatsData | null>(null);
   const [totalLikes, setTotalLikes] = useState<number>(0);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [lastRefreshed, setLastRefreshed] = useState<Date>(new Date());
   const { registerRefresh, unregisterRefresh } = useAnalyticsRefresh();
 
   const fetchStats = async () => {
     try {
+      console.log('[DashboardStats] Starting stats fetch...');
+      
       const [statsResponse, likesResponse] = await Promise.all([
         supabase.rpc('get_dashboard_stats'),
         supabase.rpc('get_song_like_statistics')
       ]);
 
+      console.log('[DashboardStats] Stats response:', statsResponse);
+      console.log('[DashboardStats] Likes response:', likesResponse);
+
+      if (statsResponse.error) {
+        console.error('[DashboardStats] Stats RPC error:', statsResponse.error);
+        throw statsResponse.error;
+      }
+
+      if (likesResponse.error) {
+        console.error('[DashboardStats] Likes RPC error:', likesResponse.error);
+        throw likesResponse.error;
+      }
+
       if (statsResponse.data && statsResponse.data.length > 0) {
+        console.log('[DashboardStats] Setting stats data:', statsResponse.data[0]);
         setStats(statsResponse.data[0]);
+      } else {
+        console.warn('[DashboardStats] No stats data received');
       }
 
       if (likesResponse.data) {
         const total = likesResponse.data.reduce((sum: number, song: any) => sum + (song.total_likes || 0), 0);
+        console.log('[DashboardStats] Total likes calculated:', total);
         setTotalLikes(total);
+      } else {
+        console.warn('[DashboardStats] No likes data received');
       }
     } catch (error) {
-      console.error('Error fetching dashboard stats:', error);
+      console.error('[DashboardStats] Error fetching dashboard stats:', error);
+      setError('Failed to fetch dashboard statistics');
     } finally {
       setLoading(false);
       setLastRefreshed(new Date());
@@ -150,6 +174,22 @@ const DashboardStats = () => {
             </CardContent>
           </Card>
         ))}
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-7 gap-6">
+        <Card className="bg-slate-900/50 border-red-500/30 col-span-full">
+          <CardContent className="p-6 text-center">
+            <div className="text-red-400 mb-2">Error loading dashboard stats</div>
+            <div className="text-slate-400 text-sm">{error}</div>
+            <Button onClick={fetchStats} className="mt-4" size="sm">
+              Retry
+            </Button>
+          </CardContent>
+        </Card>
       </div>
     );
   }

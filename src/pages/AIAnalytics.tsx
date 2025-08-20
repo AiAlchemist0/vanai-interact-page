@@ -9,6 +9,8 @@ import DashboardStats from "@/components/analytics/DashboardStats";
 import EnhancedTopSongs from "@/components/analytics/EnhancedTopSongs";
 import HourlyPatterns from "@/components/analytics/HourlyPatterns";
 import GeographicMap from "@/components/analytics/GeographicMap";
+import DebugDataStatus from "@/components/DebugDataStatus";
+import DataVerificationPanel from "@/components/DataVerificationPanel";
 
 import AudioPlayerProvider from "@/components/AudioPlayerProvider";
 import NowPlayingBanner from "@/components/NowPlayingBanner";
@@ -97,6 +99,12 @@ const AIAnalyticsContent = () => {
 
       {/* Main Content */}
       <div className="relative z-10 container mx-auto px-4 py-8 space-y-8">
+        {/* Debug Data Status - Remove this after fixing issues */}
+        <DebugDataStatus />
+        
+        {/* Data Verification Panel - Remove this after fixing issues */}
+        <DataVerificationPanel />
+
         {/* Dashboard Overview Stats */}
         <DashboardStats />
 
