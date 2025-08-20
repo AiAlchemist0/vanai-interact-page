@@ -11,7 +11,7 @@ const AudioExperienceSection = () => {
           </h2>
           <p className="text-lg sm:text-xl text-muted-foreground max-w-4xl mx-auto">
             Immerse yourself in our revolutionary audio analytics. Each track represents unique insights 
-            from British Columbia's AI survey, transformed into engaging musical narratives.
+            from Vancouver AI community leader powered by data from BC + AI survey from Rival Tech, transformed into engaging musical narratives.
           </p>
         </div>
         
