@@ -18,17 +18,46 @@ export const getSongMetadata = (songId: string) => {
     };
   }
 
-  // Create color gradients based on song theme/genre
+  // Create color gradients based on BC AI Survey theme categories and artist/content themes
   const getColorGradient = (title: string, artist: string) => {
     const combined = (title + artist).toLowerCase();
-    if (combined.includes('ai') || combined.includes('tech')) return 'from-blue-500 to-cyan-500';
-    if (combined.includes('coast') || combined.includes('catalyst') || combined.includes('kassandra')) return 'from-emerald-500 to-teal-500';
-    if (combined.includes('circles') || combined.includes('glow')) return 'from-cyan-500 to-blue-500';
-    if (combined.includes('space') || combined.includes('alien')) return 'from-orange-500 to-red-500';
-    if (combined.includes('consciousness') || combined.includes('mind')) return 'from-indigo-500 to-purple-500';
-    if (combined.includes('pixel') || combined.includes('wizard')) return 'from-yellow-500 to-orange-500';
-    if (combined.includes('dr') || combined.includes('patrick')) return 'from-green-500 to-teal-500';
-    return 'from-pink-500 to-rose-500';
+    
+    // BC AI Survey Theme Color Mapping
+    if (combined.includes('ai') || combined.includes('artificial intelligence') || combined.includes('chatgpt') || combined.includes('tech') || combined.includes('machine learning')) {
+      return 'from-[hsl(var(--survey-ai-experience))] to-[hsl(var(--ai-blue))]'; // AI Experience - Blue
+    }
+    
+    if (combined.includes('creative') || combined.includes('art') || combined.includes('music') || combined.includes('pixel') || combined.includes('wizard') || combined.includes('creation') || combined.includes('deepfakes')) {
+      return 'from-[hsl(var(--survey-creative-impact))] to-[hsl(var(--ai-purple))]'; // Creative Impact - Purple
+    }
+    
+    if (combined.includes('future') || combined.includes('vision') || combined.includes('innovation') || combined.includes('catalyst') || combined.includes('transformation') || combined.includes('tomorrow')) {
+      return 'from-[hsl(var(--survey-future-vision))] to-[hsl(var(--ai-green))]'; // Future Vision - Green
+    }
+    
+    if (combined.includes('relationship') || combined.includes('human') || combined.includes('connection') || combined.includes('love') || combined.includes('family') || combined.includes('circles')) {
+      return 'from-[hsl(var(--survey-relationships))] to-[hsl(330_78%_70%)]'; // Relationships - Pink
+    }
+    
+    if (combined.includes('community') || combined.includes('vancouver') || combined.includes('bc') || combined.includes('british columbia') || combined.includes('hackathon') || combined.includes('collective') || combined.includes('coast')) {
+      return 'from-[hsl(var(--survey-community))] to-[hsl(var(--ai-orange))]'; // Community - Yellow/Orange
+    }
+    
+    if (combined.includes('identity') || combined.includes('consciousness') || combined.includes('mind') || combined.includes('self') || combined.includes('personal') || combined.includes('individual')) {
+      return 'from-[hsl(var(--survey-identity))] to-[hsl(var(--accent))]'; // Identity - Orange
+    }
+    
+    // Special cases for specific artists/content
+    if (combined.includes('space') || combined.includes('alien') || combined.includes('macmillan')) {
+      return 'from-[hsl(var(--survey-future-vision))] to-[hsl(var(--ai-orange))]'; // Space/Alien themes - Future Vision
+    }
+    
+    if (combined.includes('dr') || combined.includes('patrick') || combined.includes('medical') || combined.includes('health')) {
+      return 'from-[hsl(var(--survey-identity))] to-[hsl(var(--ai-green))]'; // Medical/Health - Identity to Green
+    }
+    
+    // Default fallback
+    return 'from-[hsl(var(--primary))] to-[hsl(var(--ai-cyan))]';
   };
 
   return {
