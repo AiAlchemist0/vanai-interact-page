@@ -621,6 +621,16 @@ const SONGS: Song[] = [
       { time: 196, text: "Her hub, her hub, her flame..." },
       { time: 200, text: "(Vancouver's risin', AI eternal, don't you?)" }
     ] as LyricLine[]
+  },
+  {
+    id: "smells-like-reid-spirit",
+    title: "Smells Like Reid's Spirit",
+    artist: "Andrew Reid",
+    src: getAudioUrl("Smells Like Reid Spirit.mp3"),
+    coverArt: "/lovable-uploads/4db32d20-cc6e-472e-b7eb-2386c131e5e4.png",
+    lyrics: [
+      { time: 0, text: "Loading lyrics..." }
+    ] as LyricLine[]
   }
 ];
 
