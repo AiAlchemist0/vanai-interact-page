@@ -72,10 +72,10 @@ const Hero = () => {
             </p>
           </div>
 
-          {/* Logo and Stats Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-4 sm:gap-6 max-w-6xl mx-auto">
+          {/* Logo and Stats Grid - Optimized for tablet */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4 lg:gap-6 max-w-6xl mx-auto">
             {/* BC+AI Logo Section */}
-            <div className="bg-card/50 backdrop-blur-sm border border-border rounded-xl p-6 lg:p-8 text-center flex items-center justify-center min-h-[120px] sm:min-h-[140px]">
+            <div className="bg-card/50 backdrop-blur-sm border border-border rounded-xl p-4 sm:p-6 lg:p-8 text-center flex items-center justify-center min-h-[100px] sm:min-h-[120px] md:min-h-[140px]">
               <a 
                 href="https://vancouver.bc-ai.net/" 
                 target="_blank" 
@@ -94,7 +94,7 @@ const Hero = () => {
             </div>
 
             {/* Rival Technologies Logo Section */}
-            <div className="bg-card/50 backdrop-blur-sm border border-border rounded-xl p-6 lg:p-8 text-center flex items-center justify-center min-h-[120px] sm:min-h-[140px]">
+            <div className="bg-card/50 backdrop-blur-sm border border-border rounded-xl p-4 sm:p-6 lg:p-8 text-center flex items-center justify-center min-h-[100px] sm:min-h-[120px] md:min-h-[140px]">
               <a 
                 href="https://rival.tech" 
                 target="_blank" 
@@ -113,7 +113,7 @@ const Hero = () => {
             </div>
 
             {/* Stats Cards */}
-            <div className="bg-card/50 backdrop-blur-sm border border-border rounded-xl p-4 sm:p-6 lg:p-8 text-center min-h-[120px] sm:min-h-[140px] flex flex-col justify-center">
+            <div className="bg-card/50 backdrop-blur-sm border border-border rounded-xl p-3 sm:p-4 md:p-6 lg:p-8 text-center min-h-[100px] sm:min-h-[120px] md:min-h-[140px] flex flex-col justify-center">
               <div className="flex items-center justify-center mb-2 sm:mb-3">
                 <Users className="w-6 sm:w-7 lg:w-8 h-6 sm:h-7 lg:h-8 text-primary" />
               </div>
@@ -146,28 +146,28 @@ const Hero = () => {
             </div>
           </div>
 
-          {/* Secondary Action Buttons */}
-          <nav className="flex flex-wrap items-center justify-center gap-3 sm:gap-4" aria-label="Quick navigation">
-            <div className="flex items-center gap-2">
+          {/* Secondary Action Buttons - Tablet optimized */}
+          <nav className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 md:gap-4" aria-label="Quick navigation">
+            <div className="flex items-center gap-1 sm:gap-2">
               <Button 
-                size="lg" 
+                size="default" 
                 variant="secondary"
-                className="min-h-[48px] px-4 sm:px-6 gap-2 hover:scale-105 transition-all duration-300 focus:scale-105 focus:outline-2 focus:outline-offset-2 focus:outline-secondary bg-gradient-to-r from-ai-cyan/20 to-primary/20 hover:from-ai-cyan/30 hover:to-primary/30 border-ai-cyan/30 text-ai-cyan hover:text-white hover:shadow-lg hover:shadow-ai-cyan/20"
+                className="min-h-[44px] md:min-h-[48px] px-3 sm:px-4 md:px-6 gap-1 sm:gap-2 hover:scale-105 transition-all duration-300 focus:scale-105 focus:outline-2 focus:outline-offset-2 focus:outline-secondary bg-gradient-to-r from-ai-cyan/20 to-primary/20 hover:from-ai-cyan/30 hover:to-primary/30 border-ai-cyan/30 text-ai-cyan hover:text-white hover:shadow-lg hover:shadow-ai-cyan/20"
                 onClick={() => handleSmoothScroll('vision')}
                 aria-label="View project vision and watch video"
               >
-                <Lightbulb className="w-5 h-5" />
+                <Lightbulb className="w-4 sm:w-5 h-4 sm:h-5" />
                 <span className="hidden sm:inline">Vision</span>
               </Button>
               
               <Button 
                 size="icon" 
                 variant="outline"
-                className="min-h-[48px] min-w-[48px] hover:scale-105 transition-all duration-300 focus:scale-105 focus:outline-2 focus:outline-offset-2 border-ai-cyan/30 text-ai-cyan hover:bg-ai-cyan/10 hover:border-ai-cyan/50 hover:text-ai-cyan hover:shadow-md"
+                className="min-h-[44px] min-w-[44px] md:min-h-[48px] md:min-w-[48px] hover:scale-105 transition-all duration-300 focus:scale-105 focus:outline-2 focus:outline-offset-2 border-ai-cyan/30 text-ai-cyan hover:bg-ai-cyan/10 hover:border-ai-cyan/50 hover:text-ai-cyan hover:shadow-md"
                 onClick={() => handleSmoothScroll('vision')}
                 aria-label="Watch vision video"
               >
-                <Video className="w-5 h-5" />
+                <Video className="w-4 sm:w-5 h-4 sm:h-5" />
               </Button>
             </div>
 

@@ -55,11 +55,11 @@ const HeroAudioPlayer = () => {
   return (
     <PhilippeSpecialEffects type="player">
       <div className="bg-card/20 backdrop-blur-xl border border-border/20 rounded-3xl p-4 sm:p-6 lg:p-8 shadow-elegant w-full">
-      {/* Enhanced Header */}
-       <div className="mb-6 sm:mb-8">
-         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between mb-4">
-           <div className="flex items-center gap-3 flex-1 min-w-0">
-             <h3 className="text-xl sm:text-2xl lg:text-3xl font-semibold text-foreground leading-tight">
+       {/* Enhanced Header - Compact for tablets */}
+        <div className="mb-4 sm:mb-6 md:mb-8">
+          <div className="flex flex-col gap-3 sm:gap-4 md:flex-row md:items-center md:justify-between mb-3 sm:mb-4">
+            <div className="flex items-center gap-2 sm:gap-3 flex-1 min-w-0">
+              <h3 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-semibold text-foreground leading-tight">
                {isPlaylistMode ? (
                  <span className="flex items-center gap-3">
                    <span className="animate-pulse text-2xl">🎵</span>
@@ -83,7 +83,7 @@ const HeroAudioPlayer = () => {
                )}
              </h3>
            </div>
-           <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4">
+           <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-3 md:gap-4">
               <div className="flex items-center gap-2 text-muted-foreground">
                 {!likesLoading && getTotalLikes > 0 && (
                   <>
@@ -104,31 +104,31 @@ const HeroAudioPlayer = () => {
                   </>
                 )}
               </div>
-               <div className="flex items-center gap-3">
-                 <Button
-                   onClick={async () => {
-                     if (isPlaylistMode) {
-                       stopPlaylistMode();
-                     } else {
-                       try {
-                         await startPlaylistMode();
-                       } catch (error) {
-                         toast({
-                           title: "Autoplay blocked",
-                           description: "Please interact with the page first to enable playlist mode.",
-                           variant: "destructive"
-                         });
-                       }
-                     }
-                   }}
-                   variant={isPlaylistMode ? "secondary" : "secondary"}
-                   size="default"
-                    className={`h-11 px-4 text-sm font-medium transition-all duration-300 ${
-                      isPlaylistMode 
-                        ? 'bg-ai-blue/20 text-ai-blue border border-ai-blue/30 backdrop-blur-sm glow-primary' 
-                        : 'hover:bg-primary/10'
-                    }`}
-                 >
+                <div className="flex items-center gap-2 sm:gap-3">
+                  <Button
+                    onClick={async () => {
+                      if (isPlaylistMode) {
+                        stopPlaylistMode();
+                      } else {
+                        try {
+                          await startPlaylistMode();
+                        } catch (error) {
+                          toast({
+                            title: "Autoplay blocked",
+                            description: "Please interact with the page first to enable playlist mode.",
+                            variant: "destructive"
+                          });
+                        }
+                      }
+                    }}
+                    variant={isPlaylistMode ? "secondary" : "secondary"}
+                    size="sm"
+                     className={`h-9 sm:h-10 md:h-11 px-2 sm:px-3 md:px-4 text-xs sm:text-sm font-medium transition-all duration-300 ${
+                       isPlaylistMode 
+                         ? 'bg-ai-blue/20 text-ai-blue border border-ai-blue/30 backdrop-blur-sm glow-primary' 
+                         : 'hover:bg-primary/10'
+                     }`}
+                  >
                    {isPlaylistMode ? (
                       <>
                         <PlayCircle className="h-4 w-4 mr-2" />
@@ -144,21 +144,21 @@ const HeroAudioPlayer = () => {
                    )}
                  </Button>
                 
-                {/* Stop Button */}
-                {(isPlaying || isPlaylistMode) && (
-                  <Button
-                    onClick={() => {
-                      stopPlayback();
-                      if (isPlaylistMode) stopPlaylistMode();
-                    }}
-                    variant="outline"
-                    size="default"
-                    className="h-11 px-4 text-sm font-medium"
-                  >
-                    <Square className="h-4 w-4 mr-2" />
-                    Stop
-                  </Button>
-                )}
+                 {/* Stop Button */}
+                 {(isPlaying || isPlaylistMode) && (
+                   <Button
+                     onClick={() => {
+                       stopPlayback();
+                       if (isPlaylistMode) stopPlaylistMode();
+                     }}
+                     variant="outline"
+                     size="sm"
+                     className="h-9 sm:h-10 md:h-11 px-2 sm:px-3 md:px-4 text-xs sm:text-sm font-medium"
+                   >
+                     <Square className="h-3 sm:h-4 w-3 sm:w-4 mr-1 sm:mr-2" />
+                     Stop
+                   </Button>
+                 )}
               </div>
            </div>
           </div>
@@ -170,9 +170,9 @@ const HeroAudioPlayer = () => {
           </div>
         </div>
 
-       {/* Enhanced Song List */}
-      <PhilippeSpecialEffects type="playlist">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 sm:gap-6 relative z-10">
+        {/* Enhanced Song List - Optimized grid for all screen sizes */}
+       <PhilippeSpecialEffects type="playlist">
+         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 sm:gap-4 md:gap-5 lg:gap-6 relative z-10">
         {songs.map((song, index) => (
           <MemoizedSongItem
             key={song.id}

@@ -79,29 +79,38 @@ const DataVisualization = () => {
         </div>
 
         <Tabs defaultValue="sentiment" className="w-full">
-          <TabsList className="grid w-full grid-cols-3 mb-6 sm:mb-8 h-auto">
-            <TabsTrigger value="sentiment" className="text-xs sm:text-sm px-2 py-3 min-h-[44px]">Sentiment Analysis</TabsTrigger>
-            <TabsTrigger value="demographics" className="text-xs sm:text-sm px-2 py-3 min-h-[44px]">Demographics</TabsTrigger>
-            <TabsTrigger value="regional" className="text-xs sm:text-sm px-2 py-3 min-h-[44px]">Regional Data</TabsTrigger>
+          <TabsList className="grid w-full grid-cols-3 mb-4 sm:mb-6 md:mb-8 h-auto">
+            <TabsTrigger value="sentiment" className="text-[10px] sm:text-xs md:text-sm px-1 sm:px-2 py-2 sm:py-3 min-h-[40px] sm:min-h-[44px]">
+              <span className="hidden sm:inline">Sentiment Analysis</span>
+              <span className="sm:hidden">Sentiment</span>
+            </TabsTrigger>
+            <TabsTrigger value="demographics" className="text-[10px] sm:text-xs md:text-sm px-1 sm:px-2 py-2 sm:py-3 min-h-[40px] sm:min-h-[44px]">
+              <span className="hidden sm:inline">Demographics</span>
+              <span className="sm:hidden">Demo</span>
+            </TabsTrigger>
+            <TabsTrigger value="regional" className="text-[10px] sm:text-xs md:text-sm px-1 sm:px-2 py-2 sm:py-3 min-h-[40px] sm:min-h-[44px]">
+              <span className="hidden sm:inline">Regional Data</span>
+              <span className="sm:hidden">Regional</span>
+            </TabsTrigger>
           </TabsList>
 
-          <TabsContent value="sentiment" className="space-y-6 sm:space-y-8">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 lg:gap-8">
+          <TabsContent value="sentiment" className="space-y-4 sm:space-y-6 md:space-y-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 md:gap-6 lg:gap-8">
               {sentimentData.map((data, index) => (
                 <Card key={index} className="border-gradient hover:glow-primary transition-smooth">
-                  <CardHeader className="pb-3 sm:pb-6">
+                  <CardHeader className="pb-2 sm:pb-3 md:pb-6 p-3 sm:p-4 md:p-6">
                     <div className="flex items-center gap-2 sm:gap-3">
-                      <div className="p-1.5 sm:p-2 rounded-lg gradient-primary flex-shrink-0">
-                        <data.icon className="w-4 sm:w-5 h-4 sm:h-5 text-primary-foreground" />
+                      <div className="p-1 sm:p-1.5 md:p-2 rounded-lg gradient-primary flex-shrink-0">
+                        <data.icon className="w-3 sm:w-4 md:w-5 h-3 sm:h-4 md:h-5 text-primary-foreground" />
                       </div>
                       <div className="min-w-0">
-                        <CardTitle className="text-base sm:text-lg leading-tight truncate">{data.category}</CardTitle>
-                        <p className="text-xs sm:text-sm text-muted-foreground">{data.total} responses</p>
+                        <CardTitle className="text-sm sm:text-base md:text-lg leading-tight truncate">{data.category}</CardTitle>
+                        <p className="text-[10px] sm:text-xs md:text-sm text-muted-foreground">{data.total} responses</p>
                       </div>
                     </div>
                   </CardHeader>
-                  <CardContent className="pt-0">
-                    <div className="space-y-3 sm:space-y-4">
+                  <CardContent className="pt-0 p-3 sm:p-4 md:p-6">
+                    <div className="space-y-2 sm:space-y-3 md:space-y-4">
                       <div className="space-y-1 sm:space-y-2">
                         <div className="flex justify-between items-center">
                           <span className="text-xs sm:text-sm font-medium flex items-center gap-1 sm:gap-2">
@@ -141,23 +150,23 @@ const DataVisualization = () => {
             </div>
           </TabsContent>
 
-          <TabsContent value="demographics" className="space-y-8">
+          <TabsContent value="demographics" className="space-y-4 sm:space-y-6 md:space-y-8">
             <Card className="border-gradient">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Users className="w-5 h-5" />
+              <CardHeader className="p-3 sm:p-4 md:p-6">
+                <CardTitle className="flex items-center gap-2 text-base sm:text-lg md:text-xl">
+                  <Users className="w-4 sm:w-5 h-4 sm:h-5" />
                   Age Group Analysis
                 </CardTitle>
-                <p className="text-muted-foreground">
+                <p className="text-xs sm:text-sm md:text-base text-muted-foreground">
                   AI usage, concerns, and optimism across different age groups
                 </p>
               </CardHeader>
-              <CardContent>
-                <div className="space-y-6">
+              <CardContent className="p-3 sm:p-4 md:p-6">
+                <div className="space-y-3 sm:space-y-4 md:space-y-6">
                   {demographicBreakdown.map((demo, index) => (
-                    <div key={index} className="p-4 rounded-lg bg-card border border-border">
-                      <h4 className="font-semibold mb-4">Age Group: {demo.age}</h4>
-                      <div className="grid grid-cols-3 gap-4">
+                    <div key={index} className="p-3 sm:p-4 rounded-lg bg-card border border-border">
+                      <h4 className="font-semibold mb-2 sm:mb-3 md:mb-4 text-sm sm:text-base">Age Group: {demo.age}</h4>
+                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
                         <div>
                           <div className="text-sm text-muted-foreground mb-1">AI Usage</div>
                           <div className="text-2xl font-bold text-ai-blue mb-2">{demo.aiUsage}%</div>
@@ -181,8 +190,8 @@ const DataVisualization = () => {
             </Card>
           </TabsContent>
 
-          <TabsContent value="regional" className="space-y-8">
-            <div className="grid md:grid-cols-3 gap-8">
+          <TabsContent value="regional" className="space-y-4 sm:space-y-6 md:space-y-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4 md:gap-6 lg:gap-8">
               {regionalData.map((region, index) => (
                 <Card key={index} className="border-gradient hover:glow-primary transition-smooth">
                   <CardHeader>
@@ -221,7 +230,7 @@ const DataVisualization = () => {
         </Tabs>
 
         {/* Summary Stats */}
-        <div className="mt-12 sm:mt-16 grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 lg:gap-6">
+        <div className="mt-8 sm:mt-12 md:mt-16 grid grid-cols-2 md:grid-cols-4 gap-2 sm:gap-3 md:gap-4 lg:gap-6">
           <div className="text-center">
             <div className="text-xl sm:text-2xl lg:text-3xl font-bold text-primary mb-1 sm:mb-2">17</div>
             <div className="text-xs sm:text-sm text-muted-foreground">Core Questions</div>
