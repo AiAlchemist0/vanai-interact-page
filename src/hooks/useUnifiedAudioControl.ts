@@ -50,6 +50,8 @@ export const useUnifiedAudioControl = (songId: string, songIndex?: number, updat
     // If clicking on the current song and it's paused, resume
     if (isCurrent && !isPlaying && currentSong) {
       try {
+        // Add console log for consistency with navigation panel
+        console.log('▶️ Manual play: Starting play tracking for:', currentSong.title);
         togglePlay();
       } catch (error) {
         toast({
@@ -66,6 +68,13 @@ export const useUnifiedAudioControl = (songId: string, songIndex?: number, updat
     try {
       // Load the specific song first
       loadSpecificSong(songId);
+      
+      // Get song metadata for console log
+      const songs = await import('@/utils/songData');
+      const songMetadata = songs.getSongMetadata(songId);
+      
+      // Add console log for consistency with navigation panel
+      console.log('▶️ Manual play: Starting play tracking for:', songMetadata.title);
       
       // Start play tracking for the new song (geographic tracking is now session-based)
       await startPlayTracking(songId);
