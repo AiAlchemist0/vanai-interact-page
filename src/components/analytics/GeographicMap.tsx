@@ -85,20 +85,20 @@ const GeographicMap = () => {
     <TooltipProvider>
       <Card className="bg-slate-900/50 border-purple-500/30 shadow-2xl shadow-purple-500/10 backdrop-blur-xl">
         <CardHeader className="border-b border-purple-500/20">
-          <CardTitle className="flex items-center space-x-2 text-purple-300">
-            <Globe className="h-5 w-5 text-green-400" />
+          <CardTitle className="flex items-center space-x-2 text-white text-xl lg:text-2xl">
+            <Globe className="h-6 w-6 lg:h-7 lg:w-7 text-green-300" />
             <span>Global Listening Distribution</span>
           </CardTitle>
         </CardHeader>
         <CardContent className="p-6">
           <div className="space-y-4">
             {geoData.slice(0, 5).map((location, index) => (
-              <div key={`${location.region}-${location.city}-${index}`} className="flex items-center justify-between p-3 bg-slate-800/50 rounded-lg">
+              <div key={`${location.region}-${location.city}-${index}`} className="flex items-center justify-between p-4 bg-slate-800/60 rounded-lg hover:bg-slate-800/80 transition-colors duration-200 touch-manipulation min-h-[60px]">
                 <div className="flex items-center space-x-3">
-                  <MapPin className="h-4 w-4 text-green-400" />
-                  <span className="text-slate-300">{location.city}, {location.region}</span>
+                  <MapPin className="h-5 w-5 lg:h-6 lg:w-6 text-green-300" />
+                  <span className="text-slate-200 text-base lg:text-lg font-medium">{location.city}, {location.region}</span>
                 </div>
-                <span className="text-green-400 font-semibold">{location.listening_count}</span>
+                <span className="text-green-300 font-semibold text-lg lg:text-xl">{location.listening_count}</span>
               </div>
             ))}
           </div>

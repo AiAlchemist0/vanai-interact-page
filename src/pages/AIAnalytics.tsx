@@ -44,46 +44,50 @@ const AIAnalyticsContent = () => {
       {/* Header */}
       <div className="relative z-10 border-b border-purple-500/20 bg-slate-950/50 backdrop-blur-xl">
         <div className="container mx-auto px-4 py-6">
-          <div className="flex items-center justify-between">
+          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
             <div className="flex items-center space-x-4">
               <div className="p-3 bg-gradient-to-r from-purple-500 to-cyan-500 rounded-xl shadow-lg shadow-purple-500/25">
                 <BarChart3 className="h-8 w-8 text-white" />
               </div>
               <div>
-                <h1 className="text-3xl font-bold bg-gradient-to-r from-purple-400 via-pink-400 to-cyan-400 bg-clip-text text-transparent">
+                <h1 className="text-2xl lg:text-3xl font-bold bg-gradient-to-r from-purple-400 via-pink-400 to-cyan-400 bg-clip-text text-transparent">
                   AI Music Analytics Dashboard
                 </h1>
-                <p className="text-slate-400 mt-1">Real-time insights into British Columbia's music landscape</p>
+                <p className="text-slate-300 mt-1 text-sm lg:text-base">Real-time insights into British Columbia's music landscape</p>
               </div>
             </div>
-            <div className="flex items-center space-x-4">
-              <Button
-                onClick={() => navigate("/")}
-                variant="outline"
-                size="sm"
-                className="border-purple-500/50 text-purple-400 bg-purple-500/10 hover:bg-purple-500/20 hover:text-purple-300"
-              >
-                <Home className="h-4 w-4 mr-2" />
-                Home
-              </Button>
-              <Button
-                onClick={handleRefreshAll}
-                disabled={isRefreshing}
-                variant="outline"
-                size="sm"
-                className="border-purple-500/50 text-purple-400 bg-purple-500/10 hover:bg-purple-500/20 hover:text-purple-300"
-              >
-                <RefreshCw className={`h-4 w-4 mr-2 ${isRefreshing ? 'animate-spin' : ''}`} />
-                Refresh All
-              </Button>
-              <Badge variant="outline" className="border-green-500/50 text-green-400 bg-green-500/10">
-                <Activity className="h-3 w-3 mr-1 animate-pulse" />
-                Live
-              </Badge>
-              <div className="text-right">
-                <div className="text-sm text-slate-400">Current Time</div>
-                <div className="font-mono text-cyan-400 font-semibold">
-                  {currentTime.toLocaleTimeString()}
+            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4">
+              <div className="flex items-center gap-3">
+                <Button
+                  onClick={() => navigate("/")}
+                  variant="outline"
+                  size="default"
+                  className="border-purple-500/50 text-purple-300 bg-purple-500/10 hover:bg-purple-500/20 hover:text-white min-h-[44px] px-6"
+                >
+                  <Home className="h-5 w-5 mr-2" />
+                  Home
+                </Button>
+                <Button
+                  onClick={handleRefreshAll}
+                  disabled={isRefreshing}
+                  variant="outline"
+                  size="default"
+                  className="border-purple-500/50 text-purple-300 bg-purple-500/10 hover:bg-purple-500/20 hover:text-white min-h-[44px] px-6"
+                >
+                  <RefreshCw className={`h-5 w-5 mr-2 ${isRefreshing ? 'animate-spin' : ''}`} />
+                  Refresh All
+                </Button>
+              </div>
+              <div className="flex items-center gap-3">
+                <Badge variant="outline" className="border-green-500/50 text-green-300 bg-green-500/10 px-3 py-1">
+                  <Activity className="h-4 w-4 mr-1 animate-pulse" />
+                  Live
+                </Badge>
+                <div className="text-right">
+                  <div className="text-sm text-slate-300">Current Time</div>
+                  <div className="font-mono text-cyan-300 font-semibold text-lg">
+                    {currentTime.toLocaleTimeString()}
+                  </div>
                 </div>
               </div>
             </div>

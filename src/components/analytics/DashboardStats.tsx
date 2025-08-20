@@ -136,58 +136,58 @@ const DashboardStats = () => {
       <div className="space-y-4">
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center space-x-3">
-            <div className="p-2 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg shadow-lg shadow-blue-500/25">
-              <TrendingUp className="h-6 w-6 text-white" />
+            <div className="p-3 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg shadow-lg shadow-blue-500/25">
+              <TrendingUp className="h-7 w-7 text-white" />
             </div>
             <div>
-              <h2 className="text-xl font-semibold text-white">Analytics Overview</h2>
-              <p className="text-slate-400 text-sm">Real-time performance metrics</p>
+              <h2 className="text-2xl lg:text-3xl font-semibold text-white">Analytics Overview</h2>
+              <p className="text-slate-300 text-base lg:text-lg">Real-time performance metrics</p>
             </div>
           </div>
           
         </div>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-7 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-7 gap-4 lg:gap-6">
           {statCards.map((stat, index) => {
           const Icon = stat.icon;
-          return <Card key={stat.title} className="bg-slate-900/50 border-purple-500/30 shadow-2xl shadow-purple-500/10 backdrop-blur-xl hover:scale-105 transition-all duration-300 group" style={{
+          return <Card key={stat.title} className="bg-slate-900/60 border-purple-500/40 shadow-2xl shadow-purple-500/20 backdrop-blur-xl hover:scale-[1.02] hover:shadow-purple-500/30 transition-all duration-300 group touch-manipulation min-h-[200px] sm:min-h-[180px]" style={{
             animationDelay: `${index * 100}ms`
           }}>
-                <CardContent className="p-6">
+                <CardContent className="p-4 lg:p-6 h-full flex flex-col justify-between">
                   <div className="flex items-center justify-between mb-4">
-                    <div className={`p-3 rounded-xl bg-gradient-to-r ${stat.gradient} shadow-lg group-hover:shadow-xl transition-shadow duration-300`}>
-                      <Icon className="h-6 w-6 text-white" />
+                    <div className={`p-3 lg:p-4 rounded-xl bg-gradient-to-r ${stat.gradient} shadow-lg group-hover:shadow-xl transition-shadow duration-300`}>
+                      <Icon className="h-6 w-6 lg:h-7 lg:w-7 text-white" />
                     </div>
                     <div className="text-right">
-                      <div className="text-xs text-green-400 font-medium">{stat.change}</div>
+                      <div className="text-sm lg:text-base text-green-300 font-medium">{stat.change}</div>
                     </div>
                   </div>
                   
-                  <div className="space-y-1">
+                  <div className="space-y-2 flex-1">
                     <div className="flex items-center justify-between">
-                      <h3 className="text-sm font-medium text-slate-400">{stat.title}</h3>
+                      <h3 className="text-sm lg:text-base font-medium text-slate-300">{stat.title}</h3>
                       <Tooltip>
                         <TooltipTrigger asChild>
-                          <Info className="h-3 w-3 text-slate-500 hover:text-slate-300 cursor-help" />
+                          <Info className="h-4 w-4 text-slate-400 hover:text-slate-200 cursor-help touch-manipulation" />
                         </TooltipTrigger>
-                        <TooltipContent className="max-w-xs z-50 bg-slate-800 border-slate-700">
+                        <TooltipContent className="max-w-xs z-50 bg-slate-800 border-slate-700 text-slate-100">
                           <div className="space-y-2">
                             <p className="text-sm">{stat.tooltipInfo}</p>
-                            <div className="text-xs text-slate-400 border-t border-slate-700 pt-2">
+                            <div className="text-xs text-slate-300 border-t border-slate-700 pt-2">
                               Last updated: {formatTimeAgo(lastRefreshed)}
                             </div>
                           </div>
                         </TooltipContent>
                       </Tooltip>
                     </div>
-                    <div className="text-2xl font-bold text-white group-hover:text-cyan-300 transition-colors duration-300">
+                    <div className="text-3xl lg:text-4xl xl:text-2xl font-bold text-white group-hover:text-cyan-200 transition-colors duration-300">
                       {typeof stat.value === 'number' && stat.title !== "Peak Hour" ? stat.value.toLocaleString() : stat.value}
                     </div>
-                    <p className="text-xs text-slate-500">{stat.description}</p>
+                    <p className="text-sm lg:text-base text-slate-400">{stat.description}</p>
                   </div>
                   
                   {/* Glow effect on hover */}
-                  <div className={`absolute inset-0 rounded-lg bg-gradient-to-r ${stat.gradient} opacity-0 group-hover:opacity-5 transition-opacity duration-300 pointer-events-none`} />
+                  <div className={`absolute inset-0 rounded-lg bg-gradient-to-r ${stat.gradient} opacity-0 group-hover:opacity-10 transition-opacity duration-300 pointer-events-none`} />
                 </CardContent>
               </Card>;
         })}

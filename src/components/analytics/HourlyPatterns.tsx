@@ -92,8 +92,8 @@ const HourlyPatterns = () => {
     <TooltipProvider>
       <Card className="bg-slate-900/50 border-purple-500/30 shadow-2xl shadow-purple-500/10 backdrop-blur-xl">
         <CardHeader className="border-b border-purple-500/20">
-          <CardTitle className="flex items-center space-x-2 text-purple-300">
-            <Clock className="h-5 w-5 text-cyan-400" />
+          <CardTitle className="flex items-center space-x-2 text-white text-xl lg:text-2xl">
+            <Clock className="h-6 w-6 lg:h-7 lg:w-7 text-cyan-300" />
             <span>Listening Patterns by Hour</span>
           </CardTitle>
         </CardHeader>
@@ -106,12 +106,12 @@ const HourlyPatterns = () => {
                   tickFormatter={formatLabel}
                   axisLine={false}
                   tickLine={false}
-                  tick={{ fontSize: 12, fill: '#94a3b8' }}
+                  tick={{ fontSize: 14, fill: '#cbd5e1' }}
                 />
                 <YAxis 
                   axisLine={false}
                   tickLine={false}
-                  tick={{ fontSize: 12, fill: '#94a3b8' }}
+                  tick={{ fontSize: 14, fill: '#cbd5e1' }}
                 />
                 <Bar 
                   dataKey="play_count" 

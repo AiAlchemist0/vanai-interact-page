@@ -425,11 +425,11 @@ const EnhancedTopSongsAnalytics = () => {
                     }`}
                   >
                     {/* Rank Badge */}
-                    <div className={`absolute -top-3 -left-3 w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm border-2 border-background ${
+                    <div className={`absolute -top-3 -left-3 w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm border-2 border-background ${
                       index === 0 ? 'bg-gradient-primary text-background' :
                       index === 1 ? 'bg-gradient-secondary text-background' :
                       index === 2 ? 'bg-gradient-accent text-background' :
-                      'bg-secondary text-secondary-foreground'
+                      'bg-slate-200 text-slate-900 border border-slate-300'
                     }`}>
                       #{index + 1}
                     </div>
@@ -459,10 +459,10 @@ const EnhancedTopSongsAnalytics = () => {
                         )}
                       </div>
                       <div className="flex-1 min-w-0">
-                        <h3 className="font-semibold text-foreground text-sm truncate">
+                        <h3 className="font-semibold text-white text-lg lg:text-xl truncate">
                           {metadata?.title || song.song_id.replace(/-/g, ' ')}
                         </h3>
-                        <p className="text-xs text-muted-foreground truncate">
+                        <p className="text-sm lg:text-base text-slate-300 truncate">
                           {metadata?.artist || 'Unknown Artist'}
                         </p>
                       </div>
@@ -471,12 +471,12 @@ const EnhancedTopSongsAnalytics = () => {
                     {/* Primary Metric */}
                     <div className="mb-4">
                       <div className="flex items-center justify-between mb-2">
-                        <span className="text-xs text-muted-foreground">
+                        <span className="text-sm lg:text-base text-slate-300">
                           {viewMode === 'plays' ? 'Total Plays' : 
                            viewMode === 'likes' ? 'Total Likes' : 
                            'Engagement Score'}
                         </span>
-                        <span className={`text-2xl font-bold ${performance.textColor}`}>
+                        <span className={`text-3xl lg:text-4xl font-bold text-white`}>
                           {currentValue.toLocaleString()}
                         </span>
                       </div>
@@ -487,10 +487,10 @@ const EnhancedTopSongsAnalytics = () => {
                         />
                       </div>
                       <div className="flex justify-between mt-1">
-                        <span className="text-xs text-muted-foreground">
+                        <span className="text-sm text-slate-300">
                           {progressPercentage.toFixed(0)}%
                         </span>
-                        <span className="text-xs text-muted-foreground">
+                        <span className="text-sm text-slate-300">
                           {performance.level}
                         </span>
                       </div>
