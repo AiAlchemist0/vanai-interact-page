@@ -127,28 +127,13 @@ const Hero = () => {
             </div>
           </div>
 
-          {/* Main CTA Button */}
-          <div className="flex justify-center">
-            <Button 
-              size="lg"
-              onClick={() => handleSmoothScroll('audio-experience')}
-              className="gradient-primary hover:glow-primary transition-all duration-300 hover:scale-105 focus:scale-105 px-6 sm:px-8 py-4 sm:py-6 text-base sm:text-lg lg:text-xl font-semibold rounded-full shadow-xl hover:shadow-2xl animate-fade-in min-h-[56px] sm:min-h-[64px] group focus:outline-2 focus:outline-offset-2 focus:outline-primary"
-              aria-label="Explore BC AI Album - Navigate to audio experience section"
-            >
-              <span className="flex items-center gap-2 sm:gap-3">
-                🎵 Explore BC AI Album Now
-                <span className="group-hover:translate-x-1 transition-transform duration-300" aria-hidden="true">→</span>
-              </span>
-            </Button>
-          </div>
-
           {/* Secondary Action Buttons */}
           <nav className="flex flex-wrap items-center justify-center gap-3 sm:gap-4" aria-label="Quick navigation">
             <div className="flex items-center gap-2">
               <Button 
                 size="lg" 
                 variant="secondary"
-                className="min-h-[48px] px-4 sm:px-6 gap-2 hover:scale-105 transition-all duration-300 focus:scale-105 focus:outline-2 focus:outline-offset-2 focus:outline-secondary"
+                className="min-h-[48px] px-4 sm:px-6 gap-2 hover:scale-105 transition-all duration-300 focus:scale-105 focus:outline-2 focus:outline-offset-2 focus:outline-secondary bg-gradient-to-r from-ai-cyan/20 to-primary/20 hover:from-ai-cyan/30 hover:to-primary/30 border-ai-cyan/30 text-ai-cyan hover:text-white hover:shadow-lg hover:shadow-ai-cyan/20"
                 onClick={() => handleSmoothScroll('vision')}
                 aria-label="View project vision and watch video"
               >
@@ -159,7 +144,7 @@ const Hero = () => {
               <Button 
                 size="icon" 
                 variant="outline"
-                className="min-h-[48px] min-w-[48px] hover:scale-105 transition-all duration-300 focus:scale-105 focus:outline-2 focus:outline-offset-2"
+                className="min-h-[48px] min-w-[48px] hover:scale-105 transition-all duration-300 focus:scale-105 focus:outline-2 focus:outline-offset-2 border-ai-cyan/30 text-ai-cyan hover:bg-ai-cyan/10 hover:border-ai-cyan/50 hover:text-ai-cyan hover:shadow-md"
                 onClick={() => handleSmoothScroll('vision')}
                 aria-label="Watch vision video"
               >
@@ -171,7 +156,7 @@ const Hero = () => {
               <Button 
                 size="lg" 
                 variant="secondary"
-                className="min-h-[48px] px-4 sm:px-6 gap-2 hover:scale-105 transition-all duration-300 focus:scale-105 focus:outline-2 focus:outline-offset-2 focus:outline-secondary"
+                className="min-h-[48px] px-4 sm:px-6 gap-2 hover:scale-105 transition-all duration-300 focus:scale-105 focus:outline-2 focus:outline-offset-2 focus:outline-secondary bg-gradient-to-r from-ai-purple/20 to-ai-green/20 hover:from-ai-purple/30 hover:to-ai-green/30 border-ai-purple/30 text-ai-purple hover:text-white hover:shadow-lg hover:shadow-ai-purple/20"
                 onClick={() => handleSmoothScroll('insights')}
                 aria-label="View survey insights and analytics"
               >
@@ -182,7 +167,7 @@ const Hero = () => {
               <Button 
                 size="icon" 
                 variant="outline"
-                className="min-h-[48px] min-w-[48px] hover:scale-105 transition-all duration-300 focus:scale-105 focus:outline-2 focus:outline-offset-2"
+                className="min-h-[48px] min-w-[48px] hover:scale-105 transition-all duration-300 focus:scale-105 focus:outline-2 focus:outline-offset-2 border-ai-purple/30 text-ai-purple hover:bg-ai-purple/10 hover:border-ai-purple/50 hover:text-ai-purple hover:shadow-md"
                 onClick={() => navigate('/ai-analytics')}
                 aria-label="Go to AI Analytics dashboard"
               >
@@ -193,7 +178,7 @@ const Hero = () => {
             <Button 
               size="lg" 
               variant="secondary"
-              className="min-h-[48px] px-4 sm:px-6 gap-2 hover:scale-105 transition-all duration-300 focus:scale-105 focus:outline-2 focus:outline-offset-2 focus:outline-secondary"
+              className="min-h-[48px] px-4 sm:px-6 gap-2 hover:scale-105 transition-all duration-300 focus:scale-105 focus:outline-2 focus:outline-offset-2 focus:outline-secondary bg-gradient-to-r from-ai-green/20 to-ai-cyan/20 hover:from-ai-green/30 hover:to-ai-cyan/30 border-ai-green/30 text-ai-green hover:text-white hover:shadow-lg hover:shadow-ai-green/20"
               onClick={() => navigate('/game')}
               aria-label="Play BC AI interactive game"
             >
@@ -206,7 +191,7 @@ const Hero = () => {
                 <Button 
                   size="icon" 
                   variant="outline"
-                  className="min-h-[48px] min-w-[48px] hover:scale-105 transition-all duration-300 focus:scale-105 focus:outline-2 focus:outline-offset-2"
+                  className="min-h-[48px] min-w-[48px] hover:scale-105 transition-all duration-300 focus:scale-105 focus:outline-2 focus:outline-offset-2 border-muted-foreground/30 text-muted-foreground hover:bg-muted-foreground/10 hover:border-muted-foreground/50 hover:text-foreground hover:shadow-md"
                   aria-label="View legal disclaimer and project information"
                 >
                   <Shield className="w-5 h-5" />
@@ -292,6 +277,21 @@ const Hero = () => {
               </DialogContent>
             </Dialog>
           </nav>
+
+          {/* Main CTA Button */}
+          <div className="flex justify-center">
+            <Button 
+              size="lg"
+              onClick={() => handleSmoothScroll('audio-experience')}
+              className="gradient-primary hover:glow-primary transition-all duration-300 hover:scale-105 focus:scale-105 px-6 sm:px-8 py-4 sm:py-6 text-base sm:text-lg lg:text-xl font-semibold rounded-full shadow-xl hover:shadow-2xl animate-fade-in min-h-[56px] sm:min-h-[64px] group focus:outline-2 focus:outline-offset-2 focus:outline-primary"
+              aria-label="Explore BC AI Album - Navigate to audio experience section"
+            >
+              <span className="flex items-center gap-2 sm:gap-3">
+                🎵 Explore BC AI Album Now
+                <span className="group-hover:translate-x-1 transition-transform duration-300" aria-hidden="true">→</span>
+              </span>
+            </Button>
+          </div>
 
         </div>
       </div>
