@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Heart, Info } from "lucide-react";
+import { Heart, Info, Play, Pause } from "lucide-react";
 import { useUnifiedAudioControl } from '@/hooks/useUnifiedAudioControl';
 import { UnifiedPlayButton } from '@/components/ui/UnifiedPlayButton';
 import { SongInfoModal } from '@/components/SongInfoModal';
@@ -40,27 +40,27 @@ const SongItem: React.FC<SongItemProps> = ({
 
   return (
     <div
-      className={`relative ${isMobile ? 'flex flex-row items-center p-2 gap-3' : 'flex flex-col items-center p-3 sm:p-4 lg:p-3 aspect-square'} rounded-xl transition-all duration-200 border touch-manipulation cursor-pointer hover:scale-[1.02] ${
+      className={`relative ${isMobile ? 'flex flex-row items-center p-3 gap-4' : 'flex flex-col items-center p-3 sm:p-4 lg:p-3 aspect-square'} rounded-xl transition-all duration-200 border touch-manipulation cursor-pointer hover:scale-[1.02] ${
         index === currentSongIndex 
           ? `bg-primary/10 border-primary/30 shadow-lg ${isPlaylistMode ? 'ring-2 ring-primary/20' : ''}` 
           : 'bg-muted/20 hover:bg-muted/40 border-border/20'
       }`}
-      onClick={handlePlay}
+      onClick={!isMobile ? handlePlay : undefined}
     >
       {/* Album Art - Responsive layout */}
       <div className={`relative ${isMobile ? 'flex-shrink-0' : 'mb-2 sm:mb-3 flex-1'} flex items-center justify-center`}>
         <img 
           src={song.coverArt} 
           alt={`${song.title} cover`} 
-          className={`${isMobile ? 'w-16 h-16' : 'w-28 h-28 sm:w-36 sm:h-36 lg:w-32 lg:h-32'} rounded-lg object-cover shadow-md transition-all duration-200`}
+          className={`${isMobile ? 'w-20 h-20' : 'w-28 h-28 sm:w-36 sm:h-36 lg:w-32 lg:h-32'} rounded-lg object-cover shadow-md transition-all duration-200`}
         />
         
         {/* Playing Animation Indicator */}
         {index === currentSongIndex && isPlaying && (
-          <div className={`absolute -top-1 -right-1 ${isMobile ? 'w-2 h-2' : 'w-3 h-3 sm:w-4 sm:h-4'} bg-primary rounded-full animate-pulse shadow-lg`} />
+          <div className={`absolute -top-1 -right-1 ${isMobile ? 'w-3 h-3' : 'w-3 h-3 sm:w-4 sm:h-4'} bg-primary rounded-full animate-pulse shadow-lg`} />
         )}
 
-        {/* Large Play Button Overlay - Shows on hover */}
+        {/* Large Play Button Overlay - Shows on hover (Desktop only) */}
         {!isMobile && (
           <div className={`absolute inset-0 flex items-center justify-center transition-all duration-200 ${
             audioState.isPlaying ? 'opacity-0 hover:opacity-100' : 'opacity-0 hover:opacity-100'
@@ -81,10 +81,10 @@ const SongItem: React.FC<SongItemProps> = ({
       </div>
 
       {/* Main Content Area - Responsive */}
-      <div className={`${isMobile ? 'flex-1 flex flex-col justify-between min-w-0' : 'w-full text-center'}`}>
+      <div className={`${isMobile ? 'flex-1 flex flex-col justify-between min-w-0 pr-2' : 'w-full text-center'}`}>
         {/* Song Details */}
-        <div className={`${isMobile ? 'mb-2' : 'px-1'}`}>
-          <h4 className={`${isMobile ? 'text-sm' : 'text-xs sm:text-sm'} font-semibold truncate leading-tight mb-1 ${
+        <div className={`${isMobile ? 'mb-3' : 'px-1'}`}>
+          <h4 className={`${isMobile ? 'text-base' : 'text-xs sm:text-sm'} font-semibold truncate leading-tight mb-1 ${
             index === currentSongIndex ? 'text-primary' : 'text-foreground'
           }`}>
             {song.title}
@@ -94,15 +94,15 @@ const SongItem: React.FC<SongItemProps> = ({
           </p>
           
           {/* Status Message - Compact */}
-          <div className={`${isMobile ? 'h-4 mt-1' : 'h-3 mt-1'}`}>
+          <div className={`${isMobile ? 'h-5 mt-2' : 'h-3 mt-1'}`}>
             {audioState.isLoading && (
-              <div className={`${isMobile ? 'text-xs' : 'text-[10px]'} text-primary font-medium truncate flex items-center ${isMobile ? 'justify-start' : 'justify-center'} gap-1`}>
+              <div className={`${isMobile ? 'text-sm' : 'text-[10px]'} text-primary font-medium truncate flex items-center ${isMobile ? 'justify-start' : 'justify-center'} gap-1`}>
                 <span className="animate-spin">♪</span>
                 Loading...
               </div>
             )}
             {audioState.isPlaying && (
-              <div className={`${isMobile ? 'text-xs' : 'text-[10px]'} text-primary font-medium truncate ${isMobile ? 'text-left' : 'text-center'}`}>
+              <div className={`${isMobile ? 'text-sm' : 'text-[10px]'} text-primary font-medium truncate ${isMobile ? 'text-left' : 'text-center'}`}>
                 Playing
               </div>
             )}
@@ -122,17 +122,17 @@ const SongItem: React.FC<SongItemProps> = ({
         </div>
 
         {/* Action Buttons - Responsive positioning */}
-        <div className={`flex ${isMobile ? 'justify-start' : 'justify-center'} gap-2 ${isMobile ? '' : 'mb-2'}`}>
+        <div className={`flex ${isMobile ? 'justify-start' : 'justify-center'} gap-3 ${isMobile ? '' : 'mb-2'}`}>
           {/* Like Button */}
           <button
             onClick={(e) => {
               e.stopPropagation();
               onLikeClick(song.id, e);
             }}
-            className={`group relative transition-all duration-300 hover:scale-110 touch-manipulation ${isMobile ? 'p-1.5' : 'p-2'} bg-background/90 backdrop-blur-md rounded-full border border-border/50 hover:border-border shadow-lg hover:shadow-xl`}
+            className={`group relative transition-all duration-300 hover:scale-110 touch-manipulation ${isMobile ? 'p-2' : 'p-2'} bg-background/90 backdrop-blur-md rounded-full border border-border/50 hover:border-border shadow-lg hover:shadow-xl`}
           >
             <Heart 
-              className={`${isMobile ? 'w-3 h-3' : 'w-4 h-4'} transition-colors duration-200 ${
+              className={`${isMobile ? 'w-4 h-4' : 'w-4 h-4'} transition-colors duration-200 ${
                 isLiked(song.id) 
                   ? 'text-red-500 fill-red-500' 
                   : 'text-muted-foreground group-hover:text-red-400'
@@ -140,7 +140,7 @@ const SongItem: React.FC<SongItemProps> = ({
             />
             {/* Like count badge */}
             {getLikeCount(song.id) > 0 && (
-              <span className={`absolute -top-1 -right-1 bg-red-500 text-white ${isMobile ? 'text-[8px]' : 'text-[9px]'} font-bold rounded-full min-w-[14px] ${isMobile ? 'h-3.5 px-0.5' : 'h-4 px-1'} flex items-center justify-center shadow-md`}>
+              <span className={`absolute -top-1 -right-1 bg-red-500 text-white ${isMobile ? 'text-[9px]' : 'text-[9px]'} font-bold rounded-full min-w-[16px] ${isMobile ? 'h-4 px-1' : 'h-4 px-1'} flex items-center justify-center shadow-md`}>
                 {getLikeCount(song.id)}
               </span>
             )}
@@ -152,35 +152,37 @@ const SongItem: React.FC<SongItemProps> = ({
               e.stopPropagation();
               setShowInfoModal(true);
             }}
-            className={`group transition-all duration-300 hover:scale-110 touch-manipulation ${isMobile ? 'p-1.5' : 'p-2'} bg-background/90 backdrop-blur-md rounded-full border border-border/50 hover:border-border shadow-lg hover:shadow-xl`}
+            className={`group transition-all duration-300 hover:scale-110 touch-manipulation ${isMobile ? 'p-2' : 'p-2'} bg-background/90 backdrop-blur-md rounded-full border border-border/50 hover:border-border shadow-lg hover:shadow-xl`}
           >
             <Info 
-              className={`${isMobile ? 'w-3 h-3' : 'w-4 h-4'} text-muted-foreground group-hover:text-primary transition-colors duration-200`}
+              className={`${isMobile ? 'w-4 h-4' : 'w-4 h-4'} text-muted-foreground group-hover:text-primary transition-colors duration-200`}
             />
           </button>
-
-          {/* Mobile Play Button */}
-          {isMobile && (
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                audioState.isPlaying ? handleStop() : handlePlay();
-              }}
-              className="group transition-all duration-300 hover:scale-110 touch-manipulation p-1.5 bg-background/90 backdrop-blur-md rounded-full border border-border/50 hover:border-border shadow-lg hover:shadow-xl"
-            >
-              <UnifiedPlayButton
-                audioState={audioState}
-                onPlay={() => handlePlay()}
-                onStop={() => handleStop()}
-                size="sm"
-                variant="ghost"
-                showProgress={false}
-                className="w-3 h-3 text-muted-foreground group-hover:text-primary"
-              />
-            </button>
-          )}
         </div>
       </div>
+
+      {/* Mobile Play Button - Positioned at the right edge */}
+      {isMobile && (
+        <div className="flex-shrink-0 ml-2">
+          <div
+            onClick={(e) => {
+              e.stopPropagation();
+              audioState.isPlaying ? handleStop() : handlePlay();
+            }}
+            className="p-3 bg-primary/10 hover:bg-primary/20 rounded-full border border-primary/30 hover:border-primary/50 transition-all duration-300 hover:scale-110 touch-manipulation shadow-lg hover:shadow-xl cursor-pointer"
+          >
+            {audioState.isLoading ? (
+              <div className="w-6 h-6 flex items-center justify-center">
+                <div className="w-4 h-4 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+              </div>
+            ) : audioState.isPlaying ? (
+              <Pause className="w-6 h-6 text-primary" />
+            ) : (
+              <Play className="w-6 h-6 text-primary ml-0.5" />
+            )}
+          </div>
+        </div>
+      )}
        
        {/* Song Info Modal */}
        <SongInfoModal 
