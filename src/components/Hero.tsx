@@ -73,7 +73,7 @@ const Hero = () => {
           </div>
 
           {/* Logo and Stats Grid - Optimized for tablet */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4 lg:gap-6 max-w-6xl mx-auto">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3 sm:gap-4 lg:gap-6 max-w-6xl mx-auto">
             {/* BC+AI Logo Section */}
             <div className="bg-card/50 backdrop-blur-sm border border-border rounded-xl p-4 sm:p-6 lg:p-8 text-center flex items-center justify-center min-h-[100px] sm:min-h-[120px] md:min-h-[140px]">
               <a 
