@@ -40,48 +40,103 @@ const SongItem: React.FC<SongItemProps> = ({
 
   return (
     <div
-      className={`relative group ${isMobile ? 'flex flex-row items-center p-4 gap-4 rounded-xl min-h-[100px]' : 'flex flex-col items-center p-4 sm:p-5 lg:p-4 rounded-xl min-h-[280px] sm:min-h-[320px]'} transition-all duration-300 border touch-manipulation cursor-pointer ${isMobile ? 'hover:shadow-lg active:scale-[0.98]' : 'hover:scale-[1.02] hover:shadow-xl'} ${
+      className={`relative group ${isMobile ? 'flex flex-row items-start p-4 gap-4 rounded-xl min-h-[100px]' : 'flex flex-col items-center p-4 sm:p-5 lg:p-4 rounded-xl min-h-[280px] sm:min-h-[320px]'} transition-all duration-300 border touch-manipulation cursor-pointer ${isMobile ? 'hover:shadow-lg active:scale-[0.98]' : 'hover:scale-[1.02] hover:shadow-xl'} ${
         index === currentSongIndex 
           ? `bg-primary/10 border-primary/30 shadow-lg ${isPlaylistMode ? 'ring-2 ring-primary/20' : ''}` 
           : 'bg-card/60 hover:bg-card/80 border-border/30 hover:border-border/50'
       }`}
-      onClick={isMobile ? (audioState.isPlaying ? handleStop : handlePlay) : handlePlay}
+      onClick={isMobile ? undefined : handlePlay}
     >
-      {/* Album Art - Responsive layout */}
-      <div className={`relative ${isMobile ? 'flex-shrink-0' : 'mb-4 sm:mb-5 flex-1'} flex items-center justify-center`}>
-        <img 
-          src={song.coverArt} 
-          alt={`${song.title} cover`} 
-          className={`${isMobile ? 'w-20 h-20' : 'w-full max-w-[200px] aspect-square'} rounded-lg object-cover shadow-md transition-all duration-300`}
-        />
-        
-        {/* Playing Animation Indicator */}
-        {index === currentSongIndex && isPlaying && (
-          <div className={`absolute ${isMobile ? '-top-1 -right-1 w-4 h-4' : '-top-2 -right-2 w-5 h-5'} bg-primary rounded-full animate-pulse shadow-lg border-2 border-background`} />
-        )}
-
-        {/* Play Button Overlay - Desktop: on hover, Mobile: always visible */}
-        <div className={`absolute inset-0 flex items-center justify-center transition-all duration-200 ${
-          isMobile 
-            ? 'opacity-100' 
-            : (audioState.isPlaying ? 'opacity-0 hover:opacity-100' : 'opacity-0 hover:opacity-100')
-        }`}>
-          <div className={`bg-black/70 backdrop-blur-sm rounded-full p-4 transform transition-all duration-200 ${isMobile ? '' : 'hover:scale-110'} shadow-xl ${isMobile ? 'min-w-[48px] min-h-[48px]' : 'min-w-[56px] min-h-[56px]'}`}>
-            {audioState.isLoading ? (
-              <div className="w-7 h-7 flex items-center justify-center">
-                <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
-              </div>
-            ) : audioState.isPlaying ? (
-              <Pause className="w-7 h-7 text-white" />
-            ) : (
-              <Play className="w-7 h-7 text-white ml-0.5" />
+      {/* Left Column: Album Art + Action Buttons (Mobile Only) */}
+      {isMobile ? (
+        <div className="flex flex-col items-center gap-3 flex-shrink-0">
+          {/* Album Art */}
+          <div className="relative">
+            <img 
+              src={song.coverArt} 
+              alt={`${song.title} cover`} 
+              className="w-20 h-20 rounded-lg object-cover shadow-md transition-all duration-300"
+            />
+            
+            {/* Playing Animation Indicator */}
+            {index === currentSongIndex && isPlaying && (
+              <div className="absolute -top-1 -right-1 w-4 h-4 bg-primary rounded-full animate-pulse shadow-lg border-2 border-background" />
             )}
           </div>
+
+          {/* Action Buttons under Cover Art */}
+          <div className="flex gap-2">
+            {/* Like Button */}
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                onLikeClick(song.id, e);
+              }}
+              className="group relative transition-all duration-300 hover:scale-105 active:scale-95 touch-manipulation p-2 bg-background/95 backdrop-blur-sm rounded-full border border-border/30 hover:border-border/60 shadow-md hover:shadow-lg min-w-[40px] min-h-[40px]"
+            >
+              <div className="relative flex items-center justify-center w-5 h-5">
+                <Heart 
+                  className="w-5 h-5 transition-colors duration-200"
+                  style={{ 
+                    color: isLiked(song.id) ? '#ef4444' : '#6b7280',
+                    fill: isLiked(song.id) ? '#ef4444' : 'transparent'
+                  }}
+                />
+                {getLikeCount(song.id) > 0 && (
+                  <span className="absolute inset-0 flex items-center justify-center text-[9px] font-bold text-white mix-blend-difference">
+                    {getLikeCount(song.id)}
+                  </span>
+                )}
+              </div>
+            </button>
+            
+            {/* Info Button */}
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                setShowInfoModal(true);
+              }}
+              className="group transition-all duration-300 hover:scale-105 active:scale-95 touch-manipulation p-2 bg-background/95 backdrop-blur-sm rounded-full border border-border/30 hover:border-border/60 shadow-md hover:shadow-lg min-w-[40px] min-h-[40px]"
+            >
+              <Info className="w-4 h-4 text-muted-foreground group-hover:text-primary transition-colors duration-200" />
+            </button>
+          </div>
         </div>
-      </div>
+      ) : (
+        /* Desktop Album Art */
+        <div className="relative mb-4 sm:mb-5 flex-1 flex items-center justify-center">
+          <img 
+            src={song.coverArt} 
+            alt={`${song.title} cover`} 
+            className="w-full max-w-[200px] aspect-square rounded-lg object-cover shadow-md transition-all duration-300"
+          />
+          
+          {/* Playing Animation Indicator */}
+          {index === currentSongIndex && isPlaying && (
+            <div className="absolute -top-2 -right-2 w-5 h-5 bg-primary rounded-full animate-pulse shadow-lg border-2 border-background" />
+          )}
+
+          {/* Play Button Overlay - Desktop: on hover */}
+          <div className={`absolute inset-0 flex items-center justify-center transition-all duration-200 ${
+            audioState.isPlaying ? 'opacity-0 hover:opacity-100' : 'opacity-0 hover:opacity-100'
+          }`}>
+            <div className="bg-black/70 backdrop-blur-sm rounded-full p-4 transform transition-all duration-200 hover:scale-110 shadow-xl min-w-[56px] min-h-[56px]">
+              {audioState.isLoading ? (
+                <div className="w-7 h-7 flex items-center justify-center">
+                  <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                </div>
+              ) : audioState.isPlaying ? (
+                <Pause className="w-7 h-7 text-white" />
+              ) : (
+                <Play className="w-7 h-7 text-white ml-0.5" />
+              )}
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Main Content Area - Responsive */}
-      <div className={`${isMobile ? 'flex-1 flex flex-col justify-center min-w-0' : 'w-full text-center'}`}>
+      <div className={`${isMobile ? 'flex-1 flex flex-col justify-center min-w-0 pr-16' : 'w-full text-center'}`}>
         {/* Song Details */}
         <div className={`${isMobile ? 'space-y-1' : 'px-1'}`}>
           <h4 className={`${isMobile ? 'text-lg leading-tight' : 'text-sm sm:text-base'} font-bold leading-tight ${
@@ -132,45 +187,8 @@ const SongItem: React.FC<SongItemProps> = ({
           )}
         </div>
 
-        {/* Action Buttons - Mobile: positioned absolutely, Desktop: centered */}
-        {isMobile ? (
-          <div className="absolute bottom-4 right-4 flex gap-3">
-            {/* Like Button */}
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                onLikeClick(song.id, e);
-              }}
-              className="group relative transition-all duration-300 hover:scale-105 active:scale-95 touch-manipulation p-3 bg-background/95 backdrop-blur-sm rounded-full border border-border/30 hover:border-border/60 shadow-md hover:shadow-lg min-w-[48px] min-h-[48px]"
-            >
-              <div className="relative flex items-center justify-center w-6 h-6">
-                <Heart 
-                  className="w-6 h-6 transition-colors duration-200"
-                  style={{ 
-                    color: isLiked(song.id) ? '#ef4444' : '#6b7280',
-                    fill: isLiked(song.id) ? '#ef4444' : 'transparent'
-                  }}
-                />
-                {getLikeCount(song.id) > 0 && (
-                  <span className="absolute inset-0 flex items-center justify-center text-[10px] font-bold text-white mix-blend-difference">
-                    {getLikeCount(song.id)}
-                  </span>
-                )}
-              </div>
-            </button>
-            
-            {/* Info Button */}
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                setShowInfoModal(true);
-              }}
-              className="group transition-all duration-300 hover:scale-105 active:scale-95 touch-manipulation p-3 bg-background/95 backdrop-blur-sm rounded-full border border-border/30 hover:border-border/60 shadow-md hover:shadow-lg min-w-[48px] min-h-[48px]"
-            >
-              <Info className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors duration-200" />
-            </button>
-          </div>
-        ) : (
+        {/* Desktop Action Buttons */}
+        {!isMobile && (
           <div className="flex justify-center gap-4 mt-auto">
             {/* Like Button */}
             <button
@@ -210,7 +228,33 @@ const SongItem: React.FC<SongItemProps> = ({
         )}
       </div>
 
-       
+      {/* Right Play Button (Mobile Only) */}
+      {isMobile && (
+        <div className="absolute right-4 top-1/2 -translate-y-1/2">
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              if (audioState.isPlaying) {
+                handleStop();
+              } else {
+                handlePlay();
+              }
+            }}
+            className="group transition-all duration-300 hover:scale-105 active:scale-95 touch-manipulation p-3 bg-primary/10 backdrop-blur-sm rounded-full border border-primary/30 hover:border-primary/50 shadow-lg hover:shadow-xl min-w-[56px] min-h-[56px]"
+          >
+            {audioState.isLoading ? (
+              <div className="w-7 h-7 flex items-center justify-center">
+                <div className="w-5 h-5 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+              </div>
+            ) : audioState.isPlaying ? (
+              <Pause className="w-7 h-7 text-primary" />
+            ) : (
+              <Play className="w-7 h-7 text-primary ml-0.5" />
+            )}
+          </button>
+        </div>
+      )}
+
        {/* Song Info Modal */}
        <SongInfoModal 
          isOpen={showInfoModal}
