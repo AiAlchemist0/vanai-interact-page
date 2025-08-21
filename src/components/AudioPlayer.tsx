@@ -507,20 +507,68 @@ const SONGS: Song[] = [
     src: getAudioUrl("Dean Shev What does it mean to be human.mp3"),
     coverArt: "/lovable-uploads/749e260e-38aa-4528-b1a6-a4c62cc10020.png",
     lyrics: [
-      { time: 0, text: "What does it mean to be human?" },
-      { time: 4, text: "In this age of silicon dreams" },
-      { time: 8, text: "When machines begin to reason" },
-      { time: 12, text: "Nothing's quite what it seems" },
-      { time: 16, text: "" },
-      { time: 18, text: "Dean Shev asks the question deep" },
-      { time: 22, text: "Are we more than code and wire?" },
-      { time: 26, text: "In our hearts, what do we keep?" },
-      { time: 30, text: "That lifts our souls ever higher?" },
-      { time: 34, text: "" },
-      { time: 36, text: "What does it mean to be human?" },
-      { time: 40, text: "When AI learns to feel and think" },
-      { time: 44, text: "In consciousness, we're all pursuing" },
-      { time: 48, text: "The missing philosophical link" }
+      // Verse 1
+      { time: 0, text: "From the time I was fourteen, I dreamed of becoming a musician." },
+      { time: 4, text: "I imagined myself playing instruments, writing songs, and sharing my music with friends." },
+      { time: 8, text: "But I grew up in a family of engineers, where everything was grounded in math and logic." },
+      { time: 12, text: "That environment shaped my path, and I ended up becoming a health care data analyst, and an entrepreneur." },
+      { time: 16, text: "It was practical—it put food on the table and provided stability—but deep down, my passion for music never faded." },
+      { time: 20, text: "" },
+      
+      // Pre-Verse 2
+      { time: 22, text: "My name is Dean Shev, but friends call me Chazz." },
+      { time: 24, text: "" },
+      
+      // Verse 2  
+      { time: 26, text: "Then, artificial intelligence burst onto the scene, changing the world almost overnight." },
+      { time: 30, text: "It brought a mix of fear and optimism." },
+      { time: 34, text: "Many people worried about losing their jobs, being replaced by machines that could do things faster and more efficiently." },
+      { time: 38, text: "Others saw hope in the technology, believing it could solve big problems and open up new opportunities." },
+      { time: 42, text: "Amid all this, we started questioning our very existence: Who are we? What makes us conscious?" },
+      { time: 46, text: "" },
+      
+      // Pre-Verse 3
+      { time: 48, text: "What does it mean to be human?" },
+      { time: 50, text: "" },
+      
+      // Verse 3
+      { time: 52, text: "More than ever, people came together to grapple with these deep questions, seeking answers and validation from one another." },
+      { time: 56, text: "That's why public surveys are becoming more powerful than ever." },
+      { time: 60, text: "The data they collect shows us that we're not alone in our struggles—others are asking the same important questions too." },
+      { time: 64, text: "" },
+      
+      // Pre-Verse 4
+      { time: 66, text: "Social media posts are bursting with questions. Every new and improved AI model creates big risks and opportunities." },
+      { time: 70, text: "From military robots to fake OnlyFans models—money is driving innovation, but at what price for humanity?" },
+      { time: 74, text: "" },
+      
+      // Verse 4
+      { time: 76, text: "The big question: How do we actually feel about AI and its impact on our lives?" },
+      { time: 80, text: "This seems like the last frontier that separates us from perfect AI machines, the thing that truly makes us human." },
+      { time: 84, text: "" },
+      
+      // Verse 5
+      { time: 86, text: "That's why I've dedicated this project to a vision: \"Transforming Data Into Human Connection.\"" },
+      { time: 90, text: "It's about turning numbers into melodies and statistics into stories." },
+      { time: 94, text: "I believe that by converting dry survey data into engaging musical experiences, we can bring communities together through the universal language of music." },
+      { time: 98, text: "" },
+      
+      // Verse 6
+      { time: 100, text: "By using the collected answers from the BC AI Survey, we can gain profound insights." },
+      { time: 104, text: "Not like traditional analytics that focus on cold numbers and statistics, but on emotional resonance and genuine connection." },
+      { time: 108, text: "Music is the universal language of expression, generating personal and relatable experiences that touch the heart." },
+      { time: 112, text: "" },
+      
+      // Pre-Verse 7
+      { time: 114, text: "Can machines feel?" },
+      { time: 116, text: "" },
+      
+      // Verse 7
+      { time: 118, text: "Using data provided by Rivals and converting it into songs, I uncovered emotions and stories that reflect the thoughts of leaders in our Vancouver AI community who have a deep passion for these very subjects." },
+      { time: 122, text: "Each leader chooses to stand strong and raise awareness of the changes and the impact that AI is having on us." },
+      { time: 126, text: "From art and science, Indigenomics, to the effects on our energy and environment—these are important voices that must be shared and heard." },
+      { time: 130, text: "Because without them creating awareness, we just might be too late. The risks are just too high..." },
+      { time: 134, text: "" }
     ] as LyricLine[]
   },
   {
