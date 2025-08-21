@@ -688,40 +688,41 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ audioPlayerHook }) => {
   const isMobile = useIsMobile();
   const { startPlayTracking, endPlayTracking, updateActivity } = useAudio();
   
-  const {
-    audioRef,
-    currentSongIndex,
-    setCurrentSongIndex,
-    isPlaying,
-    setIsPlaying,
-    progress,
-    setProgress,
-    duration,
-    setDuration,
-    currentTime,
-    setCurrentTime,
-    autoplayBlocked,
-    setAutoplayBlocked,
-    hasUserInteracted,
-    setHasUserInteracted,
-    audioError,
-    setAudioError,
-    isLoading,
-    setIsLoading,
-    fileAvailable,
-    setFileAvailable,
-    retryCount,
-    setRetryCount,
-    showLyricsOnly,
-    setShowLyricsOnly,
-    isPlaylistMode,
-    setIsPlaylistMode,
-    currentSong,
-    loadSpecificSong,
-    startPlayback,
-  } = audioPlayerHook;
+    const {
+      audioRef,
+      currentSongIndex,
+      setCurrentSongIndex,
+      isPlaying,
+      setIsPlaying,
+      progress,
+      setProgress,
+      duration,
+      setDuration,
+      currentTime,
+      setCurrentTime,
+      autoplayBlocked,
+      setAutoplayBlocked,
+      hasUserInteracted,
+      setHasUserInteracted,
+      audioError,
+      setAudioError,
+      isLoading,
+      setIsLoading,
+      fileAvailable,
+      setFileAvailable,
+      retryCount,
+      setRetryCount,
+      showLyricsOnly,
+      setShowLyricsOnly,
+      isPlaylistMode,
+      setIsPlaylistMode,
+      currentSong,
+      loadSpecificSong,
+      startPlayback,
+      shouldAutoPlay,
+      setShouldAutoPlay,
+    } = audioPlayerHook;
   
-  const [shouldAutoPlay, setShouldAutoPlay] = React.useState(false);
   const [hasRecordedPlay, setHasRecordedPlay] = React.useState(false);
   const [previousSongId, setPreviousSongId] = React.useState<string | null>(null);
   
@@ -824,6 +825,20 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ audioPlayerHook }) => {
       setDuration(audio.duration || 0);
       setAudioError(null);
       setIsLoading(false);
+      
+      // Auto-start playback if shouldAutoPlay is true
+      if (shouldAutoPlay && hasUserInteracted) {
+        setShouldAutoPlay(false); // Reset the flag
+        setTimeout(() => {
+          audio.play().then(() => {
+            setIsPlaying(true);
+            console.log('▶️ Auto-started playback after loading');
+          }).catch(() => {
+            console.log('Autoplay blocked');
+            setAutoplayBlocked(true);
+          });
+        }, 100);
+      }
     };
     
     const onTime = () => {

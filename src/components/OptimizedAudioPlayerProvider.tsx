@@ -120,16 +120,9 @@ export const OptimizedAudioPlayerProvider: React.FC<OptimizedAudioPlayerProvider
     enhancedTracking.updateActivity();
     setIsPlaylistMode(true);
     
-    setTimeout(() => {
-      const audio = audioRef.current;
-      if (audio) {
-        audio.currentTime = 0;
-        audio.play().then(() => {
-          audioPlayerHook.setIsPlaying(true);
-        }).catch(() => console.log('Autoplay blocked'));
-      }
-    }, 100);
-  }, [enhancedTracking, setIsPlaylistMode, audioRef, audioPlayerHook]);
+    // Set the autoplay flag instead of directly playing
+    audioPlayerHook.setShouldAutoPlay(true);
+  }, [enhancedTracking, setIsPlaylistMode, audioPlayerHook]);
 
   const stopPlaylistMode = useCallback(() => {
     enhancedTracking.updateActivity();

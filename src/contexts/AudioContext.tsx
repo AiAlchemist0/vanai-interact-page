@@ -2,7 +2,7 @@ import React, { createContext, useContext, ReactNode } from 'react';
 import { Song } from '@/hooks/useAudioPlayer';
 
 interface AudioContextType {
-  loadSpecificSong: (songId: string) => void;
+  loadSpecificSong: (songId: string, autoPlay?: boolean) => void;
   startPlayback: () => void;
   togglePlay: () => void;
   nextSong: () => void;

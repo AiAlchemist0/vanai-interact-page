@@ -26,11 +26,12 @@ export const useAudioPlayer = (songs: Song[]) => {
   const [showLyricsOnly, setShowLyricsOnly] = React.useState(false);
   const [isLoadedAndReady, setIsLoadedAndReady] = React.useState(false);
   const [isPlaylistMode, setIsPlaylistMode] = React.useState(false);
+  const [shouldAutoPlay, setShouldAutoPlay] = React.useState(false);
 
   const currentSong = songs[currentSongIndex];
 
   // Function to load and prepare a specific song by ID
-  const loadSpecificSong = React.useCallback((songId: string) => {
+  const loadSpecificSong = React.useCallback((songId: string, autoPlay = false) => {
     const songIndex = songs.findIndex(song => song.id === songId);
     if (songIndex !== -1) {
       setCurrentSongIndex(songIndex);
@@ -38,6 +39,7 @@ export const useAudioPlayer = (songs: Song[]) => {
       setIsLoadedAndReady(true);
       setIsLoading(false);
       setAudioError(null);
+      setShouldAutoPlay(autoPlay);
     }
   }, [songs]);
 
@@ -89,6 +91,8 @@ export const useAudioPlayer = (songs: Song[]) => {
     setIsLoadedAndReady,
     isPlaylistMode,
     setIsPlaylistMode,
+    shouldAutoPlay,
+    setShouldAutoPlay,
     
     // Computed
     currentSong,

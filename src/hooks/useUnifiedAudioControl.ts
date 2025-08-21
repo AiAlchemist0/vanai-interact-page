@@ -63,12 +63,9 @@ export const useUnifiedAudioControl = (songId: string, songIndex?: number, updat
       return;
     }
     
-    // If clicking on a different song, load it and start playback immediately
+    // If clicking on a different song, load it and start playback
     setLoadingSong(songId);
     try {
-      // Load the specific song first
-      loadSpecificSong(songId);
-      
       // Get song metadata for console log
       const songs = await import('@/utils/songData');
       const songMetadata = songs.getSongMetadata(songId);
@@ -79,11 +76,10 @@ export const useUnifiedAudioControl = (songId: string, songIndex?: number, updat
       // Start play tracking for the new song (geographic tracking is now session-based)
       await startPlayTracking(songId);
       
-      // Start playlist mode immediately with proper error handling
-      setTimeout(() => {
-        startPlaylistMode();
-        setLoadingSong(null);
-      }, 50);
+      // Load the specific song with autoplay flag
+      loadSpecificSong(songId, true);
+      
+      setLoadingSong(null);
     } catch (error) {
       setLoadingSong(null);
       toast({
