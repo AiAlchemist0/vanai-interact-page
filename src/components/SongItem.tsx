@@ -40,7 +40,7 @@ const SongItem: React.FC<SongItemProps> = ({
 
   return (
     <div
-      className={`relative group ${isMobile ? 'flex flex-row items-start p-4 gap-4 rounded-xl min-h-[100px]' : 'flex flex-col items-center p-4 sm:p-5 lg:p-4 rounded-xl min-h-[280px] sm:min-h-[320px]'} transition-all duration-300 border touch-manipulation cursor-pointer ${isMobile ? 'hover:shadow-lg active:scale-[0.98]' : 'hover:scale-[1.02] hover:shadow-xl'} ${
+      className={`relative group ${isMobile ? 'flex flex-row items-start p-3 gap-3 rounded-xl min-h-[80px]' : 'flex flex-col items-center p-4 sm:p-5 lg:p-4 rounded-xl min-h-[280px] sm:min-h-[320px]'} transition-all duration-300 border touch-manipulation cursor-pointer ${isMobile ? 'hover:shadow-lg active:scale-[0.98]' : 'hover:scale-[1.02] hover:shadow-xl'} ${
         index === currentSongIndex 
           ? `bg-primary/10 border-primary/30 shadow-lg ${isPlaylistMode ? 'ring-2 ring-primary/20' : ''}` 
           : 'bg-card/60 hover:bg-card/80 border-border/30 hover:border-border/50'
@@ -49,13 +49,13 @@ const SongItem: React.FC<SongItemProps> = ({
     >
       {/* Left Column: Album Art + Action Buttons (Mobile Only) */}
       {isMobile ? (
-        <div className="flex flex-col items-center gap-3 flex-shrink-0">
+        <div className="flex flex-col items-center gap-2 flex-shrink-0">
           {/* Album Art */}
           <div className="relative">
             <img 
               src={song.coverArt} 
               alt={`${song.title} cover`} 
-              className="w-20 h-20 rounded-lg object-cover shadow-md transition-all duration-300"
+              className="w-16 h-16 rounded-lg object-cover shadow-md transition-all duration-300"
             />
             
             {/* Playing Animation Indicator */}
@@ -65,14 +65,14 @@ const SongItem: React.FC<SongItemProps> = ({
           </div>
 
           {/* Action Buttons under Cover Art */}
-          <div className="flex gap-2">
+          <div className="flex gap-1.5">
             {/* Like Button */}
             <button
               onClick={(e) => {
                 e.stopPropagation();
                 onLikeClick(song.id, e);
               }}
-              className="group relative transition-all duration-300 hover:scale-105 active:scale-95 touch-manipulation p-2 bg-background/95 backdrop-blur-sm rounded-full border border-border/30 hover:border-border/60 shadow-md hover:shadow-lg min-w-[40px] min-h-[40px]"
+              className="group relative transition-all duration-300 hover:scale-105 active:scale-95 touch-manipulation p-2 bg-background/95 backdrop-blur-sm rounded-full border border-border/30 hover:border-border/60 shadow-md hover:shadow-lg min-w-[36px] min-h-[36px]"
             >
               <div className="relative flex items-center justify-center w-5 h-5">
                 <Heart 
@@ -96,7 +96,7 @@ const SongItem: React.FC<SongItemProps> = ({
                 e.stopPropagation();
                 setShowInfoModal(true);
               }}
-              className="group transition-all duration-300 hover:scale-105 active:scale-95 touch-manipulation p-2 bg-background/95 backdrop-blur-sm rounded-full border border-border/30 hover:border-border/60 shadow-md hover:shadow-lg min-w-[40px] min-h-[40px]"
+              className="group transition-all duration-300 hover:scale-105 active:scale-95 touch-manipulation p-2 bg-background/95 backdrop-blur-sm rounded-full border border-border/30 hover:border-border/60 shadow-md hover:shadow-lg min-w-[36px] min-h-[36px]"
             >
               <Info className="w-4 h-4 text-muted-foreground group-hover:text-primary transition-colors duration-200" />
             </button>
@@ -136,12 +136,12 @@ const SongItem: React.FC<SongItemProps> = ({
       )}
 
       {/* Main Content Area - Responsive */}
-      <div className={`${isMobile ? 'flex-1 flex flex-col justify-center min-w-0 pr-16' : 'w-full text-center'}`}>
+      <div className={`${isMobile ? 'flex-1 flex flex-col justify-center min-w-0 pr-14' : 'w-full text-center'}`}>
         {/* Song Details */}
         <div className={`${isMobile ? 'space-y-1' : 'px-1'}`}>
-          <h4 className={`${isMobile ? 'text-lg leading-tight' : 'text-sm sm:text-base'} font-bold leading-tight ${
+          <h4 className={`${isMobile ? 'text-base leading-tight' : 'text-sm sm:text-base'} font-bold leading-tight ${
             index === currentSongIndex ? 'text-primary' : 'text-foreground'
-          }`} style={{ 
+          }`} style={{
             display: '-webkit-box',
             WebkitLineClamp: isMobile ? 2 : 3,
             WebkitBoxOrient: 'vertical',
@@ -176,9 +176,9 @@ const SongItem: React.FC<SongItemProps> = ({
               
               {/* Progress Bar */}
               {audioState.isPlaying && (
-                <div className={`w-full bg-muted/30 rounded-full ${isMobile ? 'h-1' : 'h-0.5'}`}>
+                <div className={`w-full bg-muted/30 rounded-full ${isMobile ? 'h-0.5' : 'h-0.5'}`}>
                   <div 
-                    className={`${isMobile ? 'h-1' : 'h-full'} bg-gradient-to-r from-primary to-primary/80 rounded-full transition-all duration-300 ease-out`}
+                    className={`${isMobile ? 'h-0.5' : 'h-full'} bg-gradient-to-r from-primary to-primary/80 rounded-full transition-all duration-300 ease-out`}
                     style={{ width: `${audioState.progress}%` }}
                   />
                 </div>
@@ -240,16 +240,16 @@ const SongItem: React.FC<SongItemProps> = ({
                 handlePlay();
               }
             }}
-            className="group transition-all duration-300 hover:scale-105 active:scale-95 touch-manipulation p-3 bg-primary/10 backdrop-blur-sm rounded-full border border-primary/30 hover:border-primary/50 shadow-lg hover:shadow-xl min-w-[56px] min-h-[56px]"
+            className="group transition-all duration-300 hover:scale-105 active:scale-95 touch-manipulation p-3 bg-primary/10 backdrop-blur-sm rounded-full border border-primary/30 hover:border-primary/50 shadow-lg hover:shadow-xl min-w-[52px] min-h-[52px]"
           >
             {audioState.isLoading ? (
-              <div className="w-7 h-7 flex items-center justify-center">
-                <div className="w-5 h-5 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+              <div className="w-6 h-6 flex items-center justify-center">
+                <div className="w-4 h-4 border-2 border-primary border-t-transparent rounded-full animate-spin" />
               </div>
             ) : audioState.isPlaying ? (
-              <Pause className="w-7 h-7 text-primary" />
+              <Pause className="w-6 h-6 text-primary" />
             ) : (
-              <Play className="w-7 h-7 text-primary ml-0.5" />
+              <Play className="w-6 h-6 text-primary ml-0.5" />
             )}
           </button>
         </div>
