@@ -58,7 +58,6 @@ export const useSongStatistics = (options: UseSongStatisticsOptions = {}) => {
 
 
       // Insert initial record with is_valid_play = false
-      // Track audio loading status for debugging
       const insertData = {
         song_id: songId,
         user_session_id: sessionId,
@@ -67,11 +66,6 @@ export const useSongStatistics = (options: UseSongStatisticsOptions = {}) => {
         is_valid_play: false,
         completion_percentage: 0
       };
-      
-      // Log additional context for problematic songs
-      if (['bc-coast-catalyst', 'philippe-pasquier-art-hallucinations', 'brenda-bailey', 'lionel-ringenbach'].includes(songId)) {
-        console.warn(`⚠️ Tracking problematic song: ${songId}, Audio loaded: ${audioLoadSuccess}`);
-      }
       
       console.log('Inserting play record:', insertData);
       
@@ -116,14 +110,10 @@ export const useSongStatistics = (options: UseSongStatisticsOptions = {}) => {
       const estimatedSongLength = songDuration || 180; // 3 minutes default
       const completionPercentage = Math.min((duration / estimatedSongLength) * 100, 100);
 
-      // Enhanced logging for problematic songs
-      const logLevel = ['bc-coast-catalyst', 'philippe-pasquier-art-hallucinations'].includes(songId) ? 'warn' : 'log';
       const logMessage = `Ending play tracking for song: ${songId}, Duration: ${duration}s, Valid: ${isValidPlay}, Completion: ${completionPercentage.toFixed(1)}%`;
       
       if (failureReason) {
-        console.error(`❌ ${logMessage}, Failure: ${failureReason}, Audio loaded: ${trackingData.audioLoadSuccess}`);
-      } else if (logLevel === 'warn') {
-        console.warn(`⚠️ ${logMessage}, Audio loaded: ${trackingData.audioLoadSuccess}`);
+        console.error(`❌ ${logMessage}, Failure: ${failureReason}`);
       } else {
         console.log(logMessage);
       }

@@ -42,18 +42,8 @@ export const useAudioValidation = () => {
         lastValidationTime: Date.now()
       });
 
-      // Log detailed results for problematic songs
-      const problematicSongs = ['bc-coast-catalyst', 'philippe-pasquier-art-hallucinations', 'brenda-bailey', 'lionel-ringenbach'];
-      problematicSongs.forEach(songId => {
-        const result = validation.results.find(r => r.songId === songId);
-        if (result) {
-          if (result.valid) {
-            console.log(`✅ ${songId}: Audio file is accessible (duration: ${result.duration?.toFixed(2)}s)`);
-          } else {
-            console.error(`❌ ${songId}: Audio file failed validation - ${result.error}`);
-          }
-        }
-      });
+      // Log validation summary
+      console.log(`✅ Audio validation complete: ${validation.validFiles.length} valid, ${validation.failedFiles.length} failed`);
 
       return validation;
     } catch (error) {
@@ -107,13 +97,7 @@ export const useAudioValidation = () => {
     } : null;
   };
 
-  // Auto-validate on mount for critical songs
-  useEffect(() => {
-    const criticalSongs = ['bc-coast-catalyst', 'philippe-pasquier-art-hallucinations'];
-    criticalSongs.forEach(songId => {
-      validateSingleAudio(songId).catch(console.error);
-    });
-  }, []);
+  // Auto-validate is now handled by the components that need it
 
   return {
     ...state,
