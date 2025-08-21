@@ -56,6 +56,7 @@ export const useSongStatistics = (options: UseSongStatisticsOptions = {}) => {
       
       console.log('Using session ID for tracking:', sessionId);
 
+
       // Insert initial record with is_valid_play = false
       // Track audio loading status for debugging
       const insertData = {
@@ -83,7 +84,7 @@ export const useSongStatistics = (options: UseSongStatisticsOptions = {}) => {
       if (error) {
         console.error('Error starting play tracking:', error);
         console.error('Failed insert data:', insertData);
-        console.error('Error details:', error.details, error.hint, error.code);
+        console.error('Session ID:', sessionId);
         // Don't throw error - allow playback to continue even if tracking fails
         return;
       }
@@ -96,6 +97,7 @@ export const useSongStatistics = (options: UseSongStatisticsOptions = {}) => {
       });
     } catch (err) {
       console.error('Error starting play tracking:', err);
+      // Don't re-throw - allow music playback to continue
     }
   };
 
@@ -138,8 +140,7 @@ export const useSongStatistics = (options: UseSongStatisticsOptions = {}) => {
 
       if (error) {
         console.error('Error updating play duration:', error);
-        // Don't throw error - tracking failure shouldn't affect user experience
-        return;
+        throw error;
       }
 
       // Clean up tracking data

@@ -33,6 +33,7 @@ export const useSessionTracking = () => {
     try {
       const sessionId = getSessionId();
       
+      
       // Check if session already exists and is active
       if (session?.isActive && session.sessionId === sessionId) {
         return;
