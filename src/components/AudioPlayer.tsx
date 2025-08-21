@@ -398,6 +398,7 @@ const SONGS: Song[] = [
     src: getAudioUrl("Brenda lvls up BC.mp3"),
     coverArt: "/lovable-uploads/9b9e9cd3-384c-4848-8fd2-a1a882698f96.png",
     lyrics: [
+      // Male Lead (Narrator) - Verse 1
       { time: 0, text: "In the halls of Victoria, where the budgets align," },
       { time: 4, text: "Brenda Bailey takes the helm, with a force so divine." },
       { time: 8, text: "From Vancouver-False Creek, she rose to the fight," },
@@ -408,6 +409,8 @@ const SONGS: Song[] = [
       { time: 26, text: "Now she's wielding the ledger like a lightsaber bright," },
       { time: 30, text: "Cutting through deficits, making everything right." },
       { time: 34, text: "" },
+      
+      // Chorus (Both or Group)
       { time: 36, text: "Oh, Brenda, Brenda, Jedi of the coin," },
       { time: 40, text: "May the Force be with your fiscal join!" },
       { time: 44, text: "From JEDI to Finance, you're leading the way," },
@@ -418,6 +421,8 @@ const SONGS: Song[] = [
       { time: 62, text: "Brenda Bailey, our hero so grand," },
       { time: 66, text: "Minister of might in this BC land!" },
       { time: 70, text: "" },
+      
+      // Female Lead (Brenda) - Verse 2
       { time: 72, text: "I've journeyed from tech, founding paths of my own," },
       { time: 76, text: "To the cabinet table, where the real power's grown." },
       { time: 80, text: "Appointed in November, twenty-twenty-four's call," },
@@ -428,6 +433,8 @@ const SONGS: Song[] = [
       { time: 98, text: "No Sith inflation will darken my sight," },
       { time: 102, text: "I'll fight for the people, from morning till night." },
       { time: 106, text: "" },
+      
+      // Chorus (Both or Group)
       { time: 108, text: "Oh, Brenda, Brenda, Jedi of the coin," },
       { time: 112, text: "May the Force be with your fiscal join!" },
       { time: 116, text: "From JEDI to Finance, you're leading the way," },
@@ -438,25 +445,31 @@ const SONGS: Song[] = [
       { time: 134, text: "Brenda Bailey, our hero so grand," },
       { time: 138, text: "Minister of might in this BC land!" },
       { time: 142, text: "" },
+      
+      // Male Lead (Narrator) - Bridge
       { time: 144, text: "No dark side temptation can sway her true path," },
       { time: 148, text: "She audits the shadows, masters the math." },
       { time: 152, text: "With Percy Jackson nods and Star Wars at heart," },
       { time: 156, text: "She's building tomorrow, playing her part." },
-      { time: 160, text: "" },
-      { time: 162, text: "Dressed up for the cons, JEDI team by her side," },
-      { time: 166, text: "From LinkedIn to legislature, she takes it in stride!" },
+      { time: 160, text: "Dressed up for the cons, JEDI team by her side," },
+      { time: 164, text: "From LinkedIn to legislature, she takes it in stride!" },
+      { time: 168, text: "" },
+      
+      // Female Lead (Brenda) - Bridge Response
       { time: 170, text: "Yes, I've faced the storms, the deficits deep," },
       { time: 174, text: "But with rebel spirit, promises I keep." },
-      { time: 178, text: "" },
-      { time: 180, text: "For families and futures, I'll stand tall and true," },
-      { time: 184, text: "In this galaxy of governance, I'll see us through." },
-      { time: 188, text: "May the Force guide us all in the fight," },
-      { time: 192, text: "For a brighter BC, shining so bright!" },
-      { time: 196, text: "" },
-      { time: 198, text: "Oh, Brenda, Brenda, master of the game," },
-      { time: 202, text: "In the galaxy of finance, forever your name!" },
-      { time: 206, text: "May the Force guide your every decree," },
-      { time: 210, text: "Brenda Bailey, the legend of BC!" }
+      { time: 178, text: "For families and futures, I'll stand tall and true," },
+      { time: 182, text: "In this galaxy of governance, I'll see us through." },
+      { time: 186, text: "May the Force guide us all in the fight," },
+      { time: 190, text: "For a brighter BC, shining so bright!" },
+      { time: 194, text: "" },
+      
+      // Final Chorus (Both, Fading Out)
+      { time: 196, text: "Oh, Brenda, Brenda, master of the game," },
+      { time: 200, text: "In the galaxy of finance, forever your name!" },
+      { time: 204, text: "May the Force guide your every decree," },
+      { time: 208, text: "Brenda Bailey, the legend of BC!" },
+      { time: 212, text: "" }
     ] as LyricLine[]
   },
   {
