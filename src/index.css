@@ -269,204 +269,137 @@ All colors MUST be HSL.
     overflow: hidden;
   }
 
-  /* Philippe Special Effects - Cross-browser optimized with proper positioning */
-  .philippe-player-effects {
-    --philippe-z-base: 1000;
-    --philippe-z-border: 1001;
-    --philippe-z-content: 1002;
-    --philippe-border-size: 3px;
-    contain: layout style paint;
-    isolation: isolate;
+  /* Philippe Pasquier Special Effects - Performance Optimized */
+  @media (prefers-reduced-motion: no-preference) {
+    .philippe-player-effects {
+      filter: brightness(1.1) saturate(1.2);
+      will-change: filter;
+    }
   }
 
   @media (prefers-reduced-motion: no-preference) {
     .philippe-led-border {
       position: absolute;
-      top: calc(var(--philippe-border-size) * -1);
-      right: calc(var(--philippe-border-size) * -1);
-      bottom: calc(var(--philippe-border-size) * -1);
-      left: calc(var(--philippe-border-size) * -1);
+      inset: -4px;
       border-radius: inherit;
       background: linear-gradient(45deg, 
-        hsl(330, 85%, 65%), 
-        hsl(45, 90%, 70%), 
-        hsl(120, 80%, 65%), 
-        hsl(180, 85%, 70%), 
-        hsl(240, 80%, 70%), 
-        hsl(300, 85%, 65%), 
-        hsl(330, 85%, 65%)
+        hsl(0, 100%, 60%), 
+        hsl(60, 100%, 60%), 
+        hsl(120, 100%, 60%), 
+        hsl(180, 100%, 60%), 
+        hsl(240, 100%, 60%), 
+        hsl(300, 100%, 60%), 
+        hsl(0, 100%, 60%)
       );
-      background-size: 300% 300%;
-      -webkit-animation: philippe-rainbow-border 3s ease-in-out infinite;
-      animation: philippe-rainbow-border 3s ease-in-out infinite;
-      -webkit-filter: blur(0.5px);
-      filter: blur(0.5px);
-      opacity: 0.6;
+      background-size: 400% 400%;
+      animation: philippe-rainbow-border 2s linear infinite;
+      filter: blur(1px);
+      opacity: 0.8;
       will-change: background-position;
-      z-index: var(--philippe-z-border);
-      transform: translateZ(0); /* Force GPU acceleration */
     }
   }
 
   .philippe-led-border::before {
     content: '';
     position: absolute;
-    top: var(--philippe-border-size);
-    right: var(--philippe-border-size);
-    bottom: var(--philippe-border-size);
-    left: var(--philippe-border-size);
+    inset: 4px;
     border-radius: inherit;
     background: hsl(var(--background));
-    z-index: var(--philippe-z-content);
   }
 
 
-  /* Synthwave Visualizer Bars - Reduced complexity */
+  /* Synthwave Visualizer Bars */
   .philippe-visualizer-bars {
     position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    contain: layout;
-    overflow: hidden;
+    inset: 0;
   }
 
   @media (prefers-reduced-motion: no-preference) {
     .philippe-visualizer-bar {
       position: absolute;
       bottom: 0;
-      width: 3px;
+      width: 4px;
       background: linear-gradient(to top, 
-        hsl(var(--primary) / 0.8), 
-        hsl(var(--ai-cyan) / 0.9), 
-        hsl(45, 85%, 65% / 0.7)
+        hsl(var(--primary)), 
+        hsl(var(--ai-cyan)), 
+        hsl(60, 100%, 60%)
       );
-      border-radius: 2px 2px 0 0;
-      -webkit-animation: philippe-visualizer-pulse 0.8s ease-in-out infinite alternate;
-      animation: philippe-visualizer-pulse 0.8s ease-in-out infinite alternate;
-      box-shadow: 0 0 8px hsl(var(--primary) / 0.4);
-      will-change: height;
-      transform: translateZ(0);
+      border-radius: 2px;
+      animation: philippe-visualizer-pulse 0.6s ease-in-out infinite alternate;
+      box-shadow: 0 0 15px currentColor;
+      filter: blur(0.5px);
+      will-change: height, opacity;
     }
   }
 
-  /* Playlist Background Visualizer Bars - Mobile optimized */
+  /* Playlist Background Visualizer Bars */
   .philippe-playlist-visualizer-bars {
     position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
+    inset: 0;
     z-index: 0;
-    contain: layout;
-    overflow: hidden;
-    pointer-events: none;
   }
 
-  @media (prefers-reduced-motion: no-preference) and (min-width: 768px) {
+  @media (prefers-reduced-motion: no-preference) {
     .philippe-playlist-visualizer-bar {
       position: absolute;
       bottom: 0;
-      width: 8px;
+      width: 10px;
       background: linear-gradient(to top, 
-        hsl(330, 75%, 65% / 0.6), 
-        hsl(15, 80%, 70% / 0.7), 
-        hsl(270, 75%, 75% / 0.6), 
-        hsl(180, 80%, 65% / 0.7)
+        hsl(330, 100%, 60%), /* bright pink/magenta */
+        hsl(15, 100%, 65%), /* vibrant orange */
+        hsl(270, 100%, 70%), /* electric purple */
+        hsl(180, 100%, 60%), /* bright cyan */
+        hsl(120, 100%, 50%), /* vivid green */
+        hsl(60, 100%, 60%) /* yellow/gold */
       );
-      border-radius: 3px 3px 0 0;
-      -webkit-animation: philippe-playlist-visualizer-pulse 1s ease-in-out infinite alternate;
-      animation: philippe-playlist-visualizer-pulse 1s ease-in-out infinite alternate;
-      box-shadow: 0 0 6px hsl(330, 75%, 65% / 0.3);
-      opacity: 0.7;
-      will-change: height;
-      transform: translateZ(0);
-    }
-  }
-
-  /* Simplified mobile version */
-  @media (prefers-reduced-motion: no-preference) and (max-width: 767px) {
-    .philippe-playlist-visualizer-bar {
-      display: none;
+      border-radius: 4px;
+      animation: philippe-playlist-visualizer-pulse 0.8s ease-in-out infinite alternate;
+      box-shadow: 0 0 12px hsl(330, 100%, 60% / 0.8), 0 0 20px hsl(180, 100%, 60% / 0.4);
+      filter: blur(0.2px);
+      opacity: 0.9;
+      will-change: height, opacity;
     }
   }
 
 
-  /* Retro Grid Background - Performance optimized */
-  @media (prefers-reduced-motion: no-preference) and (min-width: 768px) {
+  /* Retro Grid Background */
+  @media (prefers-reduced-motion: no-preference) {
     .philippe-retro-grid {
-      position: fixed;
-      top: 0;
-      right: 0;
-      bottom: 0;
-      left: 0;
+      position: absolute;
+      inset: 0;
       background-image: 
-        linear-gradient(hsl(var(--ai-cyan) / 0.08) 1px, transparent 1px),
-        linear-gradient(90deg, hsl(var(--ai-cyan) / 0.08) 1px, transparent 1px);
-      background-size: 50px 50px;
-      -webkit-animation: philippe-grid-move 15s linear infinite;
-      animation: philippe-grid-move 15s linear infinite;
-      -webkit-perspective: 1000px;
-      perspective: 1000px;
-      -webkit-transform-style: preserve-3d;
+        linear-gradient(hsl(var(--ai-cyan) / 0.15) 1px, transparent 1px),
+        linear-gradient(90deg, hsl(var(--ai-cyan) / 0.15) 1px, transparent 1px);
+      background-size: 60px 60px;
+      animation: philippe-grid-move 12s linear infinite;
+      perspective: 1200px;
       transform-style: preserve-3d;
       will-change: transform;
-      contain: layout;
-      pointer-events: none;
-      z-index: var(--philippe-z-base);
-    }
-  }
-
-  /* Disable grid on mobile for performance */
-  @media (max-width: 767px) {
-    .philippe-retro-grid {
-      display: none;
     }
   }
 
 
   @keyframes philippe-rainbow-border {
     0%, 100% { background-position: 0% 50%; }
-    33% { background-position: 100% 25%; }
-    66% { background-position: 50% 100%; }
+    25% { background-position: 100% 25%; }
+    50% { background-position: 50% 100%; }
+    75% { background-position: 25% 0%; }
   }
 
   @keyframes philippe-visualizer-pulse {
-    0% { 
-      height: 12px; 
-      -webkit-transform: scaleY(0.8);
-      transform: scaleY(0.8); 
-    }
-    100% { 
-      height: 35px; 
-      -webkit-transform: scaleY(1.2);
-      transform: scaleY(1.2); 
-    }
+    0% { height: 15px; opacity: 0.7; }
+    100% { height: 50px; opacity: 1; }
   }
 
   @keyframes philippe-playlist-visualizer-pulse {
-    0% { 
-      height: 15%; 
-      -webkit-transform: scaleY(0.6);
-      transform: scaleY(0.6); 
-    }
-    100% { 
-      height: 70%; 
-      -webkit-transform: scaleY(1);
-      transform: scaleY(1); 
-    }
+    0% { height: 20%; opacity: 0.4; }
+    100% { height: 80%; opacity: 0.8; }
   }
 
+
   @keyframes philippe-grid-move {
-    0% { 
-      -webkit-transform: perspective(1000px) rotateX(60deg) translateZ(0px);
-      transform: perspective(1000px) rotateX(60deg) translateZ(0px); 
-    }
-    100% { 
-      -webkit-transform: perspective(1000px) rotateX(60deg) translateZ(100px);
-      transform: perspective(1000px) rotateX(60deg) translateZ(100px); 
-    }
+    0% { transform: perspective(1200px) rotateX(65deg) translateZ(0px); }
+    100% { transform: perspective(1200px) rotateX(65deg) translateZ(120px); }
   }
 
 }
