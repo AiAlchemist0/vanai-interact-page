@@ -83,7 +83,9 @@ export const useSongStatistics = (options: UseSongStatisticsOptions = {}) => {
       if (error) {
         console.error('Error starting play tracking:', error);
         console.error('Failed insert data:', insertData);
-        throw error;
+        console.error('Error details:', error.details, error.hint, error.code);
+        // Don't throw error - allow playback to continue even if tracking fails
+        return;
       }
 
       // Store start time and record ID for duration calculation
@@ -136,7 +138,8 @@ export const useSongStatistics = (options: UseSongStatisticsOptions = {}) => {
 
       if (error) {
         console.error('Error updating play duration:', error);
-        throw error;
+        // Don't throw error - tracking failure shouldn't affect user experience
+        return;
       }
 
       // Clean up tracking data
