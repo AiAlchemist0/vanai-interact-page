@@ -293,6 +293,7 @@ export type Database = {
           avg_session_duration: number
           peak_hour: number
           top_region: string
+          total_attempts: number
           total_plays: number
           unique_songs: number
         }[]

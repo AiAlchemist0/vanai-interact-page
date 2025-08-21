@@ -12,6 +12,7 @@ interface DashboardStatsData {
   avg_session_duration: number;
   top_region: string;
   peak_hour: number;
+  total_attempts: number;
 }
 const DashboardStats = () => {
   const [stats, setStats] = useState<DashboardStatsData | null>(null);
@@ -61,11 +62,19 @@ const DashboardStats = () => {
   };
   const statCards = [{
     title: "Total Plays",
-    value: stats?.total_plays || 0,
+    value: stats?.total_attempts || 0,
     icon: TrendingUp,
+    gradient: "from-blue-500 to-purple-500",
+    change: "All attempts",
+    description: "Every play attempt",
+    tooltipInfo: "Real data showing all song play attempts, including skips and incomplete plays. This gives a complete picture of user engagement with our music platform."
+  }, {
+    title: "Valid Plays",
+    value: stats?.total_plays || 0,
+    icon: Activity,
     gradient: "from-green-500 to-emerald-500",
     change: "+12.5%",
-    description: "Valid plays (30s+)",
+    description: "Completed plays (30s+)",
     tooltipInfo: "Real data collected from user interactions. Only counts as a valid play after 30+ seconds of listening. Updated every 30 seconds via Supabase database."
   }, {
     title: "Active Sessions",
@@ -117,9 +126,9 @@ const DashboardStats = () => {
     tooltipInfo: "Real data from user interactions. Counts all heart/like actions on songs across the platform. Updated in real-time when users like songs."
   }];
   if (loading) {
-    return <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-7 gap-6">
+    return <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-8 gap-6">
         {Array.from({
-        length: 7
+        length: 8
       }).map((_, i) => <Card key={i} className="bg-slate-900/50 border-purple-500/30">
             <CardContent className="p-6">
               <div className="animate-pulse space-y-4">
@@ -147,7 +156,7 @@ const DashboardStats = () => {
           
         </div>
         
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-7 gap-4 lg:gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-8 gap-4 lg:gap-6">
           {statCards.map((stat, index) => {
           const Icon = stat.icon;
           return <Card key={stat.title} className="bg-slate-900/60 border-purple-500/40 shadow-2xl shadow-purple-500/20 backdrop-blur-xl hover:scale-[1.02] hover:shadow-purple-500/30 transition-all duration-300 group touch-manipulation min-h-[200px] sm:min-h-[180px]" style={{
