@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { TrendingUp, Users, Clock, MapPin, Zap, Activity, Info } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { TrendingUp, Users, Music, MapPin, Zap, Activity, Info, Play, Timer, Heart } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from "@/components/ui/tooltip";
 import { supabase } from "@/integrations/supabase/client";
@@ -63,145 +63,190 @@ const DashboardStats = () => {
   const statCards = [{
     title: "Total Plays",
     value: stats?.total_attempts || 0,
-    icon: TrendingUp,
-    gradient: "from-blue-500 to-purple-500",
-    change: "All attempts",
+    unit: "attempts",
+    icon: Play,
+    gradient: "from-blue-500 to-indigo-600",
+    changeIndicator: "all",
+    changeColor: "text-blue-300",
     description: "Every play attempt",
     tooltipInfo: "Real data showing all song play attempts, including skips and incomplete plays. This gives a complete picture of user engagement with our music platform."
   }, {
     title: "Valid Plays",
     value: stats?.total_plays || 0,
+    unit: "qualified",
     icon: Activity,
-    gradient: "from-green-500 to-emerald-500",
-    change: "+12.5%",
-    description: "Completed plays (30s+)",
+    gradient: "from-emerald-500 to-green-600",
+    changeIndicator: "+12.5%",
+    changeColor: "text-emerald-300",
+    description: "30+ second plays",
     tooltipInfo: "Real data collected from user interactions. Only counts as a valid play after 30+ seconds of listening. Updated every 30 seconds via Supabase database."
   }, {
-    title: "Active Sessions",
+    title: "Active Users",
     value: stats?.active_sessions || 0,
+    unit: "online",
     icon: Users,
-    gradient: "from-blue-500 to-cyan-500",
-    change: "+5 live",
+    gradient: "from-cyan-500 to-blue-600",
+    changeIndicator: "live",
+    changeColor: "text-cyan-300",
     description: "Current listeners",
     tooltipInfo: "Real data tracking active user sessions. Counts users who have interacted with the app recently. Updated every 30 seconds from session tracking database."
   }, {
-    title: "Unique Songs",
+    title: "Song Library",
     value: stats?.unique_songs || 0,
-    icon: Clock,
-    gradient: "from-purple-500 to-pink-500",
-    change: "All tracks",
-    description: "In our collection",
+    unit: "tracks",
+    icon: Music,
+    gradient: "from-purple-500 to-violet-600",
+    changeIndicator: "total",
+    changeColor: "text-purple-300",
+    description: "Available music",
     tooltipInfo: "Calculated data showing total songs available in the platform. This is derived from the song metadata catalog and database records."
   }, {
-    title: "Avg Session",
+    title: "Session Length",
     value: Math.round((stats?.avg_session_duration || 0) / 60),
-    icon: Clock,
-    gradient: "from-orange-500 to-red-500",
-    change: "minutes",
+    unit: "minutes",
+    icon: Timer,
+    gradient: "from-orange-500 to-amber-600",
+    changeIndicator: "avg",
+    changeColor: "text-orange-300",
     description: "Per listening session",
     tooltipInfo: "Calculated from real user session data. Averages the time users spend actively listening to music. Based on session tracking and play duration analytics."
   }, {
     title: "Top Region",
     value: stats?.top_region || "BC",
+    unit: "leading",
     icon: MapPin,
-    gradient: "from-teal-500 to-green-500",
-    change: "Leading",
+    gradient: "from-teal-500 to-emerald-600",
+    changeIndicator: "1st",
+    changeColor: "text-teal-300",
     description: "Most active area",
     tooltipInfo: "Real data based on IP-based geographic detection. Shows the region with the highest number of listening sessions. Location data is anonymized and aggregated."
   }, {
     title: "Peak Hour",
     value: `${stats?.peak_hour || 19}:00`,
+    unit: "PST",
     icon: Zap,
-    gradient: "from-yellow-500 to-orange-500",
-    change: "PST",
+    gradient: "from-yellow-500 to-orange-600",
+    changeIndicator: "busiest",
+    changeColor: "text-yellow-300",
     description: "Highest activity",
     tooltipInfo: "Calculated from aggregated listening patterns over the past 7 days. Shows the hour with the highest number of song plays. Time zone: Pacific Standard Time."
   }, {
-    title: "Total Likes",
+    title: "Song Hearts",
     value: totalLikes,
-    icon: Activity,
-    gradient: "from-pink-500 to-rose-500",
-    change: "Community",
-    description: "Song favorites",
+    unit: "likes",
+    icon: Heart,
+    gradient: "from-rose-500 to-pink-600",
+    changeIndicator: "total",
+    changeColor: "text-rose-300",
+    description: "Community favorites",
     tooltipInfo: "Real data from user interactions. Counts all heart/like actions on songs across the platform. Updated in real-time when users like songs."
   }];
   if (loading) {
-    return <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-8 gap-6">
-        {Array.from({
-        length: 8
-      }).map((_, i) => <Card key={i} className="bg-slate-900/50 border-purple-500/30">
-            <CardContent className="p-6">
-              <div className="animate-pulse space-y-4">
-                <div className="h-12 w-12 bg-slate-700 rounded-xl"></div>
-                <div className="h-4 w-20 bg-slate-700 rounded"></div>
-                <div className="h-8 w-16 bg-slate-700 rounded"></div>
-                <div className="h-3 w-24 bg-slate-700 rounded"></div>
+    return <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-8 gap-4 lg:gap-6">
+        {Array.from({ length: 8 }).map((_, i) => (
+          <Card key={i} className="bg-card/50 border-border/60 backdrop-blur-sm animate-fade-in" style={{ animationDelay: `${i * 100}ms` }}>
+            <CardContent className="p-4 lg:p-5">
+              <div className="animate-pulse space-y-3">
+                <div className="flex items-center justify-between">
+                  <div className="h-10 w-10 bg-muted rounded-lg"></div>
+                  <div className="h-4 w-12 bg-muted rounded-full"></div>
+                </div>
+                <div className="space-y-2">
+                  <div className="h-4 w-20 bg-muted rounded"></div>
+                  <div className="h-7 w-16 bg-muted rounded"></div>
+                  <div className="h-3 w-24 bg-muted rounded"></div>
+                </div>
               </div>
             </CardContent>
-          </Card>)}
+          </Card>
+        ))}
       </div>;
   }
-  return <TooltipProvider>
-      <div className="space-y-4">
-        <div className="flex items-center justify-between mb-6">
-          <div className="flex items-center space-x-3">
-            <div className="p-3 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg shadow-lg shadow-blue-500/25">
-              <TrendingUp className="h-7 w-7 text-white" />
+
+  return (
+    <TooltipProvider>
+      <div className="space-y-6">
+        {/* Header Section */}
+        <div className="flex items-center justify-between">
+          <div className="flex items-center space-x-4">
+            <div className="relative p-3 bg-gradient-to-br from-primary/20 to-primary/10 rounded-xl border border-primary/20 backdrop-blur-sm">
+              <TrendingUp className="h-6 w-6 text-primary" />
+              <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent rounded-xl"></div>
             </div>
             <div>
-              <h2 className="text-2xl lg:text-3xl font-semibold text-white">Analytics Overview</h2>
-              <p className="text-slate-300 text-base lg:text-lg">Real-time performance metrics</p>
+              <h1 className="text-2xl lg:text-3xl font-bold text-foreground">Analytics Dashboard</h1>
+              <p className="text-muted-foreground">Live performance metrics • Updated {formatTimeAgo(lastRefreshed)}</p>
             </div>
           </div>
-          
         </div>
         
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-8 gap-4 lg:gap-6">
+        {/* Metrics Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-8 gap-4 lg:gap-5">
           {statCards.map((stat, index) => {
-          const Icon = stat.icon;
-          return <Card key={stat.title} className="bg-slate-900/60 border-purple-500/40 shadow-2xl shadow-purple-500/20 backdrop-blur-xl hover:scale-[1.02] hover:shadow-purple-500/30 transition-all duration-300 group touch-manipulation min-h-[200px] sm:min-h-[180px]" style={{
-            animationDelay: `${index * 100}ms`
-          }}>
-                <CardContent className="p-4 lg:p-6 h-full flex flex-col justify-between">
-                  <div className="flex items-center justify-between mb-4">
-                    <div className={`p-3 lg:p-4 rounded-xl bg-gradient-to-r ${stat.gradient} shadow-lg group-hover:shadow-xl transition-shadow duration-300`}>
-                      <Icon className="h-6 w-6 lg:h-7 lg:w-7 text-white" />
+            const Icon = stat.icon;
+            return (
+              <Card 
+                key={stat.title} 
+                className="group relative bg-card/60 border-border/60 backdrop-blur-sm hover:bg-card/80 hover:border-border transition-all duration-300 hover-scale animate-fade-in overflow-hidden"
+                style={{ animationDelay: `${index * 100}ms` }}
+              >
+                {/* Background gradient overlay */}
+                <div className={`absolute inset-0 bg-gradient-to-br ${stat.gradient} opacity-0 group-hover:opacity-5 transition-opacity duration-300`} />
+                
+                <CardContent className="p-4 lg:p-5 relative">
+                  {/* Header with icon and indicator */}
+                  <div className="flex items-start justify-between mb-3">
+                    <div className={`relative p-2.5 rounded-lg bg-gradient-to-br ${stat.gradient} shadow-lg group-hover:shadow-xl transition-all duration-300`}>
+                      <Icon className="h-5 w-5 text-white" />
                     </div>
-                    <div className="text-right">
-                      <div className="text-sm lg:text-base text-green-300 font-medium">{stat.change}</div>
-                    </div>
+                    <Badge 
+                      variant="secondary" 
+                      className={`${stat.changeColor} bg-background/50 border-border/50 text-xs font-medium px-2 py-1 backdrop-blur-sm`}
+                    >
+                      {stat.changeIndicator}
+                    </Badge>
                   </div>
                   
-                  <div className="space-y-2 flex-1">
+                  {/* Content section */}
+                  <div className="space-y-2">
+                    {/* Title and info icon */}
                     <div className="flex items-center justify-between">
-                      <h3 className="text-sm lg:text-base font-medium text-slate-300">{stat.title}</h3>
-                      <Tooltip>
+                      <h3 className="text-sm font-semibold text-foreground/90 line-clamp-1">{stat.title}</h3>
+                      <Tooltip delayDuration={300}>
                         <TooltipTrigger asChild>
-                          <Info className="h-4 w-4 text-slate-400 hover:text-slate-200 cursor-help touch-manipulation" />
+                          <Info className="h-3.5 w-3.5 text-muted-foreground hover:text-foreground cursor-help transition-colors shrink-0" />
                         </TooltipTrigger>
-                        <TooltipContent className="max-w-xs z-50 bg-slate-800 border-slate-700 text-slate-100">
-                          <div className="space-y-2">
-                            <p className="text-sm">{stat.tooltipInfo}</p>
-                            <div className="text-xs text-slate-300 border-t border-slate-700 pt-2">
+                        <TooltipContent className="max-w-xs bg-popover border-border shadow-lg">
+                          <div className="space-y-2 p-1">
+                            <p className="text-sm leading-relaxed">{stat.tooltipInfo}</p>
+                            <div className="text-xs text-muted-foreground border-t border-border pt-2">
                               Last updated: {formatTimeAgo(lastRefreshed)}
                             </div>
                           </div>
                         </TooltipContent>
                       </Tooltip>
                     </div>
-                    <div className="text-3xl lg:text-4xl xl:text-2xl font-bold text-white group-hover:text-cyan-200 transition-colors duration-300">
-                      {typeof stat.value === 'number' && stat.title !== "Peak Hour" ? stat.value.toLocaleString() : stat.value}
+                    
+                    {/* Main value */}
+                    <div className="flex items-baseline space-x-1">
+                      <span className="text-2xl lg:text-3xl font-bold text-foreground group-hover:text-primary transition-colors duration-300">
+                        {typeof stat.value === 'number' && stat.title !== "Peak Hour" 
+                          ? stat.value.toLocaleString() 
+                          : stat.value}
+                      </span>
+                      <span className="text-xs text-muted-foreground font-medium">{stat.unit}</span>
                     </div>
-                    <p className="text-sm lg:text-base text-slate-400">{stat.description}</p>
+                    
+                    {/* Description */}
+                    <p className="text-xs text-muted-foreground leading-relaxed line-clamp-2">{stat.description}</p>
                   </div>
-                  
-                  {/* Glow effect on hover */}
-                  <div className={`absolute inset-0 rounded-lg bg-gradient-to-r ${stat.gradient} opacity-0 group-hover:opacity-10 transition-opacity duration-300 pointer-events-none`} />
                 </CardContent>
-              </Card>;
-        })}
+              </Card>
+            );
+          })}
         </div>
       </div>
-    </TooltipProvider>;
+    </TooltipProvider>
+  );
 };
 export default DashboardStats;
