@@ -236,13 +236,13 @@ const EnhancedTopSongsAnalytics = () => {
     const sorted = filtered.sort((a, b) => {
       switch (viewMode) {
         case 'plays':
-          return b.total_plays - a.total_plays;
+          return b.total_attempts - a.total_attempts;
         case 'likes':
           return b.total_likes - a.total_likes;
         case 'engagement':
           return b.engagement_score - a.engagement_score;
         default:
-          return b.total_plays - a.total_plays;
+          return b.total_attempts - a.total_attempts;
       }
     });
 
@@ -280,13 +280,13 @@ const EnhancedTopSongsAnalytics = () => {
   const maxValue = Math.max(...sortedSongs.map(song => {
     switch (viewMode) {
       case 'plays':
-        return song.total_plays;
+        return song.total_attempts;
       case 'likes':
         return song.total_likes;
       case 'engagement':
         return song.engagement_score;
       default:
-        return song.total_plays;
+        return song.total_attempts;
     }
   }), 1);
 
@@ -407,7 +407,7 @@ const EnhancedTopSongsAnalytics = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {sortedSongs.map((song, index) => {
                 const metadata = getSongMetadata(song.song_id);
-                const currentValue = viewMode === 'plays' ? song.total_plays : 
+                const currentValue = viewMode === 'plays' ? song.total_attempts : 
                                    viewMode === 'likes' ? song.total_likes : 
                                    song.engagement_score;
                 const progressPercentage = Math.min((currentValue / maxValue) * 100, 100);
