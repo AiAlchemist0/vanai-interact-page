@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useAudio } from '@/contexts/AudioContext';
 import { useToast } from '@/hooks/use-toast';
 
@@ -25,6 +25,8 @@ export const useUnifiedAudioControl = (songId: string, songIndex?: number, updat
   
   const { toast } = useToast();
   const [loadingSong, setLoadingSong] = useState<string | null>(null);
+  const loadingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const minLoadingTimeRef = useRef<NodeJS.Timeout | null>(null);
 
   // Standardized current song detection - prioritize songId match for consistency
   const isCurrent = currentSong?.id === songId;
@@ -36,6 +38,67 @@ export const useUnifiedAudioControl = (songId: string, songIndex?: number, updat
     isCurrent: isCurrent,
     progress: isCurrent ? progress : 0
   };
+
+  // Clear loading timeouts on unmount
+  useEffect(() => {
+    return () => {
+      if (loadingTimeoutRef.current) {
+        clearTimeout(loadingTimeoutRef.current);
+      }
+      if (minLoadingTimeRef.current) {
+        clearTimeout(minLoadingTimeRef.current);
+      }
+    };
+  }, []);
+
+  // Enhanced loading state management with minimum display time
+  const setLoadingWithMinimumTime = (songId: string | null) => {
+    if (songId) {
+      setLoadingSong(songId);
+      
+      // Set minimum loading display time (500ms)
+      minLoadingTimeRef.current = setTimeout(() => {
+        // This ensures loading shows for at least 500ms
+      }, 500);
+      
+      // Set maximum loading time (5 seconds timeout)
+      loadingTimeoutRef.current = setTimeout(() => {
+        if (loadingSong === songId) {
+          setLoadingSong(null);
+          toast({
+            title: "Loading timeout",
+            description: "Song took too long to load. Please try again.",
+            variant: "destructive"
+          });
+        }
+      }, 5000);
+    } else {
+      // Clear loading with delay to ensure minimum display time
+      if (minLoadingTimeRef.current) {
+        setTimeout(() => {
+          setLoadingSong(null);
+          if (loadingTimeoutRef.current) {
+            clearTimeout(loadingTimeoutRef.current);
+          }
+        }, 200); // Small delay to ensure smooth transition
+      } else {
+        setLoadingSong(null);
+        if (loadingTimeoutRef.current) {
+          clearTimeout(loadingTimeoutRef.current);
+        }
+      }
+    }
+  };
+
+  // Clear loading state when song actually starts playing
+  useEffect(() => {
+    if (isCurrent && isPlaying && loadingSong === songId) {
+      // Add a slight delay to ensure "Loading..." is visible before "Now Playing"
+      setTimeout(() => {
+        setLoadingWithMinimumTime(null);
+      }, 300);
+    }
+  }, [isCurrent, isPlaying, loadingSong, songId]);
 
   const handlePlay = async () => {
     // Optimized: Only update activity for meaningful interactions
@@ -64,7 +127,7 @@ export const useUnifiedAudioControl = (songId: string, songIndex?: number, updat
     }
     
     // If clicking on a different song, load it and start playback
-    setLoadingSong(songId);
+    setLoadingWithMinimumTime(songId);
     try {
       // Get song metadata for console log
       const songs = await import('@/utils/songData');
@@ -79,9 +142,9 @@ export const useUnifiedAudioControl = (songId: string, songIndex?: number, updat
       // Load the specific song with autoplay flag
       loadSpecificSong(songId, true);
       
-      setLoadingSong(null);
+      // Note: Loading state will be cleared by the useEffect when song starts playing
     } catch (error) {
-      setLoadingSong(null);
+      setLoadingWithMinimumTime(null);
       toast({
         title: "Playback failed",
         description: "Could not play this song. Please try again.",
@@ -93,7 +156,7 @@ export const useUnifiedAudioControl = (songId: string, songIndex?: number, updat
   const handleStop = () => {
     updateActivity?.();
     stopPlayback();
-    setLoadingSong(null);
+    setLoadingWithMinimumTime(null);
   };
 
   return {
