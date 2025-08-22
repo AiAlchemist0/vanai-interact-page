@@ -124,9 +124,21 @@ export const SongInfoModal: React.FC<SongInfoModalProps> = ({
                   {/* Description */}
                   <div className="prose prose-sm max-w-none">
                     <p className="text-muted-foreground leading-relaxed text-sm sm:text-base">
-                      This song connects with the BC + AI Survey by exploring themes around artificial intelligence's 
-                      impact on creativity, community, and human experience. The artist's work speaks to the evolving 
-                      relationship between technology and artistic expression.
+                      {songId === "lionel-ringenbach" ? (
+                        <>
+                          Lionel Ringenbach's "ChatGPT: Est-ce que ma facture va exploser?" addresses critical questions around AI's environmental and economic impact - themes central to the BC + AI Survey's exploration of technology's broader implications. Through his song, Lionel examines the hidden costs of AI systems, from energy consumption to infrastructure demands. Learn more about his sustainability-focused work at{" "}
+                          <a 
+                            href="https://wattsup.tech" 
+                            target="_blank" 
+                            rel="noopener noreferrer" 
+                            className="text-primary hover:underline"
+                          >
+                            wattsup.tech
+                          </a>.
+                        </>
+                      ) : (
+                        "This song connects with the BC + AI Survey by exploring themes around artificial intelligence's impact on creativity, community, and human experience. The artist's work speaks to the evolving relationship between technology and artistic expression."
+                      )}
                     </p>
                   </div>
 
