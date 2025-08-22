@@ -16,7 +16,7 @@ import PhilippeSpecialEffects from "@/components/PhilippeSpecialEffects";
 const Index = () => {
   return (
     <OptimizedAudioPlayerProvider>
-      <PhilippeSpecialEffects type="page">
+      <PhilippeSpecialEffects type="page" disabled={true}>
         <div className="min-h-screen bg-background pt-20">
         <div className="pt-0">
           <Hero />

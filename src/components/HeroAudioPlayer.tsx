@@ -53,7 +53,7 @@ const HeroAudioPlayer = () => {
   };
 
   return (
-    <PhilippeSpecialEffects type="player">
+    <PhilippeSpecialEffects type="player" disabled={true}>
       <div className="bg-card/20 backdrop-blur-xl border border-border/20 rounded-3xl p-4 sm:p-6 lg:p-8 shadow-elegant w-full">
        {/* Enhanced Header - Compact for tablets */}
         <div className="mb-4 sm:mb-6 md:mb-8">
@@ -171,7 +171,7 @@ const HeroAudioPlayer = () => {
         </div>
 
         {/* Enhanced Song List - Optimized grid for all screen sizes */}
-       <PhilippeSpecialEffects type="playlist">
+       <PhilippeSpecialEffects type="playlist" disabled={true}>
          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 sm:gap-4 md:gap-5 lg:gap-6 relative z-10">
         {songs.map((song, index) => (
           <MemoizedSongItem

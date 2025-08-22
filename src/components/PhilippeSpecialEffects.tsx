@@ -5,16 +5,17 @@ import { useReducedMotion } from '@/hooks/useReducedMotion';
 interface PhilippeSpecialEffectsProps {
   type: 'player' | 'page' | 'playlist';
   children?: React.ReactNode;
+  disabled?: boolean;
 }
 
-const PhilippeSpecialEffects: React.FC<PhilippeSpecialEffectsProps> = ({ type, children }) => {
+const PhilippeSpecialEffects: React.FC<PhilippeSpecialEffectsProps> = ({ type, children, disabled = false }) => {
   const { currentSong, isPlaying } = useAudio();
   const prefersReducedMotion = useReducedMotion();
   
   // Check if Philippe Pasquier's song is currently playing
   const isPhilippePlayingActive = useMemo(() => 
-    currentSong?.id === "philippe-pasquier-art-hallucinations" && isPlaying && !prefersReducedMotion,
-    [currentSong?.id, isPlaying, prefersReducedMotion]
+    !disabled && currentSong?.id === "philippe-pasquier-art-hallucinations" && isPlaying && !prefersReducedMotion,
+    [disabled, currentSong?.id, isPlaying, prefersReducedMotion]
   );
 
   if (type === 'player') {
