@@ -63,7 +63,7 @@ const DashboardStats = () => {
   const statCards = [{
     title: "Total Plays",
     value: stats?.total_attempts || 0,
-    unit: "attempts",
+    unit: "",
     icon: Play,
     gradient: "from-blue-500 to-indigo-600",
     changeIndicator: "all",
