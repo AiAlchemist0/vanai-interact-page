@@ -504,7 +504,7 @@ const EnhancedTopSongsAnalytics = () => {
                           <span className="text-xs text-muted-foreground">Plays</span>
                         </div>
                         <p className="text-sm font-semibold text-foreground">
-                          {song.total_plays} / {song.total_attempts}
+                          {song.total_plays}
                         </p>
                       </div>
                       <div className="bg-muted/30 rounded-lg p-3">
