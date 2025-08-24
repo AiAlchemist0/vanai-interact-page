@@ -25,6 +25,7 @@ export const useUnifiedAudioControl = (songId: string, songIndex?: number, updat
   
   const { toast } = useToast();
   const [loadingSong, setLoadingSong] = useState<string | null>(null);
+  const [lastPlayAttempt, setLastPlayAttempt] = useState<string | null>(null);
   const loadingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const minLoadingTimeRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -126,15 +127,28 @@ export const useUnifiedAudioControl = (songId: string, songIndex?: number, updat
       return;
     }
     
+    // Prevent duplicate tracking if this is the same song we just attempted
+    if (lastPlayAttempt === songId) {
+      console.log('🚫 Duplicate play attempt prevented for:', songId);
+      return;
+    }
+
     // If clicking on a different song, load it and start playback
     setLoadingWithMinimumTime(songId);
+    setLastPlayAttempt(songId);
+    
     try {
       // Get song metadata for console log
       const songs = await import('@/utils/songData');
       const songMetadata = songs.getSongMetadata(songId);
       
-      // Add console log for consistency with navigation panel
+      // Enhanced console log with autoplay status
       console.log('▶️ Manual play: Starting play tracking for:', songMetadata.title);
+      console.log('🎵 Audio context state:', {
+        songId,
+        userActivated: true,
+        timestamp: new Date().toISOString()
+      });
       
       // Start play tracking for the new song (geographic tracking is now session-based)
       await startPlayTracking(songId);
@@ -142,14 +156,30 @@ export const useUnifiedAudioControl = (songId: string, songIndex?: number, updat
       // Load the specific song with autoplay flag
       loadSpecificSong(songId, true);
       
+      // Clear duplicate prevention after successful load
+      setTimeout(() => setLastPlayAttempt(null), 2000);
+      
       // Note: Loading state will be cleared by the useEffect when song starts playing
     } catch (error) {
       setLoadingWithMinimumTime(null);
-      toast({
-        title: "Playback failed",
-        description: "Could not play this song. Please try again.",
-        variant: "destructive"
-      });
+      setLastPlayAttempt(null);
+      
+      // Enhanced error logging
+      console.error('❌ Playback failed:', error);
+      if (error instanceof Error && error.message.includes('autoplay')) {
+        console.log('🔇 Autoplay blocked - user interaction required');
+        toast({
+          title: "Audio blocked",
+          description: "Click anywhere on the page first, then try playing the song.",
+          variant: "default"
+        });
+      } else {
+        toast({
+          title: "Playback failed",
+          description: "Could not play this song. Please try again.",
+          variant: "destructive"
+        });
+      }
     }
   };
 

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
-import { Play, Pause, Loader2, Music, Check } from 'lucide-react';
+import { Play, Pause, Loader2, Music, Check, MousePointer } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { UnifiedAudioState } from '@/hooks/useUnifiedAudioControl';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
@@ -14,6 +14,8 @@ interface UnifiedPlayButtonProps {
   className?: string;
   showProgress?: boolean;
   disabled?: boolean;
+  needsInteraction?: boolean;
+  autoplayBlocked?: boolean;
   'aria-label'?: string;
 }
 
@@ -40,6 +42,8 @@ export const UnifiedPlayButton: React.FC<UnifiedPlayButtonProps> = ({
   className,
   showProgress = false,
   disabled = false,
+  needsInteraction = false,
+  autoplayBlocked = false,
   'aria-label': ariaLabel
 }) => {
   const { isLoading, isPlaying, isPaused, isCurrent, progress } = audioState;
@@ -89,6 +93,10 @@ export const UnifiedPlayButton: React.FC<UnifiedPlayButtonProps> = ({
     if (isLoading) {
       return <Loader2 className={cn(iconClass, 'animate-spin')} />;
     }
+
+    if (autoplayBlocked || needsInteraction) {
+      return <MousePointer className={cn(iconClass, 'text-amber-500')} />;
+    }
     
     if (isPlaying) {
       return variant === 'compact' ? (
@@ -107,47 +115,71 @@ export const UnifiedPlayButton: React.FC<UnifiedPlayButtonProps> = ({
 
   const getAriaLabel = () => {
     if (ariaLabel) return ariaLabel;
+    if (autoplayBlocked) return 'Click to enable audio playback';
+    if (needsInteraction) return 'Click to start playing';
     if (isLoading) return 'Loading song';
     if (isPlaying) return 'Pause song';
     if (isPaused) return 'Resume song';
     return 'Play song';
   };
 
+  const buttonContent = (
+    <Button
+      variant="ghost"
+      size="icon"
+      onClick={onPlay}
+      disabled={disabled || isLoading}
+      className={cn(
+        sizeClasses[size], 
+        getButtonStyles(), 
+        className,
+        (autoplayBlocked || needsInteraction) && 'ring-2 ring-amber-400/50 shadow-lg'
+      )}
+      aria-label={getAriaLabel()}
+    >
+      {getIcon()}
+      
+      {/* Progress Ring for Currently Playing Song */}
+      {showProgress && isCurrent && isPlaying && (
+        <div className="absolute inset-0 rounded-full">
+          <svg className="w-full h-full transform -rotate-90" viewBox="0 0 36 36">
+            <path
+              d="M18,2.0845 a 15.9155,15.9155 0 0,1 0,31.831 a 15.9155,15.9155 0 0,1 0,-31.831"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeOpacity="0.3"
+            />
+            <path
+              d="M18,2.0845 a 15.9155,15.9155 0 0,1 0,31.831 a 15.9155,15.9155 0 0,1 0,-31.831"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeDasharray={`${progress}, 100`}
+              className="transition-all duration-300"
+            />
+          </svg>
+        </div>
+      )}
+    </Button>
+  );
+
   return (
     <div className="relative">
-      <Button
-        variant="ghost"
-        size="icon"
-        onClick={onPlay}
-        disabled={disabled || isLoading}
-        className={cn(sizeClasses[size], getButtonStyles(), className)}
-        aria-label={getAriaLabel()}
-      >
-        {getIcon()}
-        
-        {/* Progress Ring for Currently Playing Song */}
-        {showProgress && isCurrent && isPlaying && (
-          <div className="absolute inset-0 rounded-full">
-            <svg className="w-full h-full transform -rotate-90" viewBox="0 0 36 36">
-              <path
-                d="M18,2.0845 a 15.9155,15.9155 0 0,1 0,31.831 a 15.9155,15.9155 0 0,1 0,-31.831"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeOpacity="0.3"
-              />
-              <path
-                d="M18,2.0845 a 15.9155,15.9155 0 0,1 0,31.831 a 15.9155,15.9155 0 0,1 0,-31.831"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeDasharray={`${progress}, 100`}
-                className="transition-all duration-300"
-              />
-            </svg>
-          </div>
-        )}
-      </Button>
+      {(autoplayBlocked || needsInteraction) ? (
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              {buttonContent}
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>{autoplayBlocked ? 'Browser blocked autoplay - click to enable' : 'Click to start playing'}</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+      ) : (
+        buttonContent
+      )}
 
       {/* Status indicator for loaded songs */}
       {(isPlaying || isPaused) && isCurrent && (
