@@ -145,11 +145,15 @@ export const SongInfoModal: React.FC<SongInfoModalProps> = ({
                              wattsup.tech
                            </a>.
                          </>
-                       ) : songId === "dr-patrick" ? (
-                         <>
-                           "Dr. Patrick Parra Pennefather" by UBC AI Orchestra celebrates the remarkable journey of Dr. Patrick from his leadership role in UBC's Faculty of Arts and the Emerging Media Lab to his influential presence in Vancouver's AI community. As a sound designer, composer, and XR innovation mentor, Dr. Patrick embodies the interdisciplinary bridge between traditional media arts and cutting-edge AI applications. His work with immersive soundscapes, virtual anatomy labs, and Fun Palace carnivals demonstrates how AI collaborations can break down silos and redefine learning experiences. The song honors his vision "There is an AI for that" and his role as a connector who transforms sound into stories while inspiring the next generation of AI innovators.
-                         </>
-                       ) : (
+                        ) : songId === "dr-patrick" ? (
+                          <>
+                            "Dr. Patrick Parra Pennefather" by UBC AI Orchestra celebrates the remarkable journey of Dr. Patrick from his leadership role in UBC's Faculty of Arts and the Emerging Media Lab to his influential presence in Vancouver's AI community. As a sound designer, composer, and XR innovation mentor, Dr. Patrick embodies the interdisciplinary bridge between traditional media arts and cutting-edge AI applications. His work with immersive soundscapes, virtual anatomy labs, and Fun Palace carnivals demonstrates how AI collaborations can break down silos and redefine learning experiences. The song honors his vision "There is an AI for that" and his role as a connector who transforms sound into stories while inspiring the next generation of AI innovators.
+                          </>
+                        ) : songId === "lalala-ai-dilemma" ? (
+                          <>
+                            A generational anthem exploring the modern dilemma facing young people: pursue traditional university education or dive straight into the AI revolution. Matthew Schwartzman's raw narrative captures the tension between conventional paths and emerging opportunities, featuring mentorship from Dean Shev (Harvard-educated AI strategy leader) and deep connections to Vancouver's AI community including Kris Krug and Surrey meetups. The song authentically portrays the uncertainty of youth navigating job displacement fears (68% statistic), while celebrating the rebellious spirit of a new generation breaking traditional molds. With multilingual elements and references to Teen2Life podcasting, it's both a personal journey and a broader commentary on education's evolving role in the AI era.
+                          </>
+                        ) : (
                          "This song connects with the BC + AI Survey by exploring themes around artificial intelligence's impact on creativity, community, and human experience. The artist's work speaks to the evolving relationship between technology and artistic expression."
                       )}
                     </p>
