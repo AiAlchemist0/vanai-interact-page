@@ -123,21 +123,30 @@ export const SongInfoModal: React.FC<SongInfoModalProps> = ({
                 <div className="space-y-6 pr-4 pb-6">
                   {/* Description */}
                   <div className="prose prose-sm max-w-none">
-                    <p className="text-muted-foreground leading-relaxed text-sm sm:text-base">
-                      {songId === "lionel-ringenbach" ? (
-                        <>
-                          Lionel Ringenbach's "ChatGPT: Est-ce que ma facture va exploser?" addresses critical questions around AI's environmental and economic impact - themes central to the BC + AI Survey's exploration of technology's broader implications. Through his song, Lionel examines the hidden costs of AI systems, from energy consumption to infrastructure demands. Learn more about his sustainability-focused work at{" "}
-                          <a 
-                            href="https://wattsup.tech" 
-                            target="_blank" 
-                            rel="noopener noreferrer" 
-                            className="text-primary hover:underline"
-                          >
-                            wattsup.tech
-                          </a>.
-                        </>
-                      ) : (
-                        "This song connects with the BC + AI Survey by exploring themes around artificial intelligence's impact on creativity, community, and human experience. The artist's work speaks to the evolving relationship between technology and artistic expression."
+                     <p className="text-muted-foreground leading-relaxed text-sm sm:text-base">
+                       {songId === "pixel-wizard" ? (
+                         <>
+                           Kevin Friel's "Mr. Pixel Wizard BC AI" celebrates Vancouver's AI filmmaking 
+                           community and the transformative power of AI in creative industries. The song 
+                           highlights how AI tools are democratizing film production, breaking down 
+                           traditional barriers, and enabling artists to create without massive budgets 
+                           or crews. It specifically honors the VanAI community's role in fostering 
+                           innovation and collaboration among AI enthusiasts and creators in British Columbia.
+                         </>
+                       ) : songId === "lionel-ringenbach" ? (
+                         <>
+                           Lionel Ringenbach's "ChatGPT: Est-ce que ma facture va exploser?" addresses critical questions around AI's environmental and economic impact - themes central to the BC + AI Survey's exploration of technology's broader implications. Through his song, Lionel examines the hidden costs of AI systems, from energy consumption to infrastructure demands. Learn more about his sustainability-focused work at{" "}
+                           <a 
+                             href="https://wattsup.tech" 
+                             target="_blank" 
+                             rel="noopener noreferrer" 
+                             className="text-primary hover:underline"
+                           >
+                             wattsup.tech
+                           </a>.
+                         </>
+                       ) : (
+                         "This song connects with the BC + AI Survey by exploring themes around artificial intelligence's impact on creativity, community, and human experience. The artist's work speaks to the evolving relationship between technology and artistic expression."
                       )}
                     </p>
                   </div>
