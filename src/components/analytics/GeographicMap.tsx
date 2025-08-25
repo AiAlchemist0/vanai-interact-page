@@ -92,7 +92,7 @@ const GeographicMap = () => {
         </CardHeader>
         <CardContent className="p-6">
           <div className="space-y-4">
-            {geoData.slice(0, 5).map((location, index) => (
+            {geoData.map((location, index) => (
               <div key={`${location.region}-${location.city}-${index}`} className="flex items-center justify-between p-4 bg-slate-800/60 rounded-lg hover:bg-slate-800/80 transition-colors duration-200 touch-manipulation min-h-[60px]">
                 <div className="flex items-center space-x-3">
                   <MapPin className="h-5 w-5 lg:h-6 lg:w-6 text-green-300" />
