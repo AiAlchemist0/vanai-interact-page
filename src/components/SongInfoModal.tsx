@@ -145,6 +145,10 @@ export const SongInfoModal: React.FC<SongInfoModalProps> = ({
                              wattsup.tech
                            </a>.
                          </>
+                       ) : songId === "dr-patrick" ? (
+                         <>
+                           "Dr. Patrick Parra Pennefather" by UBC AI Orchestra celebrates the remarkable journey of Dr. Patrick from his leadership role in UBC's Faculty of Arts and the Emerging Media Lab to his influential presence in Vancouver's AI community. As a sound designer, composer, and XR innovation mentor, Dr. Patrick embodies the interdisciplinary bridge between traditional media arts and cutting-edge AI applications. His work with immersive soundscapes, virtual anatomy labs, and Fun Palace carnivals demonstrates how AI collaborations can break down silos and redefine learning experiences. The song honors his vision "There is an AI for that" and his role as a connector who transforms sound into stories while inspiring the next generation of AI innovators.
+                         </>
                        ) : (
                          "This song connects with the BC + AI Survey by exploring themes around artificial intelligence's impact on creativity, community, and human experience. The artist's work speaks to the evolving relationship between technology and artistic expression."
                       )}
