@@ -437,10 +437,90 @@ const SONGS: Song[] = [
     src: getAudioUrl("Indigenomics AI, that's where we start.mp3"),
     coverArt: "/lovable-uploads/8d6e4150-076b-4f1c-840b-595c15a55048.png",
     lyrics: [
-      { time: 0, text: "Indigenomics AI, that's where we start" },
-      { time: 4, text: "Building bridges with technology's art" },
-      { time: 8, text: "Ancient wisdom meets digital flow" },
-      { time: 12, text: "Together we learn, together we grow" }
+      // Verse 1
+      { time: 0, text: "I'm Carol Anne Hilton, with a sparkle and a plan," },
+      { time: 4, text: "Hesquiaht roots run deep, from Ahousaht and Makah land." },
+      { time: 8, text: "Indigenomics rising, AI hummin' like a band," },
+      { time: 12, text: "Blending ancient wisdom with tech in my hand." },
+      { time: 16, text: "" },
+      { time: 18, text: "Numbers with a heartbeat, policy with a grin," },
+      { time: 22, text: "Economic empowerment, let the journey begin—" },
+      { time: 26, text: "Who wants to play Indigenomics? Come on in!" },
+      { time: 30, text: "" },
+      
+      // Chorus
+      { time: 32, text: "Oh, Indigenomics, take a seat at the table so grand," },
+      { time: 36, text: "Relationships weaving, stewardship across the land." },
+      { time: 40, text: "Sovereign data dancing, stories in the code," },
+      { time: 44, text: "Future's bright and bold on this Indigenous road." },
+      { time: 48, text: "" },
+      { time: 50, text: "Care for all, commerce with heart," },
+      { time: 54, text: "Indigenomics AI, that's where we start—" },
+      { time: 58, text: "Everybody sing, let the movement ignite!" },
+      { time: 62, text: "" },
+      
+      // Verse 2
+      { time: 64, text: "Land says \"hello,\" we answer \"we see you,\"" },
+      { time: 68, text: "Value in our stories, not just revenue." },
+      { time: 72, text: "Sovereign data governance keepin' perfect time," },
+      { time: 76, text: "Dashboards wink-wink, lookin' mighty fine." },
+      { time: 80, text: "" },
+      { time: 82, text: "From boardrooms to communities, breaking old chains," },
+      { time: 86, text: "Indigenous economies flowing like rains." },
+      { time: 90, text: "AI tools empowering, voices amplified," },
+      { time: 94, text: "In the circle of growth, no one's left behind." },
+      { time: 98, text: "" },
+      
+      // Chorus
+      { time: 100, text: "Oh, Indigenomics, take a seat at the table so grand," },
+      { time: 104, text: "Relationships weaving, stewardship across the land." },
+      { time: 108, text: "Sovereign data dancing, stories in the code," },
+      { time: 112, text: "Future's bright and bold on this Indigenous road." },
+      { time: 116, text: "" },
+      { time: 118, text: "Care for all, commerce with heart," },
+      { time: 122, text: "Indigenomics AI, that's where we start—" },
+      { time: 126, text: "Everybody sing, let the movement ignite!" },
+      { time: 130, text: "" },
+      
+      // Verse 3
+      { time: 132, text: "Scoot up a chair, make room for the crew," },
+      { time: 136, text: "We braid care and commerce like we always do." },
+      { time: 140, text: "Future in good hands, bright as cedar rings," },
+      { time: 144, text: "Books like \"Taking a Seat,\" where the truth sings." },
+      { time: 148, text: "" },
+      { time: 150, text: "Global Centre calling, Institute leading the way," },
+      { time: 154, text: "Economic liberation, day by day." },
+      { time: 158, text: "Who wants to play Indigenomics? Everybody sings!" },
+      { time: 162, text: "" },
+      
+      // Bridge
+      { time: 164, text: "From Hesquiaht shores to the world's wide stage," },
+      { time: 168, text: "I'm Carol Anne, turning the page." },
+      { time: 172, text: "No more margins, we're center and strong," },
+      { time: 176, text: "Indigenomics AI, where we all belong." },
+      { time: 180, text: "" },
+      { time: 182, text: "Multigenerational dreams, resources in trust," },
+      { time: 186, text: "Building empires from the ground up, we must." },
+      { time: 190, text: "Join the rise, feel the power unfold," },
+      { time: 194, text: "Indigenous futures, in stories retold." },
+      { time: 198, text: "" },
+      
+      // Final Chorus
+      { time: 200, text: "Oh, Indigenomics, take a seat at the table so grand," },
+      { time: 204, text: "Relationships weaving, stewardship across the land." },
+      { time: 208, text: "Sovereign data dancing, stories in the code," },
+      { time: 212, text: "Future's bright and bold on this Indigenous road." },
+      { time: 216, text: "" },
+      { time: 218, text: "Care for all, commerce with heart," },
+      { time: 222, text: "Indigenomics AI, that's where we start—" },
+      { time: 226, text: "Everybody sing, let the movement ignite!" },
+      { time: 230, text: "" },
+      
+      // Outro
+      { time: 232, text: "I'm Carol Anne Hilton, with vision so clear," },
+      { time: 236, text: "Indigenomics forever, drawing us near." },
+      { time: 240, text: "Who wants to play? The invitation's for you," },
+      { time: 244, text: "In this economic dance, we'll see it through." }
     ] as LyricLine[]
   },
   {

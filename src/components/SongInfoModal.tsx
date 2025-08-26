@@ -77,6 +77,15 @@ export const SongInfoModal: React.FC<SongInfoModalProps> = ({
       'Human Identity': 'bg-[hsl(var(--survey-identity)/0.2)] text-[hsl(var(--survey-identity))] border-[hsl(var(--survey-identity)/0.3)]',
       'Leadership & Vision': 'bg-[hsl(var(--survey-future-vision)/0.2)] text-[hsl(var(--survey-future-vision))] border-[hsl(var(--survey-future-vision)/0.3)]',
       
+      // Indigenomics AI song specific categories
+      'Indigenous Identity & Heritage': 'bg-[hsl(var(--survey-identity)/0.2)] text-[hsl(var(--survey-identity))] border-[hsl(var(--survey-identity)/0.3)]',
+      'Economic Empowerment & Innovation': 'bg-[hsl(var(--survey-future-vision)/0.2)] text-[hsl(var(--survey-future-vision))] border-[hsl(var(--survey-future-vision)/0.3)]',
+      'Technology & AI Integration': 'bg-[hsl(var(--survey-ai-experience)/0.2)] text-[hsl(var(--survey-ai-experience))] border-[hsl(var(--survey-ai-experience)/0.3)]',
+      'Community & Relationships': 'bg-[hsl(var(--survey-relationships)/0.2)] text-[hsl(var(--survey-relationships))] border-[hsl(var(--survey-relationships)/0.3)]',
+      'Vision & Future Building': 'bg-[hsl(var(--survey-future-vision)/0.2)] text-[hsl(var(--survey-future-vision))] border-[hsl(var(--survey-future-vision)/0.3)]',
+      'Leadership & Authority': 'bg-[hsl(var(--survey-community)/0.2)] text-[hsl(var(--survey-community))] border-[hsl(var(--survey-community)/0.3)]',
+      'Values & Philosophy': 'bg-[hsl(var(--survey-creative-impact)/0.2)] text-[hsl(var(--survey-creative-impact))] border-[hsl(var(--survey-creative-impact)/0.3)]',
+      
       // Additional keyword category mappings
       'technology': 'bg-[hsl(var(--survey-ai-experience)/0.2)] text-[hsl(var(--survey-ai-experience))] border-[hsl(var(--survey-ai-experience)/0.3)]',
       'concept': 'bg-[hsl(var(--survey-creative-impact)/0.2)] text-[hsl(var(--survey-creative-impact))] border-[hsl(var(--survey-creative-impact)/0.3)]',
@@ -195,6 +204,16 @@ export const SongInfoModal: React.FC<SongInfoModalProps> = ({
                                 Under Loki Jorgenson's leadership, MAC has become a cornerstone of Vancouver's AI community, fostering deep conversations about what makes us human in this digital age. The working group bridges the gap between theoretical consciousness studies and practical AI development, inspiring a new generation of thinkers to question everything and break down traditional barriers between mind, technology, and consciousness.
                                 <br /><br />
                                 This musical tribute captures the essence of MAC's mission: rigorous intellectual pursuit, community-driven learning, and the bold exploration of frontiers where thoughts intertwine with technology. It stands as a testament to Vancouver's role as a hub for consciousness research and AI innovation.
+                              </>
+                            ) : songId === "indigenomics-ai" ? (
+                              <>
+                                Carol Anne Hilton's "Indigenomics AI, that's where we start" is a groundbreaking anthem that bridges Indigenous economic sovereignty with artificial intelligence innovation. As founder and CEO of the Indigenomics Institute and author of "Taking a Seat at the Table," Carol Anne brings decades of expertise in Indigenous economic development to the forefront of AI discourse.
+                                <br /><br />
+                                Her Hesquiaht First Nation heritage from Ahousaht and Makah territories informs her revolutionary approach to data sovereignty and Indigenous-led economic empowerment. Through the Global Centre for Indigenous Economic Healing, Carol Anne champions the integration of traditional Indigenous values with modern technology, ensuring AI development honors Indigenous worldviews of stewardship, community relationships, and multi-generational thinking.
+                                <br /><br />
+                                The song's central theme of "sovereign data governance" reflects Carol Anne's pioneering work in ensuring Indigenous communities maintain control over their cultural and economic narratives in the digital age. Her vision of "care and commerce" challenges traditional capitalist models by embedding Indigenous values of reciprocity and community wellbeing into economic frameworks.
+                                <br /><br />
+                                This anthem celebrates the movement from margins to center, positioning Indigenous voices as essential leaders in AI development rather than passive participants. Through her work with corporate boardrooms, policy development, and community building, Carol Anne demonstrates how Indigenous economic philosophies can transform the entire AI ecosystem to be more ethical, sustainable, and inclusive.
                               </>
                             ) : (
                           "This song connects with the BC + AI Survey by exploring themes around artificial intelligence's impact on creativity, community, and human experience. The artist's work speaks to the evolving relationship between technology and artistic expression."

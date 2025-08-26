@@ -47,8 +47,8 @@ export const getSongMetadata = (songId: string) => {
       return 'from-[hsl(var(--survey-creative-impact))] to-[hsl(var(--ai-purple))]'; // Philosophy & Consciousness - Purple
     }
     
-    if (combined.includes('identity') || combined.includes('self') || combined.includes('personal') || combined.includes('individual') || combined.includes('indigenous') || combined.includes('cultural') || combined.includes('heritage') || combined.includes('gabriel') || combined.includes('george')) {
-      return 'from-[hsl(var(--survey-identity))] to-[hsl(var(--accent))]'; // Identity - Orange
+    if (combined.includes('identity') || combined.includes('self') || combined.includes('personal') || combined.includes('individual') || combined.includes('indigenous') || combined.includes('cultural') || combined.includes('heritage') || combined.includes('gabriel') || combined.includes('george') || combined.includes('indigenomics') || combined.includes('carol anne hilton') || combined.includes('hesquiaht') || combined.includes('ahousaht') || combined.includes('makah')) {
+      return 'from-[hsl(var(--survey-identity))] to-[hsl(var(--survey-future-vision))]'; // Indigenous Identity + Future Vision
     }
     
     // Special cases for specific artists/content

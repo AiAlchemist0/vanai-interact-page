@@ -1,0 +1,90 @@
+-- Add comprehensive keywords for "Indigenomics AI, that's where we start" by Carol Anne Hilton
+
+-- Indigenous Identity & Heritage (High relevance: 9-10)
+INSERT INTO song_keywords (song_id, keyword, category, relevance_score) VALUES
+('indigenomics-ai', 'Hesquiaht', 'Indigenous Identity & Heritage', 10),
+('indigenomics-ai', 'Ahousaht', 'Indigenous Identity & Heritage', 10),
+('indigenomics-ai', 'Makah', 'Indigenous Identity & Heritage', 10),
+('indigenomics-ai', 'Indigenous', 'Indigenous Identity & Heritage', 10),
+('indigenomics-ai', 'Carol Anne Hilton', 'Indigenous Identity & Heritage', 10),
+('indigenomics-ai', 'roots', 'Indigenous Identity & Heritage', 9),
+('indigenomics-ai', 'land', 'Indigenous Identity & Heritage', 9),
+('indigenomics-ai', 'traditional', 'Indigenous Identity & Heritage', 9),
+('indigenomics-ai', 'cultural heritage', 'Indigenous Identity & Heritage', 9),
+('indigenomics-ai', 'cedar', 'Indigenous Identity & Heritage', 9),
+('indigenomics-ai', 'circles', 'Indigenous Identity & Heritage', 9),
+('indigenomics-ai', 'stewardship', 'Indigenous Identity & Heritage', 9),
+
+-- Economic Empowerment & Innovation (High relevance: 8-10)
+('indigenomics-ai', 'Indigenomics', 'Economic Empowerment & Innovation', 10),
+('indigenomics-ai', 'economic empowerment', 'Economic Empowerment & Innovation', 10),
+('indigenomics-ai', 'commerce', 'Economic Empowerment & Innovation', 9),
+('indigenomics-ai', 'revenue', 'Economic Empowerment & Innovation', 8),
+('indigenomics-ai', 'economies', 'Economic Empowerment & Innovation', 9),
+('indigenomics-ai', 'liberation', 'Economic Empowerment & Innovation', 9),
+('indigenomics-ai', 'empires', 'Economic Empowerment & Innovation', 8),
+('indigenomics-ai', 'multigenerational', 'Economic Empowerment & Innovation', 9),
+('indigenomics-ai', 'resources', 'Economic Empowerment & Innovation', 8),
+('indigenomics-ai', 'taking a seat', 'Economic Empowerment & Innovation', 9),
+('indigenomics-ai', 'boardrooms', 'Economic Empowerment & Innovation', 8),
+
+-- Technology & AI Integration (High relevance: 8-9)
+('indigenomics-ai', 'AI', 'Technology & AI Integration', 10),
+('indigenomics-ai', 'artificial intelligence', 'Technology & AI Integration', 9),
+('indigenomics-ai', 'tech', 'Technology & AI Integration', 8),
+('indigenomics-ai', 'sovereign data', 'Technology & AI Integration', 10),
+('indigenomics-ai', 'data governance', 'Technology & AI Integration', 10),
+('indigenomics-ai', 'dashboards', 'Technology & AI Integration', 8),
+('indigenomics-ai', 'code', 'Technology & AI Integration', 8),
+('indigenomics-ai', 'stories in code', 'Technology & AI Integration', 9),
+('indigenomics-ai', 'digital', 'Technology & AI Integration', 8),
+('indigenomics-ai', 'tools', 'Technology & AI Integration', 8),
+('indigenomics-ai', 'empowering', 'Technology & AI Integration', 9),
+
+-- Community & Relationships (Medium-High relevance: 7-8)
+('indigenomics-ai', 'relationships', 'Community & Relationships', 8),
+('indigenomics-ai', 'community', 'Community & Relationships', 8),
+('indigenomics-ai', 'weaving', 'Community & Relationships', 8),
+('indigenomics-ai', 'table', 'Community & Relationships', 8),
+('indigenomics-ai', 'crew', 'Community & Relationships', 7),
+('indigenomics-ai', 'circle', 'Community & Relationships', 8),
+('indigenomics-ai', 'voices amplified', 'Community & Relationships', 8),
+('indigenomics-ai', 'movement', 'Community & Relationships', 8),
+('indigenomics-ai', 'everyone', 'Community & Relationships', 7),
+('indigenomics-ai', 'belonging', 'Community & Relationships', 8),
+('indigenomics-ai', 'trust', 'Community & Relationships', 7),
+
+-- Vision & Future Building (Medium-High relevance: 7-8)
+('indigenomics-ai', 'future', 'Vision & Future Building', 8),
+('indigenomics-ai', 'vision', 'Vision & Future Building', 8),
+('indigenomics-ai', 'bright', 'Vision & Future Building', 7),
+('indigenomics-ai', 'bold', 'Vision & Future Building', 8),
+('indigenomics-ai', 'dreams', 'Vision & Future Building', 8),
+('indigenomics-ai', 'page turning', 'Vision & Future Building', 7),
+('indigenomics-ai', 'unfold', 'Vision & Future Building', 7),
+('indigenomics-ai', 'rise', 'Vision & Future Building', 8),
+('indigenomics-ai', 'power', 'Vision & Future Building', 8),
+('indigenomics-ai', 'movement ignite', 'Vision & Future Building', 8),
+('indigenomics-ai', 'forever', 'Vision & Future Building', 7),
+
+-- Leadership & Authority (Medium relevance: 6-7)
+('indigenomics-ai', 'Global Centre', 'Leadership & Authority', 7),
+('indigenomics-ai', 'Institute', 'Leadership & Authority', 7),
+('indigenomics-ai', 'leadership', 'Leadership & Authority', 7),
+('indigenomics-ai', 'calling', 'Leadership & Authority', 6),
+('indigenomics-ai', 'leading the way', 'Leadership & Authority', 7),
+('indigenomics-ai', 'center', 'Leadership & Authority', 6),
+('indigenomics-ai', 'strong', 'Leadership & Authority', 6),
+('indigenomics-ai', 'seat at table', 'Leadership & Authority', 7),
+('indigenomics-ai', 'invitation', 'Leadership & Authority', 6),
+
+-- Values & Philosophy (Medium relevance: 6-7)
+('indigenomics-ai', 'care', 'Values & Philosophy', 7),
+('indigenomics-ai', 'wisdom', 'Values & Philosophy', 7),
+('indigenomics-ai', 'heartbeat', 'Values & Philosophy', 7),
+('indigenomics-ai', 'stories', 'Values & Philosophy', 7),
+('indigenomics-ai', 'truth', 'Values & Philosophy', 7),
+('indigenomics-ai', 'sparkle', 'Values & Philosophy', 6),
+('indigenomics-ai', 'grin', 'Values & Philosophy', 6),
+('indigenomics-ai', 'journey', 'Values & Philosophy', 6),
+('indigenomics-ai', 'dance', 'Values & Philosophy', 6);
