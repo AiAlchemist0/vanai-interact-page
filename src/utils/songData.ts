@@ -43,7 +43,7 @@ export const getSongMetadata = (songId: string) => {
       return 'from-[hsl(var(--survey-community))] to-[hsl(var(--ai-orange))]'; // Community - Yellow/Orange
     }
     
-    if (combined.includes('identity') || combined.includes('consciousness') || combined.includes('mind') || combined.includes('self') || combined.includes('personal') || combined.includes('individual')) {
+    if (combined.includes('identity') || combined.includes('consciousness') || combined.includes('mind') || combined.includes('self') || combined.includes('personal') || combined.includes('individual') || combined.includes('indigenous') || combined.includes('cultural') || combined.includes('heritage') || combined.includes('gabriel') || combined.includes('george')) {
       return 'from-[hsl(var(--survey-identity))] to-[hsl(var(--accent))]'; // Identity - Orange
     }
     

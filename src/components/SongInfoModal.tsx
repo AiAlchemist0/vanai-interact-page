@@ -159,11 +159,11 @@ export const SongInfoModal: React.FC<SongInfoModalProps> = ({
                             <>
                               Kris Krug, the visionary founder and philosophical leader of Vancouver's AI community, this song embodies the heart of BC's AI discourse. As founder of the Vancouver AI Community, BC + AI Association, and creator of "Sandboxing AI", Kris bridges traditional media (as a National Geographic photographer) with AI innovation through his "Human++" philosophy. This piece explores deepfake technology, relationship authenticity, and the tension between human touch and code-driven art while celebrating unity in the AI era. It reflects Kris's role as a community connector who facilitates crucial conversations about AI's impact on humanity, creativity, and relationships, addressing fears while promoting optimism about our technological future.
                             </>
-                          ) : songId === "gabriel-george-sr-eagles-watch" ? (
-                            <>
-                              A profound Indigenous cultural teaching that bridges ancient wisdom with modern technology challenges. Gabriel George Sr. welcomes listeners to the sacred inlet village of suh-nak, sharing ancestral stories from the mus-kwee-um, skwaw-mish, and ts-lay-wah-tooth peoples. Through spoken word and traditional eagle songs, this piece honors Chief Dan George's legacy while exploring themes of environmental stewardship, cultural healing from residential school trauma, and the sacred interconnectedness of all beings. The work masterfully weaves Indigenous place names, ceremonial knowledge, and contemporary calls for unity, positioning "AI fire" as a modern tool that must honor ancient values of community, respect, and balance with the natural world.
-                            </>
-                          ) : (
+                           ) : songId === "gabriel-george-sr-eagles-watch" ? (
+                             <>
+                               A profound Indigenous cultural teaching that bridges ancient wisdom with modern technology challenges. Gabriel George Sr. welcomes listeners to the sacred inlet village of suh-nak, sharing ancestral stories from the mus-kwee-um, skwaw-mish, and ts-lay-wah-tooth peoples. Through spoken word and traditional eagle songs (kway-tal-us puk-wus), this piece honors Chief Dan George's legacy while exploring themes of environmental stewardship, cultural healing from residential school trauma, and the sacred interconnectedness of all beings. The work masterfully weaves Indigenous place names like sul-ts-munt suh-suh-nuk (Burnaby Mountain) and ceremonial knowledge including regalia, drums, cedar, and prayer, while addressing contemporary calls for unity. Gabriel positions "AI fire" as a modern tool that must honor ancient values of community, respect, and balance with the natural world, bridging traditional hal-ko-may-lum teachings with today's technological discourse.
+                             </>
+                           ) : (
                           "This song connects with the BC + AI Survey by exploring themes around artificial intelligence's impact on creativity, community, and human experience. The artist's work speaks to the evolving relationship between technology and artistic expression."
                        )}
                     </p>
