@@ -912,6 +912,19 @@ const SONGS: Song[] = [
       { time: 140, text: "Innovation, Rival's mission, liberation, yeah!" },
       { time: 144, text: "Hey! Hey! Hey!" }
     ] as LyricLine[]
+  },
+  {
+    id: "gabriel-george-sr-eagles-watch",
+    title: "Eagle's Watch Over the Inlet",
+    artist: "Gabriel George Sr.",
+    src: getAudioUrl("Eagle's Watch Over the Inlet.mp3"),
+    coverArt: "/lovable-uploads/248e8b56-a755-4cdf-9bd0-dfcc8af06211.png",
+    lyrics: [
+      { time: 0, text: "High above the inlet waters," },
+      { time: 4, text: "Where the eagle keeps its eye," },
+      { time: 8, text: "Ancient wisdom flows like rivers," },
+      { time: 12, text: "Underneath the endless sky." }
+    ] as LyricLine[]
   }
 ];
 
