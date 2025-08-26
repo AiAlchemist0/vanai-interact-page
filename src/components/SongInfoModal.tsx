@@ -62,6 +62,15 @@ export const SongInfoModal: React.FC<SongInfoModalProps> = ({
       'Innovation': 'bg-[hsl(var(--survey-creative-impact)/0.2)] text-[hsl(var(--survey-creative-impact))] border-[hsl(var(--survey-creative-impact)/0.3)]', // Creative Impact - innovation
       'Technology Analysis': 'bg-[hsl(var(--survey-ai-experience)/0.2)] text-[hsl(var(--survey-ai-experience))] border-[hsl(var(--survey-ai-experience)/0.3)]', // AI Experience - tech analysis
       
+      // Darren Nicholls song specific categories
+      'Technology & AI': 'bg-[hsl(var(--survey-ai-experience)/0.2)] text-[hsl(var(--survey-ai-experience))] border-[hsl(var(--survey-ai-experience)/0.3)]',
+      'Business & Entrepreneurship': 'bg-[hsl(var(--survey-future-vision)/0.2)] text-[hsl(var(--survey-future-vision))] border-[hsl(var(--survey-future-vision)/0.3)]',
+      'Personal Identity': 'bg-[hsl(var(--survey-identity)/0.2)] text-[hsl(var(--survey-identity))] border-[hsl(var(--survey-identity)/0.3)]',
+      'Recreation & Lifestyle': 'bg-[hsl(var(--survey-relationships)/0.2)] text-[hsl(var(--survey-relationships))] border-[hsl(var(--survey-relationships)/0.3)]',
+      'Community & Location': 'bg-[hsl(var(--survey-community)/0.2)] text-[hsl(var(--survey-community))] border-[hsl(var(--survey-community)/0.3)]',
+      'Career Evolution': 'bg-[hsl(var(--survey-creative-impact)/0.2)] text-[hsl(var(--survey-creative-impact))] border-[hsl(var(--survey-creative-impact)/0.3)]',
+      'Mindset & Philosophy': 'bg-[hsl(var(--survey-future-vision)/0.2)] text-[hsl(var(--survey-future-vision))] border-[hsl(var(--survey-future-vision)/0.3)]',
+      
       // Additional keyword category mappings
       'technology': 'bg-[hsl(var(--survey-ai-experience)/0.2)] text-[hsl(var(--survey-ai-experience))] border-[hsl(var(--survey-ai-experience)/0.3)]',
       'concept': 'bg-[hsl(var(--survey-creative-impact)/0.2)] text-[hsl(var(--survey-creative-impact))] border-[hsl(var(--survey-creative-impact)/0.3)]',
@@ -159,11 +168,19 @@ export const SongInfoModal: React.FC<SongInfoModalProps> = ({
                             <>
                               Kris Krug, the visionary founder and philosophical leader of Vancouver's AI community, this song embodies the heart of BC's AI discourse. As founder of the Vancouver AI Community, BC + AI Association, and creator of "Sandboxing AI", Kris bridges traditional media (as a National Geographic photographer) with AI innovation through his "Human++" philosophy. This piece explores deepfake technology, relationship authenticity, and the tension between human touch and code-driven art while celebrating unity in the AI era. It reflects Kris's role as a community connector who facilitates crucial conversations about AI's impact on humanity, creativity, and relationships, addressing fears while promoting optimism about our technological future.
                             </>
-                           ) : songId === "gabriel-george-sr-eagles-watch" ? (
-                             <>
-                               A profound Indigenous cultural teaching that bridges ancient wisdom with modern technology challenges. Gabriel George Sr. welcomes listeners to the sacred inlet village of suh-nak, sharing ancestral stories from the mus-kwee-um, skwaw-mish, and ts-lay-wah-tooth peoples. Through spoken word and traditional eagle songs (kway-tal-us puk-wus), this piece honors Chief Dan George's legacy while exploring themes of environmental stewardship, cultural healing from residential school trauma, and the sacred interconnectedness of all beings. The work masterfully weaves Indigenous place names like sul-ts-munt suh-suh-nuk (Burnaby Mountain) and ceremonial knowledge including regalia, drums, cedar, and prayer, while addressing contemporary calls for unity. Gabriel positions "AI fire" as a modern tool that must honor ancient values of community, respect, and balance with the natural world, bridging traditional hal-ko-may-lum teachings with today's technological discourse.
-                             </>
-                           ) : (
+                            ) : songId === "gabriel-george-sr-eagles-watch" ? (
+                              <>
+                                A profound Indigenous cultural teaching that bridges ancient wisdom with modern technology challenges. Gabriel George Sr. welcomes listeners to the sacred inlet village of suh-nak, sharing ancestral stories from the mus-kwee-um, skwaw-mish, and ts-lay-wah-tooth peoples. Through spoken word and traditional eagle songs (kway-tal-us puk-wus), this piece honors Chief Dan George's legacy while exploring themes of environmental stewardship, cultural healing from residential school trauma, and the sacred interconnectedness of all beings. The work masterfully weaves Indigenous place names like sul-ts-munt suh-suh-nuk (Burnaby Mountain) and ceremonial knowledge including regalia, drums, cedar, and prayer, while addressing contemporary calls for unity. Gabriel positions "AI fire" as a modern tool that must honor ancient values of community, respect, and balance with the natural world, bridging traditional hal-ko-may-lum teachings with today's technological discourse.
+                              </>
+                            ) : songId === "darren-ai-struck" ? (
+                              <>
+                                This powerful rock anthem embodies the journey of a tech veteran navigating the AI revolution. Darren Nicholls chronicles his evolution from a university coder during the dot-com boom to becoming a visionary CEO and AI community leader in Vancouver. The song masterfully weaves together themes of technological disruption, entrepreneurial resilience, and the importance of family grounding in an increasingly digital world.
+                                <br /><br />
+                                Through companies like VHT.ai and Bizzer.ai, and his influential Data-guy.ai newsletter reaching hundreds of subscribers, Darren exemplifies the "adapt or perish" mentality that drives innovation in the BC tech ecosystem. The track celebrates the balance between professional ambition and personal fulfillment – from golf courses to campfire adventures, from boardrooms to family gatherings.
+                                <br /><br />
+                                The anthem's core message resonates deeply within the AI community: embrace change, harness the power of data, and never stop learning. It's a testament to how seasoned professionals can not only survive but thrive in the age of artificial intelligence, becoming leaders who guide others through technological transformation.
+                              </>
+                            ) : (
                           "This song connects with the BC + AI Survey by exploring themes around artificial intelligence's impact on creativity, community, and human experience. The artist's work speaks to the evolving relationship between technology and artistic expression."
                        )}
                     </p>

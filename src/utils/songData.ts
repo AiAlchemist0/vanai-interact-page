@@ -60,6 +60,10 @@ export const getSongMetadata = (songId: string) => {
       return 'from-[hsl(var(--survey-identity))] to-[hsl(var(--survey-future-vision))]'; // Indigenous themes - Identity to Future Vision
     }
     
+    if (combined.includes('darren') || combined.includes('struck') || combined.includes('data') || combined.includes('ceo') || combined.includes('entrepreneur')) {
+      return 'from-[hsl(var(--survey-ai-experience))] to-[hsl(var(--survey-future-vision))]'; // Entrepreneurship + AI Experience
+    }
+    
     // Default fallback
     return 'from-[hsl(var(--primary))] to-[hsl(var(--ai-cyan))]';
   };

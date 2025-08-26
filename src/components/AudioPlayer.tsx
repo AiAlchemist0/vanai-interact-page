@@ -634,10 +634,73 @@ const SONGS: Song[] = [
     src: getAudioUrl("Darren AI Struck.mp3"),
     coverArt: "/lovable-uploads/cf89c28f-23f5-4188-a5aa-e50f28daa5c2.png",
     lyrics: [
-      { time: 0, text: "AI struck! Data's thunder roar!" },
-      { time: 4, text: "Electric minds in digital war" },
-      { time: 8, text: "Silicon dreams come alive tonight" },
-      { time: 12, text: "In the realm of artificial light" },
+      // Verse 1
+      { time: 0, text: "I was codin' sites back in the .com days" },
+      { time: 4, text: "University kid with fire in my gaze" },
+      { time: 8, text: "Dot-com boom, crash and burn, I rode the wave" },
+      { time: 12, text: "Built empires high, then watched 'em cave" },
+      { time: 16, text: "Became a CEO, suits and ties so tight" },
+      { time: 20, text: "But life's a storm, hittin' day and night" },
+      { time: 24, text: "Father to my kids, watchin' 'em grow tall" },
+      { time: 28, text: "Grandpa now, answerin' the call" },
+      
+      // Chorus
+      { time: 32, text: "AI struck! Yeah, I felt the boom" },
+      { time: 36, text: "Tech's changin' lives, fillin' up the room" },
+      { time: 40, text: "Adopt or embrace, or you'll perish away" },
+      { time: 44, text: "Old wolf howlin', AI's here to stay!" },
+      { time: 48, text: "AI struck! Data's thunder roar" },
+      { time: 52, text: "From the gym to the green, I'm cravin' more" },
+      { time: 56, text: "Family man, CEO, now spinnin' companies new" },
+      { time: 60, text: "In the AI community, that's where I breakthrough!" },
+      
+      // Verse 2
+      { time: 64, text: "Golfin' on the greens, pumpin' iron at the gym" },
+      { time: 68, text: "Healthy life's my ride, keepin' body trim" },
+      { time: 72, text: "Bought a camper van, hit the road this summer heat" },
+      { time: 76, text: "Campfires burnin', stars above my feet" },
+      { time: 80, text: "But AI's callin', droppin' truth bombs loud" },
+      { time: 84, text: "Newsletter blastin', Data-guy.ai proud" },
+      { time: 88, text: "Hundreds subscribin', hangin' on my word" },
+      { time: 92, text: "Old dog's sniffin' change, the future's stirred" },
+      
+      // Chorus
+      { time: 96, text: "AI struck! Yeah, I felt the boom" },
+      { time: 100, text: "Tech's changin' lives, fillin' up the room" },
+      { time: 104, text: "Adopt or embrace, or you'll perish away" },
+      { time: 108, text: "Old wolf howlin', AI's here to stay!" },
+      { time: 112, text: "AI struck! Data's thunder roar" },
+      { time: 116, text: "From the gym to the green, I'm cravin' more" },
+      { time: 120, text: "Family man, CEO, now spinnin' companies new VHT.ai, Bizzer.ai" },
+      { time: 124, text: "In the AI community, that's where I breakthrough!" },
+      
+      // Bridge
+      { time: 128, text: "Been a long road, from crashes to kids' first cries" },
+      { time: 132, text: "Tech booms come and go, under stormy skies" },
+      { time: 136, text: "But this AI wave? It's the biggest yet" },
+      { time: 140, text: "Father, golfer, coder – no regrets" },
+      { time: 144, text: "Spun off two companies, thrivin' in the scene" },
+      { time: 148, text: "Vancouver's callin', livin' the dream" },
+      { time: 152, text: "Embrace the change, feel the power surge" },
+      { time: 156, text: "Or fade away – that's the edge we verge!" },
+      
+      // Final Chorus
+      { time: 160, text: "AI struck! Yeah, I felt the boom" },
+      { time: 164, text: "Tech's changin' lives, fillin' up the room" },
+      { time: 168, text: "Adopt or embrace, or you'll perish away" },
+      { time: 172, text: "Old wolf howlin', AI's here to stay!" },
+      { time: 176, text: "AI struck! Data's thunder roar" },
+      { time: 180, text: "From the gym to the green, I'm cravin' more" },
+      { time: 184, text: "Family man, CEO, now spinnin' companies new VHT.ai, Bizzer.ai" },
+      { time: 188, text: "In the AI community, that's where I breakthrough!" },
+      
+      // Outro
+      { time: 192, text: "AI struck... yeah, struck me down" },
+      { time: 196, text: "But I'm risin' up, ownin' this town" },
+      { time: 200, text: "Darren Nicholls, ridin' the storm" },
+      { time: 204, text: "AI forever, keepin' it warm!" },
+      { time: 208, text: "AI struck! (AI struck!)" },
+      { time: 212, text: "Yeah, AI struck!" },
       { time: 16, text: "" },
       { time: 18, text: "Darren calls from cyber space" },
       { time: 22, text: "Where algorithms show their face" },
