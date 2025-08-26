@@ -43,7 +43,11 @@ export const getSongMetadata = (songId: string) => {
       return 'from-[hsl(var(--survey-community))] to-[hsl(var(--ai-orange))]'; // Community - Yellow/Orange
     }
     
-    if (combined.includes('identity') || combined.includes('consciousness') || combined.includes('mind') || combined.includes('self') || combined.includes('personal') || combined.includes('individual') || combined.includes('indigenous') || combined.includes('cultural') || combined.includes('heritage') || combined.includes('gabriel') || combined.includes('george')) {
+    if (combined.includes('consciousness') || combined.includes('mind') || combined.includes('philosophy') || combined.includes('soul') || combined.includes('awareness') || combined.includes('mystery') || combined.includes('mac') || combined.includes('neural') || combined.includes('human')) {
+      return 'from-[hsl(var(--survey-creative-impact))] to-[hsl(var(--ai-purple))]'; // Philosophy & Consciousness - Purple
+    }
+    
+    if (combined.includes('identity') || combined.includes('self') || combined.includes('personal') || combined.includes('individual') || combined.includes('indigenous') || combined.includes('cultural') || combined.includes('heritage') || combined.includes('gabriel') || combined.includes('george')) {
       return 'from-[hsl(var(--survey-identity))] to-[hsl(var(--accent))]'; // Identity - Orange
     }
     

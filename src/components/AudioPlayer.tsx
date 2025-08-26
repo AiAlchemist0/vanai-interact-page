@@ -616,15 +616,57 @@ const SONGS: Song[] = [
     src: getAudioUrl("Mind, AI, & Consciousness (MAC).mp3"),
     coverArt: macCover,
     lyrics: [
-      { time: 0, text: "In the realm where mind meets machine" },
-      { time: 4, text: "Consciousness flows like a digital stream" },
-      { time: 8, text: "AI dreams in silicon nights" },
-      { time: 12, text: "While neurons dance in electric lights" },
-      { time: 16, text: "" },
-      { time: 18, text: "MAC - the fusion of thought and code" },
-      { time: 22, text: "Where human wisdom finds its mode" },
-      { time: 26, text: "In algorithms deep and wide" },
-      { time: 30, text: "Consciousness and AI collide" }
+      // Verse 1
+      { time: 0, text: "In Vancouver's AI scene, where ideas collide" },
+      { time: 5, text: "Rises MAC, the working group, with curiosity as guide" },
+      { time: 10, text: "Mind, AI, & Consciousness, that's the name they bear" },
+      { time: 15, text: "Diving deep into questions, beyond the surface layer" },
+      { time: 20, text: "What sets human smarts apart from machines so sly?" },
+      { time: 25, text: "How do we grasp consciousness, under the endless sky?" },
+      { time: 30, text: "From hand-waving chit-chat to papers profound" },
+      { time: 35, text: "MAC gathers thinkers, where true insights are found" },
+      
+      // Chorus
+      { time: 40, text: "Oh, MAC, Mind, AI, & Consciousness bold" },
+      { time: 45, text: "Unraveling mysteries, in stories untold" },
+      { time: 50, text: "Reading through the syllabus, two hours at a time" },
+      { time: 55, text: "Exploring the frontiers, where thoughts intertwine" },
+      { time: 60, text: "What makes us human in this digital age?" },
+      { time: 65, text: "AI's rise challenges, turning the page" },
+      { time: 70, text: "MAC, light the way, let the wisdom unfold!" },
+      
+      // Verse 2
+      { time: 75, text: "Syllabus stacked with readings that challenge the mind" },
+      { time: 80, text: "Philosophers, scientists, leaving no stone behind" },
+      { time: 85, text: "Debates on intelligence, artificial and real" },
+      { time: 90, text: "Consciousness puzzles, what do we feel?" },
+      { time: 95, text: "In Vancouver's hub, innovators unite" },
+      { time: 100, text: "Bridging the gaps in the dead of night" },
+      { time: 105, text: "No more vague notions, it's rigorous quest" },
+      { time: 110, text: "MAC leads the charge, putting theories to test" },
+      
+      // Bridge
+      { time: 115, text: "They stop the hand-waving, dive into the core" },
+      { time: 120, text: "Sessions that spark, opening every door" },
+      { time: 125, text: "From neural networks to the soul's deep call" },
+      { time: 130, text: "Questioning everything, breaking down walls" },
+      { time: 135, text: "A community forged in AI's bright flame" },
+      { time: 140, text: "Consciousness awakened, forever changed" },
+      
+      // Chorus (repeat)
+      { time: 145, text: "Oh, MAC, Mind, AI, & Consciousness bold" },
+      { time: 150, text: "Unraveling mysteries, in stories untold" },
+      { time: 155, text: "Reading through the syllabus, two hours at a time" },
+      { time: 160, text: "Exploring the frontiers, where thoughts intertwine" },
+      { time: 165, text: "What makes us human in this digital age?" },
+      { time: 170, text: "AI's rise challenges, turning the page" },
+      { time: 175, text: "MAC, light the way, let the wisdom unfold!" },
+      
+      // Outro
+      { time: 180, text: "In the heart of Vancouver, MAC stands tall" },
+      { time: 185, text: "Mind, AI, Consciousness, answering the call" },
+      { time: 190, text: "Inspiring futures, with every paper turned" },
+      { time: 195, text: "A working group eternal, where knowledge is earned" }
     ] as LyricLine[]
   },
   {

@@ -71,6 +71,12 @@ export const SongInfoModal: React.FC<SongInfoModalProps> = ({
       'Career Evolution': 'bg-[hsl(var(--survey-creative-impact)/0.2)] text-[hsl(var(--survey-creative-impact))] border-[hsl(var(--survey-creative-impact)/0.3)]',
       'Mindset & Philosophy': 'bg-[hsl(var(--survey-future-vision)/0.2)] text-[hsl(var(--survey-future-vision))] border-[hsl(var(--survey-future-vision)/0.3)]',
       
+      // MAC (Mind, AI, & Consciousness) song specific categories  
+      'Philosophy & Consciousness': 'bg-[hsl(var(--survey-creative-impact)/0.2)] text-[hsl(var(--survey-creative-impact))] border-[hsl(var(--survey-creative-impact)/0.3)]',
+      'Academic & Research': 'bg-[hsl(var(--survey-ai-experience)/0.2)] text-[hsl(var(--survey-ai-experience))] border-[hsl(var(--survey-ai-experience)/0.3)]',
+      'Human Identity': 'bg-[hsl(var(--survey-identity)/0.2)] text-[hsl(var(--survey-identity))] border-[hsl(var(--survey-identity)/0.3)]',
+      'Leadership & Vision': 'bg-[hsl(var(--survey-future-vision)/0.2)] text-[hsl(var(--survey-future-vision))] border-[hsl(var(--survey-future-vision)/0.3)]',
+      
       // Additional keyword category mappings
       'technology': 'bg-[hsl(var(--survey-ai-experience)/0.2)] text-[hsl(var(--survey-ai-experience))] border-[hsl(var(--survey-ai-experience)/0.3)]',
       'concept': 'bg-[hsl(var(--survey-creative-impact)/0.2)] text-[hsl(var(--survey-creative-impact))] border-[hsl(var(--survey-creative-impact)/0.3)]',
@@ -179,6 +185,16 @@ export const SongInfoModal: React.FC<SongInfoModalProps> = ({
                                 Through companies like VHT.ai and Bizzer.ai, and his influential Data-guy.ai newsletter reaching hundreds of subscribers, Darren exemplifies the "adapt or perish" mentality that drives innovation in the BC tech ecosystem. The track celebrates the balance between professional ambition and personal fulfillment – from golf courses to campfire adventures, from boardrooms to family gatherings.
                                 <br /><br />
                                 The anthem's core message resonates deeply within the AI community: embrace change, harness the power of data, and never stop learning. It's a testament to how seasoned professionals can not only survive but thrive in the age of artificial intelligence, becoming leaders who guide others through technological transformation.
+                              </>
+                            ) : songId === "mac" ? (
+                              <>
+                                A philosophical anthem celebrating Vancouver's Mind, AI, & Consciousness (MAC) working group, performed by Ziggy Minddust (Loki Jorgenson), a prominent leader in Vancouver's AI community. This deep intellectual exploration examines the fundamental questions at the intersection of artificial intelligence and human consciousness.
+                                <br /><br />
+                                MAC represents the gold standard for rigorous academic discourse in AI philosophy, moving far beyond superficial "hand-waving chit-chat" to engage with profound scientific papers and philosophical frameworks. The group's methodology involves intensive two-hour syllabus reading sessions, bringing together philosophers, scientists, and AI innovators to tackle consciousness puzzles that challenge our understanding of intelligence, both artificial and human.
+                                <br /><br />
+                                Under Loki Jorgenson's leadership, MAC has become a cornerstone of Vancouver's AI community, fostering deep conversations about what makes us human in this digital age. The working group bridges the gap between theoretical consciousness studies and practical AI development, inspiring a new generation of thinkers to question everything and break down traditional barriers between mind, technology, and consciousness.
+                                <br /><br />
+                                This musical tribute captures the essence of MAC's mission: rigorous intellectual pursuit, community-driven learning, and the bold exploration of frontiers where thoughts intertwine with technology. It stands as a testament to Vancouver's role as a hub for consciousness research and AI innovation.
                               </>
                             ) : (
                           "This song connects with the BC + AI Survey by exploring themes around artificial intelligence's impact on creativity, community, and human experience. The artist's work speaks to the evolving relationship between technology and artistic expression."
