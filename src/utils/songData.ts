@@ -56,6 +56,10 @@ export const getSongMetadata = (songId: string) => {
       return 'from-[hsl(var(--survey-identity))] to-[hsl(var(--ai-green))]'; // Medical/Health - Identity to Green
     }
     
+    if (combined.includes('gabriel') || combined.includes('george') || combined.includes('eagle') || combined.includes('inlet') || combined.includes('indigenous')) {
+      return 'from-[hsl(var(--survey-identity))] to-[hsl(var(--survey-future-vision))]'; // Indigenous themes - Identity to Future Vision
+    }
+    
     // Default fallback
     return 'from-[hsl(var(--primary))] to-[hsl(var(--ai-cyan))]';
   };

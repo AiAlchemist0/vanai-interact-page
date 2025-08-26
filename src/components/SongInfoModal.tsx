@@ -53,6 +53,8 @@ export const SongInfoModal: React.FC<SongInfoModalProps> = ({
       'Relationships': 'bg-[hsl(var(--survey-relationships)/0.2)] text-[hsl(var(--survey-relationships))] border-[hsl(var(--survey-relationships)/0.3)]',
       'Community': 'bg-[hsl(var(--survey-community)/0.2)] text-[hsl(var(--survey-community))] border-[hsl(var(--survey-community)/0.3)]',
       'Identity': 'bg-[hsl(var(--survey-identity)/0.2)] text-[hsl(var(--survey-identity))] border-[hsl(var(--survey-identity)/0.3)]',
+      'Indigenous Culture': 'bg-[hsl(var(--survey-identity)/0.2)] text-[hsl(var(--survey-identity))] border-[hsl(var(--survey-identity)/0.3)]',
+      'Environmental Heritage': 'bg-[hsl(var(--survey-future-vision)/0.2)] text-[hsl(var(--survey-future-vision))] border-[hsl(var(--survey-future-vision)/0.3)]',
       
       // Lionel Ringenbach specific categories mapped to BC AI Survey themes
       'Economic Impact': 'bg-[hsl(var(--survey-future-vision)/0.2)] text-[hsl(var(--survey-future-vision))] border-[hsl(var(--survey-future-vision)/0.3)]', // Future Vision - economic implications
@@ -153,11 +155,15 @@ export const SongInfoModal: React.FC<SongInfoModalProps> = ({
                           <>
                             A generational anthem exploring the modern dilemma facing young people: pursue traditional university education or dive straight into the AI revolution. Matthew Schwartzman's raw narrative captures the tension between conventional paths and emerging opportunities, featuring mentorship from Dean Shev (Harvard-educated AI strategy leader) and deep connections to Vancouver's AI community including Kris Krug and Surrey meetups. The song authentically portrays the uncertainty of youth navigating job displacement fears (68% statistic), while celebrating the rebellious spirit of a new generation breaking traditional molds. With multilingual elements and references to Teen2Life podcasting, it's both a personal journey and a broader commentary on education's evolving role in the AI era.
                           </>
-                         ) : songId === "kris-krug-circles" ? (
-                           <>
-                             Kris Krug, the visionary founder and philosophical leader of Vancouver's AI community, this song embodies the heart of BC's AI discourse. As founder of the Vancouver AI Community, BC + AI Association, and creator of "Sandboxing AI", Kris bridges traditional media (as a National Geographic photographer) with AI innovation through his "Human++" philosophy. This piece explores deepfake technology, relationship authenticity, and the tension between human touch and code-driven art while celebrating unity in the AI era. It reflects Kris's role as a community connector who facilitates crucial conversations about AI's impact on humanity, creativity, and relationships, addressing fears while promoting optimism about our technological future.
-                           </>
-                         ) : (
+                          ) : songId === "kris-krug-circles" ? (
+                            <>
+                              Kris Krug, the visionary founder and philosophical leader of Vancouver's AI community, this song embodies the heart of BC's AI discourse. As founder of the Vancouver AI Community, BC + AI Association, and creator of "Sandboxing AI", Kris bridges traditional media (as a National Geographic photographer) with AI innovation through his "Human++" philosophy. This piece explores deepfake technology, relationship authenticity, and the tension between human touch and code-driven art while celebrating unity in the AI era. It reflects Kris's role as a community connector who facilitates crucial conversations about AI's impact on humanity, creativity, and relationships, addressing fears while promoting optimism about our technological future.
+                            </>
+                          ) : songId === "gabriel-george-sr-eagles-watch" ? (
+                            <>
+                              A profound Indigenous cultural teaching that bridges ancient wisdom with modern technology challenges. Gabriel George Sr. welcomes listeners to the sacred inlet village of suh-nak, sharing ancestral stories from the mus-kwee-um, skwaw-mish, and ts-lay-wah-tooth peoples. Through spoken word and traditional eagle songs, this piece honors Chief Dan George's legacy while exploring themes of environmental stewardship, cultural healing from residential school trauma, and the sacred interconnectedness of all beings. The work masterfully weaves Indigenous place names, ceremonial knowledge, and contemporary calls for unity, positioning "AI fire" as a modern tool that must honor ancient values of community, respect, and balance with the natural world.
+                            </>
+                          ) : (
                           "This song connects with the BC + AI Survey by exploring themes around artificial intelligence's impact on creativity, community, and human experience. The artist's work speaks to the evolving relationship between technology and artistic expression."
                        )}
                     </p>
