@@ -555,8 +555,8 @@ const SONGS: Song[] = [
     id: "my-arts-all-human",
     title: "My art's all human, soul-deep and true",
     artist: "Michelle Diamond",
-    src: getAudioUrl("My art's all human, soul-deep and true.mp3"),
-    coverArt: "/lovable-uploads/fc226621-2faf-4a33-8885-28d7dc934861.png",
+    src: getAudioUrl("My arts all human soul-deep and true.mp3"),
+    coverArt: "/lovable-uploads/2c251b22-3f09-4812-bc92-ad7c64062f4b.png",
     description: `A humorous photographer's anthem about maintaining creative authenticity in the AI age. Through the eyes of Photographer Michelle, this witty track captures the pride and irony of human artistry while secretly embracing AI assistance. Set in Vancouver's vibrant AI community, it features Dr. Patrick Parra Pennefather's famous catchphrase "There is an AI for that" while celebrating the irreplaceable human spirit behind the lens. The song playfully explores the tension between creative independence and technological enhancement, highlighting how artists navigate the evolving landscape of human-AI collaboration with both pride and pragmatic adaptation.`,
     keywords: ["photography", "creativity", "vancouver-ai", "human-artistry", "dr-patrick-parra", "kris-krug", "mac-events", "ai-assistance", "authenticity", "community", "hackathons", "mr-pixel", "photographer-michelle"],
     lyrics: [
