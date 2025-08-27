@@ -150,7 +150,9 @@ export const SongInfoModal: React.FC<SongInfoModalProps> = ({
                   {/* Description */}
                   <div className="prose prose-sm max-w-none">
                      <p className="text-muted-foreground leading-relaxed text-sm sm:text-base">
-                       {songId === "pixel-wizard" ? (
+                       {song.description ? (
+                         <span dangerouslySetInnerHTML={{ __html: song.description }} />
+                       ) : songId === "pixel-wizard" ? (
                          <>
                            Kevin Friel's "Mr. Pixel Wizard BC AI" celebrates Vancouver's AI filmmaking 
                            community and the transformative power of AI in creative industries. The song 
