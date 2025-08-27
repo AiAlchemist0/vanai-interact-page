@@ -86,6 +86,13 @@ export const SongInfoModal: React.FC<SongInfoModalProps> = ({
       'Leadership & Authority': 'bg-[hsl(var(--survey-community)/0.2)] text-[hsl(var(--survey-community))] border-[hsl(var(--survey-community)/0.3)]',
       'Values & Philosophy': 'bg-[hsl(var(--survey-creative-impact)/0.2)] text-[hsl(var(--survey-creative-impact))] border-[hsl(var(--survey-creative-impact)/0.3)]',
       
+      // Enhanced keyword categories for BC AI Hackathon analysis
+      'Statistics & Data': 'bg-[hsl(var(--ai-cyan)/0.2)] text-[hsl(var(--ai-cyan))] border-[hsl(var(--ai-cyan)/0.3)]',
+      'Competition & Achievement': 'bg-[hsl(var(--ai-orange)/0.2)] text-[hsl(var(--ai-orange))] border-[hsl(var(--ai-orange)/0.3)]',
+      'Technology Tools': 'bg-[hsl(var(--survey-ai-experience)/0.2)] text-[hsl(var(--survey-ai-experience))] border-[hsl(var(--survey-ai-experience)/0.3)]',
+      'Geographic & Demographic': 'bg-[hsl(var(--survey-community)/0.2)] text-[hsl(var(--survey-community))] border-[hsl(var(--survey-community)/0.3)]',
+      'Event & Process': 'bg-[hsl(var(--survey-creative-impact)/0.2)] text-[hsl(var(--survey-creative-impact))] border-[hsl(var(--survey-creative-impact)/0.3)]',
+      
       // Additional keyword category mappings
       'technology': 'bg-[hsl(var(--survey-ai-experience)/0.2)] text-[hsl(var(--survey-ai-experience))] border-[hsl(var(--survey-ai-experience)/0.3)]',
       'concept': 'bg-[hsl(var(--survey-creative-impact)/0.2)] text-[hsl(var(--survey-creative-impact))] border-[hsl(var(--survey-creative-impact)/0.3)]',
