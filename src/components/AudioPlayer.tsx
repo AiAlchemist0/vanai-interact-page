@@ -558,6 +558,7 @@ const SONGS: Song[] = [
     src: getAudioUrl("My art's all human, soul-deep and true.mp3"),
     coverArt: "/lovable-uploads/fc226621-2faf-4a33-8885-28d7dc934861.png",
     description: `A humorous photographer's anthem about maintaining creative authenticity in the AI age. Through the eyes of Photographer Michelle, this witty track captures the pride and irony of human artistry while secretly embracing AI assistance. Set in Vancouver's vibrant AI community, it features Dr. Patrick Parra Pennefather's famous catchphrase "There is an AI for that" while celebrating the irreplaceable human spirit behind the lens. The song playfully explores the tension between creative independence and technological enhancement, highlighting how artists navigate the evolving landscape of human-AI collaboration with both pride and pragmatic adaptation.`,
+    keywords: ["photography", "creativity", "vancouver-ai", "human-artistry", "dr-patrick-parra", "kris-krug", "mac-events", "ai-assistance", "authenticity", "community", "hackathons", "mr-pixel", "photographer-michelle"],
     lyrics: [
       { time: 0, text: "(Verse 1)" },
       { time: 2, text: "In Vancouver's AI whirl, where ideas spark and spin," },
