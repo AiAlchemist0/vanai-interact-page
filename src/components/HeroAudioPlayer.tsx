@@ -31,9 +31,6 @@ const HeroAudioPlayer = () => {
     updateActivity
   } = useAudio();
   
-  console.log('HeroAudioPlayer songs count:', songs.length);
-  console.log('Michelle Diamond song found:', songs.find(s => s.id === 'my-arts-all-human'));
-  
   const { 
     getLikeCount, 
     getTotalLikes, 

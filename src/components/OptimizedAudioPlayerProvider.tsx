@@ -5,7 +5,7 @@ import { useAudioPlayer } from '@/hooks/useAudioPlayer';
 import { useEnhancedTracking } from '@/hooks/useEnhancedTracking';
 import { usePerformanceMonitor } from '@/hooks/usePerformanceMonitor';
 import { useSongLikes } from '@/hooks/useSongLikes';
-import { SONGS } from '@/components/AudioPlayer';
+import { SONGS } from '@/utils/songData';
 import AudioPlayer from './AudioPlayer';
 
 interface OptimizedAudioPlayerProviderProps {
@@ -128,7 +128,6 @@ export const OptimizedAudioPlayerProvider: React.FC<OptimizedAudioPlayerProvider
     enhancedTracking.updateActivity();
     setIsPlaylistMode(false);
   }, [enhancedTracking, setIsPlaylistMode]);
-
 
   const contextValue = useMemo(() => ({
     ...audioPlayerHook,

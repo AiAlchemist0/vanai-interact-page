@@ -9,7 +9,6 @@ export interface Song {
   coverArt: string;
   lyrics: { time: number; text: string }[];
   description?: string;
-  keywords?: string[];
 }
 
 export const useAudioPlayer = (songs: Song[]) => {
