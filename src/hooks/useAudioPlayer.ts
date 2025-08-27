@@ -8,7 +8,6 @@ export interface Song {
   src: string;
   coverArt: string;
   lyrics: { time: number; text: string }[];
-  description?: string;
 }
 
 export const useAudioPlayer = (songs: Song[]) => {
