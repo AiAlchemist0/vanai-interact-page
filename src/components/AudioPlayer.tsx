@@ -36,11 +36,7 @@ const SONGS: Song[] = [
     artist: "Official Anthem",
     src: getAudioUrl("BC AI Hackathon by Rival Tech.mp3"),
     coverArt: "/lovable-uploads/b56415f7-ad61-43e6-8d05-54452f44a5be.png",
-    description: `The official anthem of the BC AI Survey project, this dynamic track by Rival Technologies encapsulates the entire vision of our community-driven research initiative. Drawing from our comprehensive survey of 1,001 British Columbians, the song weaves together key statistical insights including the 90% deepfake concerns, 79% job displacement fears, and 54% creative AI adoption rates.
-
-As the project's thematic centerpiece, this hackathon anthem celebrates the collaborative spirit of BC's AI community while highlighting critical findings from our research. From Metro Vancouver to the islands wide, it captures the generational divide in AI adoption and the complex relationship between innovation and public trust.
-
-The song serves as both celebration and call-to-action, embodying our mission to transform raw data into compelling narratives that resonate with the diverse voices of British Columbia's AI landscape. It represents the convergence of technology, creativity, and community engagement that defines our approach to understanding AI's impact on our province.`,
+    description: `The official anthem of the BC AI Survey project, this dynamic track by Rival Technologies encapsulates the entire vision of our community-driven research initiative.  As the project's thematic centerpiece, this hackathon anthem celebrates the collaborative spirit of BC's AI community while highlighting critical findings from our research. From Metro Vancouver to the islands wide, it captures the generational divide in AI adoption and the complex relationship between innovation and public trust. The song serves as both celebration and call-to-action, embodying our mission to transform raw data into compelling narratives that resonate with the diverse voices of British Columbia's AI landscape. It represents the convergence of technology, creativity, and community engagement that defines our approach to understanding AI's impact on our province.`,
     lyrics: [
       { time: 0, text: "In Vancouver's buzzing scene, where coders dream big," },
       { time: 4, text: "The BC AI Hackathon calls, time to dig." },
