@@ -459,6 +459,29 @@ const SONGS: Song[] = [
     ] as LyricLine[]
   },
   {
+    id: "my-arts-all-human",
+    title: "My art's all human, soul-deep and true",
+    artist: "Michelle Diamond",
+    src: getAudioUrl("My art's all human, soul-deep and true.mp3"),
+    coverArt: "/lovable-uploads/92abee24-4e67-43a3-a956-1a845e0b1b1f.png",
+    description: "A photographer's passionate declaration of authentic, human creativity in the digital age. Michelle Diamond captures the soul of artistry through her lens, celebrating the irreplaceable touch of human emotion and experience in every frame. Her work stands as a testament to the power of genuine artistic expression in our increasingly automated world.",
+    keywords: ["creativity", "photography", "authenticity", "human", "art", "soul", "digital", "emotion"],
+    lyrics: [
+      { time: 0, text: "My art's all human, soul-deep and true" },
+      { time: 4, text: "No algorithms guide my hand" },
+      { time: 8, text: "Each brushstroke tells what I've been through" },
+      { time: 12, text: "In this digital world I make my stand" },
+      { time: 16, text: "Every pixel placed with intention clear" },
+      { time: 20, text: "Born from heartache, joy, and tears" },
+      { time: 24, text: "My camera captures what machines can't see" },
+      { time: 28, text: "The human spirit, wild and free" },
+      { time: 32, text: "While others chase the perfect code" },
+      { time: 36, text: "I walk the ancient artist's road" },
+      { time: 40, text: "My art's all human, soul-deep and true" },
+      { time: 44, text: "And that's what separates me from you" }
+    ] as LyricLine[]
+  },
+  {
     id: "indigenomics-ai",
     title: "Indigenomics AI, that's where we start",
     artist: "Carol Anne Hilton",
