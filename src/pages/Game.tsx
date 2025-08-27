@@ -80,7 +80,7 @@ const SONGS: Song[] = [
     title: "My art's all human, soul-deep and true",
     artist: "Michelle Diamond",
     audioFile: getAudioUrl("My art's all human, soul-deep and true.mp3"),
-    coverArt: "/lovable-uploads/fc226621-2faf-4a33-8885-28d7dc934861.png",
+    coverArt: "/lovable-uploads/ce458784-2685-46f2-a7ea-3c2e6e1143ea.png",
     bpm: 110,
     duration: 249000,
   },
