@@ -9,33 +9,31 @@ import Methodology from "@/components/Methodology";
 import Footer from "@/components/Footer";
 import OptimizedAudioPlayerProvider from "@/components/OptimizedAudioPlayerProvider";
 import NowPlayingBanner from "@/components/NowPlayingBanner";
-import MobileErrorBoundary from "@/components/MobileErrorBoundary";
+
 
 import PhilippeSpecialEffects from "@/components/PhilippeSpecialEffects";
 
 
 const Index = () => {
   return (
-    <MobileErrorBoundary>
-      <OptimizedAudioPlayerProvider>
-        <PhilippeSpecialEffects type="page" disabled={true}>
-          <div className="min-h-screen bg-background pt-20">
-          <div className="pt-0">
-            <Hero />
-            <AudioExperienceSection />
-            <VisionBanner />
-            
-            <AIMusicAnalytics />
-            <KeyInsights />
-            <QuestionCategories />
-            <DataVisualization />
-            <Methodology />
-            <Footer />
-          </div>
-          </div>
-        </PhilippeSpecialEffects>
-      </OptimizedAudioPlayerProvider>
-    </MobileErrorBoundary>
+    <OptimizedAudioPlayerProvider>
+      <PhilippeSpecialEffects type="page" disabled={true}>
+        <div className="min-h-screen bg-background pt-20">
+        <div className="pt-0">
+          <Hero />
+          <AudioExperienceSection />
+          <VisionBanner />
+          
+          <AIMusicAnalytics />
+          <KeyInsights />
+          <QuestionCategories />
+          <DataVisualization />
+          <Methodology />
+          <Footer />
+        </div>
+        </div>
+      </PhilippeSpecialEffects>
+    </OptimizedAudioPlayerProvider>
   );
 };
 

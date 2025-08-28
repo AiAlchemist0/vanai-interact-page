@@ -74,7 +74,7 @@ export const MobileProvider: React.FC<MobileProviderProps> = ({ children }) => {
       setIsHydrated(true);
       setIsMobile(false); // Safe fallback
     }
-  }, [debouncedCheckMobile]);
+  }, []); // Remove debouncedCheckMobile dependency to prevent infinite loops
 
   const contextValue = useMemo(() => ({
     isMobile: isHydrated ? isMobile : false,
