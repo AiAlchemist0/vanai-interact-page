@@ -357,7 +357,7 @@ export const SONGS: Song[] = [
     id: "brenda-bailey-jedi-master",
     title: "Brenda Bailey: Jedi Master of Finance",
     artist: "AI Community Orchestra",
-    src: getAudioUrl("Brenda Bailey Jedi Master of Finance.mp3"),
+    src: getAudioUrl("Brenda lvls up BC.mp3"),
     coverArt: "/lovable-uploads/caadd767-4a91-4395-8dbd-6e36c2b5e58d.png",
     description: `A tribute to Brenda Bailey's transformative leadership in British Columbia's financial landscape. This orchestral piece celebrates her mastery of both traditional finance and innovative AI technologies, portraying her as a Jedi-like figure wielding the force of fiscal responsibility and technological advancement for the betterment of BC's communities.`,
     lyrics: [
