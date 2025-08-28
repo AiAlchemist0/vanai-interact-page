@@ -5,6 +5,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Music2, SkipForward, Repeat, Clock, TrendingUp, BarChart3 } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
 import { supabase } from "@/integrations/supabase/client";
+import { getSongMetadata } from "@/utils/songData";
 
 interface SongAnalyticsData {
   song_id: string;
@@ -22,79 +23,6 @@ const SongAnalytics = () => {
   const [analyticsData, setAnalyticsData] = useState<SongAnalyticsData[]>([]);
   const [loading, setLoading] = useState(true);
 
-  // Import song metadata from utils
-  const getSongMetadataLocal = (songId: string) => {
-    // Updated mapping to match database song IDs with correct metadata
-    const metadataMap: Record<string, { title: string; artist: string; genre: string; color: string }> = {
-      'lionel-ringenbach': { 
-        title: 'ChatGPT: Est-ce que ma facture va exploser?', 
-        artist: 'Lionel Ringenbach', 
-        genre: 'AI Commentary',
-        color: 'from-blue-500 to-cyan-500'
-      },
-      'kris-krug-circles': { 
-        title: 'Circles in the AI Glow', 
-        artist: 'Kris Krüg & BC + AI Crew', 
-        genre: 'Electronic',
-        color: 'from-cyan-500 to-blue-500'
-      },
-      'brenda-bailey-jedi-master': { 
-        title: 'Brenda Bailey: Jedi Master of Finance', 
-        artist: 'AI Community Orchestra', 
-        genre: 'Leadership',
-        color: 'from-green-500 to-teal-500'
-      },
-      'mac': { 
-        title: 'Mind, AI, & Consciousness (MAC)', 
-        artist: 'Ziggy Minddust', 
-        genre: 'Philosophy',
-        color: 'from-indigo-500 to-purple-500'
-      },
-      'pixel-wizard': { 
-        title: 'Mr. Pixel Wizard BC AI', 
-        artist: 'Kevin Friel', 
-        genre: 'Digital Art',
-        color: 'from-yellow-500 to-orange-500'
-      },
-      'lalala-ai-dilemma': { 
-        title: 'Lalala AI Dilemma', 
-        artist: 'Matthew & Aliza Shwartzman', 
-        genre: 'Experimental',
-        color: 'from-pink-500 to-rose-500'
-      },
-      'dr-patrick': { 
-        title: 'Dr. Patrick Parra Pennefather', 
-        artist: 'UBC AI Orchestra', 
-        genre: 'Academic',
-        color: 'from-green-500 to-teal-500'
-      },
-      'hr-macmillan': { 
-        title: 'H.R MacMillan Space Centre - Alien Abduction', 
-        artist: 'Lorraine Lowe', 
-        genre: 'Space/Sci-Fi',
-        color: 'from-orange-500 to-red-500'
-      },
-      'bc-ai-hackathon': { 
-        title: 'BC AI Hackathon by Rival Tech', 
-        artist: 'Official Anthem', 
-        genre: 'Tech Anthem',
-        color: 'from-blue-500 to-purple-500'
-      },
-      'darren-ai-struck': { 
-        title: 'AI struck! Data\'s thunder roar!', 
-        artist: 'Darren Nicholls', 
-        genre: 'Electronic Rock',
-        color: 'from-red-500 to-orange-500'
-      }
-    };
-    
-    return metadataMap[songId] || {
-      title: songId.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase()),
-      artist: 'Unknown Artist',
-      genre: 'Unknown',
-      color: 'from-gray-500 to-gray-600'
-    };
-  };
 
   useEffect(() => {
     const fetchSongAnalytics = async () => {
@@ -163,7 +91,7 @@ const SongAnalytics = () => {
       <CardContent className="p-6">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {analyticsData.map((song) => {
-            const metadata = getSongMetadataLocal(song.song_id);
+            const metadata = getSongMetadata(song.song_id);
             
             const engagementScore = getEngagementScore(song);
             const validPlayRate = (song.valid_plays / song.total_plays) * 100;
@@ -182,7 +110,7 @@ const SongAnalytics = () => {
                       <h3 className="font-semibold text-white truncate mb-1">{metadata.title}</h3>
                       <p className="text-sm text-slate-400 truncate">{metadata.artist}</p>
                       <Badge variant="outline" className="text-xs mt-1 border-purple-500/50 text-purple-300">
-                        {metadata.genre}
+                        AI Music
                       </Badge>
                     </div>
                     <div className={`p-2 rounded-lg bg-gradient-to-r ${metadata.color} bg-opacity-20`}>
