@@ -321,22 +321,6 @@ export const SONGS: Song[] = [
     ] as LyricLine[]
   },
   {
-    id: "gabriel-george-sr-eagles-watch",
-    title: "Eagle's Watch Over the Inlet",
-    artist: "Gabriel George Sr.",
-    src: getAudioUrl("Eagle's Watch Over the Inlet.mp3"),
-    coverArt: "/lovable-uploads/316c72de-0185-4987-b74f-96492d391733.png",
-    description: `A profound Indigenous cultural teaching that bridges ancient wisdom with modern technology challenges. Gabriel George Sr. welcomes listeners to the sacred inlet village of suh-nak, sharing ancestral stories from the mus-kwee-um, skwaw-mish, and ts-lay-wah-tooth peoples. Through spoken word and traditional eagle songs (kway-tal-us puk-wus), this piece honors Chief Dan George's legacy while exploring themes of environmental stewardship and cultural healing.`,
-    lyrics: [
-      { time: 0, text: "Hey-ya, hey-ya, the wings beat strong," },
-      { time: 4, text: "Ancient wisdom, carried along." },
-      { time: 8, text: "Suh-nak village, sacred ground," },
-      { time: 12, text: "Where old teachings can be found." },
-      { time: 120, text: "Kway-tal-us puk-wus, the eagle is watching over us," },
-      { time: 124, text: "Chief Dan George's spirit, forever with us." },
-    ] as LyricLine[]
-  },
-  {
     id: "brenda-bailey-jedi-master",
     title: "Brenda Bailey: Jedi Master of Finance",
     artist: "AI Community Orchestra",
