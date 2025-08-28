@@ -177,10 +177,14 @@ const EnhancedTopSongsAnalytics = () => {
         }
       });
 
+      // Filter to only include songs that exist in the current app catalog
+      const validSongIds = new Set(SONGS.map(song => song.id));
+      const filteredCombinedData = combinedData.filter(song => validSongIds.has(song.song_id));
+      
       // Ensure all songs from the app catalog are included
       SONGS.forEach(song => {
-        if (!combinedData.find(data => data.song_id === song.id)) {
-          combinedData.push({
+        if (!filteredCombinedData.find(data => data.song_id === song.id)) {
+          filteredCombinedData.push({
             song_id: song.id,
             total_plays: 0,
             total_attempts: 0,
@@ -196,12 +200,13 @@ const EnhancedTopSongsAnalytics = () => {
       });
 
       console.log('📊 Enhanced Top Songs data updated:', {
-        totalSongs: combinedData.length,
-        songsWithPlays: combinedData.filter(s => s.total_plays > 0).length,
-        songsWithLikes: combinedData.filter(s => s.total_likes > 0).length
+        totalSongs: filteredCombinedData.length,
+        songsWithPlays: filteredCombinedData.filter(s => s.total_plays > 0).length,
+        songsWithLikes: filteredCombinedData.filter(s => s.total_likes > 0).length,
+        validSongsFromCatalog: SONGS.length
       });
       
-      setSongs(combinedData);
+      setSongs(filteredCombinedData);
     } catch (error) {
       console.error('❌ Error fetching song data:', error);
       setError('Failed to fetch song data. Please try refreshing.');

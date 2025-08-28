@@ -5,7 +5,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Music2, SkipForward, Repeat, Clock, TrendingUp, BarChart3 } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
 import { supabase } from "@/integrations/supabase/client";
-import { getSongMetadata } from "@/utils/songData";
+import { getSongMetadata, SONGS } from "@/utils/songData";
 
 interface SongAnalyticsData {
   song_id: string;
@@ -31,7 +31,17 @@ const SongAnalytics = () => {
           .rpc('get_song_analytics');
         
         if (error) throw error;
-        setAnalyticsData(data || []);
+        
+        // Filter to only include songs that exist in the current app catalog
+        const validSongIds = new Set(SONGS.map(song => song.id));
+        const filteredData = (data || []).filter(song => validSongIds.has(song.song_id));
+        
+        console.log('🎵 Song Analytics data fetched:', {
+          totalFromDB: data?.length || 0,
+          validSongs: filteredData.length,
+          catalogSize: SONGS.length
+        });
+        setAnalyticsData(filteredData);
       } catch (error) {
         console.error('Error fetching song analytics:', error);
       } finally {
