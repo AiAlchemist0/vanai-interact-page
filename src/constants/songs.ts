@@ -182,7 +182,7 @@ export const SONGS: Song[] = [
     id: "dean-shev-human",
     title: "What does it mean to be human?",
     artist: "Dean Shev aka Chazz",
-    src: getAudioUrl("Dean Shev Human.mp3"),
+    src: getAudioUrl("Dean Shev What does it mean to be human.mp3"),
     coverArt: "/lovable-uploads/749e260e-38aa-4528-b1a6-a4c62cc10020.png",
     lyrics: [
       { time: 0, text: "(Verse 1)" },
