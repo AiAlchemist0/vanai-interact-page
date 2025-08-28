@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { validateMultipleAudioFiles, getAudioFileInfo } from '@/utils/audioValidator';
-import { SONGS } from '@/components/AudioPlayer';
+import { SONGS } from '@/constants/songs';
 
 interface AudioValidationState {
   isValidating: boolean;

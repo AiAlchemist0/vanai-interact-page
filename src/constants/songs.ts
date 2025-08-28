@@ -135,7 +135,7 @@ export const SONGS: Song[] = [
     id: "lalala-ai-dilemma",
     title: "Lalala AI Dilemma",
     artist: "Matthew & Aliza Shwartzman",
-    src: getAudioUrl("La La La AI Dilemma_Michelle_Diamond.mp3"),
+    src: getAudioUrl("Lalala AI Dilemma.mp3"),
     coverArt: "/lovable-uploads/7e23b796-605f-4562-927b-06daa9147648.png",
     lyrics: [
       { time: 0, text: "(Verse 1)" },
