@@ -10,7 +10,6 @@ import Footer from "@/components/Footer";
 import OptimizedAudioPlayerProvider from "@/components/OptimizedAudioPlayerProvider";
 import NowPlayingBanner from "@/components/NowPlayingBanner";
 
-
 import PhilippeSpecialEffects from "@/components/PhilippeSpecialEffects";
 
 
