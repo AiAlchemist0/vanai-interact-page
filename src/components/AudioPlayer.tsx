@@ -1,6 +1,7 @@
 import React from "react";
 import { Play, Pause, StopCircle, Download, Music, SkipBack, SkipForward, Repeat, Repeat1, ArrowRight } from "lucide-react";
-import { useAudioPlayer, Song } from "@/hooks/useAudioPlayer";
+import { useAudioPlayer } from "@/hooks/useAudioPlayer";
+import { Song, SONGS } from "@/constants/songs";
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -1833,9 +1834,5 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ audioPlayerHook }) => {
     </div>
   );
 };
-
-// Export both the component and the hook data for context
-export { SONGS };
-export type { Song };
 
 export default AudioPlayer;

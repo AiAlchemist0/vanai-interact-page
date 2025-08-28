@@ -1,16 +1,9 @@
 import React from 'react';
 
-// Define the song structure
-export interface Song {
-  id: string;
-  title: string;
-  artist: string;
-  src: string;
-  coverArt: string;
-  lyrics: { time: number; text: string }[];
-  description?: string;
-  keywords?: string[];
-}
+import { Song } from '@/constants/songs';
+
+// Re-export Song type for components that import it from here
+export type { Song };
 
 export const useAudioPlayer = (songs: Song[]) => {
   const audioRef = React.useRef<HTMLAudioElement | null>(null);
