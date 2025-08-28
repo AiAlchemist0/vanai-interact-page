@@ -9,7 +9,7 @@ import { LyricLine } from "@/components/SynchronizedLyrics";
 // PlayTrackingIndicator removed - tracking continues in background
 
 import { LoadingFeedback } from "@/components/LoadingFeedback";
-import { useIsMobile } from "@/hooks/use-mobile";
+import { useMobile } from "@/contexts/MobileContext";
 import { useAudio } from "@/contexts/AudioContext";
 
 import krisKrugCover from "/lovable-uploads/22e18179-d389-42d3-9924-c6caf65d7d2e.png";
@@ -1291,7 +1291,7 @@ interface AudioPlayerProps {
 }
 
 const AudioPlayer: React.FC<AudioPlayerProps> = ({ audioPlayerHook }) => {
-  const isMobile = useIsMobile();
+  const { isMobile } = useMobile();
   const { startPlayTracking, endPlayTracking, updateActivity } = useAudio();
   
     const {

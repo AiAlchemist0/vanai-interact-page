@@ -6,7 +6,7 @@ import FloatingText, { FloatingTextItem } from './FloatingText';
 import StarPowerEffects from './StarPowerEffects';
 import Atmosphere from './Atmosphere';
 import { NotePattern } from '@/pages/Game';
-import { useIsMobile } from '@/hooks/use-mobile';
+import { useMobile } from '@/contexts/MobileContext';
 
 interface GameBoard3DProps {
   activeNotes: NotePattern[];
@@ -46,7 +46,7 @@ const GameBoard3D = ({
   starPower,
   hitFlashTimes
 }: GameBoard3DProps) => {
-  const isMobile = useIsMobile();
+  const { isMobile } = useMobile();
   return (
     <div className="w-full h-full overflow-hidden">
       <Canvas
