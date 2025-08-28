@@ -292,7 +292,7 @@ export const SONGS: Song[] = [
     title: "BC Coast Catalyst",
     artist: "Kassandra Linklater",
     src: getAudioUrl("BC Coast Catalyst.mp3"),
-    coverArt: "/lovable-uploads/429a3cb8-3ffb-40db-874a-5829a6a083bd.png",
+    coverArt: "/lovable-uploads/a99f0e18-70f9-4366-9da2-54985e37b37a.png",
     description: `An inspiring anthem celebrating British Columbia's role as a catalyst for innovation and change. Kassandra Linklater's powerful piece captures the province's unique position as a driver of technological and social progress, from the Pacific coast to the mountain ranges.`,
     lyrics: [
       { time: 0, text: "(Verse 1)" },
