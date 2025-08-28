@@ -1,6 +1,5 @@
 import React, { useCallback, useMemo } from 'react';
-import AudioPlayer from '@/components/AudioPlayer';
-import { SONGS } from '@/constants/songs';
+import AudioPlayer, { SONGS } from '@/components/AudioPlayer';
 import { AudioProvider } from '@/contexts/AudioContext';
 import { useAudioPlayer } from '@/hooks/useAudioPlayer';
 import { useEnhancedTracking } from '@/hooks/useEnhancedTracking';

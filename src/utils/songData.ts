@@ -1,4 +1,5 @@
-import { Song, SONGS } from '@/constants/songs';
+import { Song } from '@/hooks/useAudioPlayer';
+import { SONGS } from '@/components/AudioPlayer';
 
 // Create a song lookup utility
 export const getSongById = (songId: string): Song | undefined => {
