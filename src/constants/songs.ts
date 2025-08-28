@@ -224,7 +224,7 @@ export const SONGS: Song[] = [
     id: "brenda-bailey",
     title: "Brenda Bailey: Jedi Master of Finance",
     artist: "AI Community Orchestra",
-    src: getAudioUrl("Brenda Bailey Jedi Master of Finance.mp3"),
+    src: getAudioUrl("Brenda lvls up BC.mp3"),
     coverArt: "/lovable-uploads/749e260e-38aa-4528-b1a6-a4c62cc10020.png",
     description: `A tribute to BC's Finance Minister Brenda Bailey, highlighting her strategic leadership in guiding the province's AI and technology initiatives with wisdom and fiscal responsibility.`,
     lyrics: [
