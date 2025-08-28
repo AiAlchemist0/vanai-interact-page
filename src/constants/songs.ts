@@ -216,7 +216,7 @@ export const SONGS: Song[] = [
     id: "smells-like-reids-spirit",
     title: "Smells Like Reid's Spirit",
     artist: "Andrew Reid",
-    src: getAudioUrl("Smells Like Reid's Spirit.mp3"),
+    src: getAudioUrl("Smells Like Reid Spirit.mp3"),
     coverArt: "/lovable-uploads/92abee24-4e67-43a3-a956-1a845e0b1b1f.png",
     lyrics: [
       { time: 40, text: "Smells like Reid's spirit (Yeah!)" },
