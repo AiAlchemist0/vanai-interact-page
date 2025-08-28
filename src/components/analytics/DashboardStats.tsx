@@ -92,7 +92,7 @@ const DashboardStats = () => {
     tooltipInfo: "Real data tracking active user sessions. Counts users who have interacted with the app recently. Updated every 30 seconds from session tracking database."
   }, {
     title: "Song Library",
-    value: stats?.unique_songs || 0,
+    value: 16,
     unit: "tracks",
     icon: Music,
     gradient: "from-purple-500 to-violet-600",
