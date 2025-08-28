@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { useIsMobile } from './use-mobile';
+import { useMobile } from '@/contexts/MobileContext';
 
 export interface MobileGameInputState {
   pressedFrets: Set<number>;
@@ -12,7 +12,7 @@ export const useMobileGameInput = (onStrum: () => void, gameState: string) => {
   const [inputMethod, setInputMethod] = useState<'keyboard' | 'touch' | 'none'>('none');
   const [touchPoints, setTouchPoints] = useState<Map<number, number>>(new Map());
   const lastStrumRef = useRef<number>(0);
-  const isMobile = useIsMobile();
+  const { isMobile } = useMobile();
   const strumCooldown = 100; // ms between strums
 
   // Fret mapping for keyboard

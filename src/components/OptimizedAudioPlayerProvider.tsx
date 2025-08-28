@@ -5,7 +5,7 @@ import { useAudioPlayer } from '@/hooks/useAudioPlayer';
 import { useEnhancedTracking } from '@/hooks/useEnhancedTracking';
 import { usePerformanceMonitor } from '@/hooks/usePerformanceMonitor';
 import { useSongLikes } from '@/hooks/useSongLikes';
-import { SONGS } from '@/utils/songData';
+import { SONGS } from '@/constants/songs';
 import AudioPlayer from './AudioPlayer';
 
 interface OptimizedAudioPlayerProviderProps {

@@ -3,7 +3,7 @@ import { Heart, Info, Play, Pause } from "lucide-react";
 import { useUnifiedAudioControl } from '@/hooks/useUnifiedAudioControl';
 import { UnifiedPlayButton } from '@/components/ui/UnifiedPlayButton';
 import { SongInfoModal } from '@/components/SongInfoModal';
-import { useIsMobile } from '@/hooks/use-mobile';
+import { useMobile } from '@/contexts/MobileContext';
 
 interface SongItemProps {
   song: {
@@ -36,7 +36,7 @@ const SongItem: React.FC<SongItemProps> = ({
   // Now hooks are called at the top level of this component
   const { audioState, handlePlay, handleStop } = useUnifiedAudioControl(song.id, index, updateActivity);
   const [showInfoModal, setShowInfoModal] = useState(false);
-  const isMobile = useIsMobile();
+  const { isMobile } = useMobile();
 
   return (
     <div

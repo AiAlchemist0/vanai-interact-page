@@ -7,7 +7,7 @@ export interface Song {
   artist: string;
   src: string;
   coverArt: string;
-  lyrics: { time: number; text: string }[];
+  lyrics?: { time: number; text: string }[];
   description?: string;
   keywords?: string[];
 }
