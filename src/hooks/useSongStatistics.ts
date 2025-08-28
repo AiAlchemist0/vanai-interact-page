@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { supabase } from '@/integrations/supabase/client';
+import { useMobileSupabaseClient } from '@/hooks/useMobileSupabaseClient';
 
 export interface SongStatistics {
   song_id: string;
@@ -18,6 +19,7 @@ export const useSongStatistics = (options: UseSongStatisticsOptions = {}) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const playStartTimes = useRef<Map<string, { startTime: number; recordId: string; audioLoadSuccess?: boolean }>>(new Map());
+  const { createChannel, createPollingFallback, isRealtimeSupported } = useMobileSupabaseClient({ enableRealtime });
 
   const fetchStatistics = async () => {
     try {
@@ -167,29 +169,34 @@ export const useSongStatistics = (options: UseSongStatisticsOptions = {}) => {
       return;
     }
 
-    const channel = supabase
-      .channel('song-statistics-changes')
-      .on(
-        'postgres_changes',
-        {
-          event: '*',
-          schema: 'public',
-          table: 'song_statistics'
-        },
-        (payload) => {
-          console.log('Real-time statistics update:', payload);
-          // Refresh statistics when any change occurs
-          fetchStatistics();
-        }
-      )
-      .subscribe();
+    console.log('Setting up realtime subscription for song statistics, supported:', isRealtimeSupported);
+
+    const channel = createChannel(
+      'song-statistics-changes',
+      {
+        event: '*',
+        schema: 'public',
+        table: 'song_statistics'
+      },
+      (payload) => {
+        console.log('Real-time statistics update:', payload);
+        fetchStatistics();
+      },
+      (error) => {
+        console.error('Song statistics realtime error:', error);
+      }
+    );
+
+    // Set up polling fallback for mobile devices
+    const cleanupPolling = createPollingFallback(fetchStatistics, 60000); // Poll every minute
 
     return () => {
       // Clean up any ongoing tracking
       playStartTimes.current.clear();
-      supabase.removeChannel(channel);
+      channel.unsubscribe();
+      cleanupPolling?.();
     };
-  }, [enabled, enableRealtime]);
+  }, [enabled, enableRealtime, createChannel, createPollingFallback, isRealtimeSupported]);
 
   return {
     statistics,

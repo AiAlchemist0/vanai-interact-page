@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useOptimizedNetworking } from '@/hooks/useOptimizedNetworking';
+import { useMobileSupabaseClient } from '@/hooks/useMobileSupabaseClient';
 
 interface SongLikeStatistics {
   song_id: string;
@@ -24,6 +25,7 @@ export const useSongLikes = (options: UseSongLikesOptions = {}) => {
   const [error, setError] = useState<string | null>(null);
   const [likedSongs, setLikedSongs] = useState<LikedSongs>({});
   const { debouncedRequest } = useOptimizedNetworking();
+  const { createChannel, createPollingFallback, isRealtimeSupported } = useMobileSupabaseClient({ enableRealtime });
 
   // Generate a unique session ID for anonymous tracking
   const getSessionId = useCallback(() => {
@@ -80,8 +82,8 @@ export const useSongLikes = (options: UseSongLikesOptions = {}) => {
   }, [debouncedRequest]);
 
   // Optimized fetch for real-time updates
-  const optimizedFetchStatistics = useCallback(() => {
-    fetchStatistics();
+  const optimizedFetchStatistics = useCallback(async () => {
+    await fetchStatistics();
   }, [fetchStatistics]);
 
   // Toggle like for a song with optimized networking
@@ -185,25 +187,31 @@ export const useSongLikes = (options: UseSongLikesOptions = {}) => {
       return;
     }
 
-    const channel = supabase
-      .channel('song_like_statistics_changes')
-      .on(
-        'postgres_changes',
-        {
-          event: '*',
-          schema: 'public',
-          table: 'song_like_statistics'
-        },
-        () => {
-          optimizedFetchStatistics();
-        }
-      )
-      .subscribe();
+    console.log('Setting up realtime subscription for song likes, supported:', isRealtimeSupported);
+
+    const channel = createChannel(
+      'song_like_statistics_changes',
+      {
+        event: '*',
+        schema: 'public',
+        table: 'song_like_statistics'
+      },
+      () => {
+        optimizedFetchStatistics();
+      },
+      (error) => {
+        console.error('Song likes realtime error:', error);
+      }
+    );
+
+    // Set up polling fallback for mobile devices
+    const cleanupPolling = createPollingFallback(optimizedFetchStatistics, 45000); // Poll every 45 seconds
 
     return () => {
-      supabase.removeChannel(channel);
+      channel.unsubscribe();
+      cleanupPolling?.();
     };
-  }, [fetchOnMount, enableRealtime, optimizedFetchStatistics, loadLikedSongs]);
+  }, [fetchOnMount, enableRealtime, optimizedFetchStatistics, loadLikedSongs, createChannel, createPollingFallback, isRealtimeSupported]);
 
   return {
     statistics,

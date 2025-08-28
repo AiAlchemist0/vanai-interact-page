@@ -6,6 +6,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from '@/components/ui/tooltip';
 import { supabase } from '@/integrations/supabase/client';
 import { useAnalyticsRefresh } from '@/contexts/AnalyticsRefreshContext';
+import { useMobileSupabaseClient } from '@/hooks/useMobileSupabaseClient';
 
 interface GeographicData {
   region: string;
@@ -19,6 +20,7 @@ const GeographicMap = () => {
   const [loading, setLoading] = useState(true);
   const [lastRefreshed, setLastRefreshed] = useState<Date>(new Date());
   const { registerRefresh, unregisterRefresh } = useAnalyticsRefresh();
+  const { createChannel, createPollingFallback, isRealtimeSupported } = useMobileSupabaseClient();
 
   const fetchGeographicData = async () => {
     try {
@@ -40,31 +42,37 @@ const GeographicMap = () => {
     // Register refresh function
     registerRefresh('geographic-map', fetchGeographicData);
     
+    console.log('Setting up realtime subscription for geographic data, supported:', isRealtimeSupported);
+    
     // Set up real-time subscription for geographic data updates
-    const channel = supabase
-      .channel('geographic-data-changes')
-      .on(
-        'postgres_changes',
-        {
-          event: '*',
-          schema: 'public',
-          table: 'session_locations'
-        },
-        () => {
-          fetchGeographicData();
-        }
-      )
-      .subscribe();
+    const channel = createChannel(
+      'geographic-data-changes',
+      {
+        event: '*',
+        schema: 'public',
+        table: 'session_locations'
+      },
+      () => {
+        fetchGeographicData();
+      },
+      (error) => {
+        console.error('Geographic data realtime error:', error);
+      }
+    );
 
-    // Refresh every 30 seconds
+    // Set up polling fallback for mobile devices
+    const cleanupPolling = createPollingFallback(fetchGeographicData, 30000); // Poll every 30 seconds
+
+    // Additional refresh interval for all devices
     const interval = setInterval(fetchGeographicData, 30000);
 
     return () => {
       clearInterval(interval);
       unregisterRefresh('geographic-map');
-      supabase.removeChannel(channel);
+      channel.unsubscribe();
+      cleanupPolling?.();
     };
-  }, [registerRefresh, unregisterRefresh]);
+  }, [registerRefresh, unregisterRefresh, createChannel, createPollingFallback, isRealtimeSupported]);
 
   const totalListeners = geoData.reduce((sum, d) => sum + d.listening_count, 0);
 
