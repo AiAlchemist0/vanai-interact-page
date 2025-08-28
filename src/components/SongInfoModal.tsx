@@ -159,73 +159,8 @@ export const SongInfoModal: React.FC<SongInfoModalProps> = ({
                      <p className="text-muted-foreground leading-relaxed text-sm sm:text-base">
                        {song.description ? (
                          <span dangerouslySetInnerHTML={{ __html: song.description }} />
-                       ) : songId === "pixel-wizard" ? (
-                         <>
-                           Kevin Friel's "Mr. Pixel Wizard BC AI" celebrates Vancouver's AI filmmaking 
-                           community and the transformative power of AI in creative industries. The song 
-                           highlights how AI tools are democratizing film production, breaking down 
-                           traditional barriers, and enabling artists to create without massive budgets 
-                           or crews. It specifically honors the VanAI community's role in fostering 
-                           innovation and collaboration among AI enthusiasts and creators in British Columbia.
-                         </>
-                       ) : songId === "lionel-ringenbach" ? (
-                         <>
-                           Lionel Ringenbach's "ChatGPT: Est-ce que ma facture va exploser?" addresses critical questions around AI's environmental and economic impact - themes central to the BC + AI Survey's exploration of technology's broader implications. Through his song, Lionel examines the hidden costs of AI systems, from energy consumption to infrastructure demands. Learn more about his sustainability-focused work at{" "}
-                           <a 
-                             href="https://wattsup.tech" 
-                             target="_blank" 
-                             rel="noopener noreferrer" 
-                             className="text-primary hover:underline"
-                           >
-                             wattsup.tech
-                           </a>.
-                         </>
-                        ) : songId === "dr-patrick" ? (
-                          <>
-                            "Dr. Patrick Parra Pennefather" by UBC AI Orchestra celebrates the remarkable journey of Dr. Patrick from his leadership role in UBC's Faculty of Arts and the Emerging Media Lab to his influential presence in Vancouver's AI community. As a sound designer, composer, and XR innovation mentor, Dr. Patrick embodies the interdisciplinary bridge between traditional media arts and cutting-edge AI applications. His work with immersive soundscapes, virtual anatomy labs, and Fun Palace carnivals demonstrates how AI collaborations can break down silos and redefine learning experiences. The song honors his vision "There is an AI for that" and his role as a connector who transforms sound into stories while inspiring the next generation of AI innovators.
-                          </>
-                        ) : songId === "lalala-ai-dilemma" ? (
-                          <>
-                            A generational anthem exploring the modern dilemma facing young people: pursue traditional university education or dive straight into the AI revolution. Matthew Schwartzman's raw narrative captures the tension between conventional paths and emerging opportunities, featuring mentorship from Dean Shev (Harvard-educated AI strategy leader) and deep connections to Vancouver's AI community including Kris Krug and Surrey meetups. The song authentically portrays the uncertainty of youth navigating job displacement fears (68% statistic), while celebrating the rebellious spirit of a new generation breaking traditional molds. With multilingual elements and references to Teen2Life podcasting, it's both a personal journey and a broader commentary on education's evolving role in the AI era.
-                          </>
-                          ) : songId === "kris-krug-circles" ? (
-                            <>
-                              Kris Krug, the visionary founder and philosophical leader of Vancouver's AI community, this song embodies the heart of BC's AI discourse. As founder of the Vancouver AI Community, BC + AI Association, and creator of "Sandboxing AI", Kris bridges traditional media (as a National Geographic photographer) with AI innovation through his "Human++" philosophy. This piece explores deepfake technology, relationship authenticity, and the tension between human touch and code-driven art while celebrating unity in the AI era. It reflects Kris's role as a community connector who facilitates crucial conversations about AI's impact on humanity, creativity, and relationships, addressing fears while promoting optimism about our technological future.
-                            </>
-                            ) : songId === "gabriel-george-sr-eagles-watch" ? (
-                              <>
-                                A profound Indigenous cultural teaching that bridges ancient wisdom with modern technology challenges. Gabriel George Sr. welcomes listeners to the sacred inlet village of suh-nak, sharing ancestral stories from the mus-kwee-um, skwaw-mish, and ts-lay-wah-tooth peoples. Through spoken word and traditional eagle songs (kway-tal-us puk-wus), this piece honors Chief Dan George's legacy while exploring themes of environmental stewardship, cultural healing from residential school trauma, and the sacred interconnectedness of all beings. The work masterfully weaves Indigenous place names like sul-ts-munt suh-suh-nuk (Burnaby Mountain) and ceremonial knowledge including regalia, drums, cedar, and prayer, while addressing contemporary calls for unity. Gabriel positions "AI fire" as a modern tool that must honor ancient values of community, respect, and balance with the natural world, bridging traditional hal-ko-may-lum teachings with today's technological discourse.
-                              </>
-                            ) : songId === "darren-ai-struck" ? (
-                              <>
-                                This powerful rock anthem embodies the journey of a tech veteran navigating the AI revolution. Darren Nicholls chronicles his evolution from a university coder during the dot-com boom to becoming a visionary CEO and AI community leader in Vancouver. The song masterfully weaves together themes of technological disruption, entrepreneurial resilience, and the importance of family grounding in an increasingly digital world.
-                                <br /><br />
-                                Through companies like VHT.ai and Bizzer.ai, and his influential Data-guy.ai newsletter reaching hundreds of subscribers, Darren exemplifies the "adapt or perish" mentality that drives innovation in the BC tech ecosystem. The track celebrates the balance between professional ambition and personal fulfillment – from golf courses to campfire adventures, from boardrooms to family gatherings.
-                                <br /><br />
-                                The anthem's core message resonates deeply within the AI community: embrace change, harness the power of data, and never stop learning. It's a testament to how seasoned professionals can not only survive but thrive in the age of artificial intelligence, becoming leaders who guide others through technological transformation.
-                              </>
-                            ) : songId === "mac" ? (
-                              <>
-                                A philosophical anthem celebrating Vancouver's Mind, AI, & Consciousness (MAC) working group, performed by Ziggy Minddust (Loki Jorgenson), a prominent leader in Vancouver's AI community. This deep intellectual exploration examines the fundamental questions at the intersection of artificial intelligence and human consciousness.
-                                <br /><br />
-                                MAC represents the gold standard for rigorous academic discourse in AI philosophy, moving far beyond superficial "hand-waving chit-chat" to engage with profound scientific papers and philosophical frameworks. The group's methodology involves intensive two-hour syllabus reading sessions, bringing together philosophers, scientists, and AI innovators to tackle consciousness puzzles that challenge our understanding of intelligence, both artificial and human.
-                                <br /><br />
-                                Under Loki Jorgenson's leadership, MAC has become a cornerstone of Vancouver's AI community, fostering deep conversations about what makes us human in this digital age. The working group bridges the gap between theoretical consciousness studies and practical AI development, inspiring a new generation of thinkers to question everything and break down traditional barriers between mind, technology, and consciousness.
-                                <br /><br />
-                                This musical tribute captures the essence of MAC's mission: rigorous intellectual pursuit, community-driven learning, and the bold exploration of frontiers where thoughts intertwine with technology. It stands as a testament to Vancouver's role as a hub for consciousness research and AI innovation.
-                              </>
-                            ) : songId === "indigenomics-ai" ? (
-                              <>
-                                Carol Anne Hilton's "Indigenomics AI, that's where we start" is a groundbreaking anthem that bridges Indigenous economic sovereignty with artificial intelligence innovation. As founder and CEO of the Indigenomics Institute and author of "Taking a Seat at the Table," Carol Anne brings decades of expertise in Indigenous economic development to the forefront of AI discourse.
-                                <br /><br />
-                                Her Hesquiaht First Nation heritage from Ahousaht and Makah territories informs her revolutionary approach to data sovereignty and Indigenous-led economic empowerment. Through the Global Centre for Indigenous Economic Healing, Carol Anne champions the integration of traditional Indigenous values with modern technology, ensuring AI development honors Indigenous worldviews of stewardship, community relationships, and multi-generational thinking.
-                                <br /><br />
-                                The song's central theme of "sovereign data governance" reflects Carol Anne's pioneering work in ensuring Indigenous communities maintain control over their cultural and economic narratives in the digital age. Her vision of "care and commerce" challenges traditional capitalist models by embedding Indigenous values of reciprocity and community wellbeing into economic frameworks.
-                                <br /><br />
-                                This anthem celebrates the movement from margins to center, positioning Indigenous voices as essential leaders in AI development rather than passive participants. Through her work with corporate boardrooms, policy development, and community building, Carol Anne demonstrates how Indigenous economic philosophies can transform the entire AI ecosystem to be more ethical, sustainable, and inclusive.
-                              </>
-                            ) : (
-                          "This song connects with the BC + AI Survey by exploring themes around artificial intelligence's impact on creativity, community, and human experience. The artist's work speaks to the evolving relationship between technology and artistic expression."
+                       ) : (
+                         "Explore the rich story behind this song and its connection to British Columbia's vibrant AI community."
                        )}
                     </p>
                   </div>
