@@ -227,7 +227,7 @@ export const SONGS: Song[] = [
     title: "Eagle's Watch Over the Inlet",
     artist: "Gabriel George Sr.",
     src: getAudioUrl("Eagle's Watch Over the Inlet.mp3"),
-    coverArt: "/lovable-uploads/6b65586a-63ba-48f1-9c56-1846ec800f39.png",
+    coverArt: "/lovable-uploads/316c72de-0185-4987-b74f-96492d391733.png",
     lyrics: [
       { time: 0, text: "Hey-ya, hey-ya, the wings beat strong," },
       { time: 120, text: "Kway-tal-us puk-wus, the eagle is watching over us," },
