@@ -700,11 +700,11 @@ const SONGS: Song[] = [
     ] as LyricLine[]
   },
   {
-    id: "brenda-bailey",
+    id: "brenda-bailey-jedi-master",
     title: "Brenda Bailey: Jedi Master of Finance",
     artist: "AI Community Orchestra",
     src: getAudioUrl("Brenda lvls up BC.mp3"),
-    coverArt: "/lovable-uploads/9b9e9cd3-384c-4848-8fd2-a1a882698f96.png",
+    coverArt: "/lovable-uploads/caadd767-4a91-4395-8dbd-6e36c2b5e58d.png",
     lyrics: [
       // Male Lead (Narrator) - Verse 1
       { time: 0, text: "In the halls of Victoria, where the budgets align," },

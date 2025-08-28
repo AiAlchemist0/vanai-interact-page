@@ -221,23 +221,6 @@ export const SONGS: Song[] = [
     ] as LyricLine[]
   },
   {
-    id: "brenda-bailey",
-    title: "Brenda Bailey: Jedi Master of Finance",
-    artist: "AI Community Orchestra",
-    src: getAudioUrl("Brenda lvls up BC.mp3"),
-    coverArt: "/lovable-uploads/749e260e-38aa-4528-b1a6-a4c62cc10020.png",
-    description: `A tribute to BC's Finance Minister Brenda Bailey, highlighting her strategic leadership in guiding the province's AI and technology initiatives with wisdom and fiscal responsibility.`,
-    lyrics: [
-      { time: 0, text: "(Verse 1)" },
-      { time: 2, text: "In the halls of power, where budgets align..." },
-      { time: 6, text: "Brenda Bailey stands, with force divine." },
-      { time: 10, text: "Finance Minister, guiding the way," },
-      { time: 14, text: "Technology strategy, day by day." },
-      { time: 18, text: "Jedi wisdom, fiscal might," },
-      { time: 22, text: "Leading BC into AI light." },
-    ] as LyricLine[]
-  },
-  {
     id: "mac",
     title: "Mind, AI, & Consciousness (MAC)",
     artist: "Ziggy Minddust",

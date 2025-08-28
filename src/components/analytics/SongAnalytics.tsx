@@ -38,7 +38,7 @@ const SongAnalytics = () => {
         genre: 'Electronic',
         color: 'from-cyan-500 to-blue-500'
       },
-      'brenda-bailey': { 
+      'brenda-bailey-jedi-master': { 
         title: 'Brenda Bailey: Jedi Master of Finance', 
         artist: 'AI Community Orchestra', 
         genre: 'Leadership',
