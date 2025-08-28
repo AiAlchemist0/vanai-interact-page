@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect, useCallback, useMemo } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback, useMemo, useRef } from 'react';
 
 const MOBILE_BREAKPOINT = 768;
 const RESIZE_DEBOUNCE_MS = 100;
@@ -20,45 +20,60 @@ export const MobileProvider: React.FC<MobileProviderProps> = ({ children }) => {
   const [isHydrated, setIsHydrated] = useState(false);
 
   // Debounced resize handler to prevent excessive re-renders
+  const timeoutRef = useRef<NodeJS.Timeout>();
+  
   const debouncedCheckMobile = useCallback(() => {
-    let timeoutId: NodeJS.Timeout;
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
     
-    const checkMobile = () => {
-      const mobile = window.innerWidth < MOBILE_BREAKPOINT;
-      setIsMobile(mobile);
-      
-      if (process.env.NODE_ENV === 'development') {
-        console.log('Mobile context update:', {
-          windowWidth: window.innerWidth,
-          isMobile: mobile,
-          breakpoint: MOBILE_BREAKPOINT,
-          timestamp: Date.now()
-        });
+    timeoutRef.current = setTimeout(() => {
+      try {
+        if (typeof window !== 'undefined') {
+          const mobile = window.innerWidth < MOBILE_BREAKPOINT;
+          setIsMobile(mobile);
+          
+          if (process.env.NODE_ENV === 'development') {
+            console.log('Mobile context update:', {
+              windowWidth: window.innerWidth,
+              isMobile: mobile,
+              breakpoint: MOBILE_BREAKPOINT,
+              timestamp: Date.now()
+            });
+          }
+        }
+      } catch (error) {
+        console.error('Mobile detection error:', error);
+        setIsMobile(false); // Safe fallback
       }
-    };
-
-    return () => {
-      clearTimeout(timeoutId);
-      timeoutId = setTimeout(checkMobile, RESIZE_DEBOUNCE_MS);
-    };
+    }, RESIZE_DEBOUNCE_MS);
   }, []);
 
   useEffect(() => {
-    // Mark as hydrated on mount
-    setIsHydrated(true);
-    
-    // Initial mobile check
-    const mobile = window.innerWidth < MOBILE_BREAKPOINT;
-    setIsMobile(mobile);
+    try {
+      // Mark as hydrated on mount
+      setIsHydrated(true);
+      
+      // Initial mobile check with safety
+      if (typeof window !== 'undefined') {
+        const mobile = window.innerWidth < MOBILE_BREAKPOINT;
+        setIsMobile(mobile);
+      }
 
-    // Set up debounced resize listener
-    const handleResize = debouncedCheckMobile();
-    
-    window.addEventListener('resize', handleResize);
-    
-    return () => {
-      window.removeEventListener('resize', handleResize);
-    };
+      // Set up debounced resize listener
+      window.addEventListener('resize', debouncedCheckMobile);
+      
+      return () => {
+        if (timeoutRef.current) {
+          clearTimeout(timeoutRef.current);
+        }
+        window.removeEventListener('resize', debouncedCheckMobile);
+      };
+    } catch (error) {
+      console.error('Mobile context initialization error:', error);
+      setIsHydrated(true);
+      setIsMobile(false); // Safe fallback
+    }
   }, [debouncedCheckMobile]);
 
   const contextValue = useMemo(() => ({
